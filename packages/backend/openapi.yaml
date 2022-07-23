@@ -1,0 +1,23 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        "200":
+          description: ""
+info:
+  title: Adopte-un-prof APP
+  description: The Adopte-un-prof APP API description
+  version: "0.1"
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    cookie:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas: {}

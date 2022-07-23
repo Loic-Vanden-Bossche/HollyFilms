@@ -2,9 +2,10 @@
   "name": "hollyfilms",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "global-lint": "pnpm run -r --filter backend lint && pnpm run -r --filter frontend lint",
+    "global-lint:fix": "pnpm run -r --filter backend lint:fix && pnpm run -r --filter frontend lint:fix"
   },
   "repository": {
     "type": "git",
@@ -15,9 +16,5 @@
   "bugs": {
     "url": "https://github.com/Loic-Vanden-Bossche/HollyFilms/issues"
   },
-  "homepage": "https://github.com/Loic-Vanden-Bossche/HollyFilms#readme",
-  "workspaces": [
-    "packages\\backend",
-    "packages\\frontend"
-  ]
+  "homepage": "https://github.com/Loic-Vanden-Bossche/HollyFilms#readme"
 }

@@ -9,18 +9,19 @@ HollyFilms is a project that I have created to provide a simple way to manage th
 
 Install dependencies:
 ```console
-npm install
+pnpm install -g
+pnpm install
 ```
 
 Start NestJS API
 
 ```
-npm run start:dev --workspace=backend
+pnpm run -r --filter backend start
 ```
 
 Start Angular frontend
 ```
-npm run start --workspace=frontend
+pnpm run -r --filter frontend start
 ```
 
 ### Frontend
