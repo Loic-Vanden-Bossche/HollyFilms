@@ -16,12 +16,12 @@ pnpm install
 Start NestJS API
 
 ```
-pnpm run -r --filter backend start
+pnpm run start:back
 ```
 
 Start Angular frontend
 ```
-pnpm run -r --filter frontend start
+pnpm run start:front
 ```
 
 ### Frontend

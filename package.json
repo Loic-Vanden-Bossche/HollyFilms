@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "global-lint": "pnpm run -r --filter backend lint && pnpm run -r --filter frontend lint",
-    "global-lint:fix": "pnpm run -r --filter backend lint:fix && pnpm run -r --filter frontend lint:fix"
+    "global-lint:fix": "pnpm run -r --filter backend lint:fix && pnpm run -r --filter frontend lint:fix",
+    "start:front": "pnpm run -r --filter frontend start",
+    "start:back": "pnpm run -r --filter backend start:dev"
   },
   "repository": {
     "type": "git",
