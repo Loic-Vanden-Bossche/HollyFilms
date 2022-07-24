@@ -1,11 +1,10 @@
-import {DynamicModule, Logger, Module} from '@nestjs/common';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { APIConfig, DatabaseConfig } from './config/config';
 import { getMongoString } from './config/config.utils';
 import { AppService } from './app.service';
-import { WinstonModule } from 'nest-winston';
 
 @Module({})
 export class AppModule {

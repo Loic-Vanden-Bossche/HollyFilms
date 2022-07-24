@@ -4,7 +4,7 @@ export enum LogLevels {
   ERROR = 0,
   WARN = 1,
   INFO = 2,
-  HTTP =  3,
+  HTTP = 3,
   DEBUG = 4,
   VERBOSE = 5,
 }
@@ -13,7 +13,7 @@ const productionLogLevels: LogLevels[] = [
   LogLevels.ERROR,
   LogLevels.WARN,
   LogLevels.INFO,
-  LogLevels.HTTP
+  LogLevels.HTTP,
 ];
 
 const devLogLevels: LogLevels[] = [...productionLogLevels, LogLevels.DEBUG];
@@ -33,4 +33,7 @@ const envLogs = (env: Environment) => {
   }
 };
 
-export const getLogLevels = (env: Environment, verbose = false) => [...new Set(verbose ? Object.values(LogLevels) : envLogs(env))] as LogLevels[];
+export const getLogLevels = (env: Environment, verbose = false) =>
+  [
+    ...new Set(verbose ? Object.values(LogLevels) : envLogs(env)),
+  ] as LogLevels[];

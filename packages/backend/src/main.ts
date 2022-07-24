@@ -1,27 +1,32 @@
-import {NestFactory} from '@nestjs/core';
-import {AppModule} from './app.module';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 
 import * as dotenv from 'dotenv';
-import {APIConfig, CookieConfig, getConfig, SSLConfig} from './config/config';
-import {HttpException, Logger, NestApplicationOptions, ValidationPipe,} from '@nestjs/common';
+import { APIConfig, CookieConfig, getConfig, SSLConfig } from './config/config';
+import {
+  HttpException,
+  Logger,
+  NestApplicationOptions,
+  ValidationPipe,
+} from '@nestjs/common';
 import fs_promise from 'fs/promises';
-import {defaultConfig, Environment} from './config/config.default';
-import {ConfigService} from '@nestjs/config';
-import {checkOrigin} from './cors';
+import { defaultConfig, Environment } from './config/config.default';
+import { ConfigService } from '@nestjs/config';
+import { checkOrigin } from './cors';
 import helmet from 'helmet';
-import {getSameSiteStrategy} from './config/config.utils';
+import { getSameSiteStrategy } from './config/config.utils';
 
 import * as cookieParser from 'cookie-parser';
 import * as csurf from 'csurf';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import {initializeSwagger} from './swagger';
-import {generateAPIDocs} from './api.doc';
-import {triggerConfigDocGen} from 'nestjs-env-config';
-import {ConfigEnvironmentDto} from './config/config.environment.dto';
+import { initializeSwagger } from './swagger';
+import { generateAPIDocs } from './api.doc';
+import { triggerConfigDocGen } from 'nestjs-env-config';
+import { ConfigEnvironmentDto } from './config/config.environment.dto';
 
-import {getWinstonLogger} from "./logger/winston";
+import { getWinstonLogger } from './logger/winston';
 
 dotenv.config({ path: '.env' });
 
