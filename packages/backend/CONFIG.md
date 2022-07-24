@@ -31,4 +31,4 @@
 | HF_ADMIN_EMAIL | admin@hollyfilms.fr | Admin email | isEmail, isString | No |
 | HF_ADMIN_PASSWORD | admin | Admin password | isString | Yes |
 
-Generated on 23/07/2022, 22:18:14
+Generated on 24/07/2022, 14:45:02
