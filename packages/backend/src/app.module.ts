@@ -15,8 +15,11 @@ import { LogsMiddleware } from './logger/logs.middleware';
 import * as mongoose from 'mongoose';
 import { IdentityModule } from './indentity/identity.module';
 
+const logger = new Logger('Mongoose');
+
 mongoose.set('debug', (coll, method, query, doc) => {
-  console.log(`${coll}.${method}`, query, doc);
+  logger.verbose(`${coll}.${method} ${query} ${doc}`);
+  console.log(query, doc);
 });
 
 @Module({})

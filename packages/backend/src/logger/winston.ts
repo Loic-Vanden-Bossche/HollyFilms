@@ -16,9 +16,10 @@ const getMaxLevel = (levels: { [p: string]: number }): string => {
 
 const winstonLogLevels = (
   env: Environment,
+  verbose: boolean,
   allLogValues: { [p: string]: number },
 ): { [p: string]: number } => {
-  const levels = getLogLevels(env);
+  const levels = getLogLevels(env, verbose);
   return Object.keys(allLogValues)
     .filter((key) => levels.includes(allLogValues[key]))
     .reduce((obj, key) => {
@@ -34,12 +35,12 @@ const logValues = () => {
   );
 };
 
-export const getWinstonLogger = (env: Environment): LoggerService => {
+export const getWinstonLogger = (env: Environment, verbose = false): LoggerService => {
   const levels = logValues();
 
   return WinstonModule.createLogger({
     levels,
-    level: getMaxLevel(winstonLogLevels(env, levels)),
+    level: getMaxLevel(winstonLogLevels(env, verbose, levels)),
     format: winston.format.combine(
       winston.format.label({ label: 'HollyFilms' }),
       winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),

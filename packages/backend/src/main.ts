@@ -69,7 +69,7 @@ async function bootstrap() {
     .then(({ config, sslOptions }) =>
       NestFactory.create(AppModule.register(config), {
         ...sslOptions,
-        logger: getWinstonLogger(config.currentEnv),
+        logger: getWinstonLogger(config.currentEnv, config.verbose),
       }),
     )
     .catch((err) => {
