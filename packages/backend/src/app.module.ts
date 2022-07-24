@@ -1,13 +1,30 @@
-import { DynamicModule, Logger, Module } from '@nestjs/common';
+import {
+  DynamicModule,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { APIConfig, DatabaseConfig } from './config/config';
 import { getMongoString } from './config/config.utils';
 import { AppService } from './app.service';
+import { LogsMiddleware } from './logger/logs.middleware';
+
+import * as mongoose from 'mongoose';
+import { IdentityModule } from './indentity/identity.module';
+
+mongoose.set('debug', (coll, method, query, doc) => {
+  console.log(`${coll}.${method}`, query, doc);
+});
 
 @Module({})
 export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogsMiddleware).forRoutes('*');
+  }
+
   static register(config: APIConfig): DynamicModule {
     return {
       module: AppModule,
@@ -26,6 +43,7 @@ export class AppModule {
           load: [() => config],
           cache: true,
         }),
+        IdentityModule,
       ],
       providers: [AppService, Logger],
       controllers: [AppController],

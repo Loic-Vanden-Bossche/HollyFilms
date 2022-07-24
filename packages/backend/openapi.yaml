@@ -7,6 +7,231 @@ paths:
       responses:
         "200":
           description: ""
+  "/users/limited/{id}":
+    get:
+      operationId: UsersController_getUser
+      summary: "[User] get user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        &a1
+        - Users
+  /users/me:
+    put:
+      operationId: UsersController_updateMe
+      summary: "[User] Update self"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMeDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /users/admin:
+    get:
+      operationId: UsersAdminController_getUsers
+      summary: "[SuperAdmin] Get all users"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        &a2
+        - Users Admin
+    post:
+      operationId: UsersAdminController_createUser
+      summary: "[SuperAdmin] Create new user"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a2
+  "/users/admin/{id}":
+    get:
+      operationId: UsersAdminController_getUser
+      summary: "[SuperAdmin] Get specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a2
+    put:
+      operationId: UsersAdminController_updateUser
+      summary: "[SuperAdmin] Update specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a2
+    delete:
+      operationId: UsersAdminController_deleteUser
+      summary: "[SuperAdmin] Delete specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a2
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      summary: "[Public] Login using credentials"
+      parameters: []
+      requestBody:
+        required: true
+        description: Login data
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginAuthDto"
+      responses:
+        "200":
+          description: Login successful
+          headers:
+            Set-Cookie:
+              description: Authorization cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "401":
+          description: Login failed - Bad credentials
+      tags:
+        &a3
+        - Auth
+  /auth/logout:
+    get:
+      operationId: AuthController_logout
+      summary: Reset current cookie
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a3
+  /auth/register:
+    post:
+      operationId: AuthController_register
+      summary: "[Public] Register standalone/organization"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterAuthDto"
+      responses:
+        "201":
+          description: Register successful
+          headers:
+            Set-Cookie:
+              description: Authorization cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "403":
+          description: Register failed - Email already exists
+      tags: *a3
+  /auth/refresh-tokens:
+    get:
+      operationId: AuthController_regenerateTokens
+      summary: "[User] Get a new jwt using refresh token"
+      parameters: []
+      responses:
+        "200":
+          description: Refresh token successful
+          headers:
+            Set-Cookie:
+              description: Authorization cookie
+        "401":
+          description: Refresh token failed - Expired token or not logged in
+      tags: *a3
+      security:
+        - cookie: []
+  /auth/me:
+    get:
+      operationId: AuthController_getProfile
+      summary: "[User] Get the currently logged user"
+      parameters: []
+      responses:
+        "200":
+          description: Current logged user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "401":
+          description: Not logged in
+      tags: *a3
+      security:
+        - cookie: []
+  /auth/reset-password:
+    post:
+      operationId: AuthController_resetPassword
+      summary: Trigger reset-password procedure
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a3
+  /auth/change-password:
+    post:
+      operationId: AuthController_changePassword
+      summary: Change the password using token
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordAuthDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a3
 info:
   title: Adopte-un-prof APP
   description: The Adopte-un-prof APP API description
@@ -20,4 +245,244 @@ components:
       type: apiKey
       in: cookie
       name: connect.sid
-  schemas: {}
+  schemas:
+    UpdateMeDto:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        newPassword:
+          type: string
+          description: New user password
+          example: "123456"
+        newPasswordConfirm:
+          type: string
+          description: New user password confirmation
+          example: "123456"
+      required:
+        - firstname
+        - lastname
+        - username
+        - newPassword
+        - newPasswordConfirm
+    CreateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        role:
+          type: string
+          description: User role
+          example: super_admin
+        password:
+          type: string
+          description: User password
+          example: "123456"
+        roles:
+          type: array
+          description: User roles
+          example:
+            - user
+            - admin
+          items:
+            type: string
+            enum:
+              - user
+              - admin
+      required:
+        - email
+        - firstname
+        - lastname
+        - username
+        - role
+        - password
+        - roles
+    UpdateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        password:
+          type: string
+          description: User password
+          example: "123456"
+        roles:
+          type: array
+          description: User roles
+          example:
+            - user
+            - admin
+          items:
+            type: string
+            enum:
+              - user
+              - admin
+      required:
+        - email
+        - firstname
+        - lastname
+        - username
+        - password
+        - roles
+    LoginAuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        password:
+          type: string
+          description: User password
+          example: "123456"
+      required:
+        - email
+        - password
+    CurrentUser:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The user's id
+          example: 5e9f8f8f8f8f8f8f8f8f8f8f8
+        email:
+          type: string
+          description: The user's email
+          example: exemplle.test@gmail.com
+        firstname:
+          type: string
+          description: The user's first name
+          example: John
+        lastname:
+          type: string
+          description: The user's last name
+          example: Doe
+        username:
+          type: string
+          description: The user's nickname
+          example: Johnny
+        roles:
+          description: The user's roles
+          example:
+            - user
+            - admin
+          type: array
+          items:
+            type: string
+        isAdmin:
+          type: boolean
+          description: Is the user an Admin
+          example: "true"
+      required:
+        - _id
+        - email
+        - firstname
+        - lastname
+        - username
+        - roles
+        - isAdmin
+    RegisterAuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+        password:
+          type: string
+          description: User password
+          example: "123456"
+        passwordConfirm:
+          type: string
+          description: User password confirmation
+          example: "123456"
+      required:
+        - email
+        - firstname
+        - lastname
+        - username
+        - password
+        - passwordConfirm
+    ResetPasswordDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+      required:
+        - email
+    ChangePasswordAuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: exemple.test@gmail.com
+        token:
+          type: string
+          description: Change password token
+          example: b7wCwIHaRkhhCJW5IfZN8LzehT1SoE98Y4ZfmrCE8X9gj14TrWqBBdbhXzjm2vzb
+        newPassword:
+          type: string
+          description: New user password
+          example: "12345612"
+        newPasswordConfirm:
+          type: string
+          description: New user password confirmation
+          example: "123456"
+      required:
+        - email
+        - token
+        - newPassword
+        - newPasswordConfirm
