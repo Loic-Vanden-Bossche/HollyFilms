@@ -27,6 +27,7 @@ import { triggerConfigDocGen } from 'nestjs-env-config';
 import { ConfigEnvironmentDto } from './config/config.environment.dto';
 
 import { getWinstonLogger } from './logger/winston';
+import { UsersService } from './indentity/users/users.service';
 
 dotenv.config({ path: '.env' });
 
@@ -158,7 +159,7 @@ async function bootstrap() {
     }),
   );
 
-  // await app.get(UsersService).createAdminAccount();
+  await app.get(UsersService).createAdminAccount();
 
   await app.listen(configService.get<number>('port')).then(() => {
     Logger.log(
@@ -166,7 +167,5 @@ async function bootstrap() {
       'Server',
     );
   });
-
-  // app.useLogger(app.get(CustomLogger));
 }
 bootstrap();

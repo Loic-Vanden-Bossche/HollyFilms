@@ -15,6 +15,8 @@ import { getObjectId } from '../../shared/mongoose';
 
 @Injectable()
 export class UsersService {
+  logger = new Logger('Users');
+
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
@@ -122,11 +124,10 @@ export class UsersService {
   async createAdminAccount() {
     const adminConfig = this.configService.get<AdminConfig>('admin');
 
-    const logger = new Logger('Admin');
-    logger.verbose('Checking admin account');
+    this.logger.verbose('Checking admin account');
 
     if (adminConfig.password === defaultConfig.HF_ADMIN_PASSWORD) {
-      logger.warn(
+      this.logger.warn(
         `Admin password is default password, please change it if in production`,
       );
     }
@@ -136,7 +137,7 @@ export class UsersService {
       .exec();
 
     if (user) {
-      logger.verbose(`Admin ${user.email} already exists`);
+      this.logger.verbose(`Admin ${user.email} already exists`);
 
       const validPassword = await this.authService.comparePasswords(
         adminConfig.password,
@@ -144,11 +145,11 @@ export class UsersService {
       );
 
       if (validPassword) {
-        logger.verbose(`Password for admin ${user.email} is valid`);
+        this.logger.verbose(`Password for admin ${user.email} is valid`);
         return;
       }
 
-      logger.log(`Password for admin ${user.email} is invalid, updating`);
+      this.logger.log(`Password for admin ${user.email} is invalid, updating`);
 
       user.password = await this.authService.hashPassword(adminConfig.password);
       await user.save();
@@ -156,7 +157,9 @@ export class UsersService {
       return;
     }
 
-    logger.log(`Admin ${adminConfig.email} not found in database, creating`);
+    this.logger.log(
+      `Admin ${adminConfig.email} not found in database, creating`,
+    );
 
     await this.userModel.create({
       email: adminConfig.email,
@@ -166,6 +169,6 @@ export class UsersService {
       password: await this.authService.hashPassword(adminConfig.password),
       roles: [Role.Admin, Role.User],
     });
-    logger.log(`Admin ${adminConfig.email} created`);
+    this.logger.log(`Admin ${adminConfig.email} created`);
   }
 }

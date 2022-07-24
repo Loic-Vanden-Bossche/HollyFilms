@@ -5,13 +5,6 @@ import { WinstonModule } from 'nest-winston';
 import { LoggerService } from '@nestjs/common';
 import { Environment } from '../config/config.default';
 
-const valueFromLevel = (level: LogLevels) => {
-  return Object.entries(LogLevels).reduce(
-    (acc, [key, value]) => ({ ...acc, [key]: value }),
-    {},
-  )[level.toString()] as string;
-};
-
 const getMaxLevel = (levels: { [p: string]: number }): string => {
   return Object.keys(levels).reduce((acc, key) => {
     if (levels[key] > levels[acc]) {
@@ -21,18 +14,32 @@ const getMaxLevel = (levels: { [p: string]: number }): string => {
   }, 'error');
 };
 
-const winstonLogLevels = (levels: LogLevels[]): { [p: string]: number } => {
-  return levels.reduce(
-    (acc, level) => ({ ...acc, [valueFromLevel(level).toLowerCase()]: level }),
+const winstonLogLevels = (
+  env: Environment,
+  allLogValues: { [p: string]: number },
+): { [p: string]: number } => {
+  const levels = getLogLevels(env);
+  return Object.keys(allLogValues)
+    .filter((key) => levels.includes(allLogValues[key]))
+    .reduce((obj, key) => {
+      return Object.assign(obj, { [key]: allLogValues[key] });
+    }, {});
+};
+
+const logValues = () => {
+  return Object.entries(LogLevels).reduce(
+    (acc, [key, value]) =>
+      typeof value === 'number' ? { ...acc, [key.toLowerCase()]: value } : acc,
     {},
   );
 };
 
 export const getWinstonLogger = (env: Environment): LoggerService => {
-  const levels = winstonLogLevels(getLogLevels(env));
+  const levels = logValues();
+
   return WinstonModule.createLogger({
     levels,
-    level: getMaxLevel(levels),
+    level: getMaxLevel(winstonLogLevels(env, levels)),
     format: winston.format.combine(
       winston.format.label({ label: 'HollyFilms' }),
       winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
