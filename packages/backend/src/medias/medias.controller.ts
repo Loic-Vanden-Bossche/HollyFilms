@@ -15,19 +15,21 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class MediasController {
   constructor(private readonly mediasService: MediasService) {}
 
-  @Get()
   @Roles(Role.Admin)
+  @Get()
   @ApiOperation({ summary: '[User] Get all medias sorted by titles' })
   async getAllMedias(): Promise<MediaWithType[]> {
     return this.mediasService.getMedias();
   }
 
+  @Roles(Role.User)
   @Get('mostPopular')
   @ApiOperation({ summary: '[User] Get all medias sorted by most populars' })
   async getMostPopular(): Promise<MediaWithType[]> {
     return this.mediasService.getMostPopular();
   }
 
+  @Roles(Role.User)
   @Get('recommended')
   @ApiOperation({
     summary: '[User] Get all medias sorted by recommended for the current user',
@@ -36,6 +38,7 @@ export class MediasController {
     return this.mediasService.getRecommended(user);
   }
 
+  @Roles(Role.User)
   @Get('continueToWatch')
   @ApiOperation({ summary: '[User] Get all not entirely watched' })
   async getContinueToWatch(
@@ -44,18 +47,21 @@ export class MediasController {
     return this.mediasService.getContinueToWatch(user);
   }
 
+  @Roles(Role.User)
   @Get('seeAgain')
   @ApiOperation({ summary: '[User] Get all medias already seen' })
   async getSeeAgain(@User() user: CurrentUser): Promise<MediaWithType[]> {
     return this.mediasService.getSeeAgain(user);
   }
 
+  @Roles(Role.User)
   @Get('search/:query')
   @ApiOperation({ summary: '[User] Search for medias' })
   async searchQuery(@Param('query') query: string): Promise<MediaWithType[]> {
     return this.mediasService.searchQuery(query);
   }
 
+  @Roles(Role.User)
   @Get('adminSearch/:query')
   @ApiOperation({ summary: '[User] Search for medias in admin mode' })
   async adminSearchQuery(@Param('query') query: string): Promise<AdminMedia[]> {
@@ -69,6 +75,7 @@ export class MediasController {
     return this.mediasService.getRandomBackdrop();
   }
 
+  @Roles(Role.User)
   @Get('stream/:location/*')
   @ApiOperation({ summary: '[User] Stream media file' })
   async getStream(
