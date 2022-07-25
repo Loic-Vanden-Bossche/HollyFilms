@@ -33,7 +33,9 @@ export class AppModule {
             const logger = new Logger('Mongoose');
 
             mongoose.set('debug', (coll, method, query, doc) => {
-              logger.verbose(`${coll}.${method} ${colorize(query )} ${colorize(doc)}`);
+              logger.verbose(
+                `${coll}.${method} ${colorize(query)} ${colorize(doc)}`,
+              );
             });
 
             return {
