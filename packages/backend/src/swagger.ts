@@ -7,8 +7,8 @@ const initializeSwagger = (app: INestApplication) => {
     try {
       const config = new DocumentBuilder()
         .addCookieAuth(process.env.COOKIE_NAME)
-        .setTitle('Adopte-un-prof APP')
-        .setDescription('The Adopte-un-prof APP API description')
+        .setTitle('HollyFilms API')
+        .setDescription('The HollyFilms API description')
         .setVersion('0.1')
         .build();
       const document = SwaggerModule.createDocument(app, config);

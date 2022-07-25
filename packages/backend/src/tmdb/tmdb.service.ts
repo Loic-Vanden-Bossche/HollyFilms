@@ -12,27 +12,16 @@ export class TmdbService {
     private readonly configService: ConfigService,
   ) {}
 
-  async searchQuerry(querry: string): Promise<any[]> {
-    let TMDBsearchResults = null;
-
+  async searchQuery(querry: string): Promise<any[]> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
-    try {
-      TMDBsearchResults = await firstValueFrom(
-        this.httpService.get(
-          `${config.apiUrl}/search/multi?api_key=${
-            config.apiKey
-          }&language=en-US&query=${encodeURI(
-            querry,
-          )}&page=1&include_adult=false`,
-        ),
-      );
-    } catch (err) {
-      console.error(err);
-      return [];
-    }
-
-    const searchResults = TMDBsearchResults.data.results;
+    const searchResults = await firstValueFrom(
+      this.httpService.get(
+        `${config.apiUrl}/search/multi?api_key=${
+          config.apiKey
+        }&language=en-US&query=${encodeURI(querry)}&page=1&include_adult=false`,
+      ),
+    ).then((response) => response.data.results);
 
     return searchResults
       .filter((media: any) => {

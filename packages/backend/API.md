@@ -1,10 +1,10 @@
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id="adopte-un-prof-app">Adopte-un-prof APP v0.1</h1>
+<h1 id="hollyfilms-api">HollyFilms API v0.1</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
-The Adopte-un-prof APP API description
+The HollyFilms API description
 
 Base URLs:
 
@@ -13,28 +13,28 @@ Base URLs:
 * API Key (cookie)
     - Parameter Name: **connect.sid**, in: cookie. 
 
-<h1 id="adopte-un-prof-app-default">Default</h1>
+<h1 id="hollyfilms-api-app">App</h1>
 
-## AppController_getHello
+## AppController_getHealth
 
-<a id="opIdAppController_getHello"></a>
+<a id="opIdAppController_getHealth"></a>
 
 > Code samples
 
 ```shell
 # You can also use wget
-curl -X GET /
+curl -X GET /health
 
 ```
 
 ```http
-GET / HTTP/1.1
+GET /health HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/',
+fetch('/health',
 {
   method: 'GET'
 
@@ -51,7 +51,7 @@ fetch('/',
 require 'rest-client'
 require 'json'
 
-result = RestClient.get '/',
+result = RestClient.get '/health',
   params: {
   }
 
@@ -62,7 +62,7 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/')
+r = requests.get('/health')
 
 print(r.json())
 
@@ -79,7 +79,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('GET','/', array(
+    $response = $client->request('GET','/health', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -96,7 +96,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/");
+URL obj = new URL("/health");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -123,7 +123,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/", data)
+    req, err := http.NewRequest("GET", "/health", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -133,139 +133,11 @@ func main() {
 
 ```
 
-`GET /`
+`GET /health`
 
-<h3 id="appcontroller_gethello-responses">Responses</h3>
+*[Public] Check if the server is alive*
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_getAllMedias
-
-<a id="opIdMediasController_getAllMedias"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias
-
-```
-
-```http
-GET /medias HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias`
-
-<h3 id="mediascontroller_getallmedias-responses">Responses</h3>
+<h3 id="appcontroller_gethealth-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -275,1225 +147,7 @@ func main() {
 This operation does not require authentication
 </aside>
 
-## MediasController_getMostPopular
-
-<a id="opIdMediasController_getMostPopular"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/mostPopular
-
-```
-
-```http
-GET /medias/mostPopular HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/mostPopular',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/mostPopular',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/mostPopular')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/mostPopular', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/mostPopular");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/mostPopular", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/mostPopular`
-
-<h3 id="mediascontroller_getmostpopular-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_getRecommended
-
-<a id="opIdMediasController_getRecommended"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/recommended
-
-```
-
-```http
-GET /medias/recommended HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/recommended',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/recommended',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/recommended')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/recommended', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/recommended");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/recommended", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/recommended`
-
-<h3 id="mediascontroller_getrecommended-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_getContinueToWatch
-
-<a id="opIdMediasController_getContinueToWatch"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/continueToWatch
-
-```
-
-```http
-GET /medias/continueToWatch HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/continueToWatch',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/continueToWatch',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/continueToWatch')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/continueToWatch', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/continueToWatch");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/continueToWatch", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/continueToWatch`
-
-<h3 id="mediascontroller_getcontinuetowatch-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_getSeeAgain
-
-<a id="opIdMediasController_getSeeAgain"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/seeAgain
-
-```
-
-```http
-GET /medias/seeAgain HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/seeAgain',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/seeAgain',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/seeAgain')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/seeAgain', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/seeAgain");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/seeAgain", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/seeAgain`
-
-<h3 id="mediascontroller_getseeagain-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_searchQuerry
-
-<a id="opIdMediasController_searchQuerry"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/search/{querry}
-
-```
-
-```http
-GET /medias/search/{querry} HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/search/{querry}',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/search/{querry}',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/search/{querry}')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/search/{querry}', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/search/{querry}");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/search/{querry}", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/search/{querry}`
-
-<h3 id="mediascontroller_searchquerry-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|querry|path|string|true|none|
-
-<h3 id="mediascontroller_searchquerry-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_adminSearchQuerry
-
-<a id="opIdMediasController_adminSearchQuerry"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/adminSearch/{querry}
-
-```
-
-```http
-GET /medias/adminSearch/{querry} HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/adminSearch/{querry}',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/adminSearch/{querry}',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/adminSearch/{querry}')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/adminSearch/{querry}', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/adminSearch/{querry}");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/adminSearch/{querry}", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/adminSearch/{querry}`
-
-<h3 id="mediascontroller_adminsearchquerry-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|querry|path|string|true|none|
-
-<h3 id="mediascontroller_adminsearchquerry-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_getRandomBackdrop
-
-<a id="opIdMediasController_getRandomBackdrop"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/randomBackdrop
-
-```
-
-```http
-GET /medias/randomBackdrop HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/randomBackdrop',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/randomBackdrop',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/randomBackdrop')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/randomBackdrop', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/randomBackdrop");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/randomBackdrop", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/randomBackdrop`
-
-<h3 id="mediascontroller_getrandombackdrop-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_getStream
-
-<a id="opIdMediasController_getStream"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/stream/{location}/* \
-  -H 'accept-encoding: string'
-
-```
-
-```http
-GET /medias/stream/{location}/* HTTP/1.1
-
-accept-encoding: string
-
-```
-
-```javascript
-
-const headers = {
-  'accept-encoding':'string'
-};
-
-fetch('/medias/stream/{location}/*',
-{
-  method: 'GET',
-
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-headers = {
-  'accept-encoding' => 'string'
-}
-
-result = RestClient.get '/medias/stream/{location}/*',
-  params: {
-  }, headers: headers
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-headers = {
-  'accept-encoding': 'string'
-}
-
-r = requests.get('/medias/stream/{location}/*', headers = headers)
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$headers = array(
-    'accept-encoding' => 'string',
-);
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/stream/{location}/*', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/stream/{location}/*");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    headers := map[string][]string{
-        "accept-encoding": []string{"string"},
-    }
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/stream/{location}/*", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/stream/{location}/*`
-
-<h3 id="mediascontroller_getstream-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|location|path|string|true|none|
-|accept-encoding|header|string|true|none|
-
-<h3 id="mediascontroller_getstream-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## TmdbController_searchQuerry
-
-<a id="opIdTmdbController_searchQuerry"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /tmdb/search/{querry}
-
-```
-
-```http
-GET /tmdb/search/{querry} HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/tmdb/search/{querry}',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/tmdb/search/{querry}',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/tmdb/search/{querry}')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/tmdb/search/{querry}', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/tmdb/search/{querry}");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/tmdb/search/{querry}", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /tmdb/search/{querry}`
-
-<h3 id="tmdbcontroller_searchquerry-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|querry|path|string|true|none|
-
-<h3 id="tmdbcontroller_searchquerry-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-<h1 id="adopte-un-prof-app-users">Users</h1>
+<h1 id="hollyfilms-api-users">Users</h1>
 
 ## UsersController_getUser
 
@@ -1812,7 +466,7 @@ func main() {
 This operation does not require authentication
 </aside>
 
-<h1 id="adopte-un-prof-app-users-admin">Users Admin</h1>
+<h1 id="hollyfilms-api-users-admin">Users Admin</h1>
 
 ## UsersAdminController_getUsers
 
@@ -1934,7 +588,7 @@ func main() {
 
 `GET /users/admin`
 
-*[SuperAdmin] Get all users*
+*[Admin] Get all users*
 
 <h3 id="usersadmincontroller_getusers-responses">Responses</h3>
 
@@ -2100,7 +754,7 @@ func main() {
 
 `POST /users/admin`
 
-*[SuperAdmin] Create new user*
+*[Admin] Create new user*
 
 > Body parameter
 
@@ -2255,7 +909,7 @@ func main() {
 
 `GET /users/admin/{id}`
 
-*[SuperAdmin] Get specific user*
+*[Admin] Get specific user*
 
 <h3 id="usersadmincontroller_getuser-parameters">Parameters</h3>
 
@@ -2426,7 +1080,7 @@ func main() {
 
 `PUT /users/admin/{id}`
 
-*[SuperAdmin] Update specific user*
+*[Admin] Update specific user*
 
 > Body parameter
 
@@ -2581,7 +1235,7 @@ func main() {
 
 `DELETE /users/admin/{id}`
 
-*[SuperAdmin] Delete specific user*
+*[Admin] Delete specific user*
 
 <h3 id="usersadmincontroller_deleteuser-parameters">Parameters</h3>
 
@@ -2599,7 +1253,7 @@ func main() {
 This operation does not require authentication
 </aside>
 
-<h1 id="adopte-un-prof-app-auth">Auth</h1>
+<h1 id="hollyfilms-api-auth">Auth</h1>
 
 ## AuthController_login
 
@@ -2930,7 +1584,7 @@ func main() {
 
 `GET /auth/logout`
 
-*Reset current cookie*
+*[Public] Reset current cookie*
 
 <h3 id="authcontroller_logout-responses">Responses</h3>
 
@@ -3623,7 +2277,7 @@ func main() {
 
 `POST /auth/reset-password`
 
-*Trigger reset-password procedure*
+*[Public] Trigger reset-password procedure*
 
 > Body parameter
 
@@ -3797,7 +2451,7 @@ func main() {
 
 `POST /auth/change-password`
 
-*Change the password using token*
+*[Public] Change the password using token*
 
 > Body parameter
 
@@ -3821,6 +2475,1378 @@ func main() {
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="hollyfilms-api-medias">Medias</h1>
+
+## MediasController_getAllMedias
+
+<a id="opIdMediasController_getAllMedias"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias
+
+```
+
+```http
+GET /medias HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias`
+
+*[User] Get all medias sorted by titles*
+
+<h3 id="mediascontroller_getallmedias-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getMostPopular
+
+<a id="opIdMediasController_getMostPopular"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/mostPopular
+
+```
+
+```http
+GET /medias/mostPopular HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/mostPopular',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/mostPopular',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/mostPopular')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/mostPopular', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/mostPopular");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/mostPopular", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/mostPopular`
+
+*[User] Get all medias sorted by most populars*
+
+<h3 id="mediascontroller_getmostpopular-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getRecommended
+
+<a id="opIdMediasController_getRecommended"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/recommended
+
+```
+
+```http
+GET /medias/recommended HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/recommended',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/recommended',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/recommended')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/recommended', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/recommended");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/recommended", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/recommended`
+
+*[User] Get all medias sorted by recommended for the current user*
+
+<h3 id="mediascontroller_getrecommended-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getContinueToWatch
+
+<a id="opIdMediasController_getContinueToWatch"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/continueToWatch
+
+```
+
+```http
+GET /medias/continueToWatch HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/continueToWatch',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/continueToWatch',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/continueToWatch')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/continueToWatch', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/continueToWatch");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/continueToWatch", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/continueToWatch`
+
+*[User] Get all not entirely watched*
+
+<h3 id="mediascontroller_getcontinuetowatch-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getSeeAgain
+
+<a id="opIdMediasController_getSeeAgain"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/seeAgain
+
+```
+
+```http
+GET /medias/seeAgain HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/seeAgain',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/seeAgain',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/seeAgain')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/seeAgain', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/seeAgain");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/seeAgain", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/seeAgain`
+
+*[User] Get all medias already seen*
+
+<h3 id="mediascontroller_getseeagain-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_searchQuery
+
+<a id="opIdMediasController_searchQuery"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/search/{query}
+
+```
+
+```http
+GET /medias/search/{query} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/search/{query}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/search/{query}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/search/{query}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/search/{query}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/search/{query}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/search/{query}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/search/{query}`
+
+*[User] Search for medias*
+
+<h3 id="mediascontroller_searchquery-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|query|path|string|true|none|
+
+<h3 id="mediascontroller_searchquery-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_adminSearchQuery
+
+<a id="opIdMediasController_adminSearchQuery"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/adminSearch/{query}
+
+```
+
+```http
+GET /medias/adminSearch/{query} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/adminSearch/{query}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/adminSearch/{query}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/adminSearch/{query}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/adminSearch/{query}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/adminSearch/{query}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/adminSearch/{query}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/adminSearch/{query}`
+
+*[User] Search for medias in admin mode*
+
+<h3 id="mediascontroller_adminsearchquery-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|query|path|string|true|none|
+
+<h3 id="mediascontroller_adminsearchquery-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getRandomBackdrop
+
+<a id="opIdMediasController_getRandomBackdrop"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/randomBackdrop
+
+```
+
+```http
+GET /medias/randomBackdrop HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/randomBackdrop',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/randomBackdrop',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/randomBackdrop')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/randomBackdrop', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/randomBackdrop");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/randomBackdrop", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/randomBackdrop`
+
+*[Admin] Get a random movie backdrop*
+
+<h3 id="mediascontroller_getrandombackdrop-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getStream
+
+<a id="opIdMediasController_getStream"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/stream/{location}/* \
+  -H 'accept-encoding: string'
+
+```
+
+```http
+GET /medias/stream/{location}/* HTTP/1.1
+
+accept-encoding: string
+
+```
+
+```javascript
+
+const headers = {
+  'accept-encoding':'string'
+};
+
+fetch('/medias/stream/{location}/*',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'accept-encoding' => 'string'
+}
+
+result = RestClient.get '/medias/stream/{location}/*',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'accept-encoding': 'string'
+}
+
+r = requests.get('/medias/stream/{location}/*', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'accept-encoding' => 'string',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/stream/{location}/*', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/stream/{location}/*");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "accept-encoding": []string{"string"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/stream/{location}/*", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/stream/{location}/*`
+
+*[User] Stream media file*
+
+<h3 id="mediascontroller_getstream-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|location|path|string|true|none|
+|accept-encoding|header|string|true|none|
+
+<h3 id="mediascontroller_getstream-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="hollyfilms-api-tmdb">Tmdb</h1>
+
+## TmdbController_searchQuerry
+
+<a id="opIdTmdbController_searchQuerry"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /tmdb/search/{query}
+
+```
+
+```http
+GET /tmdb/search/{query} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/tmdb/search/{query}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/tmdb/search/{query}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/tmdb/search/{query}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/tmdb/search/{query}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/tmdb/search/{query}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/tmdb/search/{query}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /tmdb/search/{query}`
+
+*[Admin] Search in TMDB API for movies & tvs*
+
+<h3 id="tmdbcontroller_searchquerry-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|query|path|string|true|none|
+
+<h3 id="tmdbcontroller_searchquerry-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
 
 <aside class="success">
 This operation does not require authentication

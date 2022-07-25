@@ -1,12 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from './shared/decorators/public.decorator';
 
+@ApiTags('App')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Public()
+  @Get('health')
+  @ApiOperation({ summary: '[Public] Check if the server is alive' })
+  getHealth(): string {
+    return 'HollyFilms API is up and running';
   }
 }

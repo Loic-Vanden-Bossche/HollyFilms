@@ -9,7 +9,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { APIConfig, DatabaseConfig } from './config/config';
 import { getMongoString } from './config/config.utils';
-import { AppService } from './app.service';
 import { LogsMiddleware } from './logger/logs.middleware';
 
 import * as mongoose from 'mongoose';
@@ -59,7 +58,7 @@ export class AppModule {
         TmdbModule,
         ProcessingModule,
       ],
-      providers: [AppService, Logger],
+      providers: [Logger],
       controllers: [AppController],
     };
   }

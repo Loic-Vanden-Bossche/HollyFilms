@@ -22,35 +22,35 @@ export class UsersAdminController {
 
   @Roles(Role.Admin)
   @Get()
-  @ApiOperation({ summary: '[SuperAdmin] Get all users' })
+  @ApiOperation({ summary: '[Admin] Get all users' })
   async getUsers() {
     return this.usersService.findAll();
   }
 
   @Roles(Role.Admin)
   @Get('/:id')
-  @ApiOperation({ summary: '[SuperAdmin] Get specific user' })
+  @ApiOperation({ summary: '[Admin] Get specific user' })
   async getUser(@Param('id') id: string) {
     return this.usersService.findById(checkObjectId(id));
   }
 
   @Roles(Role.Admin)
   @Post()
-  @ApiOperation({ summary: '[SuperAdmin] Create new user' })
+  @ApiOperation({ summary: '[Admin] Create new user' })
   async createUser(@Body() user: CreateUserDto) {
     return this.usersService.create(user);
   }
 
   @Roles(Role.Admin)
   @Put('/:id')
-  @ApiOperation({ summary: '[SuperAdmin] Update specific user' })
+  @ApiOperation({ summary: '[Admin] Update specific user' })
   async updateUser(@Param('id') id: string, @Body() user: UpdateUserDto) {
     return this.usersService.update(checkObjectId(id), user);
   }
 
   @Roles(Role.Admin)
   @Delete('/:id')
-  @ApiOperation({ summary: '[SuperAdmin] Delete specific user' })
+  @ApiOperation({ summary: '[Admin] Delete specific user' })
   async deleteUser(@Param('id') id: string) {
     return this.usersService.delete(checkObjectId(id));
   }

@@ -112,7 +112,7 @@ export class MediasService {
       .then(formatManyMedias);
   }
 
-  async searchQuerry(query: string): Promise<MediaWithType[]> {
+  async searchQuery(query: string): Promise<MediaWithType[]> {
     if (query !== 'blank') {
       return this.mediaModel
         .find({
@@ -126,7 +126,7 @@ export class MediasService {
   }
 
   async adminSearchQuerry(query: string): Promise<AdminMedia[]> {
-    const medias = await this.searchQuerry(query).then(formatManyAdminMedias);
+    const medias = await this.searchQuery(query).then(formatManyAdminMedias);
 
     /*const queue = this.processingService.getQueue();
 

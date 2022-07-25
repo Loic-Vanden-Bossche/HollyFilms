@@ -55,7 +55,7 @@ export class AuthController {
 
   @Public()
   @Get('logout')
-  @ApiOperation({ summary: 'Reset current cookie' })
+  @ApiOperation({ summary: '[Public] Reset current cookie' })
   logout(
     @User() user: CurrentUser,
     @Res({ passthrough: true }) res: Response,
@@ -129,14 +129,14 @@ export class AuthController {
 
   @Public()
   @Post('reset-password')
-  @ApiOperation({ summary: 'Trigger reset-password procedure' })
+  @ApiOperation({ summary: '[Public] Trigger reset-password procedure' })
   resetPassword(@Body() resetPassword: ResetPasswordDto) {
     return this.authService.resetPassword(resetPassword);
   }
 
   @Public()
   @Post('change-password')
-  @ApiOperation({ summary: 'Change the password using token' })
+  @ApiOperation({ summary: '[Public] Change the password using token' })
   changePassword(@Body() changePassword: ChangePasswordAuthDto) {
     return this.authService.changePassword(changePassword);
   }

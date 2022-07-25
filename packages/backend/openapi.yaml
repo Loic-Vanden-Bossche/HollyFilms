@@ -1,12 +1,15 @@
 openapi: 3.0.0
 paths:
-  /:
+  /health:
     get:
-      operationId: AppController_getHello
+      operationId: AppController_getHealth
+      summary: "[Public] Check if the server is alive"
       parameters: []
       responses:
         "200":
           description: ""
+      tags:
+        - App
   "/users/limited/{id}":
     get:
       operationId: UsersController_getUser
@@ -41,7 +44,7 @@ paths:
   /users/admin:
     get:
       operationId: UsersAdminController_getUsers
-      summary: "[SuperAdmin] Get all users"
+      summary: "[Admin] Get all users"
       parameters: []
       responses:
         "200":
@@ -51,7 +54,7 @@ paths:
         - Users Admin
     post:
       operationId: UsersAdminController_createUser
-      summary: "[SuperAdmin] Create new user"
+      summary: "[Admin] Create new user"
       parameters: []
       requestBody:
         required: true
@@ -66,7 +69,7 @@ paths:
   "/users/admin/{id}":
     get:
       operationId: UsersAdminController_getUser
-      summary: "[SuperAdmin] Get specific user"
+      summary: "[Admin] Get specific user"
       parameters:
         - name: id
           required: true
@@ -79,7 +82,7 @@ paths:
       tags: *a2
     put:
       operationId: UsersAdminController_updateUser
-      summary: "[SuperAdmin] Update specific user"
+      summary: "[Admin] Update specific user"
       parameters:
         - name: id
           required: true
@@ -98,7 +101,7 @@ paths:
       tags: *a2
     delete:
       operationId: UsersAdminController_deleteUser
-      summary: "[SuperAdmin] Delete specific user"
+      summary: "[Admin] Delete specific user"
       parameters:
         - name: id
           required: true
@@ -139,7 +142,7 @@ paths:
   /auth/logout:
     get:
       operationId: AuthController_logout
-      summary: Reset current cookie
+      summary: "[Public] Reset current cookie"
       parameters: []
       responses:
         "200":
@@ -205,7 +208,7 @@ paths:
   /auth/reset-password:
     post:
       operationId: AuthController_resetPassword
-      summary: Trigger reset-password procedure
+      summary: "[Public] Trigger reset-password procedure"
       parameters: []
       requestBody:
         required: true
@@ -220,7 +223,7 @@ paths:
   /auth/change-password:
     post:
       operationId: AuthController_changePassword
-      summary: Change the password using token
+      summary: "[Public] Change the password using token"
       parameters: []
       requestBody:
         required: true
@@ -235,43 +238,56 @@ paths:
   /medias:
     get:
       operationId: MediasController_getAllMedias
+      summary: "[User] Get all medias sorted by titles"
       parameters: []
       responses:
         "200":
           description: ""
+      tags:
+        &a4
+        - Medias
   /medias/mostPopular:
     get:
       operationId: MediasController_getMostPopular
+      summary: "[User] Get all medias sorted by most populars"
       parameters: []
       responses:
         "200":
           description: ""
+      tags: *a4
   /medias/recommended:
     get:
       operationId: MediasController_getRecommended
+      summary: "[User] Get all medias sorted by recommended for the current user"
       parameters: []
       responses:
         "200":
           description: ""
+      tags: *a4
   /medias/continueToWatch:
     get:
       operationId: MediasController_getContinueToWatch
+      summary: "[User] Get all not entirely watched"
       parameters: []
       responses:
         "200":
           description: ""
+      tags: *a4
   /medias/seeAgain:
     get:
       operationId: MediasController_getSeeAgain
+      summary: "[User] Get all medias already seen"
       parameters: []
       responses:
         "200":
           description: ""
-  "/medias/search/{querry}":
+      tags: *a4
+  "/medias/search/{query}":
     get:
-      operationId: MediasController_searchQuerry
+      operationId: MediasController_searchQuery
+      summary: "[User] Search for medias"
       parameters:
-        - name: querry
+        - name: query
           required: true
           in: path
           schema:
@@ -279,11 +295,13 @@ paths:
       responses:
         "200":
           description: ""
-  "/medias/adminSearch/{querry}":
+      tags: *a4
+  "/medias/adminSearch/{query}":
     get:
-      operationId: MediasController_adminSearchQuerry
+      operationId: MediasController_adminSearchQuery
+      summary: "[User] Search for medias in admin mode"
       parameters:
-        - name: querry
+        - name: query
           required: true
           in: path
           schema:
@@ -291,16 +309,20 @@ paths:
       responses:
         "200":
           description: ""
+      tags: *a4
   /medias/randomBackdrop:
     get:
       operationId: MediasController_getRandomBackdrop
+      summary: "[Admin] Get a random movie backdrop"
       parameters: []
       responses:
         "200":
           description: ""
+      tags: *a4
   "/medias/stream/{location}/*":
     get:
       operationId: MediasController_getStream
+      summary: "[User] Stream media file"
       parameters:
         - name: location
           required: true
@@ -315,11 +337,13 @@ paths:
       responses:
         "200":
           description: ""
-  "/tmdb/search/{querry}":
+      tags: *a4
+  "/tmdb/search/{query}":
     get:
       operationId: TmdbController_searchQuerry
+      summary: "[Admin] Search in TMDB API for movies & tvs"
       parameters:
-        - name: querry
+        - name: query
           required: true
           in: path
           schema:
@@ -327,9 +351,11 @@ paths:
       responses:
         "200":
           description: ""
+      tags:
+        - Tmdb
 info:
-  title: Adopte-un-prof APP
-  description: The Adopte-un-prof APP API description
+  title: HollyFilms API
+  description: The HollyFilms API description
   version: "0.1"
   contact: {}
 tags: []
