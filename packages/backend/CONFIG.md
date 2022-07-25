@@ -30,5 +30,7 @@
 | HF_MAILS_USER_TAG | HollyFilms | Mail user tag | isString | No |
 | HF_ADMIN_EMAIL | admin@hollyfilms.fr | Admin email | isEmail, isString | No |
 | HF_ADMIN_PASSWORD | admin | Admin password | isString | Yes |
+| HF_TMDB_API_KEY |  | TMBD api key | isString | Yes |
+| HF_TMDB_API_URL | https://api.themoviedb.org/3 | TMBD api url | isString | No |
 
-Generated on 25/07/2022, 10:25:38
+Generated on 25/07/2022, 15:53:47

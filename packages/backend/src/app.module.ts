@@ -16,6 +16,9 @@ import * as mongoose from 'mongoose';
 import { IdentityModule } from './indentity/identity.module';
 
 import colorize = require('json-colorizer');
+import { MediasModule } from './medias/medias.module';
+import { TmdbModule } from './tmdb/tmdb.module';
+import { ProcessingModule } from './processing/processing.module';
 
 @Module({})
 export class AppModule {
@@ -52,6 +55,9 @@ export class AppModule {
           cache: true,
         }),
         IdentityModule,
+        MediasModule,
+        TmdbModule,
+        ProcessingModule,
       ],
       providers: [AppService, Logger],
       controllers: [AppController],

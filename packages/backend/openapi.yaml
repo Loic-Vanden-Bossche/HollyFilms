@@ -232,6 +232,101 @@ paths:
         "201":
           description: ""
       tags: *a3
+  /medias:
+    get:
+      operationId: MediasController_getAllMedias
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /medias/mostPopular:
+    get:
+      operationId: MediasController_getMostPopular
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /medias/recommended:
+    get:
+      operationId: MediasController_getRecommended
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /medias/continueToWatch:
+    get:
+      operationId: MediasController_getContinueToWatch
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /medias/seeAgain:
+    get:
+      operationId: MediasController_getSeeAgain
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  "/medias/search/{querry}":
+    get:
+      operationId: MediasController_searchQuerry
+      parameters:
+        - name: querry
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+  "/medias/adminSearch/{querry}":
+    get:
+      operationId: MediasController_adminSearchQuerry
+      parameters:
+        - name: querry
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+  /medias/randomBackdrop:
+    get:
+      operationId: MediasController_getRandomBackdrop
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  "/medias/stream/{location}/*":
+    get:
+      operationId: MediasController_getStream
+      parameters:
+        - name: location
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: accept-encoding
+          required: true
+          in: header
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+  "/tmdb/search/{querry}":
+    get:
+      operationId: TmdbController_searchQuerry
+      parameters:
+        - name: querry
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
 info:
   title: Adopte-un-prof APP
   description: The Adopte-un-prof APP API description
@@ -411,6 +506,11 @@ components:
           type: boolean
           description: Is the user an Admin
           example: "true"
+        playedMedias:
+          description: Array of medias that the user has played
+          type: array
+          items:
+            type: string
       required:
         - _id
         - email
@@ -419,6 +519,7 @@ components:
         - username
         - roles
         - isAdmin
+        - playedMedias
     RegisterAuthDto:
       type: object
       properties:

@@ -18,6 +18,7 @@ export interface APIConfig extends BaseConfig {
   rToken: RTokenConfig;
   mails: MailsConfig;
   admin: AdminConfig;
+  tmdb: TMDBConfig;
 }
 
 export interface CookieConfig {
@@ -60,6 +61,11 @@ export interface MailsConfig {
 export interface AdminConfig {
   email: string;
   password: string;
+}
+
+export interface TMDBConfig {
+  apiKey: string;
+  apiUrl: string;
 }
 
 export const getConfig = (env: Record<string, unknown>): APIConfig => {
@@ -105,6 +111,10 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
     admin: {
       email: config.HF_ADMIN_EMAIL,
       password: config.HF_ADMIN_PASSWORD,
+    },
+    tmdb: {
+      apiKey: config.HF_TMDB_API_KEY,
+      apiUrl: config.HF_TMDB_API_URL,
     },
   };
 };

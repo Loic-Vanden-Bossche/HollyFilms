@@ -200,4 +200,18 @@ export class ConfigEnvironmentDto {
   @Desc('Admin password')
   @Secret()
   HF_ADMIN_PASSWORD: string;
+
+  // TMBD
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('TMBD api key')
+  @Secret()
+  HF_TMDB_API_KEY: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('TMBD api url')
+  HF_TMDB_API_URL: string | null;
 }

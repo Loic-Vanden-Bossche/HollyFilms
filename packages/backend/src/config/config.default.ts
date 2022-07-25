@@ -48,4 +48,8 @@ export const defaultConfig: ConfigEnvironmentDto = {
   // Admin
   HF_ADMIN_EMAIL: 'admin@hollyfilms.fr',
   HF_ADMIN_PASSWORD: 'admin',
+
+  // TMDB
+  HF_TMDB_API_KEY: null,
+  HF_TMDB_API_URL: 'https://api.themoviedb.org/3',
 };

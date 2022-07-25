@@ -2,6 +2,7 @@ import { User } from './user.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../shared/role';
 import { Types } from 'mongoose';
+import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 
 export default class CurrentUser {
   constructor(user: Partial<User & { _id: Types.ObjectId }>) {
@@ -12,6 +13,7 @@ export default class CurrentUser {
     this.username = user.username;
     this.roles = user.roles;
     this.isAdmin = this.roles.includes(Role.Admin);
+    this.playedMedias = user.playedMedias;
   }
 
   @ApiProperty({
@@ -55,4 +57,9 @@ export default class CurrentUser {
     example: 'true',
   })
   isAdmin?: boolean;
+
+  @ApiProperty({
+    description: 'Array of medias that the user has played',
+  })
+  playedMedias?: PlayedMedia[];
 }

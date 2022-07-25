@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Token } from '../tokens/token.schema';
 import { Role } from '../../shared/role';
+import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 
 export type UserDocument = User & Document;
 
@@ -31,6 +32,9 @@ export class User {
 
   @Prop()
   tokens: Token[];
+
+  @Prop()
+  playedMedias: PlayedMedia[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
