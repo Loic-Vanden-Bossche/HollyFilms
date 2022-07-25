@@ -65,7 +65,7 @@ export class MediasController {
   @Get('adminSearch/:query')
   @ApiOperation({ summary: '[User] Search for medias in admin mode' })
   async adminSearchQuery(@Param('query') query: string): Promise<AdminMedia[]> {
-    return this.mediasService.adminSearchQuerry(query);
+    return this.mediasService.adminSearchQuery(query);
   }
 
   @Roles(Role.Admin)

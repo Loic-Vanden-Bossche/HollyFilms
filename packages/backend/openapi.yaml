@@ -353,6 +353,77 @@ paths:
           description: ""
       tags:
         - Tmdb
+  /processing/onlineSearch:
+    post:
+      operationId: ProcessingController_getOnlineSearchResults
+      summary: "[Admin] Engage a scrapping request to search movies"
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        &a5
+        - Processing
+  /processing/onlineSearch/getmediaLink:
+    post:
+      operationId: ProcessingController_getmediaLink
+      summary: "[Admin] Get uptobox premium link"
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags: *a5
+  "/processing/localSearch/{query}":
+    get:
+      operationId: ProcessingController_getLocalSearchResults
+      summary: "[Admin] Search in hard space for files"
+      parameters:
+        - name: query
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+  /processing/startQueue:
+    get:
+      operationId: ProcessingController_startQueue
+      summary: "[Admin] Start processing queue"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+  /processing/clearQueue:
+    get:
+      operationId: ProcessingController_clearQueue
+      summary: "[Admin] Clear all unprocessing files"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+  "/processing/startGeneration/{id}/{name}":
+    get:
+      operationId: ProcessingController_startGeneration
+      summary: "[Admin] Start generation of extra streams"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: name
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a5
 info:
   title: HollyFilms API
   description: The HollyFilms API description
