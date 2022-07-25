@@ -8,7 +8,7 @@ import CurrentUser from '../users/current';
 import { Model } from 'mongoose';
 import { UserDocument } from '../users/user.schema';
 import { CookieConfig, JWTConfig } from '../../config/config';
-import { getObjectId } from '../../shared/mongoose';
+import {getObjectId} from "../../shared/mongoose";
 
 dayjs.extend(duration);
 

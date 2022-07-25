@@ -47,6 +47,7 @@
     "dayjs": "^1.11.4",
     "dotenv": "^16.0.1",
     "helmet": "^5.1.1",
+    "json-colorizer": "^2.2.2",
     "mongoose": "^6.4.6",
     "nest-winston": "^1.7.0",
     "nestjs-env-config": "^0.4.2",

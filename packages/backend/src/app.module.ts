@@ -15,12 +15,7 @@ import { LogsMiddleware } from './logger/logs.middleware';
 import * as mongoose from 'mongoose';
 import { IdentityModule } from './indentity/identity.module';
 
-const logger = new Logger('Mongoose');
-
-mongoose.set('debug', (coll, method, query, doc) => {
-  logger.verbose(`${coll}.${method} ${query} ${doc}`);
-  console.log(query, doc);
-});
+import colorize = require('json-colorizer');
 
 @Module({})
 export class AppModule {
@@ -34,9 +29,17 @@ export class AppModule {
       imports: [
         MongooseModule.forRootAsync({
           imports: [ConfigModule],
-          useFactory: async (config: ConfigService) => ({
-            uri: getMongoString(config.get<DatabaseConfig>('database')),
-          }),
+          useFactory: async (config: ConfigService) => {
+            const logger = new Logger('Mongoose');
+
+            mongoose.set('debug', (coll, method, query, doc) => {
+              logger.verbose(`${coll}.${method} ${colorize(query )} ${colorize(doc)}`);
+            });
+
+            return {
+              uri: getMongoString(config.get<DatabaseConfig>('database')),
+            };
+          },
           inject: [ConfigService],
         }),
         ConfigModule.forRoot({
