@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Response } from 'express';
 import { env } from 'process';
 import { Media, MediaDocument } from './media.schema';
@@ -39,6 +39,8 @@ export interface AdminMedia {
 
 @Injectable()
 export class MediasService {
+  logger = new Logger('Medias');
+
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
     private readonly userService: UsersService, // private readonly processingService: ProcessingService,
@@ -49,6 +51,7 @@ export class MediasService {
   }
 
   async deleteMedia(id: string) {
+    this.logger.log(`Deleting media ${id}`);
     return this.userService
       .deletePlayedMediasOccurences(id)
       .then(() => this.mediaModel.findByIdAndDelete(id));

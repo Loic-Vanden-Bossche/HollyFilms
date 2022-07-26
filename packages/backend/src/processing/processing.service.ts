@@ -8,7 +8,7 @@ import * as request from 'request';
 
 import { EOL } from 'os';
 
-import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 import { MediasService } from 'src/medias/medias.service';
 import { WebsocketService } from './websocket.service';
@@ -31,18 +31,16 @@ type Queue = {
 };
 
 @Injectable()
-export class ProcessingService implements OnModuleInit {
+export class ProcessingService {
+  private logger = new Logger('Processing');
+
   constructor(
     private readonly websocketService: WebsocketService,
     private readonly mediasService: MediasService,
   ) {}
 
-  onModuleInit() {
-    this.purgeProcessingMedias();
-  }
-
   startGeneration(id: string, name: string) {
-    console.log('startGeneration', id, name);
+    this.logger.log(`Start extra [${name}] generation for ${id}`);
     switch (name) {
       case 'cast':
         this.generateCastStreams(id);
@@ -90,7 +88,7 @@ export class ProcessingService implements OnModuleInit {
           };
         }),
     ).catch((err) => {
-      console.log(err);
+      this.logger.error(err);
     });
   }
 
@@ -274,6 +272,8 @@ export class ProcessingService implements OnModuleInit {
   async purgeProcessingMedias(except?: string) {
     const medias = await this.mediasService.getMedias();
 
+    console.log(except);
+
     /*medias = medias.filter((media) => {
       return (
         media.mediaType === 'movie' &&
@@ -282,12 +282,9 @@ export class ProcessingService implements OnModuleInit {
       );
     });*/
 
-    console.log(except);
-
     for (const media of medias) {
       if (media.mediaType === 'movie') {
         // this.moviesService.delete(this.mediasService.getId(media.data));
-
         /* if (
           !this.washFiles(
             env.MEDIAS_LOCATION_DEFAULT +
@@ -301,9 +298,6 @@ export class ProcessingService implements OnModuleInit {
               this.mediasService.getId(media.data),
           );
         }*/
-        console.log('deletingData');
-      } else {
-        console.log('This is a TV');
       }
     }
   }

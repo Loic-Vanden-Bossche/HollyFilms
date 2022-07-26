@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UsersService } from '../../indentity/users/users.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Media, MediaDocument } from '../media.schema';
@@ -12,9 +12,11 @@ import { MediaWithType } from '../medias.utils';
 
 @Injectable()
 export class TvsService {
+  private logger = new Logger('Tvs');
+
   constructor(
-    private readonly userService: UsersService,
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
+    private readonly userService: UsersService,
     private readonly http: HttpService,
     private readonly tmdbService: TmdbService,
     private readonly configService: ConfigService,
@@ -29,17 +31,21 @@ export class TvsService {
   }
 
   add(tmdbId: number): Promise<MediaWithType> {
-    return this.tmdbService.getTv(tmdbId).then((tv) =>
-      this.mediaModel.create(tv.data).then((media) => ({
+    this.logger.verbose(`Adding tv ${tmdbId}`);
+
+    return this.tmdbService.getTv(tmdbId).then((tv) => {
+      this.logger.log(`Added tv ${tv.data.title}`);
+      return this.mediaModel.create(tv.data).then((media) => ({
         data: media,
         mediaType: 'tv',
-      })),
-    );
+      }));
+    });
   }
 
   async addSeason(id: string, seasonIndex: number): Promise<Media> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
+    this.logger.verbose(`Adding season ${seasonIndex} of tv ${id}`);
     return this.mediaModel
       .findById(id)
       .exec()
@@ -67,6 +73,8 @@ export class TvsService {
           .findById(id)
           .exec()
           .then((media) => {
+            this.logger.log(`Added season ${seasonIndex} of tv ${media.title}`);
+
             media.tvs[seasonIndex - 1].episodes = episodes;
             media.tvs[seasonIndex - 1].available = true;
             media.tvs[seasonIndex - 1].dateAdded = new Date();
