@@ -1,4 +1,4 @@
-import { Media } from './schemas/media.schema';
+import { Media } from './media.schema';
 import { AdminMedia } from './medias.service';
 
 type MediaType = 'movie' | 'tv';

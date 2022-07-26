@@ -175,7 +175,7 @@ export class TmdbService {
     };
   }
 
-  async getMovie(tmdbId: string, lang = 'en-US'): Promise<MediaWithType> {
+  async getMovie(tmdbId: number, lang = 'en-US'): Promise<MediaWithType> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
     const movie = await firstValueFrom(

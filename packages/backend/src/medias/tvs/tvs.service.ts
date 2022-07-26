@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../indentity/users/users.service';
 import { InjectModel } from '@nestjs/mongoose';
-import { Media, MediaDocument } from '../schemas/media.schema';
+import { Media, MediaDocument } from '../media.schema';
 import { Model } from 'mongoose';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';

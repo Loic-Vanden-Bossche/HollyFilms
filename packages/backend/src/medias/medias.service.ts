@@ -5,7 +5,7 @@ import * as zlib from 'zlib';
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { env } from 'process';
-import { Media, MediaDocument } from './schemas/media.schema';
+import { Media, MediaDocument } from './media.schema';
 import CurrentUser from '../indentity/users/current';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Media } from './media.schema';
+import { Media } from '../media.schema';
 
 @Schema()
 export class PlayedMedia {

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TvsService } from './tvs.service';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { Role } from '../../shared/role';
-import { Media } from '../schemas/media.schema';
+import { Media } from '../media.schema';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MediaWithType } from '../medias.utils';
 import { AddTvDto } from './dto/add.tv.dto';
@@ -22,6 +22,7 @@ export class TvsController {
 
   @Post()
   @Roles(Role.Admin)
+  @ApiOperation({ summary: '[Admin] Add a tv in database from TMDB' })
   async add(@Body() body: AddTvDto): Promise<MediaWithType> {
     return this.tvsService.add(body.tmdbId);
   }

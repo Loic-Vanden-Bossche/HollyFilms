@@ -1,10 +1,10 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Season } from '../tvs/schemas/season.schema';
-import { FileInfos } from './file-infos.schema';
-import { Review } from './review.schema';
-import { Actor } from './actor.schema';
-import { Profile } from './profile.schema';
+import { Season } from './tvs/schemas/season.schema';
+import { FileInfos } from './schemas/file-infos.schema';
+import { Review } from './schemas/review.schema';
+import { Actor } from './schemas/actor.schema';
+import { Profile } from './schemas/profile.schema';
 
 export class Director {
   name: string;
@@ -72,7 +72,8 @@ export class Media {
   @Prop()
   trailer_key: string;
 
-  @Prop()
+  // optional
+  @Prop({ default: undefined })
   tvs?: Season[];
 
   @Prop(FileInfos)

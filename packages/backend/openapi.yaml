@@ -378,6 +378,7 @@ paths:
         - Tvs
     post:
       operationId: TvsController_add
+      summary: "[Admin] Add a tv in database from TMDB"
       parameters: []
       requestBody:
         required: true
@@ -438,6 +439,31 @@ paths:
         "201":
           description: ""
       tags: *a5
+  /movies:
+    get:
+      operationId: MoviesController_getAll
+      summary: "[User] Find all movies stored in database"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        &a6
+        - Movies
+    post:
+      operationId: MoviesController_add
+      summary: "[Admin] Add a movie in database from TMDB"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MovieTvDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a6
   "/tmdb/search/{query}":
     get:
       operationId: TmdbController_searchQuerry
@@ -462,7 +488,7 @@ paths:
         "201":
           description: ""
       tags:
-        &a6
+        &a7
         - Processing
   /processing/onlineSearch/getmediaLink:
     post:
@@ -472,7 +498,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a6
+      tags: *a7
   "/processing/localSearch/{query}":
     get:
       operationId: ProcessingController_getLocalSearchResults
@@ -486,7 +512,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a6
+      tags: *a7
   /processing/startQueue:
     get:
       operationId: ProcessingController_startQueue
@@ -495,7 +521,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a6
+      tags: *a7
   /processing/clearQueue:
     get:
       operationId: ProcessingController_clearQueue
@@ -504,7 +530,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a6
+      tags: *a7
   "/processing/startGeneration/{id}/{name}":
     get:
       operationId: ProcessingController_startGeneration
@@ -523,7 +549,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a6
+      tags: *a7
 info:
   title: HollyFilms API
   description: The HollyFilms API description
@@ -802,3 +828,12 @@ components:
           example: /media/test/test.mp4
       required:
         - filePath
+    MovieTvDto:
+      type: object
+      properties:
+        tmdbId:
+          type: number
+          description: Movie id in tmdb
+          example: 13493
+      required:
+        - tmdbId
