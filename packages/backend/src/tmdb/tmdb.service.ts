@@ -5,6 +5,39 @@ import { ConfigService } from '@nestjs/config';
 import { TMDBConfig } from '../config/config';
 import { MediaWithType } from '../medias/medias.utils';
 
+export interface TMDBMovie {
+  media_type: string;
+  title: string;
+  id: number;
+  backdrop_path: string;
+  poster_path: string;
+  release_date: string;
+}
+
+export interface TMDBTVShow {
+  media_type: string;
+  name: string;
+  id: number;
+  backdrop_path: string;
+  poster_path: string;
+  first_air_date: string;
+}
+
+export interface TMDBSearchResult {
+  results: TMDBMedia[];
+}
+
+export interface OnlineSearchResult {
+  original_title: string;
+  TMDB_id: number;
+  poster_path: string;
+  backdrop_path: string;
+  release_date: string;
+  mediaType: 'tv' | 'movie';
+}
+
+type TMDBMedia = TMDBMovie | TMDBTVShow;
+
 @Injectable()
 export class TmdbService {
   constructor(
@@ -12,11 +45,23 @@ export class TmdbService {
     private readonly configService: ConfigService,
   ) {}
 
-  async searchQuery(querry: string): Promise<any[]> {
+  getBackdropPath(relativePath: string | null): string {
+    return relativePath
+      ? 'https://image.tmdb.org/t/p/w1280' + relativePath
+      : null;
+  }
+
+  getPosterPath(relativePath: string): string {
+    return relativePath
+      ? 'https://image.tmdb.org/t/p/w500' + relativePath
+      : null;
+  }
+
+  async searchQuery(querry: string): Promise<OnlineSearchResult[]> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
     const searchResults = await firstValueFrom(
-      this.httpService.get(
+      this.httpService.get<TMDBSearchResult>(
         `${config.apiUrl}/search/multi?api_key=${
           config.apiKey
         }&language=en-US&query=${encodeURI(querry)}&page=1&include_adult=false`,
@@ -24,22 +69,23 @@ export class TmdbService {
     ).then((response) => response.data.results);
 
     return searchResults
-      .filter((media: any) => {
-        return media.media_type == 'tv' || media.media_type == 'movie';
-      })
-      .map((media: any) => {
-        return {
-          original_title: media.media_type == 'tv' ? media.name : media.title,
-          TMDB_id: media.id,
-          poster_path: media.poster_path,
-          backdrop_path: media.backdrop_path,
-          release_date:
-            media.media_type == 'tv'
-              ? media.first_air_date
-              : media.release_date,
-          mediaType: media.media_type,
-        };
-      });
+      .filter(
+        (media) => media.media_type === 'tv' || media.media_type === 'movie',
+      )
+      .map((media) => ({
+        original_title:
+          'title' in media ? media.title : 'name' in media ? media.name : null,
+        TMDB_id: media.id,
+        poster_path: this.getPosterPath(media.poster_path),
+        backdrop_path: this.getBackdropPath(media.backdrop_path),
+        release_date:
+          'first_air_date' in media
+            ? media.first_air_date
+            : 'release_date' in media
+            ? media.release_date
+            : null,
+        mediaType: media.media_type as 'tv' | 'movie',
+      }));
   }
 
   async getTv(tmdbId: string): Promise<MediaWithType> {
@@ -81,12 +127,8 @@ export class TmdbService {
           })[0],
         popularity: tv.popularity,
         release_date: tv.first_air_date,
-        poster_path: tv.poster_path
-          ? 'https://image.tmdb.org/t/p/w500' + tv.poster_path
-          : null,
-        backdrop_path: tv.backdrop_path
-          ? 'https://image.tmdb.org/t/p/w1280' + tv.backdrop_path
-          : null,
+        poster_path: this.getPosterPath(tv.poster_path),
+        backdrop_path: this.getBackdropPath(tv.backdrop_path),
         tagline: JSON.stringify(tv.tagline).length - 2 ? tv.tagline : null,
         taglineFr: tv.translations.translations
           .filter((obj) => {
