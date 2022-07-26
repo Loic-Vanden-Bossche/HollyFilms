@@ -69,7 +69,7 @@ export class TvsService {
     episodeIndex: number,
     filePath: string,
   ): Promise<void> {
-    if (id && seasonIndex && episodeIndex) {
+    if (id && seasonIndex && episodeIndex && filePath) {
       /*this.processingService.addToQueue({
         fileName: filePath,
         mediaType: 'tv',

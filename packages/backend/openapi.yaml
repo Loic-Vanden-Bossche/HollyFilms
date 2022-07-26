@@ -365,6 +365,52 @@ paths:
         "200":
           description: ""
       tags: *a4
+  /tvs:
+    get:
+      operationId: TvsController_getAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  "/tvs/{id}/add/{si}":
+    get:
+      operationId: TvsController_addTvSeason
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: si
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+  "/tvs/{id}/add/{si}/{ei}":
+    post:
+      operationId: TvsController_addTvEpisode
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: si
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: ei
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
   "/tmdb/search/{query}":
     get:
       operationId: TmdbController_searchQuerry
