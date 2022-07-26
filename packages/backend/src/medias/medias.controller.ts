@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, Param, Res } from '@nestjs/common';
+import { Controller, Delete, Get, Headers, Param, Res } from '@nestjs/common';
 
 import { AdminMedia, MediasService } from './medias.service';
 
@@ -15,11 +15,25 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class MediasController {
   constructor(private readonly mediasService: MediasService) {}
 
-  @Roles(Role.Admin)
+  @Roles(Role.User)
   @Get()
   @ApiOperation({ summary: '[User] Get all medias sorted by titles' })
   async getAllMedias(): Promise<MediaWithType[]> {
     return this.mediasService.getMedias();
+  }
+
+  @Roles(Role.User)
+  @Get(':id')
+  @ApiOperation({ summary: '[User] Get a specific media by id' })
+  async getMedia(@Param('id') id: string) {
+    return this.mediasService.getMedia(id);
+  }
+
+  @Roles(Role.Admin)
+  @Delete(':id')
+  @ApiOperation({ summary: '[Admin] Delete a specific media by id' })
+  async deleteMedia(@Param('id') id: string) {
+    return this.mediasService.deleteMedia(id);
   }
 
   @Roles(Role.User)
@@ -70,7 +84,7 @@ export class MediasController {
 
   @Roles(Role.Admin)
   @Get('randomBackdrop')
-  @ApiOperation({ summary: '[Admin] Get a random movie backdrop' })
+  @ApiOperation({ summary: '[Admin] Get a random movie or tv backdrop' })
   async getRandomBackdrop(): Promise<{ path: string }> {
     return this.mediasService.getRandomBackdrop();
   }

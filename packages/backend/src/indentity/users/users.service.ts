@@ -121,6 +121,17 @@ export class UsersService {
     return this.userModel.deleteOne({ _id: getObjectId(id) });
   }
 
+  deletePlayedMediasOccurences(mediaId: string): Promise<any> {
+    return this.userModel
+      .updateMany(
+        {
+          playedMedias: { $elemMatch: { _id: mediaId } },
+        },
+        { $pull: { playedMedias: { media: { _id: mediaId } } } },
+      )
+      .exec();
+  }
+
   async createAdminAccount() {
     const adminConfig = this.configService.get<AdminConfig>('admin');
 

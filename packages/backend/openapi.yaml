@@ -246,6 +246,33 @@ paths:
       tags:
         &a4
         - Medias
+  "/medias/{id}":
+    get:
+      operationId: MediasController_getMedia
+      summary: "[User] Get a specific media by id"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+    delete:
+      operationId: MediasController_deleteMedia
+      summary: "[Admin] Delete a specific media by id"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
   /medias/mostPopular:
     get:
       operationId: MediasController_getMostPopular
@@ -313,7 +340,7 @@ paths:
   /medias/randomBackdrop:
     get:
       operationId: MediasController_getRandomBackdrop
-      summary: "[Admin] Get a random movie backdrop"
+      summary: "[Admin] Get a random movie or tv backdrop"
       parameters: []
       responses:
         "200":

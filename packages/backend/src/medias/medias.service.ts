@@ -17,8 +17,9 @@ import {
   MediaWithType,
 } from './medias.utils';
 import { PlayedMedia } from './schemas/played-media.schema';
-import { Episode } from './tvs/episode.schema';
+import { Episode } from './tvs/schemas/episode.schema';
 import { FileInfos } from './schemas/file-infos.schema';
+import { UsersService } from '../indentity/users/users.service';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -39,8 +40,19 @@ export interface AdminMedia {
 @Injectable()
 export class MediasService {
   constructor(
-    @InjectModel(Media.name) private mediaModel: Model<MediaDocument>, // private readonly processingService: ProcessingService,
+    @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
+    private readonly userService: UsersService, // private readonly processingService: ProcessingService,
   ) {}
+
+  async getMedia(id: string) {
+    this.mediaModel.findById(id);
+  }
+
+  async deleteMedia(id: string) {
+    return this.userService
+      .deletePlayedMediasOccurences(id)
+      .then(() => this.mediaModel.findByIdAndDelete(id));
+  }
 
   async getMostPopular(): Promise<MediaWithType[]> {
     return this.mediaModel
@@ -256,6 +268,25 @@ export class MediasService {
       .sort({ title: 'asc' })
       .exec()
       .then(formatManyMedias);
+  }
+
+  async updatePopularity() {
+    /*this.getMedias().then((medias) => {
+
+    });
+    console.log('updating tvs populatiry ...');
+    const tvs = await this.findAll();
+
+    for (const tv of tvs) {
+      const TMDBTv = await this.tmdbService.getTv(tv.TMDB_id.toString());
+
+      if (TMDBTv) {
+        console.log(TMDBTv.title, TMDBTv.popularity);
+        this.updateOne(tv._id.valueOf().toString(), {
+          $set: { popularity: TMDBTv.popularity },
+        });
+      }
+    }*/
   }
 
   async getStream(

@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Season } from '../tvs/season.schema';
+import { Season } from '../tvs/schemas/season.schema';
 import { FileInfos } from './file-infos.schema';
 import { Review } from './review.schema';
 import { Actor } from './actor.schema';

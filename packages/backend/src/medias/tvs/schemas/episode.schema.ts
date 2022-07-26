@@ -1,5 +1,5 @@
 import { Schema, SchemaFactory } from '@nestjs/mongoose';
-import { FileInfos } from '../schemas/file-infos.schema';
+import { FileInfos } from '../../schemas/file-infos.schema';
 
 @Schema()
 export class Episode {
