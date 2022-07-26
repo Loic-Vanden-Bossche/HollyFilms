@@ -52,4 +52,10 @@ export const defaultConfig: ConfigEnvironmentDto = {
   // TMDB
   HF_TMDB_API_KEY: null,
   HF_TMDB_API_URL: 'https://api.themoviedb.org/3',
+
+  // Medias
+  HF_MEDIAS_FFMPEG_PATH: 'C:/ffmpeg/bin/ffmpeg.exe',
+  HF_MEDIAS_FFPROBE_PATH: 'C:/ffmpeg/bin/ffprobe.exe',
+  HF_MEDIAS_PATH_DEFAULT: '../../medias_default',
+  HF_MEDIAS_PATH_SECONDARY: '../../medias_secondary',
 };

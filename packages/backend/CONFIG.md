@@ -32,5 +32,9 @@
 | HF_ADMIN_PASSWORD | admin | Admin password | isString | Yes |
 | HF_TMDB_API_KEY |  | TMBD api key | isString | Yes |
 | HF_TMDB_API_URL | https://api.themoviedb.org/3 | TMBD api url | isString | No |
+| HF_MEDIAS_FFMPEG_PATH | C:/ffmpeg/bin/ffmpeg.exe | Path of the ffmpeg executable | isString | No |
+| HF_MEDIAS_FFPROBE_PATH | C:/ffmpeg/bin/ffprobe.exe | Path of the ffprobe executable | isString | No |
+| HF_MEDIAS_PATH_DEFAULT | ../../medias_default | Path where the videos will be stored by default | isString | No |
+| HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
 
-Generated on 25/07/2022, 15:53:47
+Generated on 26/07/2022, 14:03:16

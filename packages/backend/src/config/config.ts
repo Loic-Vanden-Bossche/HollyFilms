@@ -19,6 +19,7 @@ export interface APIConfig extends BaseConfig {
   mails: MailsConfig;
   admin: AdminConfig;
   tmdb: TMDBConfig;
+  medias: MediasConfig;
 }
 
 export interface CookieConfig {
@@ -68,6 +69,13 @@ export interface TMDBConfig {
   apiUrl: string;
 }
 
+export interface MediasConfig {
+  ffmpegPath: string;
+  ffprobePath: string;
+  storePathDefault: string;
+  storePathSecondary: string;
+}
+
 export const getConfig = (env: Record<string, unknown>): APIConfig => {
   const config = validateConfig(ConfigEnvironmentDto, defaultConfig, env);
 
@@ -115,6 +123,12 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
     tmdb: {
       apiKey: config.HF_TMDB_API_KEY,
       apiUrl: config.HF_TMDB_API_URL,
+    },
+    medias: {
+      ffmpegPath: config.HF_MEDIAS_FFMPEG_PATH,
+      ffprobePath: config.HF_MEDIAS_FFPROBE_PATH,
+      storePathDefault: config.HF_MEDIAS_PATH_DEFAULT,
+      storePathSecondary: config.HF_MEDIAS_PATH_SECONDARY,
     },
   };
 };

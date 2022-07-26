@@ -214,4 +214,29 @@ export class ConfigEnvironmentDto {
   @UseDefault()
   @Desc('TMBD api url')
   HF_TMDB_API_URL: string | null;
+
+  // Medias
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path of the ffmpeg executable')
+  HF_MEDIAS_FFMPEG_PATH: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path of the ffprobe executable')
+  HF_MEDIAS_FFPROBE_PATH: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path where the videos will be stored by default')
+  HF_MEDIAS_PATH_DEFAULT: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path where the videos will be stored in secondary')
+  HF_MEDIAS_PATH_SECONDARY: string;
 }
