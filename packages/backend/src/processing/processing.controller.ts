@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ProcessingService } from './processing.service';
-import {ScrapperService} from "./scrapper.service";
-import {ApiOperation, ApiTags} from "@nestjs/swagger";
-import {Roles} from "../shared/decorators/roles.decorator";
-import {Role} from "../shared/role";
+import { ScrapperService } from './scrapper.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Roles } from '../shared/decorators/roles.decorator';
+import { Role } from '../shared/role';
 
 @ApiTags('Processing')
 @Controller('processing')
@@ -15,7 +15,9 @@ export class ProcessingController {
 
   @Roles(Role.Admin)
   @Post('onlineSearch')
-  @ApiOperation({ summary: '[Admin] Engage a scrapping request to search movies' })
+  @ApiOperation({
+    summary: '[Admin] Engage a scrapping request to search movies',
+  })
   async getOnlineSearchResults(@Body('query') query: string): Promise<void> {
     return this.scrapperService.query(query);
   }
@@ -59,10 +61,7 @@ export class ProcessingController {
   @Roles(Role.Admin)
   @Get('startGeneration/:id/:name')
   @ApiOperation({ summary: '[Admin] Start generation of extra streams' })
-  async startGeneration(
-    @Param('id') id: string,
-    @Param('name') name: string
-  ) {
+  async startGeneration(@Param('id') id: string, @Param('name') name: string) {
     this.processService.startGeneration(id, name);
   }
 }

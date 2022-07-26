@@ -19,7 +19,6 @@ import {
 import { PlayedMedia } from './schemas/played-media.schema';
 import { Episode } from './tvs/episode.schema';
 import { FileInfos } from './schemas/file-infos.schema';
-import {ProcessingService} from "../processing/processing.service";
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -40,8 +39,7 @@ export interface AdminMedia {
 @Injectable()
 export class MediasService {
   constructor(
-    @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
-    private processingService: ProcessingService,
+    @InjectModel(Media.name) private mediaModel: Model<MediaDocument>, // private readonly processingService: ProcessingService,
   ) {}
 
   async getMostPopular(): Promise<MediaWithType[]> {
@@ -130,7 +128,7 @@ export class MediasService {
   async adminSearchQuery(query: string): Promise<AdminMedia[]> {
     const medias = await this.searchQuery(query).then(formatManyAdminMedias);
 
-    const queue = this.processingService.getQueue();
+    /*const queue = this.processingService.getQueue();
 
     let index = 0;
 
@@ -142,7 +140,7 @@ export class MediasService {
           index++;
         }
       });
-    }
+    }*/
 
     return medias;
   }

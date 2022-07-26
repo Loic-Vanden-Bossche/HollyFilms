@@ -8,7 +8,7 @@ import * as request from 'request';
 
 import { EOL } from 'os';
 
-import {BadRequestException, Injectable, NotFoundException, OnModuleInit} from "@nestjs/common";
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 
 import { MediasService } from 'src/medias/medias.service';
 import { WebsocketService } from './websocket.service';
@@ -33,8 +33,8 @@ type Queue = {
 @Injectable()
 export class ProcessingService implements OnModuleInit {
   constructor(
-    public readonly websocketService: WebsocketService,
-    public readonly mediasService: MediasService
+    private readonly websocketService: WebsocketService,
+    private readonly mediasService: MediasService,
   ) {}
 
   onModuleInit() {
@@ -43,13 +43,13 @@ export class ProcessingService implements OnModuleInit {
 
   startGeneration(id: string, name: string) {
     console.log('startGeneration', id, name);
-    switch(name) {
+    switch (name) {
       case 'cast':
         this.generateCastStreams(id);
         break;
       case 'thumbnails':
         this.generateThumbs(id);
-        break
+        break;
       case 'quality':
         this.generateExtraQualities(id, [1080, 720, 480, 360, 240]);
         break;
@@ -186,7 +186,7 @@ export class ProcessingService implements OnModuleInit {
       lang?: string;
     }[];
     fileInfos: any;
-  }
+  };
 
   masterFileName = 'master.m3u8';
 
@@ -272,7 +272,7 @@ export class ProcessingService implements OnModuleInit {
   }
 
   async purgeProcessingMedias(except?: string) {
-    let medias = await this.mediasService.getMedias();
+    const medias = await this.mediasService.getMedias();
 
     /*medias = medias.filter((media) => {
       return (
@@ -282,11 +282,13 @@ export class ProcessingService implements OnModuleInit {
       );
     });*/
 
+    console.log(except);
+
     for (const media of medias) {
       if (media.mediaType === 'movie') {
         // this.moviesService.delete(this.mediasService.getId(media.data));
 
-       /* if (
+        /* if (
           !this.washFiles(
             env.MEDIAS_LOCATION_DEFAULT +
               '/' +
@@ -320,7 +322,6 @@ export class ProcessingService implements OnModuleInit {
     //--------- In method functions ---------
 
     const finalizeProcess = async () => {
-
       await this.generateCastStreams(inputVideo.id, false);
 
       this.progressStatus.mainStatus = 'ENDED';
@@ -1128,16 +1129,14 @@ export class ProcessingService implements OnModuleInit {
     });
   }
 
-  async generateCastStreams(videoId: string, resetStatus: boolean = true) {
-
+  async generateCastStreams(videoId: string, resetStatus = true) {
     const getDirectories = (path) => {
       return fs.readdirSync(path).filter((file) => {
-        return fs.statSync(path + "/" + file).isDirectory();
+        return fs.statSync(path + '/' + file).isDirectory();
       });
     };
 
     const replacementLang = (textArray: Array<string>, text: string) => {
-
       const isQC = (lang: string) => {
         return lang === 'VFQ' || lang === 'QC';
       };
@@ -1147,30 +1146,30 @@ export class ProcessingService implements OnModuleInit {
       };
 
       const getLang = (text: string) => {
-        return text.match(/LANGUAGE="[^"]*"/g)[0].match(/"[^"]*/g)[0].replace('"', '');
-      }
+        return text
+          .match(/LANGUAGE="[^"]*"/g)[0]
+          .match(/"[^"]*/g)[0]
+          .replace('"', '');
+      };
 
-      const langArray = textArray
-      .map(text => getLang(text));
+      const langArray = textArray.map((text) => getLang(text));
 
-      const fr = langArray.some(lang => isFR(lang));
-      const qc = langArray.some(lang => isQC(lang));
+      const fr = langArray.some((lang) => isFR(lang));
+      const qc = langArray.some((lang) => isQC(lang));
 
       const textLang = getLang(text);
 
-      const isDefault =
-        isFR(textLang)
-          ? true
-          : !fr && isQC(textLang)
-            ? true
-            : !fr && !qc;
+      const isDefault = isFR(textLang)
+        ? true
+        : !fr && isQC(textLang)
+        ? true
+        : !fr && !qc;
 
       return text.replace('YES', isDefault ? 'YES' : 'NO');
-    }
+    };
 
     return new Promise<void>(async (resolve, reject) => {
-
-      if(!this.progressStatus) {
+      if (!this.progressStatus) {
         this.progressStatus = {
           mainStatus: 'IDLE',
           mainMsg: 'IDLE',
@@ -1180,20 +1179,21 @@ export class ProcessingService implements OnModuleInit {
       }
 
       let endedStreams = 0;
-      let textToAppend = [];
+      const textToAppend = [];
 
       const folderName = this.getInitialLocation() + '/' + videoId + '/';
-      const audioDirectories = getDirectories(this.getInitialLocation() + '/' + videoId + '/').filter(
-        (subDir) => subDir.includes("audio") && !subDir.includes("cast")
+      const audioDirectories = getDirectories(
+        this.getInitialLocation() + '/' + videoId + '/',
+      ).filter(
+        (subDir) => subDir.includes('audio') && !subDir.includes('cast'),
       );
-      if (!audioDirectories.length) reject("Error : no audio stream found");
+      if (!audioDirectories.length) reject('Error : no audio stream found');
 
       this.progressStatus.mainMsg = `generating cast streams`;
       this.websocketService.emit('processing-media', this.progressStatus);
 
       for (const [index, audioDir] of audioDirectories.entries()) {
         new Promise<void>((resolveFile) => {
-
           this.progressStatus.streamsStatus.push({
             type: 'audio',
             tag: 'cast-audio',
@@ -1205,78 +1205,106 @@ export class ProcessingService implements OnModuleInit {
           const streamIndex = this.progressStatus.streamsStatus.length - 1;
 
           const fullAudioDir = folderName + audioDir;
-          const tempAudioDir = folderName + audioDir + "-cast";
+          const tempAudioDir = folderName + audioDir + '-cast';
 
           if (!fs.existsSync(tempAudioDir)) fs.mkdirSync(tempAudioDir);
 
           const m3u8File =
             fullAudioDir +
-            "/" +
+            '/' +
             fs
-            .readdirSync(fullAudioDir)
-            .filter((file) => file.includes(".m3u8"))[0];
+              .readdirSync(fullAudioDir)
+              .filter((file) => file.includes('.m3u8'))[0];
 
           ffmpeg(m3u8File)
-          .addOption([
-            "-c aac",
-            "-ac 2",
-            "-f hls",
-            "-hls_time 10",
-            '-hls_playlist_type event',
-            "-segment_format mpegts",
-            "-hls_segment_filename " +  tempAudioDir + "/" + audioDir + "_data%06d.ts"
-          ])
-          .output(tempAudioDir + "/" + audioDir + "_stream.m3u8")
-          .on("progress", (progress) => {
-            this.progressStatus.streamsStatus[streamIndex].prog = progress.percent;
-            this.websocketService.emit('processing-media', this.progressStatus);
-          })
-          .on("error", (err) => {
-            console.log("An error occurred: " + err.message);
-          })
-          .on("end", () => {
+            .addOption([
+              '-c aac',
+              '-ac 2',
+              '-f hls',
+              '-hls_time 10',
+              '-hls_playlist_type event',
+              '-segment_format mpegts',
+              '-hls_segment_filename ' +
+                tempAudioDir +
+                '/' +
+                audioDir +
+                '_data%06d.ts',
+            ])
+            .output(tempAudioDir + '/' + audioDir + '_stream.m3u8')
+            .on('progress', (progress) => {
+              this.progressStatus.streamsStatus[streamIndex].prog =
+                progress.percent;
+              this.websocketService.emit(
+                'processing-media',
+                this.progressStatus,
+              );
+            })
+            .on('error', (err) => {
+              console.log('An error occurred: ' + err.message);
+            })
+            .on('end', () => {
+              endedStreams++;
 
-            endedStreams++;
+              const fileContent = fs
+                .readFileSync(folderName + 'master.m3u8')
+                .toString();
+              const selectedLine = fileContent
+                .split('\n')
+                .find((line) => line.includes(audioDir));
 
-            const fileContent = fs.readFileSync(folderName + 'master.m3u8').toString();
-            const selectedLine = fileContent.split('\n').find((line) => line.includes(audioDir));
+              fs.writeFileSync(
+                folderName + 'master.m3u8',
+                fileContent.replace(
+                  selectedLine,
+                  selectedLine.replace('YES', 'NO'),
+                ),
+              );
 
-            fs.writeFileSync(folderName + 'master.m3u8', fileContent.replace(selectedLine, selectedLine.replace('YES', 'NO')));
-
-            if(!fileContent.includes(audioDir + "-cast")) {
-              textToAppend.push(
-                {
-                  url: folderName + "master.m3u8",
-                  text: selectedLine
-                    .replace(audioDir, audioDir + "-cast").
-                      replace(/NAME="[^"]*"/g, "NAME=\"cast" + (index + 1) + "\"").
-                      replace(/CHANNELS="[^"]*"/g, "CHANNELS=\"2\"")
-                    + "\n"
+              if (!fileContent.includes(audioDir + '-cast')) {
+                textToAppend.push({
+                  url: folderName + 'master.m3u8',
+                  text:
+                    selectedLine
+                      .replace(audioDir, audioDir + '-cast')
+                      .replace(
+                        /NAME="[^"]*"/g,
+                        'NAME="cast' + (index + 1) + '"',
+                      )
+                      .replace(/CHANNELS="[^"]*"/g, 'CHANNELS="2"') + '\n',
                 });
-            }
+              }
 
-            if (endedStreams === audioDirectories.length) {
+              if (endedStreams === audioDirectories.length) {
+                for (const appendData of textToAppend) {
+                  fs.appendFileSync(
+                    appendData.url,
+                    replacementLang(
+                      textToAppend.map((text) => text.text),
+                      appendData.text,
+                    ),
+                  );
+                }
 
-              for (const appendData of textToAppend) {
-                fs.appendFileSync(
-                  appendData.url, replacementLang(textToAppend.map(text => text.text), appendData.text)
+                this.progressStatus.streamsStatus[streamIndex].prog = 100;
+                this.websocketService.emit(
+                  'processing-media',
+                  this.progressStatus,
                 );
+
+                if (resetStatus) {
+                  this.progressStatus = null;
+                  this.websocketService.emit(
+                    'processing-media',
+                    this.progressStatus,
+                  );
+                }
+                resolve();
               }
 
-              this.progressStatus.streamsStatus[streamIndex].prog = 100;
-              this.websocketService.emit('processing-media', this.progressStatus);
-
-              if(resetStatus) {
-                this.progressStatus = null;
-                this.websocketService.emit('processing-media', this.progressStatus);
-              }
-              resolve();
-            }
-
-            resolveFile();
-          })
-          .run();
-        })
+              resolveFile();
+            })
+            .run();
+        });
       }
     });
   }
@@ -1443,11 +1471,11 @@ export class ProcessingService implements OnModuleInit {
       function _secondsToHRTime(time: number) {
         if (typeof time === 'number' && time >= 0) {
           let seconds = Math.floor(time % 60);
-          let minutes = Math.floor((time) / 60);
+          let minutes = Math.floor(time / 60);
           let hours = 0;
           if (minutes > 59) {
-            hours = Math.floor((time) / 3600);
-            minutes = Math.floor((((time) / 3600) % 1) * 60);
+            hours = Math.floor(time / 3600);
+            minutes = Math.floor(((time / 3600) % 1) * 60);
             seconds = Math.floor(time % 60);
           }
 

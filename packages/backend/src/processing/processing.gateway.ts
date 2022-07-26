@@ -1,13 +1,18 @@
-import {OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway,} from '@nestjs/websockets';
+import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+} from '@nestjs/websockets';
 
-import {ProcessingService} from './processing.service';
-import {Socket} from 'net';
-import {UseGuards} from '@nestjs/common';
-import {WebsocketService} from './websocket.service';
-import {env} from 'process';
-import {JwtAuthGuard} from "../indentity/auth/guards/jwt.guard";
-import {Roles} from "../shared/decorators/roles.decorator";
-import {Role} from "../shared/role";
+import { ProcessingService } from './processing.service';
+import { Socket } from 'net';
+import { UseGuards } from '@nestjs/common';
+import { WebsocketService } from './websocket.service';
+import { env } from 'process';
+import { JwtAuthGuard } from '../indentity/auth/guards/jwt.guard';
+import { Roles } from '../shared/decorators/roles.decorator';
+import { Role } from '../shared/role';
 
 let whitelist: string[];
 
