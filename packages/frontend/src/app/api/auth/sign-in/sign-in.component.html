@@ -1,0 +1,55 @@
+<div class="w-full h-full">
+  <div
+    class="h-2/3 hm:h-full w-full absolute top-1/2 hm:top-0 -translate-y-2/3 hm:translate-y-0"
+  >
+    <form class="h-full" [formGroup]="loginForm" (submit)="onSubmit()">
+      <div
+        class="w-5/6 sm:w-4/6 md:w-3/6 lg:w-2/6 h-full flex justify-evenly flex-col items-center mx-auto"
+      >
+        <img
+          class="w-3/4"
+          [src]="'assets/logos/logo-squared-' + imgColor + '.png'"
+          alt=""
+        />
+        <input
+          formControlName="email"
+          type="email"
+          autocomplete="email"
+          required
+          placeholder="Email"
+          class="px-3 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
+          formArrayName="email"
+        />
+        <input
+          formControlName="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          placeholder="Password"
+          class="px-3 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
+        />
+        <div class="flex w-full items-center justify-between">
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <input
+                type="checkbox"
+                checked="checked"
+                class="checkbox checkbox-primary"
+              />
+              <span class="ml-3 label-text">Se souvenir de moi</span>
+            </label>
+          </div>
+
+          <div class="text-sm">
+            <a href="#" class="font-medium link-primary">
+              Mot de passe oublié?
+            </a>
+          </div>
+        </div>
+        <button class="w-full btn h-14 rounded" type="submit">
+          Se connecter
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -162,6 +162,7 @@ importers:
       '@angular/platform-browser-dynamic': ^14.1.0
       '@angular/router': ^14.1.0
       '@types/jasmine': ~4.0.0
+      '@types/uuid': ^8.3.4
       autoprefixer: ^10.4.7
       eslint: ^8.20.0
       eslint-config-prettier: ^8.5.0
@@ -177,6 +178,7 @@ importers:
       tailwindcss: ^3.1.6
       tslib: ^2.3.0
       typescript: ~4.7.2
+      uuid: ^8.3.2
       zone.js: ~0.11.4
     dependencies:
       '@angular/animations': 14.1.0_@angular+core@14.1.0
@@ -187,8 +189,10 @@ importers:
       '@angular/platform-browser': 14.1.0_fsfxn3q5jfgkydsi5rfuqudspa
       '@angular/platform-browser-dynamic': 14.1.0_4uelz7lddsxzh2as2vx6t5hnym
       '@angular/router': 14.1.0_oh7ssot2niyqdg7a6md2mriq4i
+      '@types/uuid': 8.3.4
       rxjs: 7.5.6
       tslib: 2.4.0
+      uuid: 8.3.2
       zone.js: 0.11.7
     devDependencies:
       '@angular-devkit/build-angular': 14.1.0_5ew2d7aq46zvcllhjxsubyfyfe
@@ -3218,6 +3222,10 @@ packages:
   /@types/tough-cookie/4.0.2:
     resolution: {integrity: sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==}
     dev: true
+
+  /@types/uuid/8.3.4:
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+    dev: false
 
   /@types/webidl-conversions/6.1.1:
     resolution: {integrity: sha512-XAahCdThVuCFDQLT7R7Pk/vqeObFNL3YqRyFZg+AqAP/W1/w3xHaIxuW7WszQqTbIBOPRcItYJIou3i/mppu3Q==}
@@ -9083,6 +9091,7 @@ packages:
 
   /node-addon-api/3.2.1:
     resolution: {integrity: sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==}
+    requiresBuild: true
 
   /node-emoji/1.11.0:
     resolution: {integrity: sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==}

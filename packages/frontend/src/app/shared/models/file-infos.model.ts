@@ -1,7 +1,4 @@
-import { Schema, SchemaFactory } from '@nestjs/mongoose';
-
-@Schema()
-export class FileInfos {
+export interface FileInfos {
   isProcessing: boolean;
   maxQualilty: number;
   audioLangAvaliables: string[];
@@ -11,5 +8,3 @@ export class FileInfos {
   extraQualities: number[];
   location: string;
 }
-
-export const FileInfosSchema = SchemaFactory.createForClass(FileInfos);

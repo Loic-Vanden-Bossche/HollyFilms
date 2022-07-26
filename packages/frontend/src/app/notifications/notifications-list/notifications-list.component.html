@@ -1,0 +1,17 @@
+<div class="fixed right-0 bottom-0 h-[60vh] w-full pointer-events-none">
+  <div
+    class="h-0 w-0 hidden alert-info alert-error alert-success alert-warning"
+  ></div>
+  <div
+    class="h-full ml-auto w-full md:w-2/3 lg:w-1/2 flex flex-col flex-nowrap items-end justify-end"
+  >
+    <div class="w-full px-3">
+      <app-notification
+        (close)="onClose(notification.id)"
+        (action)="notification.button?.action()"
+        *ngFor="let notification of notifications"
+        [notification]="notification"
+      ></app-notification>
+    </div>
+  </div>
+</div>
