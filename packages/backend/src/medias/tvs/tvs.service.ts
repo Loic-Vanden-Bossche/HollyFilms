@@ -7,6 +7,8 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { TMDBConfig } from '../../config/config';
 import { firstValueFrom } from 'rxjs';
+import { TmdbService } from '../../tmdb/tmdb.service';
+import { MediaWithType } from '../medias.utils';
 
 @Injectable()
 export class TvsService {
@@ -14,6 +16,7 @@ export class TvsService {
     private readonly userService: UsersService,
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
     private readonly http: HttpService,
+    private readonly tmdbService: TmdbService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -23,6 +26,15 @@ export class TvsService {
         tvs: { $exists: true },
       })
       .exec();
+  }
+
+  add(tmdbId: number): Promise<MediaWithType> {
+    return this.tmdbService.getTv(tmdbId).then((tv) =>
+      this.mediaModel.create(tv.data).then((media) => ({
+        data: media,
+        mediaType: 'tv',
+      })),
+    );
   }
 
   async addSeason(id: string, seasonIndex: number): Promise<Media> {
@@ -47,7 +59,7 @@ export class TvsService {
                 ? 'https://image.tmdb.org/t/p/w1280' + episode.still_path
                 : null,
               vote_average: episode.vote_average,
-              avaliable: false,
+              available: false,
             })),
           );
 
@@ -56,7 +68,7 @@ export class TvsService {
           .exec()
           .then((media) => {
             media.tvs[seasonIndex - 1].episodes = episodes;
-            media.tvs[seasonIndex - 1].avaliable = true;
+            media.tvs[seasonIndex - 1].available = true;
             media.tvs[seasonIndex - 1].dateAdded = new Date();
             return media.save();
           });

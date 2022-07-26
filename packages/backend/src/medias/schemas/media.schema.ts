@@ -22,9 +22,6 @@ export class Media {
   title: string;
 
   @Prop()
-  titleFr: string;
-
-  @Prop()
   mediaType: string;
 
   @Prop()
@@ -38,9 +35,6 @@ export class Media {
 
   @Prop()
   overview: string;
-
-  @Prop()
-  overviewFR: string;
 
   @Prop()
   popularity: number;
@@ -59,9 +53,6 @@ export class Media {
 
   @Prop()
   tagline: string;
-
-  @Prop()
-  taglineFr: string;
 
   @Prop()
   production_companies: Array<{ name: string; logo_path: string }>;

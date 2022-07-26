@@ -368,13 +368,31 @@ paths:
   /tvs:
     get:
       operationId: TvsController_getAll
+      summary: "[User] Find all tvs stored in database"
       parameters: []
       responses:
         "200":
           description: ""
+      tags:
+        &a5
+        - Tvs
+    post:
+      operationId: TvsController_add
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddTvDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a5
   "/tvs/{id}/add/{si}":
     get:
       operationId: TvsController_addTvSeason
+      summary: "[Admin] Add a season to tv data"
       parameters:
         - name: id
           required: true
@@ -389,9 +407,11 @@ paths:
       responses:
         "200":
           description: ""
+      tags: *a5
   "/tvs/{id}/add/{si}/{ei}":
     post:
       operationId: TvsController_addTvEpisode
+      summary: "[Admin] Add episode to tv data"
       parameters:
         - name: id
           required: true
@@ -408,9 +428,16 @@ paths:
           in: path
           schema:
             type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddEpisodeTvDto"
       responses:
         "201":
           description: ""
+      tags: *a5
   "/tmdb/search/{query}":
     get:
       operationId: TmdbController_searchQuerry
@@ -435,7 +462,7 @@ paths:
         "201":
           description: ""
       tags:
-        &a5
+        &a6
         - Processing
   /processing/onlineSearch/getmediaLink:
     post:
@@ -445,7 +472,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a5
+      tags: *a6
   "/processing/localSearch/{query}":
     get:
       operationId: ProcessingController_getLocalSearchResults
@@ -459,7 +486,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a5
+      tags: *a6
   /processing/startQueue:
     get:
       operationId: ProcessingController_startQueue
@@ -468,7 +495,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a5
+      tags: *a6
   /processing/clearQueue:
     get:
       operationId: ProcessingController_clearQueue
@@ -477,7 +504,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a5
+      tags: *a6
   "/processing/startGeneration/{id}/{name}":
     get:
       operationId: ProcessingController_startGeneration
@@ -496,7 +523,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a5
+      tags: *a6
 info:
   title: HollyFilms API
   description: The HollyFilms API description
@@ -757,3 +784,21 @@ components:
         - token
         - newPassword
         - newPasswordConfirm
+    AddTvDto:
+      type: object
+      properties:
+        tmdbId:
+          type: number
+          description: TV id in tmdb
+          example: 13493
+      required:
+        - tmdbId
+    AddEpisodeTvDto:
+      type: object
+      properties:
+        filePath:
+          type: string
+          description: Path of the media to add
+          example: /media/test/test.mp4
+      required:
+        - filePath

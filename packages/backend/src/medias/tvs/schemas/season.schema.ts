@@ -8,7 +8,7 @@ export class Season {
   episode_count: number;
   overview: string;
   poster_path: string;
-  avaliable: true;
+  available: boolean;
   dateAdded?: Date;
   episodes?: Episode[];
 }

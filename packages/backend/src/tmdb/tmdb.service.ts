@@ -4,39 +4,12 @@ import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { TMDBConfig } from '../config/config';
 import { MediaWithType } from '../medias/medias.utils';
-
-export interface TMDBMovie {
-  media_type: string;
-  title: string;
-  id: number;
-  backdrop_path: string;
-  poster_path: string;
-  release_date: string;
-}
-
-export interface TMDBTVShow {
-  media_type: string;
-  name: string;
-  id: number;
-  backdrop_path: string;
-  poster_path: string;
-  first_air_date: string;
-}
-
-export interface TMDBSearchResult {
-  results: TMDBMedia[];
-}
-
-export interface OnlineSearchResult {
-  original_title: string;
-  TMDB_id: number;
-  poster_path: string;
-  backdrop_path: string;
-  release_date: string;
-  mediaType: 'tv' | 'movie';
-}
-
-type TMDBMedia = TMDBMovie | TMDBTVShow;
+import {
+  OnlineSearchResult,
+  TMDBMovie,
+  TMDBSearchResult,
+  TMDBTVShow,
+} from './tmdb.models';
 
 @Injectable()
 export class TmdbService {
@@ -88,49 +61,40 @@ export class TmdbService {
       }));
   }
 
-  async getTv(tmdbId: string): Promise<MediaWithType> {
+  async getTv(tmdbId: number): Promise<MediaWithType> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
-    const TMDB_Tv = await firstValueFrom(
-      this.httpService.get(
+    const tv = await firstValueFrom(
+      this.httpService.get<TMDBTVShow>(
         `${config.apiUrl}/tv/${tmdbId}?api_key=${config.apiKey}&language=en-US&append_to_response=videos,credits,translations,reviews`,
       ),
-    );
-
-    const tv = TMDB_Tv.data;
+    ).then((response) => response.data);
 
     return {
       data: {
-        title: tv.name,
-        titleFr: tv.translations.translations
-          .filter((obj) => {
-            return obj.iso_3166_1 === 'FR';
-          })
-          .map((c) => {
-            return JSON.stringify(c.data.name).length - 2
-              ? c.data.name
-              : tv.name;
-          })[0],
+        title: tv.translations.translations
+          .filter((obj) => obj.iso_3166_1 === 'FR')
+          .map((c) =>
+            JSON.stringify(c.data.name).length - 2 ? c.data.name : tv.name,
+          )[0],
         mediaType: 'tv',
         TMDB_id: tv.id,
-        runtime: tv.episode_run_time,
+        runtime: tv.episode_run_time[0],
         genres: tv.genres.map((g) => g.name),
-        overview: tv.overview,
-        overviewFR: tv.translations.translations
+        overview: tv.translations.translations
           .filter((obj) => {
             return obj.iso_3166_1 === 'FR';
           })
-          .map((c) => {
-            return JSON.stringify(c.data.overview).length - 2
+          .map((c) =>
+            JSON.stringify(c.data.overview).length - 2
               ? c.data.overview
-              : tv.overview;
-          })[0],
+              : tv.overview,
+          )[0],
         popularity: tv.popularity,
         release_date: tv.first_air_date,
         poster_path: this.getPosterPath(tv.poster_path),
         backdrop_path: this.getBackdropPath(tv.backdrop_path),
-        tagline: JSON.stringify(tv.tagline).length - 2 ? tv.tagline : null,
-        taglineFr: tv.translations.translations
+        tagline: tv.translations.translations
           .filter((obj) => {
             return obj.iso_3166_1 === 'FR';
           })
@@ -147,14 +111,12 @@ export class TmdbService {
               : null,
           };
         }),
-        director: tv.created_by.map((c) => {
-          return {
-            name: c.name,
-            profile_path: c.profile_path
-              ? 'https://image.tmdb.org/t/p/w185' + c.profile_path
-              : null,
-          };
-        }),
+        director: tv.created_by.map((c) => ({
+          name: c.name,
+          profile_path: c.profile_path
+            ? 'https://image.tmdb.org/t/p/w185' + c.profile_path
+            : null,
+        }))[0],
         actors: tv.credits.cast.slice(0, 8).map((c) => {
           return {
             name: c.name,
@@ -166,18 +128,16 @@ export class TmdbService {
         }),
         tvs: tv.seasons
           .filter((s) => s.name.toLowerCase() != 'specials')
-          .map((c) => {
-            return {
-              index: c.season_number,
-              name: c.name,
-              episode_count: c.episode_count,
-              overview: c.overview,
-              poster_path: c.poster_path
-                ? 'https://image.tmdb.org/t/p/w500' + c.poster_path
-                : null,
-              avaliable: false,
-            };
-          }),
+          .map((c) => ({
+            index: c.season_number,
+            name: c.name,
+            episode_count: c.episode_count,
+            overview: c.overview,
+            poster_path: c.poster_path
+              ? 'https://image.tmdb.org/t/p/w500' + c.poster_path
+              : null,
+            available: false,
+          })),
 
         rating: tv.vote_average,
         reviews: tv.reviews.results.length
@@ -197,21 +157,17 @@ export class TmdbService {
               }
               return {
                 author: {
-                  username: c.author_details.username,
-                  avatar_path: c.author_details.avatar_path,
-                  rating: c.author_details.rating,
+                  name: c.author_details.username,
+                  profile_path: c.author_details.avatar_path,
                 },
+                rating: c.author_details.rating,
                 content: c.content,
               };
             })
-          : null,
+          : [],
         trailer_key: tv.videos.results
-          .filter((obj) => {
-            return obj.type === 'Trailer' && obj.site === 'YouTube';
-          })
-          .map((c) => {
-            return c.key;
-          })[0],
+          .filter((obj) => obj.type === 'Trailer' && obj.site === 'YouTube')
+          .map((c) => c.key)[0],
         budget: tv.budget,
         revenue: tv.revenue,
       },
@@ -222,41 +178,35 @@ export class TmdbService {
   async getMovie(tmdbId: string, lang = 'en-US'): Promise<MediaWithType> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
-    const TMDBMovie = await firstValueFrom(
-      this.httpService.get(
+    const movie = await firstValueFrom(
+      this.httpService.get<TMDBMovie>(
         `${config.apiUrl}/movie/${tmdbId}?api_key=${config.apiKey}&language=${lang}&append_to_response=videos,credits,translations,reviews`,
       ),
-    );
-
-    const movie = TMDBMovie.data;
+    ).then((response) => response.data);
 
     return {
       data: {
         TMDB_id: movie.id,
-        title: movie.title,
-        titleFr: movie.translations.translations
-          .filter((obj) => {
-            return obj.iso_3166_1 === 'FR';
-          })
-          .map((c) => {
-            return JSON.stringify(c.data.title).length - 2
+        title: movie.translations.translations
+          .filter((obj) => obj.iso_3166_1 === 'FR')
+          .map((c) =>
+            JSON.stringify(c.data.title).length - 2
               ? c.data.title
-              : movie.title;
-          })[0],
+              : movie.title,
+          )[0],
         mediaType: 'movie',
-        runtime: movie.runtime,
+        runtime: movie.runtime[0],
         budget: movie.budget,
         genres: movie.genres.map((g) => g.name),
-        overview: movie.overview,
-        overviewFR: movie.translations.translations
+        overview: movie.translations.translations
           .filter((obj) => {
             return obj.iso_3166_1 === 'FR';
           })
-          .map((c) => {
-            return JSON.stringify(c.data.overview).length - 2
+          .map((c) =>
+            JSON.stringify(c.data.overview).length - 2
               ? c.data.overview
-              : movie.overview;
-          })[0],
+              : movie.overview,
+          )[0],
         popularity: movie.popularity,
         release_date: movie.release_date,
         revenue: movie.revenue,
@@ -266,46 +216,38 @@ export class TmdbService {
         backdrop_path: movie.backdrop_path
           ? 'https://image.tmdb.org/t/p/w1280' + movie.backdrop_path
           : null,
-        tagline:
-          JSON.stringify(movie.tagline).length - 2 ? movie.tagline : null,
-        taglineFr: movie.translations.translations
+        tagline: movie.translations.translations
           .filter((obj) => {
             return obj.iso_3166_1 === 'FR';
           })
-          .map((c) => {
-            return JSON.stringify(c.data.tagline).length - 2
+          .map((c) =>
+            JSON.stringify(c.data.tagline).length - 2
               ? c.data.tagline
-              : movie.tagline;
-          })[0],
-        production_companies: movie.production_companies.map((c) => {
-          return {
-            name: c.name,
-            logo_path: c.logo_path
-              ? 'https://image.tmdb.org/t/p/w185' + c.logo_path
-              : null,
-          };
-        }),
+              : movie.tagline,
+          )[0],
+        production_companies: movie.production_companies.map((c) => ({
+          name: c.name,
+          logo_path: c.logo_path
+            ? 'https://image.tmdb.org/t/p/w185' + c.logo_path
+            : null,
+        })),
         director: movie.credits.crew
           .filter((obj) => {
             return obj.job === 'Director';
           })
-          .map((c) => {
-            return {
-              name: c.name,
-              profile_path: c.profile_path
-                ? 'https://image.tmdb.org/t/p/w185' + c.profile_path
-                : null,
-            };
-          })[0],
-        actors: movie.credits.cast.slice(0, 8).map((c) => {
-          return {
+          .map((c) => ({
             name: c.name,
-            character: c.character,
             profile_path: c.profile_path
               ? 'https://image.tmdb.org/t/p/w185' + c.profile_path
               : null,
-          };
-        }),
+          }))[0],
+        actors: movie.credits.cast.slice(0, 8).map((c) => ({
+          name: c.name,
+          character: c.character,
+          profile_path: c.profile_path
+            ? 'https://image.tmdb.org/t/p/w185' + c.profile_path
+            : null,
+        })),
         rating: movie.vote_average,
         reviews: movie.reviews.results.length
           ? movie.reviews.results.map((c) => {
@@ -324,21 +266,17 @@ export class TmdbService {
               }
               return {
                 author: {
-                  username: c.author_details.username,
-                  avatar_path: c.author_details.avatar_path,
-                  rating: c.author_details.rating,
+                  name: c.author_details.username,
+                  profile_path: c.author_details.avatar_path,
                 },
+                rating: c.author_details.rating,
                 content: c.content,
               };
             })
           : null,
         trailer_key: movie.videos.results
-          .filter((obj) => {
-            return obj.type === 'Trailer' && obj.site === 'YouTube';
-          })
-          .map((c) => {
-            return c.key;
-          })[0],
+          .filter((obj) => obj.type === 'Trailer' && obj.site === 'YouTube')
+          .map((c) => c.key)[0],
         fileInfos: {
           isProcessing: true,
           maxQualilty: null,

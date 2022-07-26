@@ -3,19 +3,32 @@ import { TvsService } from './tvs.service';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { Role } from '../../shared/role';
 import { Media } from '../schemas/media.schema';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { MediaWithType } from '../medias.utils';
+import { AddTvDto } from './dto/add.tv.dto';
+import { AddEpisodeTvDto } from './dto/add-episode.tv.dto';
 
+@ApiTags('Tvs')
 @Controller('tvs')
 export class TvsController {
   constructor(private readonly tvsService: TvsService) {}
 
   @Get()
   @Roles(Role.User)
+  @ApiOperation({ summary: '[User] Find all tvs stored in database' })
   async getAll(): Promise<Media[]> {
     return this.tvsService.findAll();
   }
 
+  @Post()
+  @Roles(Role.Admin)
+  async add(@Body() body: AddTvDto): Promise<MediaWithType> {
+    return this.tvsService.add(body.tmdbId);
+  }
+
   @Get(':id/add/:si')
   @Roles(Role.Admin)
+  @ApiOperation({ summary: '[Admin] Add a season to tv data' })
   async addTvSeason(
     @Param('id') id: string,
     @Param('si') seasonIndex: number,
@@ -25,12 +38,18 @@ export class TvsController {
 
   @Post(':id/add/:si/:ei')
   @Roles(Role.Admin)
+  @ApiOperation({ summary: '[Admin] Add episode to tv data' })
   async addTvEpisode(
     @Param('id') id: string,
     @Param('si') seasonIndex: number,
     @Param('ei') episodeIndex: number,
-    @Body('filePath') filePath: string,
+    @Body() body: AddEpisodeTvDto,
   ): Promise<void> {
-    return this.tvsService.addEpisode(id, seasonIndex, episodeIndex, filePath);
+    return this.tvsService.addEpisode(
+      id,
+      seasonIndex,
+      episodeIndex,
+      body.filePath,
+    );
   }
 }

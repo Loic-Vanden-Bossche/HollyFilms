@@ -8,12 +8,14 @@ import { IdentityModule } from '../indentity/identity.module';
 import { TvsService } from './tvs/tvs.service';
 import { TvsController } from './tvs/tvs.controller';
 import { HttpModule } from '@nestjs/axios';
+import { TmdbModule } from '../tmdb/tmdb.module';
 
 @Module({
   imports: [
     forwardRef(() => ProcessingModule),
     IdentityModule,
     HttpModule,
+    TmdbModule,
     MongooseModule.forFeature([{ name: Media.name, schema: MediaSchema }]),
   ],
   providers: [MediasService, TvsService],
