@@ -4,13 +4,13 @@
   (mouseenter)="hovered = true"
   (mouseleave)="hovered = false"
   [@inOutAnimation]="animTrigger"
-  class="w-full rounded-box bg-black"
+  class="w-full"
 >
   <div
-    class="alert flex-row pointer-events-auto rounded-box transition-opacity cursor-pointer hover:opacity-95 shadow-lg my-3 p-1 pl-3"
-    [ngClass]="!type('neutral') ? 'alert-' + notification.type : ''"
+    class="flex flex-row rounded-xl items-center text-white pointer-events-auto rounded-box transition-opacity cursor-pointer hover:opacity-95 shadow-lg my-3 p-1 pl-3"
+    [ngClass]="typeClasses"
   >
-    <div>
+    <div class="mr-5">
       <svg
         *ngIf="type('neutral')"
         xmlns="http://www.w3.org/2000/svg"
@@ -81,11 +81,13 @@
           d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
+    </div>
+    <div>
       <span class="whitespace-nowrap overflow-ellipsis overflow-hidden">{{
         notification.message
       }}</span>
     </div>
-    <div class="flex-none my-0-important">
+    <div class="ml-auto my-0-important">
       <button
         (click)="onAction($event)"
         *ngIf="notification?.button"

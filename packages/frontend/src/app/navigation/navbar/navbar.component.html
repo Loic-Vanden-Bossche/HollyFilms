@@ -1,1 +1,62 @@
-<nav>NAVBAR</nav>
+<nav class="w-full h-14 bg-base-600 flex flex-row justify-between">
+  <div class="h-full flex flex-row">
+    <div class="flex flex-row items-center">
+      <div class="h-2/3 ml-5 text-base-600 cursor-pointer">
+        <a routerLink="/home"><app-logo></app-logo></a>
+      </div>
+    </div>
+    <div
+      *ngIf="isAuthenticated"
+      class="h-full text-white ml-5 flex flex-row items-center"
+    >
+      <a
+        class="ml-6 text-lg font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+        [routerLink]="button.path"
+        *ngFor="let button of navButtons"
+      >
+        <p>{{ button.name }}</p>
+      </a>
+    </div>
+  </div>
+  <div class="h-full mr-5">
+    <div *ngIf="isAuthenticated" class="flex h-full flex-row">
+      <div
+        class="text-white text-opacity-80 hover:text-opacity-100 flex flex-row items-center"
+      >
+        <fa-icon
+          (click)="onSearch()"
+          class="text-2xl mr-2 cursor-pointer"
+          [icon]="searchIcon"
+        ></fa-icon>
+        <form (submit)="onSubmit($event)">
+          <input
+            *ngIf="showSearchBar"
+            [formControl]="searchCtrl"
+            placeholder="Rechercher..."
+            class="bg-transparent w-32 outline-none px-3"
+            type="search"
+          />
+        </form>
+      </div>
+      <div class="h-full p-1.5">
+        <div
+          class="h-full rounded-full aspect-square bg-center bg-cover"
+          [ngStyle]="{ 'background-image': 'url(assets/img/avatar-blank.png)' }"
+        ></div>
+      </div>
+    </div>
+    <div class="h-full items-center flex flex-row" *ngIf="!isAuthenticated">
+      <a routerLink="sign-in"
+        ><button class="bg-white mr-4 py-1.5 px-4 rounded-lg font-bold">
+          Se connecter
+        </button></a
+      >
+      <a routerLink="sign-up"
+        ><button class="bg-white mr-4 py-1.5 px-4 rounded-lg font-bold">
+          Créer un compte
+        </button></a
+      >
+    </div>
+  </div>
+</nav>
+<div class="h-1 w-full bg-gradient-to-r gradient-colors"></div>

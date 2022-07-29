@@ -1,3 +1,17 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+@font-face {
+  font-family: "hollyfilms";
+  src: url("assets/fonts/HollyFont.ttf");
+}
+
+body {
+  margin: 0;
+  @apply bg-base-500
+}
+
+.gradient-colors {
+  @apply from-green-400 to-blue-500;
+}

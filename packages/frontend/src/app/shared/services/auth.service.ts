@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { tap } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 
 export interface registerDto {
   email: string;
@@ -17,17 +17,16 @@ export interface registerDto {
 export class AuthService {
   private _user: User | null = AuthService.getUser();
 
-  constructor(private api: HttpClient) {
-    this.api.get<User>('auth/me', { withCredentials: true }).subscribe({
-      next: (user) => {
-        this._user = user;
-        AuthService.storeUser(user);
-      },
-      error: () => {
-        this._user = null;
-        localStorage.removeItem('user');
-      },
-    });
+  constructor(private readonly api: HttpClient) {}
+
+  initAuth() {
+    return this.api.get<User>('auth/me', { withCredentials: true }).pipe(
+      catchError(() => of(null)),
+      tap((user) => (this._user = user)),
+      tap((user) =>
+        user ? AuthService.storeUser(user) : localStorage.removeItem('user')
+      )
+    );
   }
 
   get user(): User {

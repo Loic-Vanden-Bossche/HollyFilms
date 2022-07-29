@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Notification } from '../../shared/models/notification.model';
+import {
+  Notification,
+  NotificationType,
+} from '../../shared/models/notification.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -26,11 +29,31 @@ export class NotificationComponent implements OnInit {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
   @Output() action: EventEmitter<void> = new EventEmitter<void>();
 
+  typeClasses: string[] = [];
+
   animTrigger = true;
   hovered = false;
 
   ngOnInit() {
     this.resetTimer();
+    this.typeClasses = this.classesFromTypes(
+      this.notification?.type || NotificationType.Neutral
+    );
+  }
+
+  classesFromTypes(type: NotificationType): string[] {
+    switch (type) {
+      case 'success':
+        return ['bg-success', 'text-black'];
+      case 'error':
+        return ['bg-error', 'text-black'];
+      case 'warning':
+        return ['bg-warning', 'text-black'];
+      case 'info':
+        return ['bg-info', 'text-black'];
+      default:
+        return ['bg-base-600', 'text-white'];
+    }
   }
 
   resetTimer() {

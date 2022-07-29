@@ -1,34 +1,30 @@
 <div class="w-full h-full">
-  <div class="h-5/6 hm:h-full w-full absolute">
+  <div class="h-5/6 hm:h-full w-full absolute top-1/2 -translate-y-1/2">
     <form class="h-full" [formGroup]="registerForm" (submit)="onSubmit()">
       <div
-        class="w-5/6 sm:w-4/6 md:w-3/6 lg:w-2/6 h-full flex justify-evenly flex-col items-center mx-auto"
+        class="w-5/6 sm:w-4/6 md:w-3/6 lg:w-2/6 h-full bg-white rounded-xl p-10 flex flex-col justify-end items-center mx-auto"
       >
-        <img
-          class="w-3/4"
-          [src]="'assets/logos/logo-squared-' + imgColor + '.png'"
-          alt=""
-        />
-        <div class="">
-          <div class="form-control w-full">
+        <div class="w-full h-16 mb-auto">
+          <app-logo class="text-white"></app-logo>
+        </div>
+        <div class="h-full w-full flex flex-col justify-center">
+          <div class="mb-5">
             <input
               type="email"
               formControlName="email"
               autocomplete="email"
               required
               placeholder="Adresse email"
-              class="input input-bordered w-full"
+              class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
               [ngClass]="isError('email') ? 'input-error' : ''"
             />
             <label class="label">
-              <span
-                *ngIf="isError('email')"
-                class="label-text-alt text-error"
-                >{{ fieldErrors("email") }}</span
-              >
+              <span *ngIf="isError('email')" class="text-red-500 text-sm">{{
+                fieldErrors("email")
+              }}</span>
             </label>
           </div>
-          <div class="flex flex-row gap-3 w-full">
+          <div class="flex flex-row gap-3 w-full mb-5">
             <div class="form-control w-full">
               <input
                 type="text"
@@ -36,13 +32,13 @@
                 autocomplete="given-name"
                 required
                 placeholder="Prénom"
-                class="input input-bordered w-full"
+                class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded w-full"
                 [ngClass]="isError('firstname') ? 'input-error' : ''"
               />
               <label class="label">
                 <span
                   *ngIf="isError('firstname')"
-                  class="label-text-alt text-error"
+                  class="text-red-500 text-sm"
                   >{{ fieldErrors("firstname") }}</span
                 >
               </label>
@@ -54,13 +50,13 @@
                 autocomplete="family-name"
                 required
                 placeholder="Nom"
-                class="input input-bordered w-full"
+                class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded w-full"
                 [ngClass]="isError('lastname') ? 'input-error' : ''"
               />
               <label class="label">
                 <span
                   *ngIf="isError('lastname')"
-                  class="label-text-alt text-error"
+                  class="text-red-500 text-sm"
                   >{{ fieldErrors("lastname") }}</span
                 >
               </label>
@@ -71,70 +67,56 @@
                 formControlName="username"
                 autocomplete="nickname"
                 placeholder="Surnom"
-                class="input input-bordered w-full"
+                class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded w-full"
                 [ngClass]="isError('username') ? 'input-error' : ''"
               />
               <label class="label">
                 <span
                   *ngIf="isError('username')"
-                  class="label-text-alt text-error"
+                  class="text-red-500 text-sm"
                   >{{ fieldErrors("username") }}</span
                 >
               </label>
             </div>
           </div>
-          <div class="form-control w-full">
+          <div class="form-control w-full mb-5">
             <input
               type="password"
               formControlName="password"
               autocomplete="new-password"
               required
               placeholder="Mot de passe"
-              class="input input-bordered w-full"
+              class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded w-full"
               [ngClass]="isError('password') ? 'input-error' : ''"
             />
             <label class="label">
-              <span
-                *ngIf="isError('password')"
-                class="label-text-alt text-error"
-                >{{ fieldErrors("password") }}</span
-              >
+              <span *ngIf="isError('password')" class="text-red-500 text-sm">{{
+                fieldErrors("password")
+              }}</span>
             </label>
           </div>
-          <div class="form-control w-full">
+          <div class="form-control w-full mb-5">
             <input
               type="password"
               formControlName="confirmPassword"
               autocomplete="new-password"
               required
               placeholder="Conformer mot de passe"
-              class="input input-bordered w-full"
+              class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded w-full"
               [ngClass]="isError('confirmPassword') ? 'input-error' : ''"
             />
             <label class="label">
               <span
                 *ngIf="isError('confirmPassword')"
-                class="label-text-alt text-error"
+                class="text-red-500 text-sm"
                 >{{ fieldErrors("confirmPassword") }}</span
               >
             </label>
           </div>
-          <div class="flex w-full items-center justify-between">
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked="checked"
-                  class="checkbox checkbox-primary"
-                />
-                <span class="ml-3 label-text">Se souvenir de moi</span>
-              </label>
-            </div>
-          </div>
         </div>
         <button
           [disabled]="!registerForm.valid"
-          class="w-full btn h-14 rounded"
+          class="w-full text-white bg-black py-4 btn h-14 rounded"
           type="submit"
         >
           Créer mon compte

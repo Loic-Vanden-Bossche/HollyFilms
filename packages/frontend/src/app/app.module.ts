@@ -9,6 +9,8 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { interceptors } from './api/interceptors';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,8 +23,9 @@ import { AdminModule } from './admin/admin.module';
     NavigationModule,
     AuthModule,
     AdminModule,
+    FontAwesomeModule,
   ],
-  providers: [],
+  providers: [interceptors],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -4,20 +4,18 @@
   >
     <form class="h-full" [formGroup]="loginForm" (submit)="onSubmit()">
       <div
-        class="w-5/6 sm:w-4/6 md:w-3/6 lg:w-2/6 h-full flex justify-evenly flex-col items-center mx-auto"
+        class="w-5/6 sm:w-4/6 md:w-3/6 lg:w-2/6 bg-white rounded-xl px-10 h-full flex justify-evenly flex-col items-center mx-auto"
       >
-        <img
-          class="w-3/4"
-          [src]="'assets/logos/logo-squared-' + imgColor + '.png'"
-          alt=""
-        />
+        <div class="w-full h-14">
+          <app-logo class="text-white"></app-logo>
+        </div>
         <input
           formControlName="email"
           type="email"
           autocomplete="email"
           required
           placeholder="Email"
-          class="px-3 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
+          class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
           formArrayName="email"
         />
         <input
@@ -26,7 +24,7 @@
           autocomplete="current-password"
           required
           placeholder="Password"
-          class="px-3 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
+          class="px-3 bg-slate-100 py-2 input sm:text-sm appearance-none w-full h-14 rounded"
         />
         <div class="flex w-full items-center justify-between">
           <div class="form-control">
@@ -46,7 +44,10 @@
             </a>
           </div>
         </div>
-        <button class="w-full btn h-14 rounded" type="submit">
+        <button
+          class="w-full bg-black text-white btn h-14 rounded"
+          type="submit"
+        >
           Se connecter
         </button>
       </div>

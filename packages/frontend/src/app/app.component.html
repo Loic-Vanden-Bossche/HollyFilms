@@ -1,2 +1,7 @@
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
-<router-outlet></router-outlet>
+<div
+  class="w-full h-full"
+  [ngStyle]="{ 'color-scheme': theme === 'dark' ? 'dark' : 'none' }"
+>
+  <router-outlet></router-outlet>
+</div>
+<app-notifications-list></app-notifications-list>

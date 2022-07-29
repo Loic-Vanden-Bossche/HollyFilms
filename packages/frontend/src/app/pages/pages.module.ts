@@ -6,9 +6,10 @@ import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { NavigationModule } from '../navigation/navigation.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ShowcaseComponent } from './showcase/showcase.component';
 
 @NgModule({
-  declarations: [PagesComponent, HomeComponent],
+  declarations: [PagesComponent, HomeComponent, ShowcaseComponent],
   imports: [
     CommonModule,
     AppRoutingModule,
