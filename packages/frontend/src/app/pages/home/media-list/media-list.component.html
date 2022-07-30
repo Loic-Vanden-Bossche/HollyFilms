@@ -1,0 +1,7 @@
+<div class="flex flex-row overflow-x-scroll overflow-y-visible scrollbar-hide">
+  <div *ngFor="let media of mediaList" class="mt-5 h-96">
+    <div class="aspect-[475/712] h-72 mr-2">
+      <app-media-card [media]="media"></app-media-card>
+    </div>
+  </div>
+</div>

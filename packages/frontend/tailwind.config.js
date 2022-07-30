@@ -1,10 +1,12 @@
-/** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   content: [
     "./src/**/*.{html,ts}",
   ],
   theme: {
     extend: {
+      groups: ['example', 'example2'],
       colors: {
         'success': '#36D399',
         'error': '#F87272',
@@ -19,8 +21,22 @@ module.exports = {
         'base-700': '#0d1526',
         'base-800': '#080c17',
         'base-900': '#030408',
+      },
+      transitionDelay: {
+        '0': '0ms',
       }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addVariant, theme }) => {
+      const groups = theme('groups') || {};
+
+      Object.values(groups).forEach((group) => {
+        addVariant(`group-${group}-hover`, () => {
+          return `:merge(.group-${group}):hover &`
+        })
+      })
+    }),
+    require('tailwind-scrollbar-hide')
+  ]
 }

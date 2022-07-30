@@ -1,0 +1,48 @@
+<div *ngIf="media" class="h-full p-5 flex flex-col">
+  <div class="text-white">
+    <h1 class="text-xl font-bold">{{ media.data.title }}</h1>
+    <h2>{{ media.data.tagline }}</h2>
+    <div class="my-4">
+      <app-media-card-tabs [media]="media"></app-media-card-tabs>
+    </div>
+  </div>
+  <div class="mt-auto h-10 flex flex-row">
+    <div *ngIf="media.mediaType === 'movie'">
+      <a
+        ><button
+          class="mr-5 bg-gradient-to-r text-white gradient-colors h-full rounded-md font-bold px-4 py-1 hover:border-2 transition-all border-white"
+        >
+          Voir le film
+        </button></a
+      >
+      <a
+        ><button
+          class="text-black h-full bg-white rounded-md font-bold px-4 py-1"
+        >
+          Voir plus
+        </button></a
+      >
+    </div>
+    <div *ngIf="media.mediaType === 'tv'">
+      <a
+        ><button
+          class="text-black h-full bg-white rounded-md font-bold px-4 py-1"
+        >
+          Voir les épisodes
+        </button></a
+      >
+    </div>
+    <div class="ml-auto mr-5 flex flex-row">
+      <button
+        class="transition-opacity mr-5 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-full aspect-square text-white"
+      >
+        <fa-icon [icon]="addToListIcon"></fa-icon>
+      </button>
+      <button
+        class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-full aspect-square text-white"
+      >
+        <fa-icon [icon]="likeButton"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>

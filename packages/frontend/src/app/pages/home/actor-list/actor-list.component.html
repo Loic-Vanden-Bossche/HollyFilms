@@ -1,0 +1,28 @@
+<div class="flex flex-row overflow-x-scroll scrollbar-hide">
+  <div
+    class="mr-2 group p-2 transition-all shadow-xl bg-base-600 rounded-xl bg-transparent hover:bg-base-600 duration-500 delay-500 hover:delay-0"
+    *ngFor="let actor of actors"
+  >
+    <div
+      class="rounded-2xl h-16 w-16 bg-center bg-cover"
+      [ngStyle]="{
+        'background-image':
+          'url(' +
+          (actor.profile_path
+            ? 'https://image.tmdb.org/t/p/w92' + actor.profile_path
+            : 'assets/images/no-profile-image.png') +
+          ')'
+      }"
+    ></div>
+    <h1
+      class="transition-all duration-500 delay-500 font-bold mt-2 group-hover:transition-all group-hover:duration-500 group-hover:delay-0 max-w-0 group-hover:max-w-xl whitespace-nowrap opacity-0 group-hover:opacity-100"
+    >
+      {{ actor.name }}
+    </h1>
+    <h1
+      class="transition-all duration-500 delay-500 group-hover:transition-all group-hover:delay-0 max-w-0 group-hover:max-w-xl whitespace-nowrap opacity-0 group-hover:opacity-80"
+    >
+      {{ actor.character }}
+    </h1>
+  </div>
+</div>

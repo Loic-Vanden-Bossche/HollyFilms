@@ -4,6 +4,9 @@ import { Actor } from './actor.model';
 import { Season } from './season.model';
 import { Review } from './review.model';
 
+export type MediaType = 'movie' | 'tv';
+export type MediaWithType = { data: Media; mediaType: MediaType };
+
 export interface Media {
   TMDB_id: number;
   title: string;

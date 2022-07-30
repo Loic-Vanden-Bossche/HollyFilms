@@ -1,0 +1,24 @@
+<div *ngIf="media">
+  <div class="mb-5">
+    <h1 class="font-bold text-xl">{{ media.data.title }}</h1>
+    <h2>{{ media.data.tagline }}</h2>
+  </div>
+  <div class="flex w-full justify-between flex-row h-10">
+    <button
+      (mouseenter)="showMore.emit()"
+      class="text-black h-full bg-white rounded-md font-bold px-4 py-1"
+    >
+      Détails
+    </button>
+    <button
+      class="transition-opacity opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-full aspect-square text-white"
+    >
+      <fa-icon [icon]="addToListIcon"></fa-icon>
+    </button>
+    <button
+      class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-full aspect-square text-white"
+    >
+      <fa-icon [icon]="likeButton"></fa-icon>
+    </button>
+  </div>
+</div>
