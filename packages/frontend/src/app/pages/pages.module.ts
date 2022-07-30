@@ -14,6 +14,8 @@ import { ActorListComponent } from './home/actor-list/actor-list.component';
 import { MediaCardDataComponent } from './home/media-card/media-card-data/media-card-data.component';
 import { MediaCardDataDetailsComponent } from './home/media-card/media-card-data-details/media-card-data-details.component';
 import { MediaCardTabsComponent } from './home/media-card/media-card-data-details/media-card-tabs/media-card-tabs.component';
+import { MediaModalComponent } from './home/media-modal/media-modal.component';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,10 @@ import { MediaCardTabsComponent } from './home/media-card/media-card-data-detail
     MediaCardDataComponent,
     MediaCardDataDetailsComponent,
     MediaCardTabsComponent,
+    MediaModalComponent,
   ],
   imports: [
+    YouTubePlayerModule,
     CommonModule,
     AppRoutingModule,
     SharedModule,

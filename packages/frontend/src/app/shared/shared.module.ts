@@ -10,10 +10,17 @@ import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LogoComponent } from './components/logo/logo.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SafePipe } from './pipes/safe.pipe';
+import { RatingCircleComponent } from './components/rating-circle/rating-circle.component';
 
 @NgModule({
-  declarations: [ModalComponent, LogoComponent],
-  exports: [ModalComponent, LogoComponent],
+  declarations: [
+    ModalComponent,
+    LogoComponent,
+    SafePipe,
+    RatingCircleComponent,
+  ],
+  exports: [ModalComponent, LogoComponent, SafePipe, RatingCircleComponent],
   providers: [
     UsersService,
     ThemesService,

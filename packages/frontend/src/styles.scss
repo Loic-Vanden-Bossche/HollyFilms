@@ -15,3 +15,39 @@ body {
 .gradient-colors {
   @apply from-green-400 to-blue-500;
 }
+
+.modal-anim {
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: transform, opacity;
+}
+
+.modal-opened {
+  transform: Scale(1, 1) Translate(-50%, -50%);
+  opacity: 100%;
+}
+
+.modal-closed {
+  opacity: 0;
+  transform: Scale(0.9, 0.9) Translate(-50%, -50%);
+}
+
+.linecap-round {
+  stroke-linecap: round;
+}
+
+@keyframes progress-1 {
+  from {
+    stroke-dashoffset: 360;
+  }
+  to {
+    stroke-dashoffset: 100;
+  }
+}
+
+iframe {
+  pointer-events: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}

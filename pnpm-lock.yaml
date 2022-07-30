@@ -161,6 +161,7 @@ importers:
       '@angular/platform-browser': ^14.1.0
       '@angular/platform-browser-dynamic': ^14.1.0
       '@angular/router': ^14.1.0
+      '@angular/youtube-player': ^14.1.0
       '@fortawesome/angular-fontawesome': ^0.11.1
       '@fortawesome/fontawesome-svg-core': ^6.1.1
       '@fortawesome/free-brands-svg-icons': ^6.1.1
@@ -196,6 +197,7 @@ importers:
       '@angular/platform-browser': 14.1.0_fsfxn3q5jfgkydsi5rfuqudspa
       '@angular/platform-browser-dynamic': 14.1.0_4uelz7lddsxzh2as2vx6t5hnym
       '@angular/router': 14.1.0_oh7ssot2niyqdg7a6md2mriq4i
+      '@angular/youtube-player': 14.1.0_ybgtotgnqunb4jezjwo5rlkvva
       '@fortawesome/angular-fontawesome': 0.11.1_zlsknjbjmhznv7e3wrzo5u6gia
       '@fortawesome/fontawesome-svg-core': 6.1.2
       '@fortawesome/free-brands-svg-icons': 6.1.2
@@ -607,6 +609,20 @@ packages:
       '@angular/common': 14.1.0_36wbdubzobvek5dwkv7hqxvz7e
       '@angular/core': 14.1.0_rxjs@7.5.6+zone.js@0.11.7
       '@angular/platform-browser': 14.1.0_fsfxn3q5jfgkydsi5rfuqudspa
+      rxjs: 7.5.6
+      tslib: 2.4.0
+    dev: false
+
+  /@angular/youtube-player/14.1.0_ybgtotgnqunb4jezjwo5rlkvva:
+    resolution: {integrity: sha512-9l7ucJDYoxGxtf1DUevxnSwqFUlAxhF0AThCQRWOMzz7DbKOUQVejAV5mX74oTWzcIWdMjp3eYD4oWrSPR4VFA==}
+    peerDependencies:
+      '@angular/common': ^14.0.0 || ^15.0.0
+      '@angular/core': ^14.0.0 || ^15.0.0
+      rxjs: ^6.5.3 || ^7.4.0
+    dependencies:
+      '@angular/common': 14.1.0_36wbdubzobvek5dwkv7hqxvz7e
+      '@angular/core': 14.1.0_rxjs@7.5.6+zone.js@0.11.7
+      '@types/youtube': 0.0.42
       rxjs: 7.5.6
       tslib: 2.4.0
     dev: false
@@ -3321,6 +3337,10 @@ packages:
       '@types/node': 18.0.6
     dev: false
     optional: true
+
+  /@types/youtube/0.0.42:
+    resolution: {integrity: sha512-Nqo3HMPFPcNyZ7HNFZJjpH+N4yXqpxBItG+41e7nL9zednovMRZMXWj36CctSznbBcbj6ucvkJDo5iZ8SKqLIw==}
+    dev: false
 
   /@typescript-eslint/eslint-plugin/5.30.7_6wltbjakwuqm7awqswigmiuhd4:
     resolution: {integrity: sha512-l4L6Do+tfeM2OK0GJsU7TUcM/1oN/N25xHm3Jb4z3OiDU4Lj8dIuxX9LpVMS9riSXQs42D1ieX7b85/r16H9Fw==}

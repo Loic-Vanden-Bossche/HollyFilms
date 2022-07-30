@@ -30,6 +30,7 @@
     <div class="h-full w-full" *ngIf="showMore">
       <app-media-card-data-details
         [media]="media"
+        (mediaSelected)="mediaSelected.emit()"
       ></app-media-card-data-details>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MediaWithType } from '../../../shared/models/media.model';
 
 @Component({
@@ -7,4 +7,5 @@ import { MediaWithType } from '../../../shared/models/media.model';
 })
 export class MediaListComponent {
   @Input() mediaList: MediaWithType[] = [];
+  @Output() mediaSelected = new EventEmitter<MediaWithType>();
 }

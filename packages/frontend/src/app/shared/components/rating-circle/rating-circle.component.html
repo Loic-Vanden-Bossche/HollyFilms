@@ -1,0 +1,38 @@
+<svg
+  [ngStyle]="{
+    height: circleRadius * 2 + strokeSize,
+    width: circleRadius * 2 + strokeSize
+  }"
+>
+  <circle
+    class="fill-transparent stroke-base-600"
+    [ngStyle]="{ 'stroke-width': strokeSize }"
+    [attr.cx]="circleRadius + strokeSize / 2"
+    [attr.cy]="circleRadius + strokeSize / 2"
+    [attr.r]="circleRadius"
+  />
+  <circle
+    [ngStyle]="{
+      'stroke-dasharray': dasharray,
+      'stroke-dashoffset': dashoffset,
+      'stroke-width': strokeSize,
+      stroke: color
+    }"
+    class="linecap-round fill-transparent origin-center fa-rotate-270"
+    [attr.cx]="circleRadius + strokeSize / 2"
+    [attr.cy]="circleRadius + strokeSize / 2"
+    [attr.r]="circleRadius"
+  />
+  <text
+    [attr.x]="circleRadius + strokeSize / 2"
+    [attr.y]="circleRadius + strokeSize / 2"
+    alignment-baseline="middle"
+    font-weight="bold"
+    [attr.font-size]="textSize"
+    stroke-width="0"
+    [attr.fill]="color"
+    text-anchor="middle"
+  >
+    {{ percent | number: "1.1-1" }}%
+  </text>
+</svg>

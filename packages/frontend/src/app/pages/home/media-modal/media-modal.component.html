@@ -1,0 +1,86 @@
+<app-modal id="mediaModal" (closed)="closed.emit()">
+  <div
+    *ngIf="media"
+    [ngClass]="display ? 'modal-opened' : 'modal-closed'"
+    class="modal-anim scrollbar-hide overflow-y-scroll w-10/12 h-3/4 flex flex-col flex-nowrap sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 absolute overflow-hidden bg-base-500 rounded-xl drop-shadow-xl"
+  >
+    <youtube-player
+      class="overflow-hidden -translate-y-16 relative pb-[56%]"
+      [playerVars]="playerVars"
+      (stateChange)="onVideoStateChange($event)"
+      (ready)="onVideoReady()"
+      #player
+      [videoId]="media.data.trailer_key"
+    ></youtube-player>
+    <div class="absolute w-full bg-base-500 bg-opacity-50 z-10 pb-[56%]">
+      <div class="absolute flex flex-col h-full w-full">
+        <div class="relative h-full w-full">
+          <div class="flex-1 flex flex-col h-full justify-end p-4">
+            <div class="flex flex-row">
+              <div>
+                <p class="text-white text-xs">{{ media.data.tagline }}</p>
+                <h1 class="text-white text-3xl font-bold mb-10">
+                  {{ media.data.title }}
+                </h1>
+              </div>
+              <div class="flex flex-col justify-end ml-auto">
+                <app-rating-circle
+                  [rating]="media.data.rating"
+                ></app-rating-circle>
+              </div>
+            </div>
+            <div class="absolute bottom-0 h-10">
+              <a
+                ><button
+                  class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
+                >
+                  Voir le film
+                </button></a
+              >
+              <button
+                class="transition-opacity mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-5/6 aspect-square text-white"
+              >
+                <fa-icon [icon]="addToListIcon"></fa-icon>
+              </button>
+              <button
+                class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-5/6 aspect-square text-white"
+              >
+                <fa-icon [icon]="likeButton"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gradient-to-r gradient-colors h-1 w-full"></div>
+        <div class="bg-base-500 w-full h-32">
+          <div class="w-full p-4 text-white">
+            <div class="flex my-3 flex-row justify-center">
+              <div class="mr-5 flex flex-col justify-center">
+                <div class="flex justify-center">
+                  <div
+                    [ngStyle]="{
+                      'background-image':
+                        'url(' +
+                        (media.data.director.profile_path
+                          ? 'https://image.tmdb.org/t/p/w92' +
+                            media.data.director.profile_path
+                          : 'assets/images/no-profile-image.png') +
+                        ')'
+                    }"
+                    class="h-16 w-16 bg-cover bg-center rounded-2xl"
+                  ></div>
+                </div>
+                <p class="text-center mt-2">{{ media.data.director.name }}</p>
+              </div>
+              <div class="mr-5 w-1.5 rounded bg-white"></div>
+              <div>
+                <p>{{ media.data.overview }}</p>
+              </div>
+            </div>
+            <h1 class="text-xl mb-1 font-bold">Casting</h1>
+            <app-actor-list [actors]="media.data.actors"></app-actor-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>

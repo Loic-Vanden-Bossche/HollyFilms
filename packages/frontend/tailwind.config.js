@@ -24,6 +24,9 @@ module.exports = {
       },
       transitionDelay: {
         '0': '0ms',
+      },
+      transitionDuration: {
+        '0': '0ms',
       }
     },
   },

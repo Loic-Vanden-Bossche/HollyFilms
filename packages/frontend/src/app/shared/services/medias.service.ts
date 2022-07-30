@@ -11,4 +11,10 @@ export class MediasService {
   getMedias() {
     return this.http.get<MediaWithType[]>('medias', { withCredentials: true });
   }
+
+  getMedia(mediaId: string) {
+    return this.http.get<MediaWithType>(`medias/${mediaId}`, {
+      withCredentials: true,
+    });
+  }
 }

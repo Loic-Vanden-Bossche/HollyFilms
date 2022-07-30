@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MediaWithType } from '../../../../shared/models/media.model';
 import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,6 +13,7 @@ export interface MediaCardTab {
 })
 export class MediaCardDataDetailsComponent implements OnInit {
   @Input() media: MediaWithType | null = null;
+  @Output() mediaSelected = new EventEmitter<void>();
 
   addToListIcon = faPlusCircle;
   likeButton = faThumbsUp;
