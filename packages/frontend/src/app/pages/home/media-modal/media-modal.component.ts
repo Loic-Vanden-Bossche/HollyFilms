@@ -1,7 +1,8 @@
 import {
   Component,
   EventEmitter,
-  Input, OnChanges,
+  Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -20,7 +21,7 @@ dayjs.extend(duration);
   selector: 'app-media-modal',
   templateUrl: './media-modal.component.html',
 })
-export class MediaModalComponent implements OnChanges , OnInit {
+export class MediaModalComponent implements OnChanges, OnInit {
   @Input() media: MediaWithType | null = null;
   @Output() closed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -34,7 +35,7 @@ export class MediaModalComponent implements OnChanges , OnInit {
     mute: 1,
   };
 
-  displayedTime: string = '';
+  displayedTime = '';
 
   seekTime = 20;
 
@@ -58,7 +59,10 @@ export class MediaModalComponent implements OnChanges , OnInit {
 
   ngOnChanges() {
     const time = 128;
-    this.displayedTime = dayjs.duration(time, 'minute').format('H[h]mm').replace(/00$/, '');
+    this.displayedTime = dayjs
+      .duration(time, 'minute')
+      .format('H[h]mm')
+      .replace(/00$/, '');
   }
 
   onVideoReady() {
