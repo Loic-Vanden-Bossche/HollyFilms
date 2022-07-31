@@ -5,6 +5,7 @@
     class="modal-anim scrollbar-hide overflow-y-scroll w-10/12 h-3/4 flex flex-col flex-nowrap sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 absolute overflow-hidden bg-base-500 rounded-xl drop-shadow-xl"
   >
     <youtube-player
+      *ngIf="media.data.trailer_key"
       class="overflow-hidden -translate-y-16 relative pb-[56%]"
       [playerVars]="playerVars"
       (stateChange)="onVideoStateChange($event)"
@@ -12,6 +13,13 @@
       #player
       [videoId]="media.data.trailer_key"
     ></youtube-player>
+    <div
+      *ngIf="!media.data.trailer_key"
+      class="absolute w-full pb-[48%] bg-center bg-cover"
+      [ngStyle]="{
+        'background-image': 'url(' + media.data.backdrop_path + ')'
+      }"
+    ></div>
     <div class="absolute w-full bg-base-500 bg-opacity-50 z-10 pb-[56%]">
       <div class="absolute flex flex-col h-full w-full">
         <div class="relative h-full w-full">
@@ -40,13 +48,55 @@
               </div>
             </div>
             <div class="absolute flex flex-row bottom-0 h-10">
-              <a
+              <a *ngIf="media.mediaType === 'movie'"
                 ><button
                   class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
                 >
-                  Voir le film
+                  {{ isWatched || "Voir le film" }}
                 </button></a
               >
+              <div *ngIf="media.mediaType === 'tv'">
+                <a
+                  ><button
+                    class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
+                  >
+                    {{ isWatched || "Commencer" }}
+                  </button></a
+                >
+                <button
+                  (click)="showEpisodes = true"
+                  [ngClass]="
+                    showEpisodes
+                      ? ['text-black', 'bg-white', 'opacity-100']
+                      : [
+                          'text-white',
+                          'opacity-80',
+                          'hover:opacity-100',
+                          'bg-base-600'
+                        ]
+                  "
+                  class="mr-2 h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 transition-all"
+                >
+                  Episodes
+                </button>
+                <button
+                  (click)="showEpisodes = false"
+                  [ngClass]="
+                    !showEpisodes
+                      ? ['text-black', 'bg-white', 'opacity-100']
+                      : [
+                          'text-white',
+                          'opacity-80',
+                          'hover:opacity-100',
+                          'bg-base-600'
+                        ]
+                  "
+                  class="mr-2 h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 transition-all"
+                >
+                  Infos
+                </button>
+              </div>
+
               <div
                 class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
               >
@@ -76,7 +126,7 @@
         </div>
         <div class="bg-gradient-to-r gradient-colors h-1 w-full"></div>
         <div class="bg-base-500 w-full h-32">
-          <div class="w-full p-4 text-white">
+          <div *ngIf="!showEpisodes" class="w-full p-4 text-white">
             <div class="flex my-3 flex-row justify-center">
               <div class="mr-5 flex flex-col justify-center">
                 <div class="flex justify-center">
@@ -87,7 +137,7 @@
                         (media.data.director.profile_path
                           ? 'https://image.tmdb.org/t/p/w92' +
                             media.data.director.profile_path
-                          : 'assets/images/no-profile-image.png') +
+                          : 'assets/img/avatar-blank.png') +
                         ')'
                     }"
                     class="h-16 w-16 bg-cover bg-center rounded-2xl"
@@ -107,6 +157,7 @@
               [reviews]="media.data.reviews"
             ></app-media-reviews>
           </div>
+          <div *ngIf="showEpisodes">Episodes {{ media.data.tvs?.length }}</div>
         </div>
       </div>
     </div>

@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     if (media) {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { mediaId: 'id' },
+        queryParams: { mediaId: media.data._id },
       });
     } else {
       this.router.navigate([], {
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       const mediaId = params['mediaId'];
       if (mediaId) {
         this.mediasService

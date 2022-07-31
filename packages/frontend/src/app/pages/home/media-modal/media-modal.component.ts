@@ -14,6 +14,7 @@ import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
+import { MediasService } from '../../../shared/services/medias.service';
 
 dayjs.extend(duration);
 
@@ -44,9 +45,16 @@ export class MediaModalComponent implements OnChanges, OnInit {
   addToListIcon = faPlusCircle;
   likeButton = faThumbsUp;
 
+  showEpisodes = false;
+
+  isWatched: string | null = null;
+
   @ViewChild('player') player: YouTubePlayer | null = null;
 
-  constructor(private readonly modalService: ModalService) {}
+  constructor(
+    private readonly modalService: ModalService,
+    private readonly mediasService: MediasService
+  ) {}
 
   ngOnInit() {
     if (!this.apiLoaded) {
@@ -58,6 +66,30 @@ export class MediaModalComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
+    if (this.media?.mediaType === 'tv' && this.media) {
+      this.showEpisodes = true;
+      const indexes = this.mediasService.getTvClosestIndexes(this.media.data);
+
+      if (indexes) {
+        this.isWatched = `E${indexes.episodeIndex} S${indexes.seasonIndex}`;
+      }
+    }
+
+    if (this.media?.mediaType === 'movie' && this.media) {
+      this.showEpisodes = false;
+
+      const watchedTime = this.mediasService.getMovieWatchedTime(
+        this.media.data
+      );
+
+      if (watchedTime) {
+        this.isWatched = `Continuer - ${dayjs
+          .duration(watchedTime, 'minute')
+          .format('H[h]mm')
+          .replace(/00$/, '')}`;
+      }
+    }
+
     const time = 128;
     this.displayedTime = dayjs
       .duration(time, 'minute')

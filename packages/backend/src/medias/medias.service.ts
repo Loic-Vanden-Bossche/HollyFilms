@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
 
-import { Injectable, Logger } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
 import { Response } from 'express';
 import { env } from 'process';
 import { Media, MediaDocument } from './media.schema';
@@ -47,7 +47,9 @@ export class MediasService {
   ) {}
 
   async getMedia(id: string) {
-    this.mediaModel.findById(id);
+    return this.mediaModel.findById(id).orFail(() => {
+      throw new HttpException(`Media not found`, HttpStatus.NOT_FOUND);
+    }).exec().then(formatOneMedia);
   }
 
   async deleteMedia(id: string) {

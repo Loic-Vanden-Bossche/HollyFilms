@@ -8,6 +8,7 @@ export type MediaType = 'movie' | 'tv';
 export type MediaWithType = { data: Media; mediaType: MediaType };
 
 export interface Media {
+  _id: string;
   TMDB_id: number;
   title: string;
   mediaType: string;
