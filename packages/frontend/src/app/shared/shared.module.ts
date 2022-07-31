@@ -12,6 +12,7 @@ import { LogoComponent } from './components/logo/logo.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SafePipe } from './pipes/safe.pipe';
 import { RatingCircleComponent } from './components/rating-circle/rating-circle.component';
+import { RatingBarComponent } from './components/rating-bar/rating-bar.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +20,15 @@ import { RatingCircleComponent } from './components/rating-circle/rating-circle.
     LogoComponent,
     SafePipe,
     RatingCircleComponent,
+    RatingBarComponent,
   ],
-  exports: [ModalComponent, LogoComponent, SafePipe, RatingCircleComponent],
+  exports: [
+    ModalComponent,
+    LogoComponent,
+    SafePipe,
+    RatingCircleComponent,
+    RatingBarComponent,
+  ],
   providers: [
     UsersService,
     ThemesService,

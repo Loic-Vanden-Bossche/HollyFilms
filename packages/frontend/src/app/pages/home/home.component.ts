@@ -48,7 +48,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const mediaId = params['mediaId'];
-      console.log(params);
       if (mediaId) {
         this.mediasService
           .getMedia(mediaId)

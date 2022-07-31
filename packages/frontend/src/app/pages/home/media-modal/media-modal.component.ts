@@ -2,7 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -15,7 +15,7 @@ import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
   selector: 'app-media-modal',
   templateUrl: './media-modal.component.html',
 })
-export class MediaModalComponent implements OnChanges {
+export class MediaModalComponent implements OnInit {
   @Input() media: MediaWithType | null = null;
   @Output() closed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -29,6 +29,8 @@ export class MediaModalComponent implements OnChanges {
     mute: 1,
   };
 
+  seekTime = 20;
+
   apiLoaded = false;
 
   addToListIcon = faPlusCircle;
@@ -38,7 +40,7 @@ export class MediaModalComponent implements OnChanges {
 
   constructor(private readonly modalService: ModalService) {}
 
-  ngOnChanges() {
+  ngOnInit() {
     if (!this.apiLoaded) {
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
@@ -48,12 +50,17 @@ export class MediaModalComponent implements OnChanges {
   }
 
   onVideoReady() {
-    this.player?.seekTo(20, true);
+    this.seekToStart();
+  }
+
+  seekToStart() {
+    this.player?.seekTo(this.seekTime, true);
   }
 
   onVideoStateChange(state: any) {
     if (state.data === 0) {
       this.player?.playVideo();
+      this.seekToStart();
     }
   }
 

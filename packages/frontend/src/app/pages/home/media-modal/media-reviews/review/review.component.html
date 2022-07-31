@@ -1,0 +1,28 @@
+<div
+  class="flex text-white p-3 flex-col w-full rounded shadow-lg bg-base-600"
+  *ngIf="review"
+>
+  <div class="flex-row flex w-full items-center mb-3">
+    <div
+      class="rounded-2xl h-16 w-16 bg-center bg-cover"
+      [ngStyle]="{
+        'background-image':
+          'url(' +
+          (review.author.profile_path
+            ? review.author.profile_path
+            : 'assets/img/avatar-blank.png') +
+          ')'
+      }"
+    ></div>
+    <div class="ml-4 flex flex-col">
+      <h1 class="text-xl font-bold">{{ review.author.name | titlecase }}</h1>
+      <h2 class="text-sm text-slate-400">@{{ authorTag }}</h2>
+    </div>
+  </div>
+  <div *ngIf="review.rating" class="mb-3">
+    <app-rating-bar [rating]="review.rating"></app-rating-bar>
+  </div>
+  <div class="text-xs" *ngIf="review.content">
+    <markdown [data]="review.content"> </markdown>
+  </div>
+</div>

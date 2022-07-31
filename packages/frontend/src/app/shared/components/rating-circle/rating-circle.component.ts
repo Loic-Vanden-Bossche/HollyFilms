@@ -15,6 +15,7 @@ export class RatingCircleComponent implements OnChanges {
   @Input() maxRating = 10;
   @Input() circleRadius = 20;
   @Input() strokeSize = 5;
+  @Input() innerStrokeSize = 2;
   @Input() colorMap: ColorMap[] = [
     { color: '#F87272', breakpoint: 20 },
     { color: '#FBBD23', breakpoint: 40 },

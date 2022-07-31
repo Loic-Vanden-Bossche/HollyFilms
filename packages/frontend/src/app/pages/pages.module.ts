@@ -16,6 +16,9 @@ import { MediaCardDataDetailsComponent } from './home/media-card/media-card-data
 import { MediaCardTabsComponent } from './home/media-card/media-card-data-details/media-card-tabs/media-card-tabs.component';
 import { MediaModalComponent } from './home/media-modal/media-modal.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { MediaReviewsComponent } from './home/media-modal/media-reviews/media-reviews.component';
+import { ReviewComponent } from './home/media-modal/media-reviews/review/review.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,8 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     MediaCardDataDetailsComponent,
     MediaCardTabsComponent,
     MediaModalComponent,
+    MediaReviewsComponent,
+    ReviewComponent,
   ],
   imports: [
     YouTubePlayerModule,
@@ -39,6 +44,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     ReactiveFormsModule,
     FormsModule,
     FontAwesomeModule,
+    MarkdownModule.forRoot(),
   ],
 })
 export class PagesModule {}

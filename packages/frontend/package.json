@@ -35,6 +35,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@types/uuid": "^8.3.4",
+    "ngx-markdown": "^14.0.1",
     "rxjs": "~7.5.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss-scoped-groups": "^2.0.0",

@@ -1,0 +1,9 @@
+<div class="w-full flex flex-row items-center">
+  <span class="text-xs mr-2" [ngStyle]="{color}">{{ percent }}%</span>
+  <div class="w-full overflow-hidden relative rounded-xl h-1 bg-base-700">
+    <div
+      [ngStyle]="{ 'background-color': color, width: percent + '%' }"
+      class="absolute top-0 rounded-tr-xl rounded-br-xl left-0 h-full"
+    ></div>
+  </div>
+</div>
