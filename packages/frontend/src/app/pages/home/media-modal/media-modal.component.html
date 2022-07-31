@@ -126,7 +126,7 @@
         </div>
         <div class="bg-gradient-to-r gradient-colors h-1 w-full"></div>
         <div class="bg-base-500 w-full h-32">
-          <div *ngIf="!showEpisodes" class="w-full p-4 text-white">
+          <div *ngIf="!showEpisodes" @onTabChange class="w-full p-4 text-white">
             <app-media-infos
               [casting]="media.data.actors"
               [overview]="media.data.overview"
@@ -136,6 +136,7 @@
           </div>
           <div
             class="w-full p-4 text-white"
+            @onTabChange
             *ngIf="showEpisodes && media.data.tvs"
           >
             <app-media-episodes [seasons]="media.data.tvs"></app-media-episodes>

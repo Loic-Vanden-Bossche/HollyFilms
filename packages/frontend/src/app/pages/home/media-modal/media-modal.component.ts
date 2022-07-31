@@ -15,12 +15,24 @@ import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 import { MediasService } from '../../../shared/services/medias.service';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 dayjs.extend(duration);
 
 @Component({
   selector: 'app-media-modal',
   templateUrl: './media-modal.component.html',
+  animations: [
+    trigger('onTabChange', [
+      transition(':enter', [
+        style({ opacity: 0, 'transform': 'translateX(-10px)' }),
+        animate(
+          '0.5s ease',
+          style({ opacity: 1, 'transform': 'translateX(0)' }),
+        ),
+      ]),
+    ]),
+  ],
 })
 export class MediaModalComponent implements OnChanges, OnInit {
   @Input() media: MediaWithType | null = null;
