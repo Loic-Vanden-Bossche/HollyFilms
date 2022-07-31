@@ -1,5 +1,5 @@
 <div *ngIf="media" class="h-full p-5 flex flex-col">
-  <div class="text-white">
+  <div class="text-white overflow-hidden">
     <h1 class="text-xl font-bold">{{ media.data.title }}</h1>
     <h2>{{ media.data.tagline }}</h2>
     <div class="my-4">
@@ -7,10 +7,10 @@
     </div>
   </div>
   <div class="mt-auto h-10 flex flex-row">
-    <div *ngIf="media.mediaType === 'movie'">
+    <div class="flex flex-row" *ngIf="media.mediaType === 'movie'">
       <a
         ><button
-          class="mr-5 bg-gradient-to-r text-white gradient-colors h-full rounded-md font-bold px-4 py-1 hover:border-2 transition-all border-white"
+          class="mr-5 whitespace-nowrap bg-gradient-to-r text-white gradient-colors h-full rounded-md font-bold px-4 py-1 hover:border-2 transition-all border-white"
         >
           Voir le film
         </button></a
@@ -18,7 +18,7 @@
       <a
         ><button
           (click)="mediaSelected.emit()"
-          class="text-black h-full bg-white rounded-md font-bold px-4 py-1"
+          class="text-black whitespace-nowrap h-full bg-white rounded-md font-bold px-4 py-1"
         >
           Voir plus
         </button></a
@@ -28,7 +28,7 @@
       <a
         ><button
           (click)="mediaSelected.emit()"
-          class="text-black h-full bg-white rounded-md font-bold px-4 py-1"
+          class="text-black whitespace-nowrap h-full bg-white rounded-md font-bold px-4 py-1"
         >
           Voir les épisodes
         </button></a

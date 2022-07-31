@@ -1,6 +1,6 @@
 <div
   (mouseleave)="showMore = false"
-  class="relative group-example delay-75 overflow-hidden hover:z-10 hover:delay-0 transition-all hover:-translate-y-2 border-white hover:border-2 rounded-md h-72 hover:h-96 cursor-pointer"
+  class="relative duration-300 group-example delay-75 overflow-hidden hover:z-10 hover:delay-0 transition-all hover:-translate-y-2 border-white hover:border-2 rounded-md h-72 hover:h-96 cursor-pointer"
   [ngClass]="
     showMore ? positionClasses.concat('aspect-[16/9]') : 'aspect-[475/712]'
   "
@@ -16,7 +16,7 @@
     }"
   ></div>
   <div
-    class="absolute h-full w-full transition-all top-0 left-0 opacity-0 translate-y-14 group-example-hover:opacity-100 group-example-hover:translate-y-0"
+    class="duration-300 absolute h-full w-full transition-all top-0 left-0 opacity-0 translate-y-14 group-example-hover:opacity-100 group-example-hover:translate-y-0"
   >
     <div
       *ngIf="!showMore"
