@@ -8,5 +8,7 @@ import { Season } from '../../../../shared/models/season.model';
 export class MediaEpisodesComponent implements OnInit {
   @Input() seasons: Season[] = [];
 
+  selectedSeasonIndex: number = 0;
+
   ngOnInit(): void {}
 }
