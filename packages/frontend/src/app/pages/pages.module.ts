@@ -19,6 +19,8 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
 import { MediaReviewsComponent } from './home/media-modal/media-reviews/media-reviews.component';
 import { ReviewComponent } from './home/media-modal/media-reviews/review/review.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { MediaInfosComponent } from './home/media-modal/media-infos/media-infos.component';
+import { MediaEpisodesComponent } from './home/media-modal/media-episodes/media-episodes.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { MarkdownModule } from 'ngx-markdown';
     MediaModalComponent,
     MediaReviewsComponent,
     ReviewComponent,
+    MediaInfosComponent,
+    MediaEpisodesComponent,
   ],
   imports: [
     YouTubePlayerModule,

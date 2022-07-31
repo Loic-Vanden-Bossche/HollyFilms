@@ -1,0 +1,26 @@
+<div class="flex my-3 flex-row justify-center">
+  <div class="mr-5 flex flex-col justify-center">
+    <div class="flex justify-center">
+      <div
+        [ngStyle]="{
+          'background-image':
+            'url(' +
+            (director?.profile_path
+              ? 'https://image.tmdb.org/t/p/w92' + director?.profile_path
+              : 'assets/img/avatar-blank.png') +
+            ')'
+        }"
+        class="h-16 w-16 bg-cover bg-center rounded-2xl"
+      ></div>
+    </div>
+    <p class="text-center mt-2">{{ director?.name }}</p>
+  </div>
+  <div class="mr-5 w-1.5 rounded bg-white"></div>
+  <div>
+    <p>{{ overview }}</p>
+  </div>
+</div>
+<div class="mb-3 mt-6">
+  <app-actor-list [actors]="casting"></app-actor-list>
+</div>
+<app-media-reviews [reviews]="reviews"></app-media-reviews>
