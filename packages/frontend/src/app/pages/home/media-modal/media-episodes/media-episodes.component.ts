@@ -8,7 +8,19 @@ import { Season } from '../../../../shared/models/season.model';
 export class MediaEpisodesComponent implements OnInit {
   @Input() seasons: Season[] = [];
 
-  selectedSeasonIndex: number = 0;
+  selectedSeasonIndex: number | null = null;
 
-  ngOnInit(): void {}
+  selectDefaultSeason() {
+    console.log(this.seasons);
+    for (const [i, season] of this.seasons.entries()) {
+      if (season.available) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  ngOnInit(): void {
+    this.selectedSeasonIndex = this.selectDefaultSeason();
+  }
 }

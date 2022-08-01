@@ -52,7 +52,7 @@ export class TvsService {
       .then(async (media) => {
         const episodes = await firstValueFrom(
           this.http.get(
-            `${config.apiUrl}/tv/${media.TMDB_id}/season/${seasonIndex}?api_key=${config.apiKey}&language=en-US&append_to_response=videos,credits,translations,reviews`,
+            `${config.apiUrl}/tv/${media.TMDB_id}/season/${seasonIndex}?api_key=${config.apiKey}&language=fr-FR&append_to_response=videos,credits,translations,reviews`,
           ),
         )
           .then((response) => response.data.episodes)
@@ -70,16 +70,14 @@ export class TvsService {
           );
 
         return this.mediaModel
-          .findById(id)
-          .exec()
-          .then((media) => {
-            this.logger.log(`Added season ${seasonIndex} of tv ${media.title}`);
-
-            media.tvs[seasonIndex - 1].episodes = episodes;
-            media.tvs[seasonIndex - 1].available = true;
-            media.tvs[seasonIndex - 1].dateAdded = new Date();
-            return media.save();
-          });
+          .findByIdAndUpdate(id, {
+            $set: {
+              [`tvs.${seasonIndex - 1}.episodes`]: episodes,
+              [`tvs.${seasonIndex - 1}.available`]: true,
+              [`tvs.${seasonIndex - 1}.dateAdded`]: new Date(),
+            }
+          })
+          .exec();
       });
   }
 
