@@ -11,13 +11,8 @@
   </div>
 </div>
 <div *ngIf="selectedSeasonIndex !== null" class="flex-col flex w-full">
-  <div class="h-24 w-full flex flex-row bg-base-700 overflow-hidden mb-3 rounded" *ngFor="let episode of seasons[selectedSeasonIndex].episodes">
-    <div class="h-full bg-cover bg-center aspect-video" [ngStyle]="{
-          'background-image': 'url(' + episode.still_path +')'
-        }"></div>
-    <div class="p-2">
-      <h1 class="font-bold">{{episode.name}}</h1>
-    </div>
+  <div *ngFor="let episode of seasonsWithWatchedTime[selectedSeasonIndex].episodes; let index = index">
+    <app-episode [episode]="episode"></app-episode>
   </div>
 </div>
 <div *ngIf="selectedSeasonIndex === null">

@@ -4,7 +4,7 @@ import CreateUserDto from './dto/create.user.dto';
 import UpdateUserDto from './dto/update.user.dto';
 import UpdateMeDto from './dto/update.me.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import {Model, Schema} from 'mongoose';
 import CurrentUser from './current';
 import { AuthService } from '../auth/auth.service';
 import { ConfigService } from '@nestjs/config';
@@ -120,6 +120,53 @@ export class UsersService {
     await this.isExist(id);
     return this.userModel.deleteOne({ _id: getObjectId(id) });
   }
+
+  // Updated current time if a playedMedia is found esle create a new one
+  setMediaPlayedTime(user: CurrentUser, mediaId: string, currentTime: number, seasonIndex: number, episodeIndex?: number) {
+
+    const indexes = { seasonIndex, episodeIndex };
+    const tvReady = (seasonIndex && episodeIndex);
+
+    const indexesParams = tvReady ? indexes : {
+      seasonIndex: { $exists: false },
+      episodeIndex: { $exists: false },
+    };
+
+    return this.userModel.findOneAndUpdate({
+      _id: user._id,
+      playedMedias: {
+        $elemMatch: {
+          media: getObjectId(mediaId) as any,
+          ...indexesParams,
+        }
+      }
+    }, {
+      $set: {
+        'playedMedias.$.currentTime': currentTime,
+      }
+    }, {new: true}).then((foundUser) => {
+      if (!foundUser) {
+        this.logger.verbose(`User ${user._id} added playtime entry for media ${mediaId}`);
+        return this.userModel.findByIdAndUpdate(user._id, {
+          $push: {
+            playedMedias: {
+              media: getObjectId(mediaId) as any,
+              currentTime,
+              ...(tvReady ? indexes : {}),
+              audioTrack: 0,
+              subtitleTrack: 0,
+            }
+          }
+        }, {new: true});
+      } else {
+        return foundUser;
+      }
+    }).then((u) => {
+      this.logger.log(`User ${u._id} updated playtime`);
+      return u?.playedMedias;
+    });
+  }
+
 
   deletePlayedMediasOccurences(mediaId: string): Promise<any> {
     return this.userModel

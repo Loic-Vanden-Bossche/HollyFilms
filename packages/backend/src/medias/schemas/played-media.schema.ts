@@ -1,18 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Media } from '../media.schema';
+import {SchemaTypes} from "mongoose";
 
 @Schema()
 export class PlayedMedia {
-  @Prop()
+  @Prop({ type: SchemaTypes.ObjectId, ref: Media.name })
   media: Media;
 
   @Prop()
   currentTime: number;
 
-  @Prop()
+  @Prop({ default: undefined })
   seasonIndex?: number;
 
-  @Prop()
+  @Prop({ default: undefined })
   episodeIndex?: number;
 
   @Prop()

@@ -1,8 +1,9 @@
-<div
-  class="bg-transparent duration-700 flex flex-col items-center group transition-all p-0 hover:p-2 rounded-lg cursor-pointer transition-all hover:bg-base-600 hover:shadow-lg"
+<div [ngClass]="extend ? ['hover:p-2', 'cursor-pointer', 'hover:bg-base-600', 'hover:shadow-lg'] : []"
+  class="bg-transparent duration-700 flex flex-col items-center group transition-all p-0 rounded-lg transition-all"
 >
   <svg
-    class="group-hover:scale-150 duration-700 mt-0 group-hover:mt-3 transition-all"
+    [ngClass]="extend ? ['group-hover:scale-150', 'group-hover:mt-3'] : []"
+    class="duration-700 mt-0 transition-all"
     [ngStyle]="{
       height: circleRadius * 2 + strokeSize,
       width: circleRadius * 2 + strokeSize
@@ -40,8 +41,8 @@
       {{ percent | number: "1.1-1" }}%
     </text>
   </svg>
-  <div
-    class="group-hover:max-w-3xl mt-0 transition-all duration-700 group-hover:mt-4 group-hover:max-h-24 overflow-hidden max-h-0 max-w-0 font-bold text-sm"
+  <div [ngClass]="extend ? ['group-hover:max-w-3xl', 'group-hover:mt-4', 'group-hover:max-h-24'] : []"
+    class="mt-0 transition-all duration-700 overflow-hidden max-h-0 max-w-0 font-bold text-sm"
   >
     <p class="whitespace-nowrap" [ngStyle]="{color}">{{ 10133 }} votes</p>
   </div>

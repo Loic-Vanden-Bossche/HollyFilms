@@ -21,6 +21,8 @@ import { ReviewComponent } from './home/media-modal/media-reviews/review/review.
 import { MarkdownModule } from 'ngx-markdown';
 import { MediaInfosComponent } from './home/media-modal/media-infos/media-infos.component';
 import { MediaEpisodesComponent } from './home/media-modal/media-episodes/media-episodes.component';
+import { EpisodeComponent } from './home/media-modal/media-episodes/episode/episode.component';
+import { WatchProgressComponent } from './home/media-modal/media-episodes/watch-progress/watch-progress.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { MediaEpisodesComponent } from './home/media-modal/media-episodes/media-
     ReviewComponent,
     MediaInfosComponent,
     MediaEpisodesComponent,
+    EpisodeComponent,
+    WatchProgressComponent,
   ],
   imports: [
     YouTubePlayerModule,

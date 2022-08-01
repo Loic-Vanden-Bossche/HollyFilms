@@ -24,41 +24,6 @@ export class MediasService {
     });
   }
 
-  isTvWatched(media: Media) {
-    return this.auth.user.playedMedias
-      .filter((pm) => pm.media === media)
-      .some((pm) => pm.currentTime > this.watchedThreshold);
-  }
-
-  getTvClosestIndexes(
-    media: Media
-  ): { episodeIndex: number; seasonIndex: number } | null {
-    if (!this.isTvWatched(media)) {
-      return null;
-    }
-
-    let seasonIndex = 0;
-    let episodeIndex = 0;
-
-    this.auth.user.playedMedias
-      .filter((pm) => pm.media._id === media._id)
-      .forEach((pm) => {
-        if (pm.seasonIndex !== undefined && pm.episodeIndex !== undefined) {
-          if (pm.seasonIndex > seasonIndex) {
-            seasonIndex = pm.seasonIndex;
-            episodeIndex = pm.episodeIndex;
-          } else if (
-            pm.seasonIndex === seasonIndex &&
-            pm.episodeIndex > episodeIndex
-          ) {
-            episodeIndex = pm.episodeIndex;
-          }
-        }
-      });
-
-    return { seasonIndex, episodeIndex };
-  }
-
   getMovieWatchedTime(media: Media) {
     return (
       this.auth.user.playedMedias.find((pm) => pm.media._id === media._id)

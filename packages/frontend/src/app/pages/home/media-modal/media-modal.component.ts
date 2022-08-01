@@ -16,6 +16,7 @@ import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 import { MediasService } from '../../../shared/services/medias.service';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {TvsService} from "../../../shared/services/tvs.service";
 
 dayjs.extend(duration);
 
@@ -65,7 +66,8 @@ export class MediaModalComponent implements OnChanges, OnInit {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly mediasService: MediasService
+    private readonly mediasService: MediasService,
+    private readonly tvsService: TvsService
   ) {}
 
   ngOnInit() {
@@ -80,7 +82,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
   ngOnChanges() {
     if (this.media?.mediaType === 'tv' && this.media) {
       this.showEpisodes = true;
-      const indexes = this.mediasService.getTvClosestIndexes(this.media.data);
+      const indexes = this.tvsService.getTvClosestIndexes(this.media.data);
 
       if (indexes) {
         this.isWatched = `E${indexes.episodeIndex} S${indexes.seasonIndex}`;

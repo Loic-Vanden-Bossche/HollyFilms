@@ -9,6 +9,8 @@ import { TMDBConfig } from '../../config/config';
 import { firstValueFrom } from 'rxjs';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { MediaWithType } from '../medias.utils';
+import {TMDBSeason} from "../../tmdb/tmdb.models";
+import {Episode} from "./schemas/episode.schema";
 
 @Injectable()
 export class TvsService {
@@ -51,16 +53,17 @@ export class TvsService {
       .exec()
       .then(async (media) => {
         const episodes = await firstValueFrom(
-          this.http.get(
-            `${config.apiUrl}/tv/${media.TMDB_id}/season/${seasonIndex}?api_key=${config.apiKey}&language=fr-FR&append_to_response=videos,credits,translations,reviews`,
+          this.http.get<TMDBSeason>(
+            `${config.apiUrl}/tv/${media.TMDB_id}/season/${seasonIndex}?api_key=${config.apiKey}&language=fr-FR&append_to_response=content_ratings`,
           ),
         )
           .then((response) => response.data.episodes)
           .then((episodes) =>
-            episodes.map((episode) => ({
+            episodes.map((episode): Episode => ({
               name: episode.name,
               index: episode.episode_number,
               overview: episode.overview,
+              releaseDate: new Date(episode.air_date),
               still_path: episode.still_path
                 ? 'https://image.tmdb.org/t/p/w1280' + episode.still_path
                 : null,
@@ -73,7 +76,6 @@ export class TvsService {
           .findByIdAndUpdate(id, {
             $set: {
               [`tvs.${seasonIndex - 1}.episodes`]: episodes,
-              [`tvs.${seasonIndex - 1}.available`]: true,
               [`tvs.${seasonIndex - 1}.dateAdded`]: new Date(),
             }
           })

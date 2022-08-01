@@ -5,10 +5,12 @@ export interface Episode {
   index: number;
   overview: string;
   still_path: string;
-  runtime: number;
+  runtime?: number;
   vote_average: number;
-  avaliable: boolean;
+  available: boolean;
   queued?: boolean;
-  dateAdded: Date;
-  fileInfos: FileInfos;
+  releaseDate: Date;
+  dateAdded?: Date;
+  fileInfos?: FileInfos;
+  watchedTime?: number;
 }

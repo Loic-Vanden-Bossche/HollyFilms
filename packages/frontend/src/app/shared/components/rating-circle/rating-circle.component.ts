@@ -22,12 +22,13 @@ export class RatingCircleComponent implements OnChanges {
     { color: '#FFFF77', breakpoint: 70 },
     { color: '#36D399', breakpoint: 100 },
   ];
-  @Input() dasharray = 130;
   @Input() textSize = 9;
+  @Input() extend = false;
 
   color = this.colorMap[0].color;
 
-  dashoffset = this.dasharray;
+  dashoffset = 0;
+  dasharray = 130;
 
   percent = 0;
 
@@ -42,6 +43,8 @@ export class RatingCircleComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    this.dasharray = this.circleRadius * Math.PI * 2;
+    this.dashoffset = this.dasharray;
     setTimeout(() => {
       const goal = (this.rating / this.maxRating) * 100;
       const inter = interval(2).subscribe(() => {

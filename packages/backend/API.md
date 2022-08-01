@@ -466,6 +466,182 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## UsersController_setMediaCurrentTime
+
+<a id="opIdUsersController_setMediaCurrentTime"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /users/setMediaCurrentTime/{mediaId} \
+  -H 'Content-Type: application/json'
+
+```
+
+```http
+POST /users/setMediaCurrentTime/{mediaId} HTTP/1.1
+
+Content-Type: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "currentTime": 40,
+  "seasonIndex": 1,
+  "episodeIndex": 1
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/users/setMediaCurrentTime/{mediaId}',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json'
+}
+
+result = RestClient.post '/users/setMediaCurrentTime/{mediaId}',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json'
+}
+
+r = requests.post('/users/setMediaCurrentTime/{mediaId}', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/users/setMediaCurrentTime/{mediaId}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/setMediaCurrentTime/{mediaId}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/users/setMediaCurrentTime/{mediaId}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /users/setMediaCurrentTime/{mediaId}`
+
+*[User] Set media current time*
+
+> Body parameter
+
+```json
+{
+  "currentTime": 40,
+  "seasonIndex": 1,
+  "episodeIndex": 1
+}
+```
+
+<h3 id="userscontroller_setmediacurrenttime-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|mediaId|path|string|true|none|
+|body|body|[UpdateMeMediaPlayedTimeDto](#schemaupdatememediaplayedtimedto)|true|none|
+
+<h3 id="userscontroller_setmediacurrenttime-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="hollyfilms-api-users-admin">Users Admin</h1>
 
 ## UsersAdminController_getUsers
@@ -5887,6 +6063,30 @@ This operation does not require authentication
 |username|string|true|none|User nickname|
 |newPassword|string|true|none|New user password|
 |newPasswordConfirm|string|true|none|New user password confirmation|
+
+<h2 id="tocS_UpdateMeMediaPlayedTimeDto">UpdateMeMediaPlayedTimeDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaupdatememediaplayedtimedto"></a>
+<a id="schema_UpdateMeMediaPlayedTimeDto"></a>
+<a id="tocSupdatememediaplayedtimedto"></a>
+<a id="tocsupdatememediaplayedtimedto"></a>
+
+```json
+{
+  "currentTime": 40,
+  "seasonIndex": 1,
+  "episodeIndex": 1
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|currentTime|number|true|none|Current play time of the movie or episode|
+|seasonIndex|number|true|none|Season index of the movie or episode|
+|episodeIndex|number|true|none|Episode index of the movie or episode|
 
 <h2 id="tocS_CreateUserDto">CreateUserDto</h2>
 <!-- backwards compatibility -->

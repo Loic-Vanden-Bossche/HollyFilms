@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { UserDocument } from '../users/user.schema';
 import { CookieConfig, JWTConfig } from '../../config/config';
 import { getObjectId } from '../../shared/mongoose';
+import {Media} from "../../medias/media.schema";
 
 dayjs.extend(duration);
 
@@ -61,6 +62,12 @@ export const currentUserFromPayload = (
     .findById(getObjectId(payload._id))
     .orFail(() => {
       throw new HttpException('Invalid user', HttpStatus.UNAUTHORIZED);
-    })
+    }).populate({
+    path: 'playedMedias',
+    populate: {
+      path: 'media',
+      model: Media.name
+    }
+  })
     .exec()
     .then((user) => new CurrentUser(user));

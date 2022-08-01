@@ -61,6 +61,22 @@ interface TMDBMovie {
   };
 }
 
+interface TMDBSeason {
+  episode_count: number;
+  name: string;
+  poster_path: string;
+  season_number: number;
+  overview: string;
+  episodes?: {
+    name: string;
+    episode_number: number;
+    overview: string;
+    still_path: string;
+    vote_average: number;
+    air_date: string;
+  }[];
+}
+
 interface TMDBTVShow {
   media_type: 'tv';
   name: string;
@@ -104,13 +120,7 @@ interface TMDBTVShow {
       profile_path: string;
     }[];
   };
-  seasons: {
-    episode_count: number;
-    name: string;
-    poster_path: string;
-    season_number: number;
-    overview: string;
-  }[];
+  seasons: TMDBSeason[];
   reviews: {
     results: {
       content: string;
@@ -148,6 +158,7 @@ type TMDBMedia = TMDBMovie | TMDBTVShow;
 export {
   TMDBMovie,
   TMDBTVShow,
+  TMDBSeason,
   TMDBSearchResult,
   OnlineSearchResult,
   TMDBMedia,

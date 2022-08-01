@@ -7,12 +7,13 @@ export class Episode {
   index: number;
   overview: string;
   still_path: string;
-  runtime: number;
+  runtime?: number;
   vote_average: number;
-  avaliable: boolean;
+  available: boolean;
   queued?: boolean;
-  dateAdded: Date;
-  fileInfos: FileInfos;
+  dateAdded?: Date;
+  releaseDate: Date;
+  fileInfos?: FileInfos;
 }
 
 export const EpisodeSchema = SchemaFactory.createForClass(Episode);

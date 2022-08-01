@@ -41,6 +41,26 @@ paths:
         "200":
           description: ""
       tags: *a1
+  "/users/setMediaCurrentTime/{mediaId}":
+    post:
+      operationId: UsersController_setMediaCurrentTime
+      summary: "[User] Set media current time"
+      parameters:
+        - name: mediaId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMeMediaPlayedTimeDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a1
   /users/admin:
     get:
       operationId: UsersAdminController_getUsers
@@ -593,6 +613,25 @@ components:
         - username
         - newPassword
         - newPasswordConfirm
+    UpdateMeMediaPlayedTimeDto:
+      type: object
+      properties:
+        currentTime:
+          type: number
+          description: Current play time of the movie or episode
+          example: 40
+        seasonIndex:
+          type: number
+          description: Season index of the movie or episode
+          example: 1
+        episodeIndex:
+          type: number
+          description: Episode index of the movie or episode
+          example: 1
+      required:
+        - currentTime
+        - seasonIndex
+        - episodeIndex
     CreateUserDto:
       type: object
       properties:
