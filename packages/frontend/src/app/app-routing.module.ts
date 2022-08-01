@@ -9,6 +9,7 @@ import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { PageNotFoundComponent } from './navigation/page-not-found/page-not-found.component';
 import { AuthGuardService as AuthGuard } from './auth/auth.guard';
 import { AdminGuardService as AdminGuard } from './admin/admin.guard';
+import { PlayerComponent } from './player/player.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,16 @@ const routes: Routes = [
   {
     path: 'sign-up',
     component: SignUpComponent,
+  },
+  {
+    path: 'play/:mediaId',
+    component: PlayerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'play/:mediaId/:seasonIndex/:episodeIndex',
+    component: PlayerComponent,
+    canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: 'not-found' },
   {

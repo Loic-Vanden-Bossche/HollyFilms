@@ -1,5 +1,11 @@
 <app-modal id="mediaModal" (closed)="closed.emit()">
   <div
+    *ngIf="playAnimData"
+    (@playMode.done)="onPlayNavigate()"
+    [@playMode]="{ value: playAnimData, params: playAnimData }"
+    class="fixed rounded z-10 bg-black"
+  ></div>
+  <div
     *ngIf="media"
     [ngClass]="display ? 'modal-opened' : 'modal-closed'"
     class="modal-anim scrollbar-hide overflow-y-scroll w-10/12 h-3/4 flex flex-col flex-nowrap sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 absolute overflow-hidden bg-base-500 rounded-xl drop-shadow-xl"
@@ -49,7 +55,7 @@
               </div>
             </div>
             <div class="absolute flex flex-row bottom-0 h-10">
-              <a *ngIf="media.mediaType === 'movie'"
+              <a (click)="onPlay($event)" *ngIf="media.mediaType === 'movie'"
                 ><button
                   class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
                 >
@@ -57,7 +63,7 @@
                 </button></a
               >
               <div *ngIf="media.mediaType === 'tv'">
-                <a
+                <a (click)="onPlay($event)"
                   ><button
                     class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
                   >
@@ -140,7 +146,11 @@
             @onTabChange
             *ngIf="showEpisodes && media.data.tvs"
           >
-            <app-media-episodes [mediaId]="media.data._id" [seasons]="media.data.tvs"></app-media-episodes>
+            <app-media-episodes
+              (playEpisode)="onPlayTv($event)"
+              [mediaId]="media.data._id"
+              [seasons]="media.data.tvs"
+            ></app-media-episodes>
           </div>
         </div>
       </div>

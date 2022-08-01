@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Media, MediaWithType } from '../models/media.model';
+import { Media } from '../models/media.model';
 import { AuthService } from './auth.service';
-import {Episode} from "../models/episode.model";
-
-export interface WatchProgress {
-  watched: number;
-  total: number;
-}
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +8,7 @@ export interface WatchProgress {
 export class TvsService {
   watchedThreshold = 120;
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly auth: AuthService
-  ) {}
+  constructor(private readonly auth: AuthService) {}
 
   isTvWatched(media: Media) {
     return this.auth.user.playedMedias
@@ -26,8 +16,19 @@ export class TvsService {
       .some((pm) => pm.currentTime > this.watchedThreshold);
   }
 
-  getEpisodeWatchedTime(mediaId: string, episodeIndex: number, seasonIndex: number): number {
-    return this.auth.user.playedMedias.find(pm => pm.media._id === mediaId && pm.seasonIndex === seasonIndex && pm.episodeIndex === episodeIndex)?.currentTime || 0;
+  getEpisodeWatchedTime(
+    mediaId: string,
+    episodeIndex: number,
+    seasonIndex: number
+  ): number {
+    return (
+      this.auth.user.playedMedias.find(
+        (pm) =>
+          pm.media._id === mediaId &&
+          pm.seasonIndex === seasonIndex &&
+          pm.episodeIndex === episodeIndex
+      )?.currentTime || 0
+    );
   }
 
   getTvClosestIndexes(

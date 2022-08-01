@@ -15,10 +15,18 @@ import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 import { MediasService } from '../../../shared/services/medias.service';
-import {animate, style, transition, trigger} from '@angular/animations';
-import {TvsService} from "../../../shared/services/tvs.service";
+import { animate, style, transition, trigger } from '@angular/animations';
+import { TvsService } from '../../../shared/services/tvs.service';
+import { Router } from '@angular/router';
 
 dayjs.extend(duration);
+
+export interface PlayData {
+  x: number;
+  y: number;
+  seasonIndex?: number;
+  episodeIndex?: number;
+}
 
 @Component({
   selector: 'app-media-modal',
@@ -26,18 +34,45 @@ dayjs.extend(duration);
   animations: [
     trigger('onTabChange', [
       transition(':enter', [
-        style({ opacity: 0, 'transform': 'translateX(-10px)' }),
-        animate(
-          '0.5s ease',
-          style({ opacity: 1, 'transform': 'translateX(0)' }),
-        ),
+        style({ opacity: 0, transform: 'translateX(-10px)' }),
+        animate('0.5s ease', style({ opacity: 1, transform: 'translateX(0)' })),
       ]),
+    ]),
+    trigger('playMode', [
+      transition(
+        ':enter',
+        [
+          style({
+            height: '0px',
+            width: '0px',
+            top: '{{y}}px',
+            left: '{{x}}px',
+          }),
+          animate(
+            '0.7s ease',
+            style({
+              height: '100vh',
+              width: '100vw',
+              top: '0px',
+              left: '0px',
+            })
+          ),
+        ],
+        {
+          params: {
+            top: '0em',
+            left: '0em',
+          },
+        }
+      ),
     ]),
   ],
 })
 export class MediaModalComponent implements OnChanges, OnInit {
   @Input() media: MediaWithType | null = null;
   @Output() closed: EventEmitter<void> = new EventEmitter<void>();
+
+  playAnimData: PlayData | null = null;
 
   playerVars = {
     autoplay: 1,
@@ -67,7 +102,8 @@ export class MediaModalComponent implements OnChanges, OnInit {
   constructor(
     private readonly modalService: ModalService,
     private readonly mediasService: MediasService,
-    private readonly tvsService: TvsService
+    private readonly tvsService: TvsService,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -124,6 +160,29 @@ export class MediaModalComponent implements OnChanges, OnInit {
       this.player?.playVideo();
       this.seekToStart();
     }
+  }
+
+  onPlay($event: MouseEvent) {
+    this.playAnimData = {
+      x: $event.clientX,
+      y: $event.clientY,
+    };
+  }
+
+  onPlayTv(data: PlayData) {
+    this.playAnimData = data;
+  }
+
+  onPlayNavigate() {
+    if (this.playAnimData) {
+      const { seasonIndex, episodeIndex } = this.playAnimData;
+      this.router.navigate([
+        '/play',
+        this.media?.data._id,
+        ...(seasonIndex && episodeIndex ? [seasonIndex, episodeIndex] : []),
+      ]);
+    }
+    this.playAnimData = null;
   }
 
   close(): void {

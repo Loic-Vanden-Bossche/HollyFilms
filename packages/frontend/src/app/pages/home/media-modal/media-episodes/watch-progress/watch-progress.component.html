@@ -1,8 +1,13 @@
 <div class="w-full flex flex-row items-center">
-  <span class="text-xs transition-all overflow-hidden max-h-0 max-w-0 mr-0 group-hover:mr-2 group-hover:max-w-xs whitespace-nowrap group-hover:max-h-5">{{displayTime}}</span>
-  <div class="w-full overflow-hidden relative group-hover:rounded-xl h-1 bg-base-700">
+  <span
+    class="text-xs transition-all overflow-hidden max-h-0 max-w-0 mr-0 group-hover:mr-2 group-hover:max-w-xs whitespace-nowrap group-hover:max-h-5"
+    >{{ displayTime }}</span
+  >
+  <div
+    class="w-full overflow-hidden relative group-hover:rounded-xl h-1 bg-base-700"
+  >
     <div
-      [ngStyle]="{width: percent + '%' }"
+      [ngStyle]="{ width: percent + '%' }"
       class="absolute bg-gradient-to-r gradient-colors top-0 rounded-tr-xl rounded-br-xl left-0 h-full"
     ></div>
   </div>

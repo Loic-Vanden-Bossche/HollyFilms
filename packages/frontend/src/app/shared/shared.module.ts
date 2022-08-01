@@ -13,7 +13,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SafePipe } from './pipes/safe.pipe';
 import { RatingCircleComponent } from './components/rating-circle/rating-circle.component';
 import { RatingBarComponent } from './components/rating-bar/rating-bar.component';
-import {SentenceCasePipe} from "./pipes/sentence-case.pipe";
+import { SentenceCasePipe } from './pipes/sentence-case.pipe';
 
 @NgModule({
   declarations: [

@@ -1,30 +1,40 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Episode} from "../../../../../shared/models/episode.model";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Episode } from '../../../../../shared/models/episode.model';
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/fr';
-import {faCirclePlay} from "@fortawesome/free-solid-svg-icons";
-import {TvsService} from "../../../../../shared/services/tvs.service";
+import { faCirclePlay } from '@fortawesome/free-solid-svg-icons';
+import { TvsService } from '../../../../../shared/services/tvs.service';
+import { PlayData } from '../../media-modal.component';
 dayjs.locale('fr');
 
 @Component({
   selector: 'app-episode',
-  templateUrl: './episode.component.html'
+  templateUrl: './episode.component.html',
 })
 export class EpisodeComponent implements OnInit {
-
   @Input() episode: Episode | null = null;
+  @Output() play = new EventEmitter<PlayData>();
 
   releaseDate = '';
   playIcon = faCirclePlay;
 
-  duration: string = '';
+  duration = '';
 
   constructor(private readonly tvsService: TvsService) {}
 
-  ngOnInit(): void {
-    const duration = dayjs.duration(this.episode?.runtime || 0);
-    this.duration = (duration.asHours() >= 1 ? duration.hours() + 'h' : '') + duration.minutes() + 'm';
-    this.releaseDate = dayjs(this.episode?.releaseDate).format('D MMMM YYYY');
+  onPlay(event: MouseEvent) {
+    this.play.emit({
+      x: event.clientX,
+      y: event.clientY,
+    });
   }
 
+  ngOnInit(): void {
+    const duration = dayjs.duration(this.episode?.runtime || 0);
+    this.duration =
+      (duration.asHours() >= 1 ? duration.hours() + 'h' : '') +
+      duration.minutes() +
+      'm';
+    this.releaseDate = dayjs(this.episode?.releaseDate).format('D MMMM YYYY');
+  }
 }

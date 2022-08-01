@@ -1,18 +1,39 @@
 <div class="flex h-8 mb-8 flex-row">
-  <div [ngClass]="season.available ? 'pointer-events-auto' : 'pointer-events-none'" *ngFor="let season of seasons;let index = index">
-    <button (click)="selectedSeasonIndex = index" [ngClass]="(selectedSeasonIndex === index) ? ['opacity-100', 'border-white', 'border-opacity-100'] : ['opacity-60', 'border-base-600', 'border-opacity-40']" [ngStyle]="{
-          'background-image':
-            'url(' + season.poster_path + ')'
-        }" class="border-2 rounded transition-all overflow-hidden hover:shadow-md relative bg-cover bg-center mr-3">
-      <div class="h-full w-full flex flex-col justify-center bg-base-600 bg-opacity-40">
-        <h1 class="font-bold px-6">Saison {{index + 1}}</h1>
+  <div
+    [ngClass]="season.available ? 'pointer-events-auto' : 'pointer-events-none'"
+    *ngFor="let season of seasons; let index = index"
+  >
+    <button
+      (click)="selectedSeasonIndex = index"
+      [ngClass]="
+        selectedSeasonIndex === index
+          ? ['opacity-100', 'border-white', 'border-opacity-100']
+          : ['opacity-60', 'border-base-600', 'border-opacity-40']
+      "
+      [ngStyle]="{
+        'background-image': 'url(' + season.poster_path + ')'
+      }"
+      class="border-2 rounded transition-all overflow-hidden hover:shadow-md relative bg-cover bg-center mr-3"
+    >
+      <div
+        class="h-full w-full flex flex-col justify-center bg-base-600 bg-opacity-40"
+      >
+        <h1 class="font-bold px-6">Saison {{ index + 1 }}</h1>
       </div>
     </button>
   </div>
 </div>
 <div *ngIf="selectedSeasonIndex !== null" class="flex-col flex w-full">
-  <div *ngFor="let episode of seasonsWithWatchedTime[selectedSeasonIndex].episodes; let index = index">
-    <app-episode [episode]="episode"></app-episode>
+  <div
+    *ngFor="
+      let episode of seasonsWithWatchedTime[selectedSeasonIndex].episodes;
+      let index = index
+    "
+  >
+    <app-episode
+      (play)="onPlayEpisode($event, selectedSeasonIndex + 1, index + 1)"
+      [episode]="episode"
+    ></app-episode>
   </div>
 </div>
 <div *ngIf="selectedSeasonIndex === null">

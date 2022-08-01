@@ -11,9 +11,10 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { interceptors } from './api/interceptors';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PlayerComponent } from './player/player.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PlayerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
