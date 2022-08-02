@@ -1,7 +1,8 @@
 <div [ngClass]="display ? 'opacity-100' : 'invisible opacity-0'">
-  <div class="fixed top-0 right-0 left-0 bottom-0 z-50 overflow-auto">
+  <div class="fixed top-0 right-0 left-0 bottom-0 z-40 overflow-auto">
     <div class="w-full h-full relative">
       <div
+        #content
         class="fixed z-0 top-0 right-0 left-0 bottom-0 bg-black opacity-75"
       ></div>
       <ng-content></ng-content>

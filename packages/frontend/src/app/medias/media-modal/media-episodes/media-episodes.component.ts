@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Season } from '../../../../shared/models/season.model';
-import { TvsService } from '../../../../shared/services/tvs.service';
-import { PlayData } from '../media-modal.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { Season } from '../../../shared/models/season.model';
+import { TvsService } from '../../../shared/services/tvs.service';
+import { PlayerService } from '../../../shared/services/player.service';
 
 @Component({
   selector: 'app-media-episodes',
@@ -10,17 +10,21 @@ import { PlayData } from '../media-modal.component';
 export class MediaEpisodesComponent implements OnInit {
   @Input() mediaId = '';
   @Input() seasons: Season[] = [];
-  @Output() playEpisode = new EventEmitter<PlayData>();
 
   seasonsWithWatchedTime: Season[] = [];
 
   selectedSeasonIndex: number | null = null;
 
-  constructor(private readonly tvsService: TvsService) {}
+  constructor(
+    private readonly tvsService: TvsService,
+    private readonly playerService: PlayerService
+  ) {}
 
-  onPlayEpisode(event: PlayData, seasonIndex: number, episodeIndex: number) {
-    this.playEpisode.emit({
-      ...event,
+  onPlayEpisode(event: MouseEvent, seasonIndex: number, episodeIndex: number) {
+    this.playerService.play({
+      mediaId: this.mediaId,
+      x: event.clientX,
+      y: event.clientY,
       seasonIndex,
       episodeIndex,
     });

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { Actor } from '../../../shared/models/actor.model';
+import { Actor } from '../../shared/models/actor.model';
 
 @Component({
   selector: 'app-actor-list',

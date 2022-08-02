@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MediaCardTab } from '../media-card-data-details.component';
-import { MediaWithType } from '../../../../../shared/models/media.model';
+import { MediaWithType } from '../../../../shared/models/media.model';
 
 @Component({
   selector: 'app-media-card-tabs',

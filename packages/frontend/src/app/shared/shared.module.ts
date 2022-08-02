@@ -11,8 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LogoComponent } from './components/logo/logo.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SafePipe } from './pipes/safe.pipe';
-import { RatingCircleComponent } from './components/rating-circle/rating-circle.component';
-import { RatingBarComponent } from './components/rating-bar/rating-bar.component';
+import { RatingCircleComponent } from './components/ratings/rating-circle/rating-circle.component';
+import { RatingBarComponent } from './components/ratings/rating-bar/rating-bar.component';
 import { SentenceCasePipe } from './pipes/sentence-case.pipe';
 
 @NgModule({

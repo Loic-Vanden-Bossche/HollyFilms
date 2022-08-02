@@ -1,11 +1,5 @@
 <app-modal id="mediaModal" (closed)="closed.emit()">
   <div
-    *ngIf="playAnimData"
-    (@playMode.done)="onPlayNavigate()"
-    [@playMode]="{ value: playAnimData, params: playAnimData }"
-    class="fixed rounded z-10 bg-black"
-  ></div>
-  <div
     *ngIf="media"
     [ngClass]="display ? 'modal-opened' : 'modal-closed'"
     class="modal-anim scrollbar-hide overflow-y-scroll w-10/12 h-3/4 flex flex-col flex-nowrap sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 absolute overflow-hidden bg-base-500 rounded-xl drop-shadow-xl"
@@ -147,7 +141,6 @@
             *ngIf="showEpisodes && media.data.tvs"
           >
             <app-media-episodes
-              (playEpisode)="onPlayTv($event)"
               [mediaId]="media.data._id"
               [seasons]="media.data.tvs"
             ></app-media-episodes>

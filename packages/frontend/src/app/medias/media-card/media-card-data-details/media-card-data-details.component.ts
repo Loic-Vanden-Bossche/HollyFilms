@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MediaWithType } from '../../../../shared/models/media.model';
+import { MediaWithType } from '../../../shared/models/media.model';
 import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { PlayerService } from '../../../shared/services/player.service';
 
 export interface MediaCardTab {
   title: string;
@@ -20,8 +21,20 @@ export class MediaCardDataDetailsComponent implements OnInit {
 
   overview = '';
 
+  constructor(private readonly playerService: PlayerService) {}
+
   ngOnInit(): void {
     this.overview = this.truncateOverview(this.media?.data.overview || '', 300);
+  }
+
+  onPlay(event: MouseEvent) {
+    if (this.media) {
+      this.playerService.play({
+        mediaId: this.media.data._id,
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
   }
 
   truncateOverview(overview: string, n = 100): string {

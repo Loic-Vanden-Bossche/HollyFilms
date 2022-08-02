@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MediaWithType } from '../../../shared/models/media.model';
+import { MediaWithType } from '../../shared/models/media.model';
 import { fromEvent, sampleTime } from 'rxjs';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Review } from '../../../../shared/models/review.model';
+import { Review } from '../../../shared/models/review.model';
 
 @Component({
   selector: 'app-media-reviews',
