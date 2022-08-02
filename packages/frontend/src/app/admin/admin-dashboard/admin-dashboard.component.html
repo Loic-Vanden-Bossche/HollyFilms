@@ -1,1 +1,17 @@
-ADMIN ONLY
+<div class="w-full p-5 text-white">
+  <div class="flex flex-row h-12">
+    <button
+      [ngClass]="
+        selectedTab === button.path ? 'border-white' : 'border-transparent'
+      "
+      *ngFor="let button of navButtons"
+      [routerLink]="button.path"
+      class="outline-none rounded h-full px-5 border-2 font-bold bg-base-600 mr-4"
+    >
+      {{ button.label }}
+    </button>
+  </div>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -10,6 +10,8 @@ import { PageNotFoundComponent } from './navigation/page-not-found/page-not-foun
 import { AuthGuardService as AuthGuard } from './auth/auth.guard';
 import { AdminGuardService as AdminGuard } from './admin/admin.guard';
 import { PlayerComponent } from './player/player.component';
+import { AdminMediasComponent } from './admin/admin-medias/admin-medias.component';
+import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 
 const routes: Routes = [
   {
@@ -32,6 +34,20 @@ const routes: Routes = [
         component: AdminDashboardComponent,
         data: { title: 'Panneau admin' },
         canActivate: [AuthGuard, AdminGuard],
+        children: [
+          {
+            path: '',
+            component: AdminMediasComponent,
+          },
+          {
+            path: 'medias',
+            component: AdminMediasComponent,
+          },
+          {
+            path: 'users',
+            component: AdminUsersComponent,
+          },
+        ],
       },
     ],
   },
