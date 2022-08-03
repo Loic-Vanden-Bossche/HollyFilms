@@ -6,9 +6,17 @@ import { WebsocketService } from './websocket.service';
 import { ScrapperService } from './scrapper.service';
 import { MediasModule } from '../medias/medias.module';
 import { HttpModule } from '@nestjs/axios';
+import { MongooseModule } from '@nestjs/mongoose';
+import { QueuedProcess, QueuedProcessSchema } from './queued-process.schema';
 
 @Module({
-  imports: [forwardRef(() => MediasModule), HttpModule],
+  imports: [
+    forwardRef(() => MediasModule),
+    HttpModule,
+    MongooseModule.forFeature([
+      { name: QueuedProcess.name, schema: QueuedProcessSchema },
+    ]),
+  ],
   controllers: [ProcessingController],
   providers: [
     ProcessingGateway,

@@ -21,6 +21,7 @@ import {
   formatOneMedia,
   MediaType,
   MediaWithType,
+  MediaWithTypeAndQueue,
 } from './medias.utils';
 import { PlayedMedia } from './schemas/played-media.schema';
 import { Episode } from './tvs/schemas/episode.schema';
@@ -152,6 +153,7 @@ export class MediasService {
         .find({
           $or: [{ title: new RegExp(query, 'i') }],
         })
+        .sort({ title: 'asc' })
         .exec()
         .then(formatManyMedias);
     }
@@ -159,24 +161,30 @@ export class MediasService {
     return this.getMedias();
   }
 
-  async adminSearchQuery(query: string): Promise<MediaWithType[]> {
-    const medias = await this.searchQuery(query);
+  async adminSearchQuery(query: string): Promise<MediaWithTypeAndQueue[]> {
+    let medias = await this.searchQuery(query);
+    const queuedMedias: MediaWithTypeAndQueue[] = [];
 
-    const queue = this.processingService.getQueue();
+    const queue = await this.processingService.getQueue();
 
-    const index = 0;
-
-    for (const videoInQueue of queue.videos) {
-      /*medias.forEach((item, i) => {
-        if (item._id.toString() == videoInQueue.id.toString()) {
-          medias.splice(i, 1);
-          medias.splice(index, 0, item);
-          index++;
-        }
-      });*/
+    for (const video of queue) {
+      const index = medias.findIndex(
+        (media) => media.data._id.toString() === video.media._id.toString(),
+      );
+      if (index !== -1) {
+        queuedMedias.push({
+          ...medias[index],
+          queue: {
+            fileName: video.filePath,
+            seasonIndex: video.seasonIndex,
+            episodeIndex: video.episodeIndex,
+          },
+        });
+        medias = [...medias.slice(0, index), ...medias.slice(index + 1)];
+      }
     }
 
-    return medias;
+    return [...queuedMedias, ...medias];
   }
 
   async getRandomBackdrop(): Promise<{ path: string }> {

@@ -4,6 +4,7 @@ import { FileInfos } from './schemas/file-infos.schema';
 import { Review } from './schemas/review.schema';
 import { Actor } from './schemas/actor.schema';
 import { Profile } from './schemas/profile.schema';
+import { Schema as MongooseSchema } from 'mongoose';
 
 export class Director {
   name: string;
@@ -14,6 +15,9 @@ export type MediaDocument = Media & Document;
 
 @Schema()
 export class Media {
+  @Prop({ auto: true, type: MongooseSchema.Types.ObjectId })
+  _id?: string;
+
   @Prop()
   TMDB_id: number;
 
@@ -71,7 +75,6 @@ export class Media {
   @Prop()
   trailer_key: string;
 
-  // optional
   @Prop({ default: undefined })
   tvs?: Season[];
 

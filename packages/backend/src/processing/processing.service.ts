@@ -23,20 +23,9 @@ import { ffprobe } from 'fluent-ffmpeg';
 import { env } from 'process';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
-
-export interface QueuedVideo {
-  fileName: string;
-  id: string;
-  mediaType: string;
-  seasonIndex?: number;
-  episodeIndex?: number;
-}
-
-export interface Queue {
-  videos: QueuedVideo[];
-  index: 0;
-  started: boolean;
-}
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { QueuedProcess, QueuedProcessDocument } from './queued-process.schema';
 
 export interface FileData {
   path: string;
@@ -49,7 +38,28 @@ export interface FileData {
 export class ProcessingService {
   private logger = new Logger('Processing');
 
+  queueStarted = false;
+
+  progressStatus: {
+    mainStatus: string;
+    mainMsg: string;
+    streamsStatus: {
+      type: string;
+      tag: string;
+      data?: any;
+      prog?: number;
+      index?: number;
+      stringToAppend?: string;
+      lang?: string;
+    }[];
+    fileInfos: any;
+  };
+
+  masterFileName = 'master.m3u8';
+
   constructor(
+    @InjectModel(QueuedProcess.name)
+    private queuedProcessModel: Model<QueuedProcessDocument>,
     private readonly websocketService: WebsocketService,
     @Inject(forwardRef(() => MediasService))
     private readonly mediasService: MediasService,
@@ -176,66 +186,72 @@ export class ProcessingService {
 
   //-------------------------------------------------------------------//
 
-  queue: Queue = {
-    videos: [],
-    index: 0,
-    started: false,
-  };
-
-  progressStatus: {
-    mainStatus: string;
-    mainMsg: string;
-    streamsStatus: {
-      type: string;
-      tag: string;
-      data?: any;
-      prog?: number;
-      index?: number;
-      stringToAppend?: string;
-      lang?: string;
-    }[];
-    fileInfos: any;
-  };
-
-  masterFileName = 'master.m3u8';
-
   getQueue() {
-    return this.queue;
+    return this.queuedProcessModel
+      .find()
+      .sort({ createdAt: -1 })
+      .populate('media')
+      .exec();
   }
 
-  addToQueue(video: QueuedVideo) {
-    this.queue.videos.push(video);
+  addToQueue(
+    mediaId: string,
+    filePath: string,
+    seasonIndex?: number,
+    episodeIndex?: number,
+  ) {
+    return this.queuedProcessModel.create({
+      media: mediaId,
+      filePath,
+      seasonIndex,
+      episodeIndex,
+    });
+  }
+
+  getCurrent() {
+    return this.queuedProcessModel
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .populate('media')
+      .exec()
+      .then((res) => res[0]);
+  }
+
+  queueLength() {
+    return this.queuedProcessModel.countDocuments().exec();
   }
 
   startQueue() {
-    this.processMedia(this.queue.videos[0]);
+    this.getCurrent().then((video) => {
+      this.processMedia(video);
+    });
+  }
+
+  shiftQueue() {
+    return this.getCurrent().then((video) => video.remove());
   }
 
   async clearQueue(): Promise<boolean> {
-    const isMovies = this.queue.videos.filter(
-      (video) => video.mediaType == 'movie',
-    ).length;
+    const queueLength = await this.queueLength();
 
-    if (this.queue.videos.length) {
-      if (!this.queue.started) {
-        this.queue.videos = [];
-
-        if (isMovies) {
-          await this.purgeProcessingMedias();
-        } else {
-          return false;
-        }
-      } else {
-        if (isMovies) {
-          this.queue.videos.splice(1, this.queue.videos.length);
-          await this.purgeProcessingMedias(this.queue.videos[0].id);
-        } else {
-          return false;
-        }
-      }
+    if (!queueLength) {
+      return false;
     }
 
-    return true;
+    const current = await this.getCurrent();
+
+    if (this.queueStarted) {
+      return this.queuedProcessModel
+        .remove({ _id: { $ne: current._id } })
+        .exec()
+        .then(() => true);
+    } else {
+      return this.queuedProcessModel
+        .remove()
+        .exec()
+        .then(() => true);
+    }
   }
 
   async getSiInfos() {
@@ -323,17 +339,15 @@ export class ProcessingService {
       : null;
   }
 
-  async processMedia(inputVideo: QueuedVideo) {
+  async processMedia(inputVideo: QueuedProcess) {
     //--------- In method functions ---------
 
     const finalizeProcess = async () => {
-      await this.generateCastStreams(inputVideo.id, false);
-
       this.progressStatus.mainStatus = 'ENDED';
       this.progressStatus.mainMsg = 'processing ended';
       this.progressStatus.streamsStatus = [];
 
-      this.queue.started = false;
+      this.queueStarted = false;
 
       if (inputVideo.seasonIndex && inputVideo.episodeIndex) {
         /*this.tvsService.updateOne(
@@ -387,14 +401,14 @@ export class ProcessingService {
         });*/
       }
 
-      this.queue.videos.shift();
+      await this.shiftQueue();
 
       this.websocketService.emit('processing-media', this.progressStatus);
 
       this.progressStatus = null;
 
       setTimeout(() => {
-        this.processMedia(this.queue.videos[0]);
+        this.getCurrent().then((video) => this.processMedia(video));
       }, 200);
     };
 
@@ -420,15 +434,15 @@ export class ProcessingService {
 
         switch (renderSelected) {
           case 'FULL':
-            await this.generateThumbs(inputVideo.id);
+            await this.generateThumbs(inputVideo.media._id);
             await this.generateExtraQualities(
-              inputVideo.id,
+              inputVideo.media._id,
               [1080, 720, 480, 360],
             );
 
             break;
           case 'HALF':
-            await this.generateThumbs(inputVideo.id);
+            await this.generateThumbs(inputVideo.media._id);
 
             break;
         }
@@ -630,15 +644,17 @@ export class ProcessingService {
 
     //---------------------------------------
 
-    if (!inputVideo || this.queue.started) return;
+    if (!inputVideo || this.queueStarted) return;
 
     const renderModes = ['FULL', 'HALF', 'FAST'];
 
     const renderSelected = renderModes[2];
 
-    this.queue.started = true;
+    this.queueStarted = true;
 
-    console.log('processing ' + inputVideo.fileName + 'in ' + inputVideo.id);
+    console.log(
+      'processing ' + inputVideo.filePath + 'in ' + inputVideo.media._id,
+    );
 
     let startedStreams = 0;
     let endedStreams = 0;
@@ -655,7 +671,7 @@ export class ProcessingService {
     await emitProcessEvent();
     this.getSiInfos();
 
-    if (inputVideo.fileName.includes('http')) {
+    if (inputVideo.filePath.includes('http')) {
       this.progressStatus = {
         mainStatus: 'DOWNLOADING',
         mainMsg: 'Downloading video file',
@@ -667,7 +683,7 @@ export class ProcessingService {
 
       await (() => {
         return new Promise<void>((resolve, reject) => {
-          progress(request(inputVideo.fileName), {})
+          progress(request(inputVideo.filePath), {})
             .on('progress', (state) => {
               state.speed = state.speed
                 ? this.convertBytes(state.speed) + '/s'
@@ -679,7 +695,7 @@ export class ProcessingService {
             })
             .on('end', () => {
               resolve();
-              inputVideo.fileName = 'temp.mkv';
+              inputVideo.filePath = 'temp.mkv';
               this.websocketService.emit('processing-videoDownload', null);
             })
             .pipe(fs.createWriteStream('temp.mkv'));
@@ -694,7 +710,7 @@ export class ProcessingService {
     const folderName =
       this.getInitialLocation() +
       '/' +
-      inputVideo.id +
+      inputVideo.media._id +
       '/' +
       (inputVideo.seasonIndex ? inputVideo.seasonIndex + '/' : '') +
       (inputVideo.episodeIndex ? inputVideo.episodeIndex + '/' : '');
@@ -704,7 +720,7 @@ export class ProcessingService {
         recursive: true,
       });
 
-    ffprobe(inputVideo.fileName, (err, data) => {
+    ffprobe(inputVideo.filePath, (err, data) => {
       fileData = data;
 
       if (err) {
@@ -736,7 +752,7 @@ export class ProcessingService {
                 this.progressStatus.mainMsg =
                   'Processing streams : could be very long (HEVC)';
 
-              ffmpeg(inputVideo.fileName)
+              ffmpeg(inputVideo.filePath)
                 .addOption([
                   '-map 0:' + stream.index,
                   '-c ' + codecToUse,
@@ -829,7 +845,7 @@ export class ProcessingService {
               const effectiveChannels =
                 stream.channels > 6 ? 6 : stream.channels;
 
-              ffmpeg(inputVideo.fileName)
+              ffmpeg(inputVideo.filePath)
                 .addOption([
                   '-map 0:' + stream.index,
                   '-c ' + codecToApply,
@@ -911,7 +927,7 @@ export class ProcessingService {
                 fs.existsSync(folderName + stream.index + '_subtitle') ||
                   fs.mkdirSync(folderName + stream.index + '_subtitle');
 
-                ffmpeg(inputVideo.fileName)
+                ffmpeg(inputVideo.filePath)
                   .addOption(['-map 0:' + stream.index, '-c webvtt'])
                   .output(
                     folderName +

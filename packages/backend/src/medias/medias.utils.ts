@@ -2,7 +2,13 @@ import { Media } from './media.schema';
 import { AdminMedia } from './medias.service';
 
 type MediaType = 'movie' | 'tv';
+type QueueData = {
+  fileName: string;
+  seasonIndex?: number;
+  episodeIndex?: number;
+};
 type MediaWithType = { data: Media; mediaType: MediaType };
+type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
 
 const getMediaType = (media: Media): MediaType => {
   return media.tvs ? 'tv' : 'movie';
@@ -35,6 +41,8 @@ const formatManyMedias = (medias: Media[]): MediaWithType[] =>
 export {
   MediaType,
   MediaWithType,
+  MediaWithTypeAndQueue,
+  QueueData,
   getMediaType,
   formatManyMedias,
   formatOneMedia,
