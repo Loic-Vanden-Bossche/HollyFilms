@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from '../../shared/services/modal.service';
 import { faBan, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { BehaviorSubject, mergeWith } from 'rxjs';
+import {BehaviorSubject, debounceTime, distinctUntilChanged, mergeWith} from 'rxjs';
 import { AdminService } from '../../shared/services/admin.service';
 import { FormControl } from '@angular/forms';
 import { FileData } from '../../shared/models/file-data.model';
@@ -52,14 +52,13 @@ export class AddMediaModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.isOnline
-      .pipe(mergeWith(this.searchCtrl.valueChanges))
+      .pipe(mergeWith(this.searchCtrl.valueChanges.pipe(debounceTime(500), distinctUntilChanged())))
       .subscribe(() => this.search());
   }
 
   search() {
     if (this._selectedFile) {
       if (this.searchCtrl.value) {
-        console.log('searching for', this.searchCtrl.value);
         this.adminService
           .tmdbSearch(this.searchCtrl.value || '')
           .subscribe((results) => (this.tmdbResults = results));

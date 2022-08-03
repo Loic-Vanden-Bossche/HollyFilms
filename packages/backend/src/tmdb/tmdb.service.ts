@@ -37,7 +37,7 @@ export class TmdbService {
       this.httpService.get<TMDBSearchResult>(
         `${config.apiUrl}/search/multi?api_key=${
           config.apiKey
-        }&language=en-US&query=${encodeURI(query)}&page=1&include_adult=false`,
+        }&language=fr-FR&query=${encodeURI(query)}&page=1&include_adult=false`,
       ),
     ).then((response) => response.data.results);
 
