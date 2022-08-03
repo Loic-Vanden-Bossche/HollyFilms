@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ProcessingService } from './processing.service';
+import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
+import {FileData, ProcessingService} from './processing.service';
 import { ScrapperService } from './scrapper.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../shared/decorators/roles.decorator';
@@ -14,11 +14,11 @@ export class ProcessingController {
   ) {}
 
   @Roles(Role.Admin)
-  @Post('onlineSearch')
+  @Get('onlineSearch')
   @ApiOperation({
     summary: '[Admin] Engage a scrapping request to search movies',
   })
-  async getOnlineSearchResults(@Body('query') query: string): Promise<void> {
+  async getOnlineSearchResults(@Query('query') query: string): Promise<void> {
     return this.scrapperService.query(query);
   }
 
@@ -30,17 +30,9 @@ export class ProcessingController {
   }
 
   @Roles(Role.Admin)
-  @Get('localSearch/:query')
+  @Get('localSearch')
   @ApiOperation({ summary: '[Admin] Search in hard space for files' })
-  async getLocalSearchResults(@Param('query') query: string): Promise<
-    | void
-    | {
-        path: string;
-        name: string;
-        size: string;
-        duration: string;
-      }[]
-  > {
+  async getLocalSearchResults(@Query('query') query: string): Promise<FileData[]> {
     return this.processService.searchQuery(query);
   }
 

@@ -4938,7 +4938,8 @@ Content-Type: application/json
 
 ```javascript
 const inputBody = '{
-  "tmdbId": 13493
+  "tmdbId": 13493,
+  "filePath": "/media/13493.mp4"
 }';
 const headers = {
   'Content-Type':'application/json'
@@ -5067,7 +5068,8 @@ func main() {
 
 ```json
 {
-  "tmdbId": 13493
+  "tmdbId": 13493,
+  "filePath": "/media/13493.mp4"
 }
 ```
 
@@ -5097,18 +5099,18 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X GET /tmdb/search/{query}
+curl -X GET /tmdb/search?query=string
 
 ```
 
 ```http
-GET /tmdb/search/{query} HTTP/1.1
+GET /tmdb/search?query=string HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/tmdb/search/{query}',
+fetch('/tmdb/search?query=string',
 {
   method: 'GET'
 
@@ -5125,9 +5127,10 @@ fetch('/tmdb/search/{query}',
 require 'rest-client'
 require 'json'
 
-result = RestClient.get '/tmdb/search/{query}',
+result = RestClient.get '/tmdb/search',
   params: {
-  }
+  'query' => 'string'
+}
 
 p JSON.parse(result)
 
@@ -5136,7 +5139,9 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/tmdb/search/{query}')
+r = requests.get('/tmdb/search', params={
+  'query': 'string'
+})
 
 print(r.json())
 
@@ -5153,7 +5158,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('GET','/tmdb/search/{query}', array(
+    $response = $client->request('GET','/tmdb/search', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -5170,7 +5175,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/tmdb/search/{query}");
+URL obj = new URL("/tmdb/search?query=string");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -5197,7 +5202,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/tmdb/search/{query}", data)
+    req, err := http.NewRequest("GET", "/tmdb/search", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5207,7 +5212,7 @@ func main() {
 
 ```
 
-`GET /tmdb/search/{query}`
+`GET /tmdb/search`
 
 *[Admin] Search in TMDB API for movies & tvs*
 
@@ -5215,7 +5220,7 @@ func main() {
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|query|path|string|true|none|
+|query|query|string|true|none|
 
 <h3 id="tmdbcontroller_searchquerry-responses">Responses</h3>
 
@@ -5237,20 +5242,20 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X POST /processing/onlineSearch
+curl -X GET /processing/onlineSearch?query=string
 
 ```
 
 ```http
-POST /processing/onlineSearch HTTP/1.1
+GET /processing/onlineSearch?query=string HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/processing/onlineSearch',
+fetch('/processing/onlineSearch?query=string',
 {
-  method: 'POST'
+  method: 'GET'
 
 })
 .then(function(res) {
@@ -5265,9 +5270,10 @@ fetch('/processing/onlineSearch',
 require 'rest-client'
 require 'json'
 
-result = RestClient.post '/processing/onlineSearch',
+result = RestClient.get '/processing/onlineSearch',
   params: {
-  }
+  'query' => 'string'
+}
 
 p JSON.parse(result)
 
@@ -5276,7 +5282,9 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.post('/processing/onlineSearch')
+r = requests.get('/processing/onlineSearch', params={
+  'query': 'string'
+})
 
 print(r.json())
 
@@ -5293,7 +5301,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('POST','/processing/onlineSearch', array(
+    $response = $client->request('GET','/processing/onlineSearch', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -5310,9 +5318,9 @@ try {
 ```
 
 ```java
-URL obj = new URL("/processing/onlineSearch");
+URL obj = new URL("/processing/onlineSearch?query=string");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("POST");
+con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
 BufferedReader in = new BufferedReader(
     new InputStreamReader(con.getInputStream()));
@@ -5337,7 +5345,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "/processing/onlineSearch", data)
+    req, err := http.NewRequest("GET", "/processing/onlineSearch", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5347,15 +5355,21 @@ func main() {
 
 ```
 
-`POST /processing/onlineSearch`
+`GET /processing/onlineSearch`
 
 *[Admin] Engage a scrapping request to search movies*
+
+<h3 id="processingcontroller_getonlinesearchresults-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|query|query|string|true|none|
 
 <h3 id="processingcontroller_getonlinesearchresults-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -5501,18 +5515,18 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X GET /processing/localSearch/{query}
+curl -X GET /processing/localSearch?query=string
 
 ```
 
 ```http
-GET /processing/localSearch/{query} HTTP/1.1
+GET /processing/localSearch?query=string HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/processing/localSearch/{query}',
+fetch('/processing/localSearch?query=string',
 {
   method: 'GET'
 
@@ -5529,9 +5543,10 @@ fetch('/processing/localSearch/{query}',
 require 'rest-client'
 require 'json'
 
-result = RestClient.get '/processing/localSearch/{query}',
+result = RestClient.get '/processing/localSearch',
   params: {
-  }
+  'query' => 'string'
+}
 
 p JSON.parse(result)
 
@@ -5540,7 +5555,9 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/processing/localSearch/{query}')
+r = requests.get('/processing/localSearch', params={
+  'query': 'string'
+})
 
 print(r.json())
 
@@ -5557,7 +5574,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('GET','/processing/localSearch/{query}', array(
+    $response = $client->request('GET','/processing/localSearch', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -5574,7 +5591,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/processing/localSearch/{query}");
+URL obj = new URL("/processing/localSearch?query=string");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -5601,7 +5618,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/processing/localSearch/{query}", data)
+    req, err := http.NewRequest("GET", "/processing/localSearch", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5611,7 +5628,7 @@ func main() {
 
 ```
 
-`GET /processing/localSearch/{query}`
+`GET /processing/localSearch`
 
 *[Admin] Search in hard space for files*
 
@@ -5619,7 +5636,7 @@ func main() {
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|query|path|string|true|none|
+|query|query|string|true|none|
 
 <h3 id="processingcontroller_getlocalsearchresults-responses">Responses</h3>
 
@@ -6342,7 +6359,8 @@ This operation does not require authentication
 
 ```json
 {
-  "tmdbId": 13493
+  "tmdbId": 13493,
+  "filePath": "/media/13493.mp4"
 }
 
 ```
@@ -6352,4 +6370,5 @@ This operation does not require authentication
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |tmdbId|number|true|none|Movie id in tmdb|
+|filePath|string|true|none|filePath of the movie|
 

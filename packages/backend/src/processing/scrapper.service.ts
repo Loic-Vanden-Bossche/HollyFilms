@@ -266,6 +266,7 @@ export class ScrapperService implements OnModuleInit {
             'searchProgressDataEvent',
             (shortUrlArr = shortUrlArr.filter((elem) => elem.files.length)),
           );
+          console.log(shortUrlArr);
         }
       } else {
         this.searchProgress = 'no movie found';

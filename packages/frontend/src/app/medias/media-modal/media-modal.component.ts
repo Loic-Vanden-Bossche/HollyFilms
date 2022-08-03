@@ -141,6 +141,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
   }
 
   get display(): boolean {
+    console.log(this.modalService.isDisplay('mediaModal') || false);
     return this.modalService.isDisplay('mediaModal') || false;
   }
 }

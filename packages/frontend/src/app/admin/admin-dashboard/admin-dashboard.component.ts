@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { map, startWith } from 'rxjs';
+import { faFileCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { ModalService } from '../../shared/services/modal.service';
 
 interface NavButton {
   label: string;
@@ -28,10 +30,16 @@ export class AdminDashboardComponent implements OnInit {
     },
   ];
 
+  addFileIcon = faFileCirclePlus;
+
   constructor(
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly modalService: ModalService
   ) {}
+
+  openModal() {
+    this.modalService.open('add-media-modal');
+  }
 
   ngOnInit() {
     this.router.events

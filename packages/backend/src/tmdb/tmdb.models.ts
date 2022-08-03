@@ -144,7 +144,7 @@ interface TMDBSearchResult {
   results: TMDBMedia[];
 }
 
-interface OnlineSearchResult {
+interface TMDBAdminSearchResult {
   original_title: string;
   TMDB_id: number;
   poster_path: string;
@@ -160,6 +160,6 @@ export {
   TMDBTVShow,
   TMDBSeason,
   TMDBSearchResult,
-  OnlineSearchResult,
+  TMDBAdminSearchResult,
   TMDBMedia,
 };

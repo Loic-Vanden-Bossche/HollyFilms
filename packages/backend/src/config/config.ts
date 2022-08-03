@@ -74,6 +74,7 @@ export interface MediasConfig {
   ffprobePath: string;
   storePathDefault: string;
   storePathSecondary: string;
+  searchFilesPath: string;
 }
 
 export const getConfig = (env: Record<string, unknown>): APIConfig => {
@@ -129,6 +130,7 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
       ffprobePath: config.HF_MEDIAS_FFPROBE_PATH,
       storePathDefault: config.HF_MEDIAS_PATH_DEFAULT,
       storePathSecondary: config.HF_MEDIAS_PATH_SECONDARY,
+      searchFilesPath: config.HF_MEDIAS_FILES_PATH,
     },
   };
 };

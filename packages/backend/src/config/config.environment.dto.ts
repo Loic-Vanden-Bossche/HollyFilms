@@ -239,4 +239,10 @@ export class ConfigEnvironmentDto {
   @UseDefault()
   @Desc('Path where the videos will be stored in secondary')
   HF_MEDIAS_PATH_SECONDARY: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path where the videos files are stored before upload')
+  HF_MEDIAS_FILES_PATH: string;
 }

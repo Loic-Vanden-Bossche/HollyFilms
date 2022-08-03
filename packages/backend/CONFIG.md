@@ -36,5 +36,6 @@
 | HF_MEDIAS_FFPROBE_PATH | C:/ffmpeg/bin/ffprobe.exe | Path of the ffprobe executable | isString | No |
 | HF_MEDIAS_PATH_DEFAULT | ../../medias_default | Path where the videos will be stored by default | isString | No |
 | HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
+| HF_MEDIAS_FILES_PATH | ../../medias_files | Path where the videos files are stored before upload | isString | No |
 
-Generated on 26/07/2022, 14:03:16
+Generated on 03/08/2022, 00:37:24

@@ -1,0 +1,10 @@
+<div
+  class="bg-base-700 hover:shadow-lg px-5 py-3 flex flex-col cursor-pointer transition-all rounded-xl hover:bg-base-800"
+  *ngIf="file"
+>
+  <h1 class="font-bold text-xl mb-0.5">{{ file.name }}</h1>
+  <div class="opacity-50 flex flex-row text-xs">
+    <p class="font-bold mr-3">{{ file.size }}</p>
+    <p>{{ file.duration }}</p>
+  </div>
+</div>

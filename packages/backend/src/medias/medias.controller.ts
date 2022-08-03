@@ -9,6 +9,7 @@ import CurrentUser from '../indentity/users/current';
 import { Role } from '../shared/role';
 import { MediaWithType } from './medias.utils';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {Media} from "./media.schema";
 
 @ApiTags('Medias')
 @Controller('medias')
@@ -75,10 +76,10 @@ export class MediasController {
     return this.mediasService.searchQuery(query);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.Admin)
   @Get('adminSearch/:query')
   @ApiOperation({ summary: '[User] Search for medias in admin mode' })
-  async adminSearchQuery(@Param('query') query: string): Promise<AdminMedia[]> {
+  async adminSearchQuery(@Param('query') query: string): Promise<MediaWithType[]> {
     return this.mediasService.adminSearchQuery(query);
   }
 

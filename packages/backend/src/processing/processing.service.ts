@@ -15,20 +15,29 @@ import { WebsocketService } from './websocket.service';
 import { ffprobe } from 'fluent-ffmpeg';
 
 import { env } from 'process';
+import {ConfigService} from "@nestjs/config";
+import {MediasConfig} from "../config/config";
 
-type QueuedVideo = {
+export interface QueuedVideo {
   fileName: string;
   id: string;
   mediaType: string;
   seasonIndex?: number;
   episodeIndex?: number;
-};
+}
 
-type Queue = {
+export interface Queue  {
   videos: QueuedVideo[];
   index: 0;
   started: boolean;
-};
+}
+
+export interface FileData {
+  path: string;
+  name: string;
+  size: string;
+  duration: string;
+}
 
 @Injectable()
 export class ProcessingService {
@@ -37,6 +46,7 @@ export class ProcessingService {
   constructor(
     private readonly websocketService: WebsocketService,
     private readonly mediasService: MediasService,
+    private readonly configService: ConfigService,
   ) {}
 
   startGeneration(id: string, name: string) {
@@ -56,16 +66,9 @@ export class ProcessingService {
     }
   }
 
-  async searchQuery(query: string): Promise<
-    | void
-    | {
-        path: string;
-        name: string;
-        size: string;
-        duration: string;
-      }[]
-  > {
-    const filesTo = await this.getFiles(env.MEDIA_FILES_FOLDER);
+  async searchQuery(query: string): Promise<FileData[]> {
+    const config = this.configService.get<MediasConfig>('medias');
+    const filesTo = await this.getFiles(config.searchFilesPath);
 
     return await Promise.all(
       filesTo
@@ -89,6 +92,7 @@ export class ProcessingService {
         }),
     ).catch((err) => {
       this.logger.error(err);
+      throw err;
     });
   }
 

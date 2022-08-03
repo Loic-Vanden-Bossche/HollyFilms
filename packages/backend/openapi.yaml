@@ -484,14 +484,14 @@ paths:
         "201":
           description: ""
       tags: *a6
-  "/tmdb/search/{query}":
+  /tmdb/search:
     get:
       operationId: TmdbController_searchQuerry
       summary: "[Admin] Search in TMDB API for movies & tvs"
       parameters:
         - name: query
           required: true
-          in: path
+          in: query
           schema:
             type: string
       responses:
@@ -500,12 +500,17 @@ paths:
       tags:
         - Tmdb
   /processing/onlineSearch:
-    post:
+    get:
       operationId: ProcessingController_getOnlineSearchResults
       summary: "[Admin] Engage a scrapping request to search movies"
-      parameters: []
+      parameters:
+        - name: query
+          required: true
+          in: query
+          schema:
+            type: string
       responses:
-        "201":
+        "200":
           description: ""
       tags:
         &a7
@@ -519,14 +524,14 @@ paths:
         "201":
           description: ""
       tags: *a7
-  "/processing/localSearch/{query}":
+  /processing/localSearch:
     get:
       operationId: ProcessingController_getLocalSearchResults
       summary: "[Admin] Search in hard space for files"
       parameters:
         - name: query
           required: true
-          in: path
+          in: query
           schema:
             type: string
       responses:
@@ -874,5 +879,10 @@ components:
           type: number
           description: Movie id in tmdb
           example: 13493
+        filePath:
+          type: string
+          description: filePath of the movie
+          example: /media/13493.mp4
       required:
         - tmdbId
+        - filePath

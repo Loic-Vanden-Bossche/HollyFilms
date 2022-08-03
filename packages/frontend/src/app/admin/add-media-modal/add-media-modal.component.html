@@ -1,0 +1,83 @@
+<app-modal id="add-media-modal">
+  <div
+    class="w-10/12 text-white h-3/4 sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
+  >
+    <div
+      [ngClass]="
+        display ? ['scale-100', 'opacity-100'] : ['scale-90', 'opacity-0']
+      "
+      class="h-full w-full transition-all duration-300 overflow-hidden flex flex-col flex-nowrap overflow-hidden"
+    >
+      <div
+        class="bg-base-500 py-3 px-5 flex flex-row items-center rounded-t-lg h-16 w-full"
+      >
+        <fa-icon class="text-xl mr-5" [icon]="searchIcon"></fa-icon>
+        <input
+          [formControl]="searchCtrl"
+          type="search"
+          class="bg-transparent h-full mr-5 w-full outline-none"
+          placeholder="Rechercher..."
+        />
+        <div
+          (click)="close()"
+          class="h-full flex flex-col cursor-pointer justify-center"
+        >
+          <span
+            class="opacity-50 text-xs rounded px-2 py-1 bg-base-600 uppercase"
+            >esc</span
+          >
+        </div>
+      </div>
+      <div
+        @onSelectedChange
+        (click)="selectedFile = null"
+        class="h-12 flex-shrink-0 cursor-pointer overflow-hidden px-5 flex flex-row items-center hover:bg-base-600 bg-base-500 w-full mt-0.5"
+        *ngIf="selectedFile"
+      >
+        <fa-icon class="text-lg mr-5 opacity-50" [icon]="banIcon"></fa-icon>
+        <h1 class="font-bold opacity-50">{{ selectedFile.name }}</h1>
+      </div>
+      <div
+        class="bg-base-500/60 relative p-5 backdrop-blur rounded-b-lg overflow-y-scroll scrollbar-hide"
+      >
+        <!--<div class="absolute top-2 right-2 h-8 flex flex-row">
+          <button (click)="isOnline.next(false)" [ngClass]="(isOnline | async) ? ['bg-base-600', 'text-white', 'border-base-500/60'] : ['bg-white', 'text-black', 'border-white']" class="transition-all mr-2 border-2 hover:border-white rounded-xl font-bold px-3">local</button>
+          <button (click)="isOnline.next(true)" [ngClass]="(isOnline | async) ? ['border-white'] : ['border-base-500']" class="hover:border-white transition-all border-2 rounded-xl bg-gradient-to-r gradient-colors font-bold px-3">online</button>
+        </div>-->
+        <div *ngIf="!selectedFile">
+          <div *ngIf="!isOnline.value">
+            <div *ngIf="localResults.length">
+              <div
+                class="mb-3"
+                (click)="selectedFile = file"
+                *ngFor="let file of localResults"
+              >
+                <app-local-file [file]="file"></app-local-file>
+              </div>
+            </div>
+            <div *ngIf="!localResults.length">
+              <p>Aucun résultats pour cette recherche</p>
+            </div>
+          </div>
+          <div *ngIf="isOnline.value">
+            <p>Recherche en ligne désactivée pour le moment</p>
+          </div>
+        </div>
+        <div *ngIf="selectedFile">
+          <div *ngIf="tmdbResults.length">
+            <div
+              (click)="onAddMovie(tmdbMedia)"
+              class="mb-3"
+              *ngFor="let tmdbMedia of tmdbResults"
+            >
+              <app-tmdb-result [tmdbMedia]="tmdbMedia"></app-tmdb-result>
+            </div>
+          </div>
+          <div *ngIf="!tmdbResults.length">
+            <p>Aucun résultats pour cette recherche</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>

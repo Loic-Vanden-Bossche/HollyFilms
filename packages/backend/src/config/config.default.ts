@@ -58,4 +58,5 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_MEDIAS_FFPROBE_PATH: 'C:/ffmpeg/bin/ffprobe.exe',
   HF_MEDIAS_PATH_DEFAULT: '../../medias_default',
   HF_MEDIAS_PATH_SECONDARY: '../../medias_secondary',
+  HF_MEDIAS_FILES_PATH: '../../medias_files',
 };

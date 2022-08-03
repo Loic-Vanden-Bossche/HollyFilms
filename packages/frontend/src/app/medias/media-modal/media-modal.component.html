@@ -1,149 +1,159 @@
 <app-modal id="mediaModal" (closed)="closed.emit()">
   <div
-    *ngIf="media"
-    [ngClass]="display ? 'modal-opened' : 'modal-closed'"
-    class="modal-anim scrollbar-hide overflow-y-scroll w-10/12 h-3/4 flex flex-col flex-nowrap sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 absolute overflow-hidden bg-base-500 rounded-xl drop-shadow-xl"
+    class="w-10/12 h-3/4 sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
   >
-    <youtube-player
-      *ngIf="media.data.trailer_key"
-      class="overflow-hidden -translate-y-16 relative pb-[56%]"
-      [playerVars]="playerVars"
-      (stateChange)="onVideoStateChange($event)"
-      (ready)="onVideoReady()"
-      #player
-      [videoId]="media.data.trailer_key"
-    ></youtube-player>
     <div
-      *ngIf="!media.data.trailer_key"
-      class="absolute w-full pb-[48%] bg-center bg-cover"
-      [ngStyle]="{
-        'background-image': 'url(' + media.data.backdrop_path + ')'
-      }"
-    ></div>
-    <div class="absolute w-full bg-base-500 bg-opacity-50 z-10 pb-[56%]">
-      <div class="absolute flex flex-col h-full w-full">
-        <div class="relative h-full w-full">
-          <div class="absolute p-4 top-0 left-0">
-            <div class="flex flex-row justify-start h-3">
-              <img
-                class="h-full mr-2"
-                *ngFor="let c of media.data.production_companies"
-                [src]="c.logo_path"
-                alt=""
-              />
-            </div>
-          </div>
-          <div class="flex-1 flex flex-col h-full justify-end p-4">
-            <div class="flex flex-row">
-              <div class="flex flex-col justify-end">
-                <p class="text-white text-xs">{{ media.data.tagline }}</p>
-                <h1 class="text-white text-3xl font-bold mb-10">
-                  {{ media.data.title }}
-                </h1>
+      *ngIf="media"
+      [ngClass]="
+        display ? ['scale-100', 'opacity-100'] : ['scale-90', 'opacity-0']
+      "
+      class="h-full w-full transition-all duration-1000 scrollbar-hide overflow-y-scroll flex flex-col flex-nowrap overflow-hidden bg-base-500 rounded-xl drop-shadow-xl"
+    >
+      <youtube-player
+        *ngIf="media.data.trailer_key"
+        class="overflow-hidden -translate-y-16 relative pb-[56%]"
+        [playerVars]="playerVars"
+        (stateChange)="onVideoStateChange($event)"
+        (ready)="onVideoReady()"
+        #player
+        [videoId]="media.data.trailer_key"
+      ></youtube-player>
+      <div
+        *ngIf="!media.data.trailer_key"
+        class="absolute w-full pb-[48%] bg-center bg-cover"
+        [ngStyle]="{
+          'background-image': 'url(' + media.data.backdrop_path + ')'
+        }"
+      ></div>
+      <div class="absolute w-full bg-base-500 bg-opacity-50 z-10 pb-[56%]">
+        <div class="absolute flex flex-col h-full w-full">
+          <div class="relative h-full w-full">
+            <div class="absolute p-4 top-0 left-0">
+              <div class="flex flex-row justify-start h-3">
+                <img
+                  class="h-full mr-2"
+                  *ngFor="let c of media.data.production_companies"
+                  [src]="c.logo_path"
+                  alt=""
+                />
               </div>
-              <div class="flex flex-col justify-end ml-auto">
-                <app-rating-circle
-                  [rating]="media.data.rating"
-                  [extend]="true"
-                ></app-rating-circle>
-              </div>
             </div>
-            <div class="absolute flex flex-row bottom-0 h-10">
-              <a (click)="onPlay($event)" *ngIf="media.mediaType === 'movie'"
-                ><button
-                  class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
-                >
-                  {{ isWatched || "Voir le film" }}
-                </button></a
-              >
-              <div *ngIf="media.mediaType === 'tv'">
-                <a (click)="onPlay($event)"
+            <div class="flex-1 flex flex-col h-full justify-end p-4">
+              <div class="flex flex-row">
+                <div class="flex flex-col justify-end">
+                  <p class="text-white text-xs">{{ media.data.tagline }}</p>
+                  <h1 class="text-white text-3xl font-bold mb-10">
+                    {{ media.data.title }}
+                  </h1>
+                </div>
+                <div class="flex flex-col justify-end ml-auto">
+                  <app-rating-circle
+                    [rating]="media.data.rating"
+                    [extend]="true"
+                  ></app-rating-circle>
+                </div>
+              </div>
+              <div class="absolute flex flex-row bottom-0 h-10">
+                <a (click)="onPlay($event)" *ngIf="media.mediaType === 'movie'"
                   ><button
                     class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
                   >
-                    {{ isWatched || "Commencer" }}
+                    {{ isWatched || "Voir le film" }}
                   </button></a
                 >
-                <button
-                  (click)="showEpisodes = true"
-                  [ngClass]="
-                    showEpisodes
-                      ? ['text-black', 'bg-white', 'opacity-100']
-                      : [
-                          'text-white',
-                          'opacity-80',
-                          'hover:opacity-100',
-                          'bg-base-600'
-                        ]
-                  "
-                  class="mr-2 h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 transition-all"
-                >
-                  Episodes
-                </button>
-                <button
-                  (click)="showEpisodes = false"
-                  [ngClass]="
-                    !showEpisodes
-                      ? ['text-black', 'bg-white', 'opacity-100']
-                      : [
-                          'text-white',
-                          'opacity-80',
-                          'hover:opacity-100',
-                          'bg-base-600'
-                        ]
-                  "
-                  class="mr-2 h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 transition-all"
-                >
-                  Infos
-                </button>
-              </div>
+                <div *ngIf="media.mediaType === 'tv'">
+                  <a (click)="onPlay($event)"
+                    ><button
+                      class="mr-2 bg-gradient-to-r text-white gradient-colors h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 hover:border-x-2 hover:border-t-2 transition-all border-white"
+                    >
+                      {{ isWatched || "Commencer" }}
+                    </button></a
+                  >
+                  <button
+                    (click)="showEpisodes = true"
+                    [ngClass]="
+                      showEpisodes
+                        ? ['text-black', 'bg-white', 'opacity-100']
+                        : [
+                            'text-white',
+                            'opacity-80',
+                            'hover:opacity-100',
+                            'bg-base-600'
+                          ]
+                    "
+                    class="mr-2 h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 transition-all"
+                  >
+                    Episodes
+                  </button>
+                  <button
+                    (click)="showEpisodes = false"
+                    [ngClass]="
+                      !showEpisodes
+                        ? ['text-black', 'bg-white', 'opacity-100']
+                        : [
+                            'text-white',
+                            'opacity-80',
+                            'hover:opacity-100',
+                            'bg-base-600'
+                          ]
+                    "
+                    class="mr-2 h-full rounded-tl-md rounded-tr-md font-bold px-4 py-1 transition-all"
+                  >
+                    Infos
+                  </button>
+                </div>
 
-              <div
-                class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
-              >
-                <p class="font-bold contents h-full w-full">
-                  {{ displayedTime }}
-                </p>
+                <div
+                  class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
+                >
+                  <p class="font-bold contents h-full w-full">
+                    {{ displayedTime }}
+                  </p>
+                </div>
+                <div
+                  class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
+                >
+                  <p class="font-bold contents h-full w-full">
+                    {{ media.data.release_date.split("-")[0] }}
+                  </p>
+                </div>
+                <button
+                  class="transition-opacity mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-5/6 aspect-square text-white"
+                >
+                  <fa-icon [icon]="addToListIcon"></fa-icon>
+                </button>
+                <button
+                  class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-5/6 aspect-square text-white"
+                >
+                  <fa-icon [icon]="likeButton"></fa-icon>
+                </button>
               </div>
-              <div
-                class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
-              >
-                <p class="font-bold contents h-full w-full">
-                  {{ media.data.release_date.split("-")[0] }}
-                </p>
-              </div>
-              <button
-                class="transition-opacity mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-5/6 aspect-square text-white"
-              >
-                <fa-icon [icon]="addToListIcon"></fa-icon>
-              </button>
-              <button
-                class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-5/6 aspect-square text-white"
-              >
-                <fa-icon [icon]="likeButton"></fa-icon>
-              </button>
             </div>
           </div>
-        </div>
-        <div class="bg-gradient-to-r gradient-colors h-1 w-full"></div>
-        <div class="bg-base-500 w-full h-32">
-          <div *ngIf="!showEpisodes" @onTabChange class="w-full p-4 text-white">
-            <app-media-infos
-              [casting]="media.data.actors"
-              [overview]="media.data.overview"
-              [director]="media.data.director"
-              [reviews]="media.data.reviews"
-            ></app-media-infos>
-          </div>
-          <div
-            class="w-full p-4 text-white"
-            @onTabChange
-            *ngIf="showEpisodes && media.data.tvs"
-          >
-            <app-media-episodes
-              [mediaId]="media.data._id"
-              [seasons]="media.data.tvs"
-            ></app-media-episodes>
+          <div class="bg-gradient-to-r gradient-colors h-1 w-full"></div>
+          <div class="bg-base-500 w-full h-32">
+            <div
+              *ngIf="!showEpisodes"
+              @onTabChange
+              class="w-full p-4 text-white"
+            >
+              <app-media-infos
+                [casting]="media.data.actors"
+                [overview]="media.data.overview"
+                [director]="media.data.director"
+                [reviews]="media.data.reviews"
+              ></app-media-infos>
+            </div>
+            <div
+              class="w-full p-4 text-white"
+              @onTabChange
+              *ngIf="showEpisodes && media.data.tvs"
+            >
+              <app-media-episodes
+                [mediaId]="media.data._id"
+                [seasons]="media.data.tvs"
+              ></app-media-episodes>
+            </div>
           </div>
         </div>
       </div>

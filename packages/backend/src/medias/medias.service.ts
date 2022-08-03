@@ -142,8 +142,8 @@ export class MediasService {
     return this.getMedias();
   }
 
-  async adminSearchQuery(query: string): Promise<AdminMedia[]> {
-    const medias = await this.searchQuery(query).then(formatManyAdminMedias);
+  async adminSearchQuery(query: string): Promise<MediaWithType[]> {
+    const medias = await this.searchQuery(query);
 
     /*const queue = this.processingService.getQueue();
 

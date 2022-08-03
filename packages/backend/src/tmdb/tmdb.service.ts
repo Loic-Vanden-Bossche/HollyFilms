@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { TMDBConfig } from '../config/config';
 import { MediaWithType } from '../medias/medias.utils';
 import {
-  OnlineSearchResult,
+  TMDBAdminSearchResult,
   TMDBMovie,
   TMDBSearchResult,
   TMDBTVShow,
@@ -30,14 +30,14 @@ export class TmdbService {
       : null;
   }
 
-  async searchQuery(querry: string): Promise<OnlineSearchResult[]> {
+  async searchQuery(query: string): Promise<TMDBAdminSearchResult[]> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
     const searchResults = await firstValueFrom(
       this.httpService.get<TMDBSearchResult>(
         `${config.apiUrl}/search/multi?api_key=${
           config.apiKey
-        }&language=en-US&query=${encodeURI(querry)}&page=1&include_adult=false`,
+        }&language=en-US&query=${encodeURI(query)}&page=1&include_adult=false`,
       ),
     ).then((response) => response.data.results);
 
