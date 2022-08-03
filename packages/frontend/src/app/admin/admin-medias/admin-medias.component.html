@@ -1,3 +1,5 @@
-<div class="w-full">
-  <app-medias-table [medias]="medias"></app-medias-table>
+<div class="w-full relative">
+  <div *ngFor="let media of medias | async" class="mb-2">
+    <app-media-row [media]="media"></app-media-row>
+  </div>
 </div>

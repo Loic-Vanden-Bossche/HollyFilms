@@ -1,5 +1,5 @@
-import {Controller, Get, Param, Query} from '@nestjs/common';
-import { TmdbService } from './tmdb.service';
+import { Controller, Get, Query } from '@nestjs/common';
+import { SearchType, TmdbService } from './tmdb.service';
 import { Roles } from '../shared/decorators/roles.decorator';
 import { Role } from '../shared/role';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -12,7 +12,10 @@ export class TmdbController {
   @Roles(Role.Admin)
   @Get('search')
   @ApiOperation({ summary: '[Admin] Search in TMDB API for movies & tvs' })
-  async searchQuerry(@Query('query') query: string) {
-    return this.tmdbService.searchQuery(query);
+  async searchQuerry(
+    @Query('type') type: SearchType = 'both',
+    @Query('query') query: string,
+  ) {
+    return this.tmdbService.searchQuery(query, type);
   }
 }

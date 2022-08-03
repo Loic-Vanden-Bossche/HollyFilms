@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalService } from '../../shared/services/modal.service';
 import { faBan, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import {BehaviorSubject, debounceTime, distinctUntilChanged, mergeWith} from 'rxjs';
+import {
+  BehaviorSubject,
+  debounceTime,
+  distinctUntilChanged,
+  mergeWith,
+} from 'rxjs';
 import { AdminService } from '../../shared/services/admin.service';
 import { FormControl } from '@angular/forms';
 import { FileData } from '../../shared/models/file-data.model';
@@ -34,10 +39,13 @@ import { NotificationType } from '../../shared/models/notification.model';
   ],
 })
 export class AddMediaModalComponent implements OnInit {
+  @Input() addingMovie = true;
+
+  private _selectedFile: FileData | null = null;
+
   searchCtrl = new FormControl('');
 
   localResults: FileData[] = [];
-  private _selectedFile: FileData | null = null;
   tmdbResults: TMDBAdminSearchResult[] = [];
 
   constructor(
@@ -52,15 +60,25 @@ export class AddMediaModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.isOnline
-      .pipe(mergeWith(this.searchCtrl.valueChanges.pipe(debounceTime(500), distinctUntilChanged())))
+      .pipe(
+        mergeWith(
+          this.searchCtrl.valueChanges.pipe(
+            debounceTime(500),
+            distinctUntilChanged()
+          )
+        )
+      )
       .subscribe(() => this.search());
   }
 
   search() {
-    if (this._selectedFile) {
+    if (this._selectedFile || !this.addingMovie) {
       if (this.searchCtrl.value) {
         this.adminService
-          .tmdbSearch(this.searchCtrl.value || '')
+          .tmdbSearch(
+            this.searchCtrl.value || '',
+            this.addingMovie ? 'movie' : 'tv'
+          )
           .subscribe((results) => (this.tmdbResults = results));
       } else {
         this.tmdbResults = [];
@@ -76,22 +94,27 @@ export class AddMediaModalComponent implements OnInit {
     }
   }
 
-  onAddMovie(tmdbMedia: TMDBAdminSearchResult) {
-    if (this.selectedFile) {
+  onAddMedia(tmdbMedia: TMDBAdminSearchResult) {
+    if (this.selectedFile && this.addingMovie) {
       this.adminService
         .addMovie(tmdbMedia.TMDB_id, this.selectedFile?.path)
         .subscribe((media) => {
           this.notificationsService.push({
             type: NotificationType.Success,
-            message: `${media.mediaType === 'tv' ? 'La série' : 'Le film'} ${
-              media.data.title
-            } à été ${
-              media.mediaType === 'tv' ? 'ajoutée' : 'ajouté'
-            } à la base de données`,
+            message: `Le film ${media.data.title} à été ajouté à la base de données`,
             lifetime: 3000,
           });
           this.close();
         });
+    } else if (!this.addingMovie) {
+      this.adminService.addTv(tmdbMedia.TMDB_id).subscribe((media) => {
+        this.notificationsService.push({
+          type: NotificationType.Success,
+          message: `La série ${media.data.title} à été ajoutée à la base de données`,
+          lifetime: 3000,
+        });
+        this.close();
+      });
     }
   }
 

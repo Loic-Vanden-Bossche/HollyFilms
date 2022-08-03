@@ -1,6 +1,14 @@
-import { Controller, Delete, Get, Headers, Param, Res } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  Param,
+  Query,
+  Res,
+} from '@nestjs/common';
 
-import { AdminMedia, MediasService } from './medias.service';
+import { MediasService } from './medias.service';
 
 import { Response } from 'express';
 import { Roles } from '../shared/decorators/roles.decorator';
@@ -9,7 +17,6 @@ import CurrentUser from '../indentity/users/current';
 import { Role } from '../shared/role';
 import { MediaWithType } from './medias.utils';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import {Media} from "./media.schema";
 
 @ApiTags('Medias')
 @Controller('medias')
@@ -21,6 +28,15 @@ export class MediasController {
   @ApiOperation({ summary: '[User] Get all medias sorted by titles' })
   async getAllMedias(): Promise<MediaWithType[]> {
     return this.mediasService.getMedias();
+  }
+
+  @Roles(Role.Admin)
+  @Get('adminSearch')
+  @ApiOperation({ summary: '[User] Search for medias in admin mode' })
+  async adminSearchQuery(
+    @Query('query') query: string,
+  ): Promise<MediaWithType[]> {
+    return this.mediasService.adminSearchQuery(query);
   }
 
   @Roles(Role.User)
@@ -74,13 +90,6 @@ export class MediasController {
   @ApiOperation({ summary: '[User] Search for medias' })
   async searchQuery(@Param('query') query: string): Promise<MediaWithType[]> {
     return this.mediasService.searchQuery(query);
-  }
-
-  @Roles(Role.Admin)
-  @Get('adminSearch/:query')
-  @ApiOperation({ summary: '[User] Search for medias in admin mode' })
-  async adminSearchQuery(@Param('query') query: string): Promise<MediaWithType[]> {
-    return this.mediasService.adminSearchQuery(query);
   }
 
   @Roles(Role.Admin)

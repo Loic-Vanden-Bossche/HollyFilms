@@ -32,7 +32,7 @@
         @onSelectedChange
         (click)="selectedFile = null"
         class="h-12 flex-shrink-0 cursor-pointer overflow-hidden px-5 flex flex-row items-center hover:bg-base-600 bg-base-500 w-full mt-0.5"
-        *ngIf="selectedFile"
+        *ngIf="selectedFile && addingMovie"
       >
         <fa-icon class="text-lg mr-5 opacity-50" [icon]="banIcon"></fa-icon>
         <h1 class="font-bold opacity-50">{{ selectedFile.name }}</h1>
@@ -44,7 +44,7 @@
           <button (click)="isOnline.next(false)" [ngClass]="(isOnline | async) ? ['bg-base-600', 'text-white', 'border-base-500/60'] : ['bg-white', 'text-black', 'border-white']" class="transition-all mr-2 border-2 hover:border-white rounded-xl font-bold px-3">local</button>
           <button (click)="isOnline.next(true)" [ngClass]="(isOnline | async) ? ['border-white'] : ['border-base-500']" class="hover:border-white transition-all border-2 rounded-xl bg-gradient-to-r gradient-colors font-bold px-3">online</button>
         </div>-->
-        <div *ngIf="!selectedFile">
+        <div *ngIf="!selectedFile && addingMovie">
           <div *ngIf="!isOnline.value">
             <div *ngIf="localResults.length">
               <div
@@ -63,10 +63,10 @@
             <p>Recherche en ligne désactivée pour le moment</p>
           </div>
         </div>
-        <div *ngIf="selectedFile">
+        <div *ngIf="selectedFile || !addingMovie">
           <div *ngIf="tmdbResults.length">
             <div
-              (click)="onAddMovie(tmdbMedia)"
+              (click)="onAddMedia(tmdbMedia)"
               class="mb-3"
               *ngFor="let tmdbMedia of tmdbResults"
             >

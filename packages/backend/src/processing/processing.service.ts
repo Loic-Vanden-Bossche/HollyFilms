@@ -8,15 +8,21 @@ import * as request from 'request';
 
 import { EOL } from 'os';
 
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 
 import { MediasService } from 'src/medias/medias.service';
 import { WebsocketService } from './websocket.service';
 import { ffprobe } from 'fluent-ffmpeg';
 
 import { env } from 'process';
-import {ConfigService} from "@nestjs/config";
-import {MediasConfig} from "../config/config";
+import { ConfigService } from '@nestjs/config';
+import { MediasConfig } from '../config/config';
 
 export interface QueuedVideo {
   fileName: string;
@@ -26,7 +32,7 @@ export interface QueuedVideo {
   episodeIndex?: number;
 }
 
-export interface Queue  {
+export interface Queue {
   videos: QueuedVideo[];
   index: 0;
   started: boolean;
@@ -45,6 +51,7 @@ export class ProcessingService {
 
   constructor(
     private readonly websocketService: WebsocketService,
+    @Inject(forwardRef(() => MediasService))
     private readonly mediasService: MediasService,
     private readonly configService: ConfigService,
   ) {}

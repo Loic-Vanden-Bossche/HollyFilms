@@ -1,5 +1,5 @@
-import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
-import {FileData, ProcessingService} from './processing.service';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { FileData, ProcessingService } from './processing.service';
 import { ScrapperService } from './scrapper.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../shared/decorators/roles.decorator';
@@ -32,7 +32,9 @@ export class ProcessingController {
   @Roles(Role.Admin)
   @Get('localSearch')
   @ApiOperation({ summary: '[Admin] Search in hard space for files' })
-  async getLocalSearchResults(@Query('query') query: string): Promise<FileData[]> {
+  async getLocalSearchResults(
+    @Query('query') query: string,
+  ): Promise<FileData[]> {
     return this.processService.searchQuery(query);
   }
 

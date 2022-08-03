@@ -20,7 +20,7 @@ import { MoviesController } from './movies/movies.controller';
     TmdbModule,
     MongooseModule.forFeature([{ name: Media.name, schema: MediaSchema }]),
   ],
-  providers: [MediasService, TvsService, MoviesService],
+  providers: [TvsService, MoviesService, MediasService],
   controllers: [MediasController, TvsController, MoviesController],
   exports: [MediasService],
 })

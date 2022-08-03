@@ -2790,6 +2790,147 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## MediasController_adminSearchQuery
+
+<a id="opIdMediasController_adminSearchQuery"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/adminSearch?query=string
+
+```
+
+```http
+GET /medias/adminSearch?query=string HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/adminSearch?query=string',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/adminSearch',
+  params: {
+  'query' => 'string'
+}
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/adminSearch', params={
+  'query': 'string'
+})
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/adminSearch', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/adminSearch?query=string");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/adminSearch", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/adminSearch`
+
+*[User] Search for medias in admin mode*
+
+<h3 id="mediascontroller_adminsearchquery-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|query|query|string|true|none|
+
+<h3 id="mediascontroller_adminsearchquery-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 ## MediasController_getMedia
 
 <a id="opIdMediasController_getMedia"></a>
@@ -3723,144 +3864,6 @@ func main() {
 |query|path|string|true|none|
 
 <h3 id="mediascontroller_searchquery-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## MediasController_adminSearchQuery
-
-<a id="opIdMediasController_adminSearchQuery"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /medias/adminSearch/{query}
-
-```
-
-```http
-GET /medias/adminSearch/{query} HTTP/1.1
-
-```
-
-```javascript
-
-fetch('/medias/adminSearch/{query}',
-{
-  method: 'GET'
-
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-result = RestClient.get '/medias/adminSearch/{query}',
-  params: {
-  }
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-
-r = requests.get('/medias/adminSearch/{query}')
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/medias/adminSearch/{query}', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/medias/adminSearch/{query}");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/adminSearch/{query}", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /medias/adminSearch/{query}`
-
-*[User] Search for medias in admin mode*
-
-<h3 id="mediascontroller_adminsearchquery-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|query|path|string|true|none|
-
-<h3 id="mediascontroller_adminsearchquery-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -5077,7 +5080,7 @@ func main() {
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[MovieTvDto](#schemamovietvdto)|true|none|
+|body|body|[AddMovieDto](#schemaaddmoviedto)|true|none|
 
 <h3 id="moviescontroller_add-responses">Responses</h3>
 
@@ -5099,18 +5102,18 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X GET /tmdb/search?query=string
+curl -X GET /tmdb/search?type=string&query=string
 
 ```
 
 ```http
-GET /tmdb/search?query=string HTTP/1.1
+GET /tmdb/search?type=string&query=string HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/tmdb/search?query=string',
+fetch('/tmdb/search?type=string&query=string',
 {
   method: 'GET'
 
@@ -5129,7 +5132,8 @@ require 'json'
 
 result = RestClient.get '/tmdb/search',
   params: {
-  'query' => 'string'
+  'type' => 'string',
+'query' => 'string'
 }
 
 p JSON.parse(result)
@@ -5140,7 +5144,7 @@ p JSON.parse(result)
 import requests
 
 r = requests.get('/tmdb/search', params={
-  'query': 'string'
+  'type': 'string',  'query': 'string'
 })
 
 print(r.json())
@@ -5175,7 +5179,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/tmdb/search?query=string");
+URL obj = new URL("/tmdb/search?type=string&query=string");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -5220,6 +5224,7 @@ func main() {
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|type|query|string|true|none|
 |query|query|string|true|none|
 
 <h3 id="tmdbcontroller_searchquerry-responses">Responses</h3>
@@ -6350,12 +6355,12 @@ This operation does not require authentication
 |---|---|---|---|---|
 |filePath|string|true|none|Path of the media to add|
 
-<h2 id="tocS_MovieTvDto">MovieTvDto</h2>
+<h2 id="tocS_AddMovieDto">AddMovieDto</h2>
 <!-- backwards compatibility -->
-<a id="schemamovietvdto"></a>
-<a id="schema_MovieTvDto"></a>
-<a id="tocSmovietvdto"></a>
-<a id="tocsmovietvdto"></a>
+<a id="schemaaddmoviedto"></a>
+<a id="schema_AddMovieDto"></a>
+<a id="tocSaddmoviedto"></a>
+<a id="tocsaddmoviedto"></a>
 
 ```json
 {

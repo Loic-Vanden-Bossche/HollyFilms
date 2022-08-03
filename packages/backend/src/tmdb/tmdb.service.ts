@@ -6,10 +6,13 @@ import { TMDBConfig } from '../config/config';
 import { MediaWithType } from '../medias/medias.utils';
 import {
   TMDBAdminSearchResult,
+  TMDBMedia,
   TMDBMovie,
   TMDBSearchResult,
   TMDBTVShow,
 } from './tmdb.models';
+
+export type SearchType = 'movie' | 'tv' | 'both';
 
 @Injectable()
 export class TmdbService {
@@ -30,35 +33,55 @@ export class TmdbService {
       : null;
   }
 
-  async searchQuery(query: string): Promise<TMDBAdminSearchResult[]> {
+  async searchQuery(
+    query: string,
+    type: SearchType,
+  ): Promise<TMDBAdminSearchResult[]> {
+    const getParamFromType = (): string => {
+      switch (type) {
+        case 'movie':
+          return 'movie';
+        case 'tv':
+          return 'tv';
+        case 'both':
+          return 'multi';
+      }
+    };
+
+    const filterByType = (result: TMDBMedia): boolean => {
+      switch (type) {
+        case 'movie':
+        case 'tv':
+          return true;
+        case 'both':
+          return result.media_type === 'movie' || result.media_type === 'tv';
+      }
+    };
+
     const config = this.configService.get<TMDBConfig>('tmdb');
 
     const searchResults = await firstValueFrom(
       this.httpService.get<TMDBSearchResult>(
-        `${config.apiUrl}/search/multi?api_key=${
+        `${config.apiUrl}/search/${getParamFromType()}?api_key=${
           config.apiKey
         }&language=fr-FR&query=${encodeURI(query)}&page=1&include_adult=false`,
       ),
     ).then((response) => response.data.results);
 
-    return searchResults
-      .filter(
-        (media) => media.media_type === 'tv' || media.media_type === 'movie',
-      )
-      .map((media) => ({
-        original_title:
-          'title' in media ? media.title : 'name' in media ? media.name : null,
-        TMDB_id: media.id,
-        poster_path: this.getPosterPath(media.poster_path),
-        backdrop_path: this.getBackdropPath(media.backdrop_path),
-        release_date:
-          'first_air_date' in media
-            ? media.first_air_date
-            : 'release_date' in media
-            ? media.release_date
-            : null,
-        mediaType: media.media_type as 'tv' | 'movie',
-      }));
+    return searchResults.filter(filterByType).map((media) => ({
+      original_title:
+        'title' in media ? media.title : 'name' in media ? media.name : null,
+      TMDB_id: media.id,
+      poster_path: this.getPosterPath(media.poster_path),
+      backdrop_path: this.getBackdropPath(media.backdrop_path),
+      release_date:
+        'first_air_date' in media
+          ? media.first_air_date
+          : 'release_date' in media
+          ? media.release_date
+          : null,
+      mediaType: type === 'both' ? (media.media_type as 'tv' | 'movie') : type,
+    }));
   }
 
   async getTv(tmdbId: number): Promise<MediaWithType> {

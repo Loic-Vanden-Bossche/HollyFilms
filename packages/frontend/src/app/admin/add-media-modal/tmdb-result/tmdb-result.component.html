@@ -5,9 +5,7 @@
   *ngIf="tmdbMedia"
   class="group rounded-lg transition-all hover:translate-x-2 cursor-pointer opacity-70 hover:opacity-100 bg-cover bg-center h-16"
 >
-  <div
-    class="bg-base-600 bg-opacity-70 flex flex-row h-full w-full py-1 px-3"
-  >
+  <div class="bg-base-600 bg-opacity-70 flex flex-row h-full w-full py-1 px-3">
     <div class="flex flex-col h-full justify-center">
       <h1 class="text-xl font-bold">{{ tmdbMedia.original_title }}</h1>
       <div class="flex flex-row items-center opacity-70">
@@ -18,7 +16,9 @@
         <p class="opacity-70 text-xs">@{{ tmdbMedia.TMDB_id }}</p>
       </div>
     </div>
-    <div class="ml-auto group-hover:opacity-100 opacity-0 transition-opacity mr-3 text-xl flex flex-col justify-center">
+    <div
+      class="ml-auto group-hover:opacity-100 opacity-0 transition-opacity mr-3 text-xl flex flex-col justify-center"
+    >
       <fa-icon [icon]="addIcon"></fa-icon>
     </div>
   </div>

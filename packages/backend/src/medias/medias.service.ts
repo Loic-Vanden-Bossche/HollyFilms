@@ -2,7 +2,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
 
-import {HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { env } from 'process';
 import { Media, MediaDocument } from './media.schema';
@@ -10,7 +17,6 @@ import CurrentUser from '../indentity/users/current';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import {
-  formatManyAdminMedias,
   formatManyMedias,
   formatOneMedia,
   MediaType,
@@ -20,6 +26,9 @@ import { PlayedMedia } from './schemas/played-media.schema';
 import { Episode } from './tvs/schemas/episode.schema';
 import { FileInfos } from './schemas/file-infos.schema';
 import { UsersService } from '../indentity/users/users.service';
+import { ProcessingService } from '../processing/processing.service';
+import { HttpService } from '@nestjs/axios';
+import { TmdbService } from '../tmdb/tmdb.service';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -43,13 +52,21 @@ export class MediasService {
 
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
-    private readonly userService: UsersService, // private readonly processingService: ProcessingService,
+    private readonly userService: UsersService,
+    private readonly http: HttpService,
+    private readonly tmdbService: TmdbService,
+    @Inject(forwardRef(() => ProcessingService))
+    private readonly processingService: ProcessingService,
   ) {}
 
   async getMedia(id: string) {
-    return this.mediaModel.findById(id).orFail(() => {
-      throw new HttpException(`Media not found`, HttpStatus.NOT_FOUND);
-    }).exec().then(formatOneMedia);
+    return this.mediaModel
+      .findById(id)
+      .orFail(() => {
+        throw new HttpException(`Media not found`, HttpStatus.NOT_FOUND);
+      })
+      .exec()
+      .then(formatOneMedia);
   }
 
   async deleteMedia(id: string) {
@@ -145,19 +162,19 @@ export class MediasService {
   async adminSearchQuery(query: string): Promise<MediaWithType[]> {
     const medias = await this.searchQuery(query);
 
-    /*const queue = this.processingService.getQueue();
+    const queue = this.processingService.getQueue();
 
-    let index = 0;
+    const index = 0;
 
     for (const videoInQueue of queue.videos) {
-      medias.forEach((item, i) => {
+      /*medias.forEach((item, i) => {
         if (item._id.toString() == videoInQueue.id.toString()) {
           medias.splice(i, 1);
           medias.splice(index, 0, item);
           index++;
         }
-      });
-    }*/
+      });*/
+    }
 
     return medias;
   }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { TMDBAdminSearchResult } from '../../../shared/models/admin-tmdb-search-result.model';
-import {faSquarePlus} from "@fortawesome/free-solid-svg-icons";
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-tmdb-result',

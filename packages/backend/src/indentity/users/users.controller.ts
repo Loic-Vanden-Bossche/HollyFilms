@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import UpdateMeDto from './dto/update.me.dto';
@@ -6,8 +6,8 @@ import { Role } from '../../shared/role';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { User } from '../../shared/decorators/user.decorator';
 import { checkObjectId } from '../../shared/mongoose';
-import CurrentUser from "./current";
-import UpdateMeMediaPlayedTimeDto from "./dto/update.me-media-played-time.dto";
+import CurrentUser from './current';
+import UpdateMeMediaPlayedTimeDto from './dto/update.me-media-played-time.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -30,7 +30,17 @@ export class UsersController {
 
   @Post('setMediaCurrentTime/:mediaId')
   @ApiOperation({ summary: '[User] Set media current time' })
-  async setMediaCurrentTime(@User() user: CurrentUser, @Param('mediaId') mediaId: string, @Body() body: UpdateMeMediaPlayedTimeDto) {
-    return this.usersService.setMediaPlayedTime(user, mediaId, body.currentTime, body.seasonIndex, body.episodeIndex);
+  async setMediaCurrentTime(
+    @User() user: CurrentUser,
+    @Param('mediaId') mediaId: string,
+    @Body() body: UpdateMeMediaPlayedTimeDto,
+  ) {
+    return this.usersService.setMediaPlayedTime(
+      user,
+      mediaId,
+      body.currentTime,
+      body.seasonIndex,
+      body.episodeIndex,
+    );
   }
 }

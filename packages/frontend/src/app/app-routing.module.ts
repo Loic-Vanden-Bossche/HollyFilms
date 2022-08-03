@@ -37,14 +37,17 @@ const routes: Routes = [
         children: [
           {
             path: '',
+            data: { animation: 'default' },
             component: AdminMediasComponent,
           },
           {
             path: 'medias',
+            data: { animation: 'medias' },
             component: AdminMediasComponent,
           },
           {
             path: 'users',
+            data: { animation: 'users' },
             component: AdminUsersComponent,
           },
         ],

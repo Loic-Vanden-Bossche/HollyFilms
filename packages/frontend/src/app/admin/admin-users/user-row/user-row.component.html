@@ -1,0 +1,17 @@
+<div
+  *ngIf="user"
+  class="h-16 hover:h-80 border-2 duration-700 border-base-600 border-transparent hover:border-white border-opacity-60 hover:border-opacity-100 group w-full cursor-pointer opacity-60 hover:opacity-100 transition-all h-full rounded bg-base-600"
+>
+  <div class="h-16 flex items-center px-1.5 flex-row">
+    <div class="h-full mr-4 p-2">
+      <div
+        class="h-full rounded-full aspect-square bg-center bg-cover"
+        [ngStyle]="{ 'background-image': 'url(assets/img/avatar-blank.png)' }"
+      ></div>
+    </div>
+    <div class="flex flex-col">
+      <h1 class="font-bold text-lg">{{ user.email }}</h1>
+      <p class="text-xs opacity-70">@{{ user._id }}</p>
+    </div>
+  </div>
+</div>

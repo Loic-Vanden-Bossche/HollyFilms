@@ -1,14 +1,5 @@
-import {
-  IsArray,
-  IsEmail,
-  IsNotEmpty, IsNumber,
-  IsOptional,
-  IsString,
-  Length,
-  MaxLength, Min,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../../../shared/role';
 
 export default class UpdateMeMediaPlayedTimeDto {
   @IsNotEmpty()

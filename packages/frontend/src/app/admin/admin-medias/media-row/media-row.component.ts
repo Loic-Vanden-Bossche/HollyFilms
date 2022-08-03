@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MediaWithType } from '../../../../shared/models/media.model';
+import { MediaWithType } from '../../../shared/models/media.model';
 
 @Component({
   selector: 'app-media-row',

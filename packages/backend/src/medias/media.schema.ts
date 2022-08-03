@@ -4,7 +4,6 @@ import { FileInfos } from './schemas/file-infos.schema';
 import { Review } from './schemas/review.schema';
 import { Actor } from './schemas/actor.schema';
 import { Profile } from './schemas/profile.schema';
-import {Types} from "mongoose";
 
 export class Director {
   name: string;

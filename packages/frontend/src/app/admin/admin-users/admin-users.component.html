@@ -1,1 +1,5 @@
-<p>admin-users works!</p>
+<div class="w-full relative">
+  <div *ngFor="let user of users" class="mb-2">
+    <app-user-row [user]="user"></app-user-row>
+  </div>
+</div>

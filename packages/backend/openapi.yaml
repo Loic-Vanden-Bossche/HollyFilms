@@ -266,6 +266,20 @@ paths:
       tags:
         &a4
         - Medias
+  /medias/adminSearch:
+    get:
+      operationId: MediasController_adminSearchQuery
+      summary: "[User] Search for medias in admin mode"
+      parameters:
+        - name: query
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
   "/medias/{id}":
     get:
       operationId: MediasController_getMedia
@@ -333,20 +347,6 @@ paths:
     get:
       operationId: MediasController_searchQuery
       summary: "[User] Search for medias"
-      parameters:
-        - name: query
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ""
-      tags: *a4
-  "/medias/adminSearch/{query}":
-    get:
-      operationId: MediasController_adminSearchQuery
-      summary: "[User] Search for medias in admin mode"
       parameters:
         - name: query
           required: true
@@ -479,7 +479,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MovieTvDto"
+              $ref: "#/components/schemas/AddMovieDto"
       responses:
         "201":
           description: ""
@@ -489,6 +489,11 @@ paths:
       operationId: TmdbController_searchQuerry
       summary: "[Admin] Search in TMDB API for movies & tvs"
       parameters:
+        - name: type
+          required: true
+          in: query
+          schema:
+            type: string
         - name: query
           required: true
           in: query
@@ -872,7 +877,7 @@ components:
           example: /media/test/test.mp4
       required:
         - filePath
-    MovieTvDto:
+    AddMovieDto:
       type: object
       properties:
         tmdbId:

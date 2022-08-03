@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Media } from '../media.schema';
-import {SchemaTypes} from "mongoose";
+import { SchemaTypes } from 'mongoose';
 
 @Schema()
 export class PlayedMedia {
