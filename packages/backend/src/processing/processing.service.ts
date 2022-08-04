@@ -254,15 +254,21 @@ export class ProcessingService {
   }
 
   async purgeProcessing() {
+    this.logger.log('Looking for processing files to purge');
     return this.getQueue().then((queue) =>
       Promise.all(
-        queue.map((video) =>
-          fsp
-            .access(video.targetPath)
-            .then(() =>
-              fsp.rm(video.targetPath, { recursive: true, force: true }),
-            ),
-        ),
+        queue.map(async (video) => {
+          try {
+            await fsp.access(video.targetPath);
+            return fsp
+              .rm(video.targetPath, { recursive: true, force: true })
+              .then(() =>
+                this.logger.log(`Purged processing media ${video.media._id}`),
+              );
+          } catch (err) {
+            return err;
+          }
+        }),
       ),
     );
   }
