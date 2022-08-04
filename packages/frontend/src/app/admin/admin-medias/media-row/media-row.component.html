@@ -1,15 +1,28 @@
 <div
   *ngIf="media"
+  (mouseenter)="expanded = true"
+  (mouseleave)="expanded = false"
+  [ngClass]="
+    expanded || this.processData
+      ? ['h-80', 'border-white', 'border-opacity-100', 'opacity-100']
+      : ['h-20', 'border-base-600', 'border-opacity-60', 'opacity-60']
+  "
   [ngStyle]="{
     'background-image': 'url(' + media.data.backdrop_path + ')'
   }"
-  class="h-20 hover:h-80 overflow-hidden duration-700 border-2 border-base-600 border-transparent hover:border-white border-opacity-60 hover:border-opacity-100 group w-full cursor-pointer opacity-60 hover:opacity-100 transition-all bg-cover bg-center h-full rounded bg-base-600"
+  class="overflow-hidden duration-700 border-2 group w-full cursor-pointer transition-all bg-cover bg-center h-full rounded bg-base-600"
 >
   <div class="bg-base-600 bg-opacity-60 h-full w-full">
     <div class="h-20 flex items-center px-3 py-1 flex-row">
       <div class="flex flex-col">
         <h1 class="font-bold text-xl">{{ media.data.title }}</h1>
         <p class="text-xs opacity-70">@{{ media.data._id }}</p>
+      </div>
+      <div *ngIf="media.queue">
+        <p>En attente {{ media.queue.fileName }}</p>
+      </div>
+      <div *ngIf="processData">
+        {{ processData.mainMsg }}
       </div>
     </div>
   </div>

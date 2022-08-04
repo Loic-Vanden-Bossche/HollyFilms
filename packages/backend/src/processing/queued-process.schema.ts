@@ -12,6 +12,9 @@ export class QueuedProcess {
   @Prop()
   filePath: string;
 
+  @Prop()
+  targetPath: string;
+
   @Prop({ type: SchemaTypes.ObjectId, ref: Media.name })
   media: Media;
 

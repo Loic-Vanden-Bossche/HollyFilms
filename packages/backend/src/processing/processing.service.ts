@@ -8,6 +8,8 @@ import * as request from 'request';
 
 import { EOL } from 'os';
 
+import * as fsp from 'fs/promises';
+
 import {
   BadRequestException,
   forwardRef,
@@ -35,26 +37,35 @@ export interface FileData {
   duration: string;
 }
 
+export interface ProgressStatus {
+  mainStatus: string;
+  mainMsg: string;
+  streamsStatus: StreamStatus[];
+  fileInfos: FileInfos;
+}
+
+export interface StreamStatus {
+  type: string;
+  tag: string;
+  data?: any;
+  prog?: number;
+  index?: number;
+  stringToAppend?: string;
+  lang?: string;
+}
+
+export interface SystemInfos {
+  cpuTemp: number;
+  cpuUsage: number;
+}
+
 @Injectable()
 export class ProcessingService {
   private logger = new Logger('Processing');
 
   queueStarted = false;
 
-  progressStatus: {
-    mainStatus: string;
-    mainMsg: string;
-    streamsStatus: {
-      type: string;
-      tag: string;
-      data?: any;
-      prog?: number;
-      index?: number;
-      stringToAppend?: string;
-      lang?: string;
-    }[];
-    fileInfos: FileInfos;
-  };
+  progressStatus: ProgressStatus;
 
   masterFileName = 'master.m3u8';
 
@@ -205,6 +216,7 @@ export class ProcessingService {
   ) {
     return this.queuedProcessModel.create({
       media: mediaId,
+      targetPath: this.getTargetPath(mediaId, seasonIndex, episodeIndex),
       filePath,
       seasonIndex,
       episodeIndex,
@@ -233,6 +245,26 @@ export class ProcessingService {
 
   shiftQueue() {
     return this.getCurrent().then((video) => video.remove());
+  }
+
+  getTargetPath(mediaId: string, seasonIndex?: number, episodeIndex?: number) {
+    return `${this.getInitialLocation()}/${mediaId}/${
+      seasonIndex ? seasonIndex + '/' : ''
+    }${episodeIndex ? episodeIndex + '/' : ''}`;
+  }
+
+  async purgeProcessing() {
+    return this.getQueue().then((queue) =>
+      Promise.all(
+        queue.map((video) =>
+          fsp
+            .access(video.targetPath)
+            .then(() =>
+              fsp.rm(video.targetPath, { recursive: true, force: true }),
+            ),
+        ),
+      ),
+    );
   }
 
   async clearQueue(): Promise<boolean> {
@@ -492,7 +524,9 @@ export class ProcessingService {
         ...this.progressStatus.streamsStatus
           .filter((stream) => stream.type == 'video')
           .map((obj) => {
-            return this.getFolderSize(folderName + obj.index + '_video/');
+            return this.getFolderSize(
+              inputVideo.targetPath + obj.index + '_video/',
+            );
           }),
       );
 
@@ -500,8 +534,9 @@ export class ProcessingService {
         (stream) => stream.type == 'video',
       )) {
         if (
-          this.getFolderSize(folderName + stream.index + '_video/') >=
-          largestVideo
+          this.getFolderSize(
+            inputVideo.targetPath + stream.index + '_video/',
+          ) >= largestVideo
         )
           return stream;
       }
@@ -522,7 +557,7 @@ export class ProcessingService {
       largestVideoStream = getLargestVideoStream();
 
       fs.writeFileSync(
-        folderName + this.masterFileName,
+        inputVideo.targetPath + this.masterFileName,
         '#EXTM3U\n#EXT-X-VERSION:6\n\n',
       );
 
@@ -531,7 +566,7 @@ export class ProcessingService {
           .filter((stream) => stream.type == 'subtitle')
           .map((obj) => {
             return fs.statSync(
-              folderName +
+              inputVideo.targetPath +
                 obj.index +
                 '_subtitle/' +
                 obj.index +
@@ -554,7 +589,7 @@ export class ProcessingService {
         const largestSubtitleByLang = Math.max(
           ...langArr.map((obj) => {
             return fs.statSync(
-              folderName +
+              inputVideo.targetPath +
                 obj.index +
                 '_subtitle/' +
                 obj.index +
@@ -565,7 +600,7 @@ export class ProcessingService {
 
         for (const stream of langArr) {
           const subtitleSize = fs.statSync(
-            folderName +
+            inputVideo.targetPath +
               stream.index +
               '_subtitle/' +
               stream.index +
@@ -577,22 +612,22 @@ export class ProcessingService {
             subtitleSize >= largestSubtitle / 2
           ) {
             fs.appendFileSync(
-              folderName + this.masterFileName,
+              inputVideo.targetPath + this.masterFileName,
               stream.stringToAppend,
             );
           } else {
-            this.washFiles(folderName + stream.index + '_subtitle/');
+            this.washFiles(inputVideo.targetPath + stream.index + '_subtitle/');
           }
         }
       }
 
-      fs.appendFileSync(folderName + this.masterFileName, '\n');
+      fs.appendFileSync(inputVideo.targetPath + this.masterFileName, '\n');
 
       for (const stream of this.progressStatus.streamsStatus.filter(
         (stream) => stream.type == 'audio',
       )) {
         fs.appendFileSync(
-          folderName + this.masterFileName,
+          inputVideo.targetPath + this.masterFileName,
           stream.stringToAppend,
         );
       }
@@ -601,11 +636,11 @@ export class ProcessingService {
         (stream) =>
           stream.type == 'video' && stream.index != largestVideoStream.index,
       )) {
-        this.washFiles(folderName + stream.index + '_video/');
+        this.washFiles(inputVideo.targetPath + stream.index + '_video/');
       }
 
       fs.appendFileSync(
-        folderName + this.masterFileName,
+        inputVideo.targetPath + this.masterFileName,
         largestVideoStream.stringToAppend,
       );
     };
@@ -706,16 +741,8 @@ export class ProcessingService {
 
     let largestVideoStream;
 
-    const folderName =
-      this.getInitialLocation() +
-      '/' +
-      inputVideo.media._id +
-      '/' +
-      (inputVideo.seasonIndex ? inputVideo.seasonIndex + '/' : '') +
-      (inputVideo.episodeIndex ? inputVideo.episodeIndex + '/' : '');
-
-    fs.existsSync(folderName) ||
-      fs.mkdirSync(folderName, {
+    fs.existsSync(inputVideo.targetPath) ||
+      fs.mkdirSync(inputVideo.targetPath, {
         recursive: true,
       });
 
@@ -740,8 +767,8 @@ export class ProcessingService {
                 prog: 0,
               };
 
-              fs.existsSync(folderName + stream.index + '_video') ||
-                fs.mkdirSync(folderName + stream.index + '_video');
+              fs.existsSync(inputVideo.targetPath + stream.index + '_video') ||
+                fs.mkdirSync(inputVideo.targetPath + stream.index + '_video');
 
               startedStreams++;
 
@@ -760,14 +787,14 @@ export class ProcessingService {
                   '-hls_playlist_type event',
                   '-hls_flags independent_segments',
                   '-hls_segment_filename ' +
-                    folderName +
+                    inputVideo.targetPath +
                     stream.index +
                     '_video/' +
                     stream.index +
                     '_video_data%06d.ts',
                 ])
                 .output(
-                  folderName +
+                  inputVideo.targetPath +
                     stream.index +
                     '_video/' +
                     stream.index +
@@ -786,7 +813,9 @@ export class ProcessingService {
                 })
                 .on('end', () => {
                   const bitrate = Math.round(
-                    (this.getFolderSize(folderName + stream.index + '_video/') /
+                    (this.getFolderSize(
+                      inputVideo.targetPath + stream.index + '_video/',
+                    ) /
                       Math.pow(10, 9) /
                       ((data.format.duration / 60) * 0.0075)) *
                       Math.pow(10, 6),
@@ -832,8 +861,8 @@ export class ProcessingService {
 
               emitProcessEvent();
 
-              fs.existsSync(folderName + stream.index + '_audio') ||
-                fs.mkdirSync(folderName + stream.index + '_audio');
+              fs.existsSync(inputVideo.targetPath + stream.index + '_audio') ||
+                fs.mkdirSync(inputVideo.targetPath + stream.index + '_audio');
 
               startedStreams++;
 
@@ -853,14 +882,14 @@ export class ProcessingService {
                   '-hls_time 10',
                   '-hls_playlist_type event',
                   '-hls_segment_filename ' +
-                    folderName +
+                    inputVideo.targetPath +
                     stream.index +
                     '_audio/' +
                     stream.index +
                     '_audio_data%06d.ts',
                 ])
                 .output(
-                  folderName +
+                  inputVideo.targetPath +
                     stream.index +
                     '_audio/' +
                     stream.index +
@@ -923,13 +952,17 @@ export class ProcessingService {
 
                 emitProcessEvent();
 
-                fs.existsSync(folderName + stream.index + '_subtitle') ||
-                  fs.mkdirSync(folderName + stream.index + '_subtitle');
+                fs.existsSync(
+                  inputVideo.targetPath + stream.index + '_subtitle',
+                ) ||
+                  fs.mkdirSync(
+                    inputVideo.targetPath + stream.index + '_subtitle',
+                  );
 
                 ffmpeg(inputVideo.filePath)
                   .addOption(['-map 0:' + stream.index, '-c webvtt'])
                   .output(
-                    folderName +
+                    inputVideo.targetPath +
                       stream.index +
                       '_subtitle/' +
                       stream.index +
@@ -972,7 +1005,7 @@ export class ProcessingService {
                       '",\n';
 
                     fs.writeFileSync(
-                      folderName +
+                      inputVideo.targetPath +
                         stream.index +
                         '_subtitle/' +
                         stream.index +

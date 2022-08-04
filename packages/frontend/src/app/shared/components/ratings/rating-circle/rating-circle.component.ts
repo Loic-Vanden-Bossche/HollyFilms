@@ -46,12 +46,11 @@ export class RatingCircleComponent implements OnChanges {
     this.dasharray = this.circleRadius * Math.PI * 2;
     this.dashoffset = this.dasharray;
     setTimeout(() => {
-      const goal = (this.rating / this.maxRating) * 100;
-      const inter = interval(2).subscribe(() => {
-        this.dashoffset = this.dashoffset - 1;
-        this.percent = (1 - this.dashoffset / this.dasharray) * 100;
-
-        this.color = this.colorFromColorMap(this.colorMap, this.percent);
+      const goal = this.rating / this.maxRating;
+      this.dashoffset = this.dasharray - this.dasharray * goal;
+      const inter = interval(100).subscribe(() => {
+        this.percent = this.percent + 0.1;
+        this.color = this.colorFromColorMap(this.colorMap, this.percent * 100);
 
         if (this.percent >= goal) {
           this.percent = goal;

@@ -3,7 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Media, MediaDocument } from '../media.schema';
 import { Model } from 'mongoose';
 import { TmdbService } from '../../tmdb/tmdb.service';
-import { formatOneMedia, MediaWithType } from '../medias.utils';
+import {
+  formatOneMedia,
+  MediaWithType,
+  MediaWithTypeAndQueue,
+} from '../medias.utils';
 import { ProcessingService } from '../../processing/processing.service';
 import { FileInfos } from '../schemas/file-infos.schema';
 
@@ -30,7 +34,7 @@ export class MoviesService {
     return this.mediaModel.create(movie).then(formatOneMedia);
   }
 
-  add(tmdbId: number, filePath: string): Promise<MediaWithType> {
+  add(tmdbId: number, filePath: string): Promise<MediaWithTypeAndQueue> {
     this.logger.verbose(`Adding movie ${tmdbId}`);
 
     return this.tmdbService.getMovie(tmdbId).then(async (movie) => {
@@ -39,7 +43,7 @@ export class MoviesService {
 
       return this.processingService
         .addToQueue(createdMovie.data._id, filePath)
-        .then(() => createdMovie);
+        .then(() => ({ ...createdMovie, queue: { fileName: filePath } }));
     });
   }
 

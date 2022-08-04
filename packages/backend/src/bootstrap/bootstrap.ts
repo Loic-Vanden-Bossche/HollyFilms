@@ -24,6 +24,7 @@ import { ConfigEnvironmentDto } from '../config/config.environment.dto';
 import { UsersService } from '../indentity/users/users.service';
 import { warpSSLConfig } from './ssl';
 import { prepareProcessing } from './prepare-processing';
+import { ProcessingService } from '../processing/processing.service';
 
 dotenv.config({ path: '.env' });
 
@@ -126,6 +127,7 @@ export default async () => {
   );
 
   await app.get(UsersService).createAdminAccount();
+  await app.get(ProcessingService).purgeProcessing();
 
   await app.listen(configService.get<number>('port')).then(() => {
     Logger.log(

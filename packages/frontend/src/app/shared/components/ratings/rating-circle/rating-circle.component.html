@@ -28,7 +28,7 @@
         'stroke-width': innerStrokeSize,
         stroke: color
       }"
-      class="linecap-round fill-transparent origin-center fa-rotate-270"
+      class="linecap-round transition-all duration-900 fill-transparent origin-center fa-rotate-270"
       [attr.cx]="circleRadius + strokeSize / 2"
       [attr.cy]="circleRadius + strokeSize / 2"
       [attr.r]="circleRadius"
@@ -43,7 +43,7 @@
       [attr.fill]="color"
       text-anchor="middle"
     >
-      {{ percent | number: "1.1-1" }}%
+      {{ percent * 100 | number: "1.1-1" }}%
     </text>
   </svg>
   <div

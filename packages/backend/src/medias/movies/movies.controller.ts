@@ -4,7 +4,7 @@ import { Roles } from '../../shared/decorators/roles.decorator';
 import { Role } from '../../shared/role';
 import { Media } from '../media.schema';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { MediaWithType } from '../medias.utils';
+import { MediaWithTypeAndQueue } from '../medias.utils';
 import { AddMovieDto } from './dto/add.movie.dto';
 
 @ApiTags('Movies')
@@ -22,7 +22,7 @@ export class MoviesController {
   @Post()
   @Roles(Role.Admin)
   @ApiOperation({ summary: '[Admin] Add a movie in database from TMDB' })
-  async add(@Body() body: AddMovieDto): Promise<MediaWithType> {
+  async add(@Body() body: AddMovieDto): Promise<MediaWithTypeAndQueue> {
     return this.moviesService.add(body.tmdbId, body.filePath);
   }
 }

@@ -5,7 +5,13 @@ import { Season } from './season.model';
 import { Review } from './review.model';
 
 export type MediaType = 'movie' | 'tv';
+export type QueueData = {
+  fileName: string;
+  seasonIndex?: number;
+  episodeIndex?: number;
+};
 export type MediaWithType = { data: Media; mediaType: MediaType };
+export type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
 
 export interface Media {
   _id: string;

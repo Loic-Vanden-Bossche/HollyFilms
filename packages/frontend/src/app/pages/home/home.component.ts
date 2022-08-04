@@ -62,6 +62,9 @@ export class HomeComponent implements OnInit {
               this.openModal(media);
             }
           });
+      } else {
+        this.modalService.close('mediaModal');
+        this.selectedMedia = null;
       }
     });
 

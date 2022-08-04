@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
+import { SearchService } from '../../shared/services/search.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
 })
-export class NavbarComponent {
-  constructor(private readonly authService: AuthService) {}
+export class NavbarComponent implements OnInit {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly searchService: SearchService
+  ) {}
 
   searchCtrl = new FormControl('');
   showSearchBar = true;
@@ -22,6 +26,12 @@ export class NavbarComponent {
 
   searchIcon = faMagnifyingGlass;
 
+  ngOnInit() {
+    this.searchCtrl.valueChanges.subscribe((query) =>
+      this.onSearch(query || '')
+    );
+  }
+
   get isAuthenticated() {
     return this.authService.isAuthenticated;
   }
@@ -29,19 +39,10 @@ export class NavbarComponent {
   onSubmit(event: SubmitEvent) {
     event.stopPropagation();
     event.preventDefault();
-    this.onSearch();
+    this.onSearch(this.searchCtrl.value || '');
   }
 
-  onSearch() {
-    this.showSearchBar = !this.showSearchBar;
-
-    if (this.searchCtrl.value) {
-      this.triggerSearch();
-    }
-  }
-
-  triggerSearch() {
-    console.log(this.searchCtrl.value);
-    this.searchCtrl.setValue('');
+  onSearch(query: string) {
+    this.searchService.search = query;
   }
 }

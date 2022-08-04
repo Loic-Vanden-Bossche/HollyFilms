@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LocalFileComponent } from './add-media-modal/local-file/local-file.component';
 import { TmdbResultComponent } from './add-media-modal/tmdb-result/tmdb-result.component';
 import { UserRowComponent } from './admin-users/user-row/user-row.component';
+import { SocketIoModule } from 'ngx-socket-io';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,10 @@ import { UserRowComponent } from './admin-users/user-row/user-row.component';
     FontAwesomeModule,
     SharedModule,
     ReactiveFormsModule,
+    SocketIoModule.forRoot({
+      url: `${environment.websocketUrl}${environment.websocketNamespace}`,
+      options: { path: environment.websocketNamespace, withCredentials: true },
+    }),
   ],
 })
 export class AdminModule {}

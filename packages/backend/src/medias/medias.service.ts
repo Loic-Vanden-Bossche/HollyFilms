@@ -163,7 +163,6 @@ export class MediasService {
 
   async adminSearchQuery(query: string): Promise<MediaWithTypeAndQueue[]> {
     let medias = await this.searchQuery(query);
-    const queuedMedias: MediaWithTypeAndQueue[] = [];
 
     const queue = await this.processingService.getQueue();
 
@@ -172,17 +171,27 @@ export class MediasService {
         (media) => media.data._id.toString() === video.media._id.toString(),
       );
       if (index !== -1) {
-        queuedMedias.push({
-          ...medias[index],
-          queue: {
-            fileName: video.filePath,
-            seasonIndex: video.seasonIndex,
-            episodeIndex: video.episodeIndex,
-          },
-        });
         medias = [...medias.slice(0, index), ...medias.slice(index + 1)];
       }
     }
+
+    const queuedMedias: Array<MediaWithType | MediaWithTypeAndQueue> =
+      await Promise.all(
+        queue.map((video) =>
+          this.mediaModel
+            .findById(video.media._id)
+            .exec()
+            .then(formatOneMedia)
+            .then((media) => ({
+              ...media,
+              queue: {
+                fileName: video.filePath,
+                seasonIndex: video.seasonIndex,
+                episodeIndex: video.episodeIndex,
+              },
+            })),
+        ),
+      );
 
     return [...queuedMedias, ...medias];
   }

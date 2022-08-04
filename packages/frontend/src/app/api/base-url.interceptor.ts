@@ -19,7 +19,6 @@ export class BaseUrlInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    console.log(request.url);
     return next.handle(
       request.clone({
         url: request.url.startsWith('http')

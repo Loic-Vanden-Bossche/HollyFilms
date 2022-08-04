@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MediaWithType } from '../models/media.model';
+import { MediaWithType, MediaWithTypeAndQueue } from '../models/media.model';
 import { FileData } from '../models/file-data.model';
 import { TMDBAdminSearchResult } from '../models/admin-tmdb-search-result.model';
 import { User } from '../models/user.model';
@@ -11,13 +11,19 @@ import { BehaviorSubject, tap } from 'rxjs';
 })
 export class AdminService {
   users = new BehaviorSubject<User[]>([]);
-  medias = new BehaviorSubject<MediaWithType[]>([]);
+  medias = new BehaviorSubject<MediaWithTypeAndQueue[]>([]);
+
+  refreshMediaList = new EventEmitter<void>();
 
   constructor(private readonly http: HttpClient) {}
 
+  refreshMedias() {
+    this.refreshMediaList.emit();
+  }
+
   getMedias(query = '') {
     return this.http
-      .get<MediaWithType[]>(`medias/adminSearch?query=${query}`, {
+      .get<MediaWithTypeAndQueue[]>(`medias/adminSearch?query=${query}`, {
         withCredentials: true,
       })
       .pipe(tap((medias) => this.medias.next(medias)));
@@ -58,14 +64,12 @@ export class AdminService {
         },
         { withCredentials: true }
       )
-      .pipe(tap((media) => this.medias.next([...this.medias.value, media])));
+      .pipe(tap(() => this.refreshMedias()));
   }
 
   addTv(tmdbId: number) {
-    return this.http.post<MediaWithType>(
-      'tvs',
-      { tmdbId },
-      { withCredentials: true }
-    );
+    return this.http
+      .post<MediaWithType>('tvs', { tmdbId }, { withCredentials: true })
+      .pipe(tap(() => this.refreshMedias()));
   }
 }
