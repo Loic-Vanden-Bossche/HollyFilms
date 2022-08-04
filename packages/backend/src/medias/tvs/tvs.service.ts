@@ -11,6 +11,7 @@ import { TmdbService } from '../../tmdb/tmdb.service';
 import { MediaWithType } from '../medias.utils';
 import { TMDBSeason } from '../../tmdb/tmdb.models';
 import { Episode } from './schemas/episode.schema';
+import { ProcessingService } from '../../processing/processing.service';
 
 @Injectable()
 export class TvsService {
@@ -22,6 +23,7 @@ export class TvsService {
     private readonly http: HttpService,
     private readonly tmdbService: TmdbService,
     private readonly configService: ConfigService,
+    private readonly processingService: ProcessingService,
   ) {}
 
   async findAll(): Promise<Media[]> {
@@ -86,21 +88,16 @@ export class TvsService {
   }
 
   async addEpisode(
-    id: string,
+    mediaId: string,
     seasonIndex: number,
     episodeIndex: number,
     filePath: string,
-  ): Promise<void> {
-    if (id && seasonIndex && episodeIndex && filePath) {
-      /*this.processingService.addToQueue({
-        fileName: filePath,
-        mediaType: 'tv',
-        id: id,
-        seasonIndex: seasonIndex,
-        episodeIndex: episodeIndex,
-      });*/
-    }
-
-    return;
+  ) {
+    return this.processingService.addToQueue(
+      mediaId,
+      filePath,
+      seasonIndex,
+      episodeIndex,
+    );
   }
 }

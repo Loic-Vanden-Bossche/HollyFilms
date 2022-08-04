@@ -103,9 +103,8 @@ export class MediaModalComponent implements OnChanges, OnInit {
       }
     }
 
-    const time = 128;
     this.displayedTime = dayjs
-      .duration(time, 'minute')
+      .duration(this.media?.data.fileInfos?.Sduration || 0, 'seconds')
       .format('H[h]mm')
       .replace(/00$/, '');
   }

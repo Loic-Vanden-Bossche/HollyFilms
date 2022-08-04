@@ -22,6 +22,6 @@ import { MoviesController } from './movies/movies.controller';
   ],
   providers: [TvsService, MoviesService, MediasService],
   controllers: [MediasController, TvsController, MoviesController],
-  exports: [MediasService],
+  exports: [MediasService, MoviesService, TvsService],
 })
 export class MediasModule {}

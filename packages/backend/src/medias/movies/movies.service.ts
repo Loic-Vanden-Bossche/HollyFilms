@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Media, MediaDocument } from '../media.schema';
 import { Model } from 'mongoose';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { formatOneMedia, MediaWithType } from '../medias.utils';
 import { ProcessingService } from '../../processing/processing.service';
+import { FileInfos } from '../schemas/file-infos.schema';
 
 @Injectable()
 export class MoviesService {
@@ -13,6 +14,7 @@ export class MoviesService {
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
     private readonly tmdbService: TmdbService,
+    @Inject(forwardRef(() => ProcessingService))
     private readonly processingService: ProcessingService,
   ) {}
 
@@ -39,5 +41,16 @@ export class MoviesService {
         .addToQueue(createdMovie.data._id, filePath)
         .then(() => createdMovie);
     });
+  }
+
+  finalizeProcess(mediaId: string, fileInfos: FileInfos) {
+    this.logger.verbose(`Finalizing process for movie ${mediaId}`);
+    return this.mediaModel
+      .findByIdAndUpdate(mediaId, {
+        $set: {
+          fileInfos,
+        },
+      })
+      .exec();
   }
 }

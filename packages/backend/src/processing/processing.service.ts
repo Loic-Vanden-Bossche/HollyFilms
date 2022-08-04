@@ -20,12 +20,13 @@ import { MediasService } from 'src/medias/medias.service';
 import { WebsocketService } from './websocket.service';
 import { ffprobe } from 'fluent-ffmpeg';
 
-import { env } from 'process';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { QueuedProcess, QueuedProcessDocument } from './queued-process.schema';
+import { FileInfos } from '../medias/schemas/file-infos.schema';
+import { MoviesService } from '../medias/movies/movies.service';
 
 export interface FileData {
   path: string;
@@ -52,7 +53,7 @@ export class ProcessingService {
       stringToAppend?: string;
       lang?: string;
     }[];
-    fileInfos: any;
+    fileInfos: FileInfos;
   };
 
   masterFileName = 'master.m3u8';
@@ -63,6 +64,8 @@ export class ProcessingService {
     private readonly websocketService: WebsocketService,
     @Inject(forwardRef(() => MediasService))
     private readonly mediasService: MediasService,
+    @Inject(forwardRef(() => MoviesService))
+    private readonly moviesService: MoviesService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -332,10 +335,12 @@ export class ProcessingService {
   processLocation = 'secondary';
 
   getInitialLocation(): string {
+    const { storePathDefault, storePathSecondary } =
+      this.configService.get<MediasConfig>('medias');
     return this.processLocation == 'default'
-      ? env.MEDIAS_LOCATION_DEFAULT
+      ? storePathDefault
       : this.processLocation == 'secondary'
-      ? env.MEDIAS_LOCATION_SECONDARY
+      ? storePathSecondary
       : null;
   }
 
@@ -385,20 +390,10 @@ export class ProcessingService {
           },
         );*/
       } else {
-        /*this.moviesService.updateOne(inputVideo.id, {
-          $set: {
-            dateAdded: new Date(),
-            runtime: Math.round(this.progressStatus.fileInfos.Sduration / 60),
-            'fileInfos.isProcessing': false,
-            'fileInfos.maxQualilty': this.progressStatus.fileInfos.maxQualilty,
-            'fileInfos.audioLangAvaliables':
-              this.progressStatus.fileInfos.audioLangAvaliables,
-            'fileInfos.maxQualiltyTag':
-              this.progressStatus.fileInfos.maxQualiltyTag,
-            'fileInfos.Sduration': this.progressStatus.fileInfos.Sduration,
-            'fileInfos.location': this.processLocation,
-          },
-        });*/
+        this.moviesService.finalizeProcess(
+          inputVideo.media._id,
+          this.progressStatus.fileInfos,
+        );
       }
 
       await this.shiftQueue();
@@ -617,6 +612,7 @@ export class ProcessingService {
 
     const writeFileInfo = () => {
       this.progressStatus.fileInfos = {
+        isProcessing: false,
         maxQualilty: Math.round(0.5625 * largestVideoStream.data.width),
         audioLangAvaliables: getUnique(
           fileData.streams
@@ -626,6 +622,9 @@ export class ProcessingService {
             }),
         ),
         maxQualiltyTag: null,
+        thumbnailsGenerated: false,
+        extraQualities: [],
+        location: this.processLocation,
         Sduration: Math.round(fileData.format.duration),
       };
 

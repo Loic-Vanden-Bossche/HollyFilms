@@ -41,13 +41,13 @@ export class TvsController {
   @Roles(Role.Admin)
   @ApiOperation({ summary: '[Admin] Add episode to tv data' })
   async addTvEpisode(
-    @Param('id') id: string,
+    @Param('id') mediaId: string,
     @Param('si') seasonIndex: number,
     @Param('ei') episodeIndex: number,
     @Body() body: AddEpisodeTvDto,
-  ): Promise<void> {
+  ) {
     return this.tvsService.addEpisode(
-      id,
+      mediaId,
       seasonIndex,
       episodeIndex,
       body.filePath,
