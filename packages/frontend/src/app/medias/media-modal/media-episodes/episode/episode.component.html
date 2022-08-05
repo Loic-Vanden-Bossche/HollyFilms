@@ -53,13 +53,13 @@
         </div>
       </div>
       <div *ngIf="episode.available" class="ml-auto">
-        <app-rating-circle
+        <app-progress-circle
           [textSize]="7"
           [strokeSize]="4"
           [innerStrokeSize]="2"
           [circleRadius]="15"
-          [rating]="episode.vote_average"
-        ></app-rating-circle>
+          [progress]="(episode.vote_average / 10) * 100"
+        ></app-progress-circle>
       </div>
     </div>
     <p class="text-xs mt-4">{{ episode.overview }}</p>

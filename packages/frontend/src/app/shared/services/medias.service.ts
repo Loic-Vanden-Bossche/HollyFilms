@@ -26,7 +26,7 @@ export class MediasService {
 
   getMovieWatchedTime(media: Media) {
     return (
-      this.auth.user.playedMedias.find((pm) => pm.media._id === media._id)
+      this.auth.user.playedMedias.find((pm) => pm.media?._id === media._id)
         ?.currentTime || 0
     );
   }

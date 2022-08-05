@@ -40,7 +40,7 @@ export class MediaEpisodesComponent implements OnInit {
   }
 
   calculateWatchedTime() {
-    this.seasonsWithWatchedTime = this.seasons.map((season) => ({
+    return this.seasons.map((season) => ({
       ...season,
       episodes: season.episodes?.map((episode) => ({
         ...episode,
@@ -54,7 +54,8 @@ export class MediaEpisodesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.calculateWatchedTime();
+    this.seasonsWithWatchedTime = this.calculateWatchedTime();
+    console.log(this.seasonsWithWatchedTime);
     this.selectedSeasonIndex = this.selectDefaultSeason();
   }
 }

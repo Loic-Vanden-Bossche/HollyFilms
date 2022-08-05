@@ -4,25 +4,75 @@
   (mouseleave)="expanded = false"
   [ngClass]="
     expanded || this.processData
-      ? ['h-80', 'border-white', 'border-opacity-100', 'opacity-100']
-      : ['h-20', 'border-base-600', 'border-opacity-60', 'opacity-60']
+      ? ['border-white', 'border-opacity-100', 'opacity-100']
+      : ['border-base-600', 'border-opacity-60', 'opacity-60']
   "
   [ngStyle]="{
     'background-image': 'url(' + media.data.backdrop_path + ')'
   }"
   class="overflow-hidden duration-700 border-2 group w-full cursor-pointer transition-all bg-cover bg-center h-full rounded bg-base-600"
 >
-  <div class="bg-base-600 bg-opacity-60 h-full w-full">
-    <div class="h-20 flex items-center px-3 py-1 flex-row">
-      <div class="flex flex-col">
+  <div class="bg-base-600 px-4 flex flex-col bg-opacity-60 h-full w-full">
+    <div class="h-20 flex justify-between items-center flex-row">
+      <div class="flex flex-col mr-4">
         <h1 class="font-bold text-xl">{{ media.data.title }}</h1>
         <p class="text-xs opacity-70">@{{ media.data._id }}</p>
       </div>
-      <div *ngIf="media.queue">
-        <p>En attente {{ media.queue.fileName }}</p>
+      <div class="flex flex-col items-end">
+        <h1
+          [ngStyle]="{ 'background-color': statusColor }"
+          class="px-2 mb-2 font-bold rounded bg-success"
+        >
+          {{ currentStatus }}
+        </h1>
+        <p *ngIf="media.queue" class="text-xs opacity-70">{{ fileName }}</p>
       </div>
-      <div *ngIf="processData">
-        {{ processData.mainMsg }}
+    </div>
+    <div
+      [ngStyle]="{
+        height: expanded || this.processData ? contentHeight + 'px' : 0
+      }"
+      [ngClass]="processData || expanded ? ['mb-10'] : []"
+      class="transition-all duration-700"
+    >
+      <div #mediaContent>
+        <div *ngIf="processData">
+          <h1 class="mb-3 font-bold">{{ processData.mainMsg }}</h1>
+          <div class="mb-3 flex flex-row">
+            <div
+              [ngClass]="
+                selectedStream?.index === stream.index &&
+                selectedStream?.type === stream.type
+                  ? ['scale-105', 'opacity-100']
+                  : ['opacity-50']
+              "
+              (click)="selectedStream = stream"
+              class="mr-3 hover:scale-105 transition-all hover:opacity-100 select-none"
+              *ngFor="
+                let stream of processData.streamsStatus;
+                let index = index;
+                trackBy: trackUndefined
+              "
+            >
+              <app-progress-circle
+                [@onCircle]="{ value: '', params: { delay: index * 200 } }"
+                [subText]="stream.tag"
+                [circleRadius]="40"
+                [textSize]="13"
+                [strokeSize]="10"
+                [innerStrokeSize]="4"
+                [progress]="stream.prog || 0"
+              >
+              </app-progress-circle>
+            </div>
+          </div>
+          <div
+            @onSelectionChange
+            *ngFor="let stream of selectedStream ? [selectedStream] : []"
+          >
+            {{ stream.tag }} {{ stream.lang }}
+          </div>
+        </div>
       </div>
     </div>
   </div>

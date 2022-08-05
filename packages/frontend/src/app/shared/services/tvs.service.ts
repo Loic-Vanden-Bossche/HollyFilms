@@ -24,7 +24,7 @@ export class TvsService {
     return (
       this.auth.user.playedMedias.find(
         (pm) =>
-          pm.media._id === mediaId &&
+          pm.media?._id === mediaId &&
           pm.seasonIndex === seasonIndex &&
           pm.episodeIndex === episodeIndex
       )?.currentTime || 0

@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { interval } from 'rxjs';
 
 export interface ColorMap {
   color: string;
@@ -13,50 +12,11 @@ export interface ColorMap {
 export class RatingCircleComponent implements OnChanges {
   @Input() rating = 0;
   @Input() maxRating = 10;
-  @Input() circleRadius = 20;
-  @Input() strokeSize = 5;
-  @Input() innerStrokeSize = 2;
-  @Input() colorMap: ColorMap[] = [
-    { color: '#F87272', breakpoint: 20 },
-    { color: '#FBBD23', breakpoint: 40 },
-    { color: '#FFFF77', breakpoint: 70 },
-    { color: '#36D399', breakpoint: 100 },
-  ];
-  @Input() textSize = 9;
   @Input() extend = false;
 
-  color = this.colorMap[0].color;
-
-  dashoffset = 0;
-  dasharray = 130;
-
-  percent = 0;
-
-  colorFromColorMap(colorMap: ColorMap[], percent: number): string {
-    const colorMapLength = colorMap.length;
-    for (let i = 0; i < colorMapLength; i++) {
-      if (percent < colorMap[i].breakpoint) {
-        return colorMap[i].color;
-      }
-    }
-    return colorMap[colorMapLength - 1].color;
-  }
+  progress = 0;
 
   ngOnChanges() {
-    this.dasharray = this.circleRadius * Math.PI * 2;
-    this.dashoffset = this.dasharray;
-    setTimeout(() => {
-      const goal = this.rating / this.maxRating;
-      this.dashoffset = this.dasharray - this.dasharray * goal;
-      const inter = interval(100).subscribe(() => {
-        this.percent = this.percent + 0.1;
-        this.color = this.colorFromColorMap(this.colorMap, this.percent * 100);
-
-        if (this.percent >= goal) {
-          this.percent = goal;
-          inter.unsubscribe();
-        }
-      });
-    }, 300);
+    this.progress = (this.rating / this.maxRating) * 100;
   }
 }

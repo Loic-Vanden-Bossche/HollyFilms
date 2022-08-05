@@ -6,54 +6,18 @@
   "
   class="bg-transparent duration-700 flex flex-col items-center group transition-all p-0 rounded-lg transition-all"
 >
-  <svg
+  <app-progress-circle
     [ngClass]="extend ? ['group-hover:scale-150', 'group-hover:mt-3'] : []"
-    class="duration-700 mt-0 transition-all"
-    [ngStyle]="{
-      height: circleRadius * 2 + strokeSize,
-      width: circleRadius * 2 + strokeSize
-    }"
-  >
-    <circle
-      class="fill-transparent stroke-base-600"
-      [ngStyle]="{ 'stroke-width': strokeSize }"
-      [attr.cx]="circleRadius + strokeSize / 2"
-      [attr.cy]="circleRadius + strokeSize / 2"
-      [attr.r]="circleRadius"
-    />
-    <circle
-      [ngStyle]="{
-        'stroke-dasharray': dasharray,
-        'stroke-dashoffset': dashoffset,
-        'stroke-width': innerStrokeSize,
-        stroke: color
-      }"
-      class="linecap-round transition-all duration-900 fill-transparent origin-center fa-rotate-270"
-      [attr.cx]="circleRadius + strokeSize / 2"
-      [attr.cy]="circleRadius + strokeSize / 2"
-      [attr.r]="circleRadius"
-    />
-    <text
-      [attr.x]="circleRadius + strokeSize / 2"
-      [attr.y]="circleRadius + strokeSize / 2"
-      alignment-baseline="middle"
-      font-weight="bold"
-      [attr.font-size]="textSize"
-      stroke-width="0"
-      [attr.fill]="color"
-      text-anchor="middle"
-    >
-      {{ percent * 100 | number: "1.1-1" }}%
-    </text>
-  </svg>
+    [progress]="progress"
+  ></app-progress-circle>
   <div
     [ngClass]="
       extend
         ? ['group-hover:max-w-3xl', 'group-hover:mt-4', 'group-hover:max-h-24']
         : []
     "
-    class="mt-0 transition-all duration-700 overflow-hidden max-h-0 max-w-0 font-bold text-sm"
+    class="mt-0 text-white transition-all duration-700 overflow-hidden max-h-0 max-w-0 font-bold text-sm"
   >
-    <p class="whitespace-nowrap" [ngStyle]="{color}">{{ 10133 }} votes</p>
+    <p class="whitespace-nowrap">{{ 10133 }} votes</p>
   </div>
 </div>

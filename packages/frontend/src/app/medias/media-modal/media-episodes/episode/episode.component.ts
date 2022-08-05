@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Episode } from '../../../../shared/models/episode.model';
 import * as dayjs from 'dayjs';
-import 'dayjs/locale/fr';
 import { faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import { TvsService } from '../../../../shared/services/tvs.service';
-dayjs.locale('fr');
 
 @Component({
   selector: 'app-episode',

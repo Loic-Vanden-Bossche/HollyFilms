@@ -41,6 +41,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MarkdownModule,
     YouTubePlayerModule,
     FontAwesomeModule,
+    MarkdownModule.forRoot(),
   ],
 })
 export class MediasModule {}

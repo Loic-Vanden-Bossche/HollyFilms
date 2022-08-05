@@ -13,13 +13,10 @@ import { YouTubePlayer } from '@angular/youtube-player';
 import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import * as dayjs from 'dayjs';
-import * as duration from 'dayjs/plugin/duration';
 import { MediasService } from '../../shared/services/medias.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { TvsService } from '../../shared/services/tvs.service';
 import { PlayerService } from '../../shared/services/player.service';
-
-dayjs.extend(duration);
 
 @Component({
   selector: 'app-media-modal',
@@ -140,7 +137,6 @@ export class MediaModalComponent implements OnChanges, OnInit {
   }
 
   get display(): boolean {
-    console.log(this.modalService.isDisplay('mediaModal') || false);
     return this.modalService.isDisplay('mediaModal') || false;
   }
 }
