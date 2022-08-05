@@ -520,6 +520,15 @@ paths:
       tags:
         &a7
         - Processing
+  /processing/initialData:
+    get:
+      operationId: ProcessingController_getInitialData
+      summary: "[Admin] Get initial processing data"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a7
   /processing/onlineSearch/getmediaLink:
     post:
       operationId: ProcessingController_getmediaLink
@@ -548,6 +557,29 @@ paths:
       operationId: ProcessingController_startQueue
       summary: "[Admin] Start processing queue"
       parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a7
+  /processing/stopQueue:
+    get:
+      operationId: ProcessingController_stopQueue
+      summary: "[Admin] Stop processing queue"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a7
+  "/processing/removeFromQueue/{id}":
+    delete:
+      operationId: ProcessingController_removeFromQueue
+      summary: "[Admin] Stop processing queue"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
       responses:
         "200":
           description: ""

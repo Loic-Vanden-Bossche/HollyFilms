@@ -10,18 +10,26 @@
     >
       {{ button.label }}
     </button>
-    <button
-      (click)="addTv()"
-      class="outline-none ml-auto mr-3 rounded text-lg h-full px-3 border-2 border-transparent hover:border-white font-bold bg-base-600 mr-4"
-    >
-      <fa-icon [icon]="addMediaIcon"></fa-icon>
-    </button>
-    <button
-      (click)="addMovie()"
-      class="outline-none rounded text-lg h-full px-3 border-2 border-transparent hover:border-white font-bold bg-base-600 mr-4"
-    >
-      <fa-icon [icon]="addFileIcon"></fa-icon>
-    </button>
+    <div *ngIf="selectedTab === 'medias'" class="ml-auto h-full flex flex-row">
+      <div class="h-full">
+        <app-queue-controls
+          (queueUpdated)="queueStarted = $event"
+          [queueStarted]="queueStarted"
+        ></app-queue-controls>
+      </div>
+      <button
+        (click)="addTv()"
+        class="outline-none ml-4 rounded text-lg h-full px-3 border-2 border-transparent hover:border-white font-bold bg-base-600 mr-4"
+      >
+        <fa-icon [icon]="addMediaIcon"></fa-icon>
+      </button>
+      <button
+        (click)="addMovie()"
+        class="outline-none rounded text-lg h-full px-3 border-2 border-transparent hover:border-white font-bold bg-base-600 mr-4"
+      >
+        <fa-icon [icon]="addFileIcon"></fa-icon>
+      </button>
+    </div>
   </div>
   <div [@onTabChange]="prepareRoute(outlet)" class="w-full mt-7">
     <router-outlet #outlet="outlet"></router-outlet>

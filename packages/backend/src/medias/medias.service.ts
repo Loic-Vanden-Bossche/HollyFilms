@@ -30,6 +30,8 @@ import { UsersService } from '../indentity/users/users.service';
 import { ProcessingService } from '../processing/processing.service';
 import { HttpService } from '@nestjs/axios';
 import { TmdbService } from '../tmdb/tmdb.service';
+import { QueuedProcess } from '../processing/queued-process.schema';
+import * as rimraf from 'rimraf';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -74,7 +76,13 @@ export class MediasService {
     this.logger.log(`Deleting media ${id}`);
     return this.userService
       .deletePlayedMediasOccurences(id)
-      .then(() => this.mediaModel.findByIdAndDelete(id));
+      .then(() => this.mediaModel.findByIdAndDelete(id))
+      .then((media) => this.removeMediaFromDisk(id).then(() => media));
+  }
+
+  async removeMediaFromDisk(mediaId): Promise<void> {
+    const path = this.processingService.getTargetPath(mediaId);
+    if (fs.existsSync(path)) rimraf.sync(path);
   }
 
   async getMostPopular(): Promise<MediaWithType[]> {
@@ -164,11 +172,19 @@ export class MediasService {
   async adminSearchQuery(query: string): Promise<MediaWithTypeAndQueue[]> {
     let medias = await this.searchQuery(query);
 
-    const queue = await this.processingService.getQueue();
+    const queue = await this.processingService.getQueue().then((queue) =>
+      queue.reduce((acc, cur) => {
+        acc[cur.media._id.toString()] = [
+          ...(acc[cur.media._id.toString()] || []),
+          cur,
+        ];
+        return acc;
+      }, {} as Record<string, QueuedProcess[]>),
+    );
 
-    for (const video of queue) {
+    for (const mediaId of Object.keys(queue)) {
       const index = medias.findIndex(
-        (media) => media.data._id.toString() === video.media._id.toString(),
+        (media) => media.data._id.toString() === mediaId,
       );
       if (index !== -1) {
         medias = [...medias.slice(0, index), ...medias.slice(index + 1)];
@@ -177,18 +193,20 @@ export class MediasService {
 
     const queuedMedias: Array<MediaWithType | MediaWithTypeAndQueue> =
       await Promise.all(
-        queue.map((video) =>
+        Object.entries(queue).map(([mediaId, video]) =>
           this.mediaModel
-            .findById(video.media._id)
+            .findById(mediaId)
             .exec()
             .then(formatOneMedia)
             .then((media) => ({
               ...media,
-              queue: {
-                fileName: video.filePath,
-                seasonIndex: video.seasonIndex,
-                episodeIndex: video.episodeIndex,
-              },
+              queue: video.map((v) => ({
+                _id: v._id,
+                filePath: v.filePath,
+                seasonIndex: v.seasonIndex,
+                episodeIndex: v.episodeIndex,
+                dateAdded: v.dateAdded,
+              })),
             })),
         ),
       );

@@ -3,9 +3,11 @@ import { AdminMedia } from './medias.service';
 
 type MediaType = 'movie' | 'tv';
 type QueueData = {
-  fileName: string;
+  _id?: string;
+  filePath?: string;
   seasonIndex?: number;
   episodeIndex?: number;
+  dateAdded?: Date;
 };
 type MediaWithType = { data: Media; mediaType: MediaType };
 type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };

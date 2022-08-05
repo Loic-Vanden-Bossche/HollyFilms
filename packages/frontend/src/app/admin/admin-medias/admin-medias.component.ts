@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../shared/services/admin.service';
-import {
-  ProcessingService,
-  ProgressStatus,
-} from '../../shared/services/processing.service';
+import { ProcessingService } from '../../shared/services/processing.service';
 import { SearchService } from '../../shared/services/search.service';
-import { map, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-medias',
   templateUrl: './admin-medias.component.html',
 })
 export class AdminMediasComponent implements OnInit {
-  progressStatus: ProgressStatus | null = null;
-
   get medias() {
     return this.adminService.medias;
+  }
+
+  get progressStatus() {
+    return this.processingService.liveProgress;
   }
 
   constructor(
@@ -38,21 +37,10 @@ export class AdminMediasComponent implements OnInit {
 
     this.processingService
       .onStatusUpdated()
-      .pipe(
-        map((status) => {
-          if (status.mainStatus === 'ENDED') {
-            this.adminService.refreshMedias();
-            return null;
-          }
-          return status;
-        })
-      )
-      .subscribe((status) => (this.progressStatus = status));
+      .subscribe((status) => (this.processingService.progressStatus = status));
+
     this.processingService
       .onDownloadStatusUpdated()
-      .subscribe((status) => console.log(status));
-    this.processingService
-      .onSystemInfosUpdated()
       .subscribe((status) => console.log(status));
   }
 }

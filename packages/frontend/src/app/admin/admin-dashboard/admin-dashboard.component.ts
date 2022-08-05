@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { map, startWith } from 'rxjs';
+import { map, startWith, tap } from 'rxjs';
 import {
   faFileCirclePlus,
   faSquarePlus,
@@ -14,6 +14,9 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { ProcessingService } from '../../shared/services/processing.service';
+import { AdminService } from '../../shared/services/admin.service';
+import { SystemMetrics } from '../../shared/models/system-metrics.model';
 
 interface NavButton {
   label: string;
@@ -47,8 +50,10 @@ type Tabs = 'users' | 'medias';
 })
 export class AdminDashboardComponent implements OnInit {
   selectedTab: Tabs = 'medias';
-
   addingMovie = true;
+
+  serverMetrics: SystemMetrics | null = null;
+  queueStarted = false;
 
   navButtons: NavButton[] = [
     {
@@ -66,7 +71,9 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly modalService: ModalService
+    private readonly modalService: ModalService,
+    private readonly processingService: ProcessingService,
+    private readonly adminService: AdminService
   ) {}
 
   addMovie() {
@@ -88,6 +95,19 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.adminService
+      .getInitialData()
+      .pipe(
+        tap(
+          (data) =>
+            (this.processingService.progressStatus =
+              data.progressStatus || null)
+        )
+      )
+      .subscribe((data) => {
+        this.queueStarted = data.queueStarted;
+      });
+
     this.router.events
       .pipe(
         map((e) => (e instanceof NavigationEnd ? e.url.split('/')[2] : '')),
@@ -96,5 +116,9 @@ export class AdminDashboardComponent implements OnInit {
       .subscribe((e) => {
         if (e) this.selectedTab = e as 'users' | 'medias';
       });
+
+    this.processingService
+      .onSystemInfosUpdated()
+      .subscribe((status) => (this.serverMetrics = status));
   }
 }

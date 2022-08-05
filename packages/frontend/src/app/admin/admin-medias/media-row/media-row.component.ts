@@ -11,6 +11,8 @@ import {
   StreamStatus,
 } from '../../../shared/services/processing.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { AdminService } from '../../../shared/services/admin.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-media-row',
@@ -55,8 +57,8 @@ export class MediaRowComponent implements OnChanges {
   selectedStream: StreamStatus | null = null;
 
   get fileName(): string {
-    if (this.media) {
-      return this.media.queue?.fileName.split('/').pop() || '';
+    if (this.media && this.media.queue?.length) {
+      return this.media.queue[0].filePath.split('/').pop() || '';
     }
     return '';
   }
@@ -65,19 +67,34 @@ export class MediaRowComponent implements OnChanges {
     return this.mediaContent?.nativeElement.getBoundingClientRect().height || 0;
   }
 
+  constructor(private readonly adminService: AdminService) {}
+
   trackUndefined() {
     return undefined;
   }
 
+  removeFromQueue() {
+    forkJoin(
+      (this.media?.queue || []).map((file) =>
+        this.adminService.removeFromQueue(file._id)
+      )
+    ).subscribe(() => {
+      this.adminService.refreshMedias();
+    });
+  }
+
+  deleteMedia() {
+    this.adminService.deleteMedia(this.media?.data._id || '').subscribe();
+  }
+
   ngOnChanges() {
-    console.log(this.processData?.streamsStatus);
     if (this.processData) {
       if (!this.selectedStream) {
         this.selectedStream = this.processData.streamsStatus[0];
       }
       this.currentStatus = 'Traitement...';
       this.statusColor = '#F87272';
-    } else if (this.media?.queue?.fileName) {
+    } else if (this.fileName) {
       this.currentStatus = 'En attente';
       this.statusColor = '#FBBD23';
     }

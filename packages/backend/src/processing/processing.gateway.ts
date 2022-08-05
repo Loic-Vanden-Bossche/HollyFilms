@@ -1,17 +1,12 @@
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
-  SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
 
 import { ProcessingService } from './processing.service';
 import { Socket } from 'net';
-import { UseGuards } from '@nestjs/common';
 import { WebsocketService } from './websocket.service';
-import { JwtAuthGuard } from '../indentity/auth/guards/jwt.guard';
-import { Roles } from '../shared/decorators/roles.decorator';
-import { Role } from '../shared/role';
 
 @WebSocketGateway({
   cors: {
@@ -35,15 +30,5 @@ export class ProcessingGateway
 
   handleDisconnect(client: Socket) {
     this.websocketService.removeClient(client);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin)
-  @SubscribeMessage('getMainProcessStatus')
-  onEvent(): void {
-    this.websocketService.emit(
-      'processing-media',
-      this.processingService.progressStatus,
-    );
   }
 }

@@ -6,12 +6,14 @@ import { Review } from './review.model';
 
 export type MediaType = 'movie' | 'tv';
 export type QueueData = {
-  fileName: string;
+  _id: string;
+  filePath: string;
   seasonIndex?: number;
   episodeIndex?: number;
+  dateAdded: Date;
 };
 export type MediaWithType = { data: Media; mediaType: MediaType };
-export type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
+export type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData[] };
 
 export interface Media {
   _id: string;

@@ -32,7 +32,7 @@
       [ngStyle]="{
         height: expanded || this.processData ? contentHeight + 'px' : 0
       }"
-      [ngClass]="processData || expanded ? ['mb-10'] : []"
+      [ngClass]="processData || expanded ? ['mb-4'] : []"
       class="transition-all duration-700"
     >
       <div #mediaContent>
@@ -70,8 +70,25 @@
             @onSelectionChange
             *ngFor="let stream of selectedStream ? [selectedStream] : []"
           >
-            {{ stream.tag }} {{ stream.lang }}
+            <app-media-stream [stream]="stream"></app-media-stream>
           </div>
+        </div>
+
+        <div class="flex flex-row justify-end h-8">
+          <button
+            (click)="removeFromQueue()"
+            class="transition-all opacity-90 hover:opacity-100 rounded h-full bg-base-500 px-3 font-bold"
+            *ngIf="media.queue && !processData"
+          >
+            retirer de la file d'attente
+          </button>
+          <button
+            (click)="deleteMedia()"
+            class="transition-all opacity-90 hover:opacity-100 rounded h-full bg-error px-3 font-bold"
+            *ngIf="!media.queue"
+          >
+            supprimer {{ media.mediaType === "movie" ? "le film" : "la série" }}
+          </button>
         </div>
       </div>
     </div>

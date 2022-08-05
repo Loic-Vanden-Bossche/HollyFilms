@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { FileData, ProcessingService } from './processing.service';
 import { ScrapperService } from './scrapper.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -23,6 +31,15 @@ export class ProcessingController {
   }
 
   @Roles(Role.Admin)
+  @Get('initialData')
+  @ApiOperation({
+    summary: '[Admin] Get initial processing data',
+  })
+  async getInitialData() {
+    return this.processService.getInitialData();
+  }
+
+  @Roles(Role.Admin)
   @Post('onlineSearch/getmediaLink')
   @ApiOperation({ summary: '[Admin] Get uptobox premium link' })
   async getmediaLink(@Body('link') link: string): Promise<void> {
@@ -43,6 +60,20 @@ export class ProcessingController {
   @ApiOperation({ summary: '[Admin] Start processing queue' })
   async startQueue() {
     this.processService.startQueue();
+  }
+
+  @Roles(Role.Admin)
+  @Get('stopQueue')
+  @ApiOperation({ summary: '[Admin] Stop processing queue' })
+  async stopQueue() {
+    this.processService.stopQueue();
+  }
+
+  @Roles(Role.Admin)
+  @Delete('removeFromQueue/:id')
+  @ApiOperation({ summary: '[Admin] Stop processing queue' })
+  async removeFromQueue(@Param('id') id: string) {
+    return this.processService.removeFromQueue(id);
   }
 
   @Roles(Role.Admin)

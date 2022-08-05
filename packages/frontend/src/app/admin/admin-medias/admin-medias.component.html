@@ -1,7 +1,7 @@
 <div class="w-full relative">
   <div *ngFor="let media of medias | async; let index = index" class="mb-2">
     <app-media-row
-      [processData]="index === 0 ? progressStatus : null"
+      [processData]="index === 0 ? (progressStatus | async) : null"
       [media]="media"
     ></app-media-row>
   </div>

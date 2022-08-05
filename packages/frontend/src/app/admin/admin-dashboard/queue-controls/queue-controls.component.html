@@ -1,0 +1,30 @@
+<div class="bg-base-700 px-3 h-full rounded flex flex-row items-center">
+  <p class="font-bold mr-3">{{ queueLength }}</p>
+  <button
+    (click)="onClearQueue()"
+    [ngClass]="
+      !canClearQueue ? ['pointer-events-none', 'opacity-30'] : ['opacity-80']
+    "
+    class="h-2/3 mr-3 aspect-square rounded outline-none border-2 border-transparent hover:border-white font-bold ml-auto h-full transition-all bg-warning hover:opacity-100"
+  >
+    <fa-icon [icon]="clearQueueIcon"></fa-icon>
+  </button>
+  <button
+    (click)="onStopQueue()"
+    [ngClass]="
+      !canStopQueue ? ['pointer-events-none', 'opacity-30'] : ['opacity-80']
+    "
+    class="h-2/3 mr-3 aspect-square rounded outline-none border-2 border-transparent hover:border-white font-bold ml-auto h-full transition-all bg-error hover:opacity-100"
+  >
+    <fa-icon [icon]="pauseQueueIcon"></fa-icon>
+  </button>
+  <button
+    (click)="onStartQueue()"
+    [ngClass]="
+      !canStartQueue ? ['pointer-events-none', 'opacity-30'] : ['opacity-80']
+    "
+    class="h-2/3 aspect-square rounded outline-none border-2 border-transparent hover:border-white font-bold ml-auto h-full transition-all bg-success opacity-80 hover:opacity-100"
+  >
+    <fa-icon [icon]="startQueueIcon"></fa-icon>
+  </button>
+</div>

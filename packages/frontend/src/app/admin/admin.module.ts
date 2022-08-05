@@ -14,6 +14,8 @@ import { TmdbResultComponent } from './add-media-modal/tmdb-result/tmdb-result.c
 import { UserRowComponent } from './admin-users/user-row/user-row.component';
 import { SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../../environments/environment';
+import { MediaStreamComponent } from './admin-medias/media-row/media-stream/media-stream.component';
+import { QueueControlsComponent } from './admin-dashboard/queue-controls/queue-controls.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { environment } from '../../environments/environment';
     LocalFileComponent,
     TmdbResultComponent,
     UserRowComponent,
+    MediaStreamComponent,
+    QueueControlsComponent,
   ],
   imports: [
     CommonModule,

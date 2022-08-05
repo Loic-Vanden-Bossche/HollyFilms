@@ -5,6 +5,7 @@ import { FileData } from '../models/file-data.model';
 import { TMDBAdminSearchResult } from '../models/admin-tmdb-search-result.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, tap } from 'rxjs';
+import { ProgressStatus } from './processing.service';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,45 @@ export class AdminService {
     return this.http.get<FileData[]>(`processing/localSearch?query=${query}`, {
       withCredentials: true,
     });
+  }
+
+  getQueueLength(media: MediaWithTypeAndQueue[]) {
+    return media.filter((m) => m.queue).length;
+  }
+
+  getInitialData() {
+    return this.http.get<{
+      progressStatus: ProgressStatus;
+      queueStarted: boolean;
+    }>('processing/initialData', { withCredentials: true });
+  }
+
+  startQueue() {
+    return this.http.get('processing/startQueue', { withCredentials: true });
+  }
+
+  stopQueue() {
+    return this.http.get('processing/stopQueue', { withCredentials: true });
+  }
+
+  removeFromQueue(videoId: string) {
+    return this.http.delete(`processing/removeFromQueue/${videoId}`, {
+      withCredentials: true,
+    });
+  }
+
+  deleteMedia(id: string) {
+    return this.http
+      .delete(`medias/${id}`, { withCredentials: true })
+      .pipe(tap(() => this.refreshMedias()));
+  }
+
+  clearQueue() {
+    return this.http
+      .get<{ needRefresh: boolean }>('processing/clearQueue', {
+        withCredentials: true,
+      })
+      .pipe(tap(() => this.refreshMedias()));
   }
 
   onlineSearch(query = '') {

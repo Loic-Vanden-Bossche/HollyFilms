@@ -29,6 +29,7 @@ import { Model } from 'mongoose';
 import { QueuedProcess, QueuedProcessDocument } from './queued-process.schema';
 import { FileInfos } from '../medias/schemas/file-infos.schema';
 import { MoviesService } from '../medias/movies/movies.service';
+import { interval } from 'rxjs';
 
 export interface FileData {
   path: string;
@@ -47,7 +48,7 @@ export interface ProgressStatus {
 export interface StreamStatus {
   type: string;
   tag: string;
-  data?: any;
+  data?: ffmpeg.FfprobeStream;
   prog?: number;
   index?: number;
   stringToAppend?: string;
@@ -55,8 +56,19 @@ export interface StreamStatus {
 }
 
 export interface SystemInfos {
-  cpuTemp: number;
-  cpuUsage: number;
+  cpu: { maxTemp: number; temp: number; usage: number };
+  disks: Array<{
+    used: number;
+    use: number;
+    available: number;
+    size: number;
+  }>;
+  mem: {
+    used: number;
+    available: number;
+    total: number;
+  };
+  uptime: number;
 }
 
 @Injectable()
@@ -64,9 +76,7 @@ export class ProcessingService {
   private logger = new Logger('Processing');
 
   queueStarted = false;
-
   progressStatus: ProgressStatus;
-
   masterFileName = 'master.m3u8';
 
   constructor(
@@ -78,7 +88,20 @@ export class ProcessingService {
     @Inject(forwardRef(() => MoviesService))
     private readonly moviesService: MoviesService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    interval(1000).subscribe(() => {
+      this.getSiInfos().then((data) =>
+        this.websocketService.emit('si-data', data),
+      );
+    });
+  }
+
+  async getInitialData() {
+    return {
+      progressStatus: this.progressStatus,
+      queueStarted: this.queueStarted,
+    };
+  }
 
   startGeneration(id: string, name: string) {
     this.logger.log(`Start extra [${name}] generation for ${id}`);
@@ -243,6 +266,14 @@ export class ProcessingService {
     });
   }
 
+  stopQueue() {
+    this.queueStarted = false;
+  }
+
+  removeFromQueue(id: string) {
+    return this.queuedProcessModel.findByIdAndDelete(id).exec();
+  }
+
   shiftQueue() {
     return this.getCurrent().then((video) => video.remove());
   }
@@ -295,21 +326,31 @@ export class ProcessingService {
     }
   }
 
-  async getSiInfos() {
-    if (this.progressStatus) {
-      this.websocketService.emit('si-data', {
-        cpuTemp: (await si.cpuTemperature()).main,
-        cpuUsage: await (async function () {
-          return new Promise((resolve) => {
-            os.cpuUsage((data) => {
-              resolve(Math.round(data * 100));
-            });
-          });
-        })(),
-      });
-
-      this.getSiInfos();
-    }
+  async getSiInfos(): Promise<SystemInfos> {
+    return Promise.all([
+      si.cpuTemperature(),
+      new Promise<number>((resolve) =>
+        os.cpuUsage((data) => resolve(Math.round(data * 100))),
+      ),
+      si.fsSize().then((res) =>
+        res.map((el) => ({
+          used: el.used,
+          use: el.use,
+          available: el.available,
+          size: el.size,
+        })),
+      ),
+      si.mem().then((res) => ({
+        used: res.used,
+        available: res.available,
+        total: res.total,
+      })),
+    ]).then(([cpuTemp, cpuUsage, disks, mem]) => ({
+      cpu: { maxTemp: cpuTemp.max, temp: cpuTemp.main, usage: cpuUsage },
+      disks,
+      mem,
+      uptime: process.uptime(),
+    }));
   }
 
   washFiles(path: string): boolean {
@@ -335,39 +376,6 @@ export class ProcessingService {
     }
 
     return totalSizeBytes;
-  }
-
-  async purgeProcessingMedias(except?: string) {
-    const medias = await this.mediasService.getMedias();
-
-    console.log(except);
-
-    /*medias = medias.filter((media) => {
-      return (
-        media.mediaType === 'movie' &&
-        media.data['fileInfos'].isProcessing === true &&
-        this.mediasService.getId(media.data) !== except
-      );
-    });*/
-
-    for (const media of medias) {
-      if (media.mediaType === 'movie') {
-        // this.moviesService.delete(this.mediasService.getId(media.data));
-        /* if (
-          !this.washFiles(
-            env.MEDIAS_LOCATION_DEFAULT +
-              '/' +
-              this.mediasService.getId(media.data),
-          )
-        ) {
-          this.washFiles(
-            env.MEDIAS_LOCATION_SECONDARY +
-              '/' +
-              this.mediasService.getId(media.data),
-          );
-        }*/
-      }
-    }
   }
 
   processLocation = 'secondary';
@@ -709,7 +717,6 @@ export class ProcessingService {
     };
 
     await emitProcessEvent();
-    this.getSiInfos();
 
     if (inputVideo.filePath.includes('http')) {
       this.progressStatus = {
