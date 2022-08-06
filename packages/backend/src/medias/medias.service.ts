@@ -11,7 +11,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { env } from 'process';
 import { Media, MediaDocument } from './media.schema';
 import CurrentUser from '../indentity/users/current';
 import { Model } from 'mongoose';
@@ -30,6 +29,8 @@ import { UsersService } from '../indentity/users/users.service';
 import { ProcessingService } from '../processing/processing.service';
 import { QueuedProcess } from '../processing/queued-process.schema';
 import * as rimraf from 'rimraf';
+import { ConfigService } from '@nestjs/config';
+import { MediasConfig } from '../config/config';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -56,6 +57,7 @@ export class MediasService {
     private readonly userService: UsersService,
     @Inject(forwardRef(() => ProcessingService))
     private readonly processingService: ProcessingService,
+    private readonly configService: ConfigService,
   ) {}
 
   async getMedia(id: string) {
@@ -352,11 +354,12 @@ export class MediasService {
     mediaPath: string,
     encodingHeader: string,
   ): Promise<void> {
+    const config = this.configService.get<MediasConfig>('medias');
     location =
       location == 'default'
-        ? env.MEDIAS_LOCATION_DEFAULT
+        ? config.storePathDefault
         : location == 'secondary'
-        ? env.MEDIAS_LOCATION_SECONDARY
+        ? config.storePathSecondary
         : null;
 
     if (!location) {

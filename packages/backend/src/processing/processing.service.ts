@@ -1015,7 +1015,7 @@ export class ProcessingService {
                       '_subtitle_stream.m3u8",' +
                       'LANGUAGE="' +
                       stream.tags.language +
-                      '",\n';
+                      '"\n';
 
                     fs.writeFileSync(
                       inputVideo.targetPath +

@@ -1,6 +1,6 @@
 <div class="flex flex-row cursor-pointer overflow-x-scroll scrollbar-hide">
   <div
-    class="mr-2 group p-2 transition-all hover:shadow-xl bg-base-600 rounded-xl bg-transparent hover:bg-base-600 duration-500 delay-500 hover:delay-0"
+    class="transition-all mr-2 group p-2 bg-base-600/30 rounded-xl hover:shadow-xl"
     *ngFor="let actor of actors"
   >
     <div
@@ -14,15 +14,15 @@
           ')'
       }"
     ></div>
-    <h1
-      class="transition-all duration-500 delay-500 font-bold mt-2 group-hover:transition-all group-hover:delay-0 max-w-0 group-hover:max-w-xs whitespace-nowrap opacity-0 group-hover:opacity-100"
+    <div
+      class="mt-2 p-2 transition-all bg-base-600 rounded-xl hover:bg-base-700"
     >
-      {{ actor.name }}
-    </h1>
-    <h1
-      class="transition-all duration-500 delay-500 group-hover:transition-all group-hover:delay-0 max-w-0 group-hover:max-w-xs whitespace-nowrap opacity-0 group-hover:opacity-80"
-    >
-      {{ actor.character }}
-    </h1>
+      <h1 class="font-bold whitespace-nowrap">
+        {{ actor.name }}
+      </h1>
+      <h1 class="whitespace-nowrap opacity-80">
+        {{ actor.character }}
+      </h1>
+    </div>
   </div>
 </div>

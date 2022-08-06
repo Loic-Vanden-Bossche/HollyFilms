@@ -1,16 +1,25 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MediaCardTab } from '../media-card-data-details.component';
 import { MediaWithType } from '../../../../shared/models/media.model';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-media-card-tabs',
   templateUrl: './media-card-tabs.component.html',
+  animations: [
+    trigger('onTabChange', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX(-10px)' }),
+        animate('0.5s ease', style({ opacity: 1, transform: 'translateX(0)' })),
+      ]),
+    ]),
+  ],
 })
 export class MediaCardTabsComponent implements OnInit {
   @Input() media: MediaWithType | null = null;
 
   tabs: MediaCardTab[] = [
-    { title: 'Description', value: 'overview' },
+    { title: "Vue d'ensemble", value: 'overview' },
     { title: 'Casting', value: 'cast' },
   ];
 

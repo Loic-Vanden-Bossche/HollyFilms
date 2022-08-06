@@ -1,1 +1,9 @@
-<div class="bg-black w-full h-full"></div>
+<div class="bg-black w-full h-full overflow-hidden">
+  <div [@onPlay]="true" class="h-full w-full">
+    <video
+      #player
+      class="video-js w-full h-full vjs-default-skin"
+      controls
+    ></video>
+  </div>
+</div>

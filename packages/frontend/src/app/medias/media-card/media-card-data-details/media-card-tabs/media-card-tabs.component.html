@@ -1,7 +1,7 @@
 <div *ngIf="media">
   <div class="flex flex-row">
     <button
-      class="mr-2 font-bold text-xs rounded px-3 py-1 bg-white"
+      class="transition-all mr-2 font-bold text-xs rounded px-3 py-1"
       [ngClass]="
         tab.value === currentTab.value
           ? ['bg-white', 'text-black']
@@ -15,10 +15,15 @@
   </div>
   <div class="my-4">
     <app-actor-list
+      @onTabChange
       *ngIf="currentTab.value === 'cast'"
       [actors]="media.data.actors"
     ></app-actor-list>
-    <p *ngIf="currentTab.value === 'overview'" class="text-sm mt-3">
+    <p
+      *ngIf="currentTab.value === 'overview'"
+      @onTabChange
+      class="text-sm mt-3"
+    >
       {{ overview }}
     </p>
   </div>
