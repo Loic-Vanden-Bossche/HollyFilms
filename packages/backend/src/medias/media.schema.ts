@@ -75,6 +75,9 @@ export class Media {
   @Prop()
   trailer_key: string;
 
+  @Prop({ default: false })
+  available?: boolean;
+
   @Prop({ default: undefined })
   tvs?: Season[];
 

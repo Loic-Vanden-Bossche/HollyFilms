@@ -28,8 +28,6 @@ import { Episode } from './tvs/schemas/episode.schema';
 import { FileInfos } from './schemas/file-infos.schema';
 import { UsersService } from '../indentity/users/users.service';
 import { ProcessingService } from '../processing/processing.service';
-import { HttpService } from '@nestjs/axios';
-import { TmdbService } from '../tmdb/tmdb.service';
 import { QueuedProcess } from '../processing/queued-process.schema';
 import * as rimraf from 'rimraf';
 
@@ -56,8 +54,6 @@ export class MediasService {
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
     private readonly userService: UsersService,
-    private readonly http: HttpService,
-    private readonly tmdbService: TmdbService,
     @Inject(forwardRef(() => ProcessingService))
     private readonly processingService: ProcessingService,
   ) {}
@@ -155,10 +151,14 @@ export class MediasService {
       .then(formatManyMedias);
   }
 
-  async searchQuery(query: string): Promise<MediaWithType[]> {
-    if (query !== 'blank') {
+  async searchQuery(
+    query = '',
+    onlyAvailable = false,
+  ): Promise<MediaWithType[]> {
+    if (query && query !== 'blank') {
       return this.mediaModel
         .find({
+          ...(onlyAvailable ? { available: true } : {}),
           $or: [{ title: new RegExp(query, 'i') }],
         })
         .sort({ title: 'asc' })
@@ -166,7 +166,7 @@ export class MediasService {
         .then(formatManyMedias);
     }
 
-    return this.getMedias();
+    return this.getMedias(onlyAvailable);
   }
 
   async adminSearchQuery(query: string): Promise<MediaWithTypeAndQueue[]> {
@@ -319,9 +319,9 @@ export class MediasService {
     return points;
   }
 
-  async getMedias(): Promise<MediaWithType[]> {
+  async getMedias(onlyAvailable = false): Promise<MediaWithType[]> {
     return this.mediaModel
-      .find({})
+      .find(onlyAvailable ? { available: true } : {})
       .sort({ title: 'asc' })
       .exec()
       .then(formatManyMedias);

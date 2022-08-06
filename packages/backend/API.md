@@ -2666,18 +2666,18 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X GET /medias
+curl -X GET /medias?query=string
 
 ```
 
 ```http
-GET /medias HTTP/1.1
+GET /medias?query=string HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/medias',
+fetch('/medias?query=string',
 {
   method: 'GET'
 
@@ -2696,7 +2696,8 @@ require 'json'
 
 result = RestClient.get '/medias',
   params: {
-  }
+  'query' => 'string'
+}
 
 p JSON.parse(result)
 
@@ -2705,7 +2706,9 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/medias')
+r = requests.get('/medias', params={
+  'query': 'string'
+})
 
 print(r.json())
 
@@ -2739,7 +2742,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/medias");
+URL obj = new URL("/medias?query=string");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -2779,6 +2782,12 @@ func main() {
 `GET /medias`
 
 *[User] Get all medias sorted by titles*
+
+<h3 id="mediascontroller_getallmedias-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|query|query|string|true|none|
 
 <h3 id="mediascontroller_getallmedias-responses">Responses</h3>
 

@@ -52,6 +52,7 @@ export class MoviesService {
     return this.mediaModel
       .findByIdAndUpdate(mediaId, {
         $set: {
+          available: true,
           fileInfos,
         },
       })

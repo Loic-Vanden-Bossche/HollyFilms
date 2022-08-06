@@ -26,8 +26,8 @@ export class MediasController {
   @Roles(Role.User)
   @Get()
   @ApiOperation({ summary: '[User] Get all medias sorted by titles' })
-  async getAllMedias(): Promise<MediaWithType[]> {
-    return this.mediasService.getMedias();
+  async getAllMedias(@Query('query') query: string): Promise<MediaWithType[]> {
+    return this.mediasService.searchQuery(query, true);
   }
 
   @Roles(Role.Admin)

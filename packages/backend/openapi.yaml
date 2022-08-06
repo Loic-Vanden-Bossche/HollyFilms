@@ -259,7 +259,12 @@ paths:
     get:
       operationId: MediasController_getAllMedias
       summary: "[User] Get all medias sorted by titles"
-      parameters: []
+      parameters:
+        - name: query
+          required: true
+          in: query
+          schema:
+            type: string
       responses:
         "200":
           description: ""
