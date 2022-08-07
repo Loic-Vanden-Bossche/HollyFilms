@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { MediaWithType } from '../../shared/models/media.model';
+import { ListType, MediaWithType } from '../../shared/models/media.model';
 import {
   BehaviorSubject,
   catchError,
@@ -19,7 +19,7 @@ import {
   of,
   tap,
 } from 'rxjs';
-import { ListType, MediasService } from '../../shared/services/medias.service';
+import { MediasService } from '../../shared/services/medias.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   faChevronLeft,

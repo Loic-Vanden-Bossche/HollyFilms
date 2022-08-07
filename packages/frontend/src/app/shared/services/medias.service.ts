@@ -1,21 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Media, MediaWithType } from '../models/media.model';
+import {
+  ListType,
+  Media,
+  MediaWithType,
+  MediaWithTypeAndFeatured,
+} from '../models/media.model';
 import { AuthService } from './auth.service';
-
-export enum ListType {
-  ALL = '',
-  RECOMMENDED = 'recommended',
-  POPULAR = 'popular',
-  RECENT = 'recent',
-  INLIST = 'inlist',
-  LIKED = 'liked',
-  WATCHED = 'watched',
-  CONTINUE = 'continue',
-  MOVIE = 'movie',
-  SERIES = 'series',
-  ANIME = 'anime',
-}
 
 @Injectable({
   providedIn: 'root',
@@ -52,5 +43,11 @@ export class MediasService {
       this.auth.user.playedMedias.find((pm) => pm.media?._id === media._id)
         ?.currentTime || 0
     );
+  }
+
+  getFeaturedMedias() {
+    return this.http.get<MediaWithTypeAndFeatured[]>(`medias/featured`, {
+      withCredentials: true,
+    });
   }
 }

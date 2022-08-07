@@ -2,6 +2,9 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import "~swiper/swiper-bundle.css";
+
+
 @font-face {
   font-family: "hollyfilms";
   src: url("assets/fonts/HollyFont.ttf");
@@ -45,4 +48,12 @@ iframe {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+
+// Swiper
+
+:root {
+  --swiper-navigation-color: #fff;
+  --swiper-pagination-color: #fff;
+  --swiper-pagination-bullet-inactive-color: #fff;
 }

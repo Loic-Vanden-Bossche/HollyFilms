@@ -14,6 +14,31 @@ export type QueueData = {
 };
 export type MediaWithType = { data: Media; mediaType: MediaType };
 export type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData[] };
+export type MediaWithTypeAndFeatured = MediaWithType & {
+  featured: FeaturedType;
+};
+
+export enum ListType {
+  ALL = '',
+  RECOMMENDED = 'recommended',
+  POPULAR = 'popular',
+  RECENT = 'recent',
+  INLIST = 'inlist',
+  LIKED = 'liked',
+  WATCHED = 'watched',
+  CONTINUE = 'continue',
+  MOVIE = 'movie',
+  SERIES = 'series',
+  ANIME = 'anime',
+}
+
+export enum FeaturedType {
+  RECOMMENDED = 'recommended',
+  POPULAR = 'popular',
+  RECENT = 'recent',
+  CONTINUE = 'continue',
+  INLIST = 'inlist',
+}
 
 export interface Media {
   _id: string;

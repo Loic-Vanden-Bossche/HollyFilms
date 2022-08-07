@@ -16,11 +16,13 @@ import CurrentUser from '../indentity/users/current';
 import { Model, Query } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import {
+  FeaturedType,
   formatManyMedias,
   formatOneMedia,
   ListType,
   MediaType,
   MediaWithType,
+  MediaWithTypeAndFeatured,
   MediaWithTypeAndQueue,
 } from './medias.utils';
 import { PlayedMedia } from './schemas/played-media.schema';
@@ -418,6 +420,32 @@ export class MediasService {
     }
 
     return this.getRecommended(user, skip, limit);
+  }
+
+  getFeatured(user: CurrentUser): Promise<MediaWithTypeAndFeatured[]> {
+    const featuredMap = [
+      { listType: ListType.POPULAR, number: 3, featured: FeaturedType.POPULAR },
+      {
+        listType: ListType.RECOMMENDED,
+        number: 3,
+        featured: FeaturedType.RECOMMENDED,
+      },
+      { listType: ListType.RECENT, number: 2, featured: FeaturedType.RECENT },
+      { listType: ListType.INLIST, number: 1, featured: FeaturedType.INLIST },
+      {
+        listType: ListType.CONTINUE,
+        number: 1,
+        featured: FeaturedType.CONTINUE,
+      },
+    ];
+
+    return Promise.all([
+      ...featuredMap.map(({ listType, number, featured }) =>
+        this.getMedias(true, user, listType, 0, number).then((medias) =>
+          medias.map((media) => ({ ...media, featured })),
+        ),
+      ),
+    ]).then((medias) => medias.flat());
   }
 
   async updatePopularity() {

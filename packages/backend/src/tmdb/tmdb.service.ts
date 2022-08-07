@@ -89,43 +89,23 @@ export class TmdbService {
 
     const tv = await firstValueFrom(
       this.httpService.get<TMDBTVShow>(
-        `${config.apiUrl}/tv/${tmdbId}?api_key=${config.apiKey}&language=en-US&append_to_response=videos,credits,translations,reviews`,
+        `${config.apiUrl}/tv/${tmdbId}?api_key=${config.apiKey}&language=fr-FR&append_to_response=videos,credits,translations,reviews`,
       ),
     ).then((response) => response.data);
 
     return {
       data: {
-        title: tv.translations.translations
-          .filter((obj) => obj.iso_3166_1 === 'FR')
-          .map((c) =>
-            JSON.stringify(c.data.name).length - 2 ? c.data.name : tv.name,
-          )[0],
+        title: tv.name,
         mediaType: 'tv',
         TMDB_id: tv.id,
         runtime: tv.episode_run_time[0],
         genres: tv.genres.map((g) => g.name),
-        overview: tv.translations.translations
-          .filter((obj) => {
-            return obj.iso_3166_1 === 'FR';
-          })
-          .map((c) =>
-            JSON.stringify(c.data.overview).length - 2
-              ? c.data.overview
-              : tv.overview,
-          )[0],
+        overview: tv.overview,
         popularity: tv.popularity,
         release_date: tv.first_air_date,
         poster_path: this.getPosterPath(tv.poster_path),
         backdrop_path: this.getBackdropPath(tv.backdrop_path),
-        tagline: tv.translations.translations
-          .filter((obj) => {
-            return obj.iso_3166_1 === 'FR';
-          })
-          .map((c) => {
-            return JSON.stringify(c.data.tagline).length - 2
-              ? c.data.tagline
-              : tv.tagline;
-          })[0],
+        tagline: tv.tagline,
         production_companies: tv.production_companies.map((c) => {
           return {
             name: c.name,
@@ -198,56 +178,30 @@ export class TmdbService {
     };
   }
 
-  async getMovie(tmdbId: number, lang = 'en-US'): Promise<MediaWithType> {
+  async getMovie(tmdbId: number): Promise<MediaWithType> {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
     const movie = await firstValueFrom(
       this.httpService.get<TMDBMovie>(
-        `${config.apiUrl}/movie/${tmdbId}?api_key=${config.apiKey}&language=${lang}&append_to_response=videos,credits,translations,reviews`,
+        `${config.apiUrl}/movie/${tmdbId}?api_key=${config.apiKey}&language=fr-FR&append_to_response=videos,credits,translations,reviews`,
       ),
     ).then((response) => response.data);
 
     return {
       data: {
         TMDB_id: movie.id,
-        title: movie.translations.translations
-          .filter((obj) => obj.iso_3166_1 === 'FR')
-          .map((c) =>
-            JSON.stringify(c.data.title).length - 2
-              ? c.data.title
-              : movie.title,
-          )[0],
+        title: movie.title,
         mediaType: 'movie',
         runtime: movie.runtime[0],
         budget: movie.budget,
         genres: movie.genres.map((g) => g.name),
-        overview: movie.translations.translations
-          .filter((obj) => {
-            return obj.iso_3166_1 === 'FR';
-          })
-          .map((c) =>
-            JSON.stringify(c.data.overview).length - 2
-              ? c.data.overview
-              : movie.overview,
-          )[0],
+        overview: movie.overview,
         popularity: movie.popularity,
         release_date: movie.release_date,
         revenue: movie.revenue,
-        poster_path: movie.poster_path
-          ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path
-          : null,
-        backdrop_path: movie.backdrop_path
-          ? 'https://image.tmdb.org/t/p/w1280' + movie.backdrop_path
-          : null,
-        tagline: movie.translations.translations
-          .filter((obj) => {
-            return obj.iso_3166_1 === 'FR';
-          })
-          .map((c) =>
-            JSON.stringify(c.data.tagline).length - 2
-              ? c.data.tagline
-              : movie.tagline,
-          )[0],
+        poster_path: this.getPosterPath(movie.poster_path),
+        backdrop_path: this.getBackdropPath(movie.backdrop_path),
+        tagline: movie.tagline,
         production_companies: movie.production_companies.map((c) => ({
           name: c.name,
           logo_path: c.logo_path
@@ -255,9 +209,7 @@ export class TmdbService {
             : null,
         })),
         director: movie.credits.crew
-          .filter((obj) => {
-            return obj.job === 'Director';
-          })
+          .filter((obj) => obj.job === 'Director')
           .map((c) => ({
             name: c.name,
             profile_path: c.profile_path

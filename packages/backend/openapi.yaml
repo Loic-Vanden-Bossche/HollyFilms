@@ -319,6 +319,15 @@ paths:
         "200":
           description: ""
       tags: *a4
+  /medias/featured:
+    get:
+      operationId: MediasController_getFeatured
+      summary: "[User] Get n of featured medias"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a4
   "/medias/{id}":
     get:
       operationId: MediasController_getMedia

@@ -19,6 +19,7 @@ import { MediaWithType } from './medias.utils';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MediasQueryDto } from './dto/medias.query.dto';
 import { SearchQueryDto } from './dto/search.query.dto';
+import { checkObjectId } from '../shared/mongoose';
 
 @ApiTags('Medias')
 @Controller('medias')
@@ -60,17 +61,24 @@ export class MediasController {
   }
 
   @Roles(Role.User)
+  @Get('featured')
+  @ApiOperation({ summary: '[User] Get n of featured medias' })
+  async getFeatured(@User() user: CurrentUser) {
+    return this.mediasService.getFeatured(user);
+  }
+
+  @Roles(Role.User)
   @Get(':id')
   @ApiOperation({ summary: '[User] Get a specific media by id' })
   async getMedia(@Param('id') id: string) {
-    return this.mediasService.getMedia(id);
+    return this.mediasService.getMedia(checkObjectId(id));
   }
 
   @Roles(Role.Admin)
   @Delete(':id')
   @ApiOperation({ summary: '[Admin] Delete a specific media by id' })
   async deleteMedia(@Param('id') id: string) {
-    return this.mediasService.deleteMedia(id);
+    return this.mediasService.deleteMedia(checkObjectId(id));
   }
 
   @Roles(Role.User)

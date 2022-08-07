@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ListType, MediasService } from '../../shared/services/medias.service';
-import { MediaWithType } from '../../shared/models/media.model';
+import { MediasService } from '../../shared/services/medias.service';
+import { ListType, MediaWithType } from '../../shared/models/media.model';
 import { ModalService } from '../../shared/services/modal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, catchError, of } from 'rxjs';

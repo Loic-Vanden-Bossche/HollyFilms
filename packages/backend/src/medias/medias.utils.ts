@@ -11,6 +11,7 @@ type QueueData = {
 };
 type MediaWithType = { data: Media; mediaType: MediaType };
 type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
+type MediaWithTypeAndFeatured = MediaWithType & { featured: FeaturedType };
 
 enum ListType {
   ALL = '',
@@ -24,6 +25,14 @@ enum ListType {
   MOVIE = 'movie',
   SERIES = 'series',
   ANIME = 'anime',
+}
+
+enum FeaturedType {
+  RECOMMENDED = 'recommended',
+  POPULAR = 'popular',
+  RECENT = 'recent',
+  CONTINUE = 'continue',
+  INLIST = 'inlist',
 }
 
 const getMediaType = (media: Media): MediaType => {
@@ -56,13 +65,15 @@ const formatManyMedias = (medias: Media[]): MediaWithType[] =>
 
 export {
   MediaType,
+  QueueData,
   MediaWithType,
   MediaWithTypeAndQueue,
-  QueueData,
+  MediaWithTypeAndFeatured,
   getMediaType,
   formatManyMedias,
   formatOneMedia,
   formatAdminMedia,
   formatManyAdminMedias,
   ListType,
+  FeaturedType,
 };

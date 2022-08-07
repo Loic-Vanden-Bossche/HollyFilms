@@ -1,0 +1,16 @@
+<div class="w-full h-96 relative">
+  <swiper class="w-full h-full pb-14" [config]="config">
+    <ng-template
+      class="w-5/12 h-full rounded-xl bg-amber-300"
+      *ngFor="let media of featured"
+      swiperSlide
+    >
+      <div id="swiper-carousel-animate-opacity" class="h-full">
+        <app-media-carrousel-item [media]="media"></app-media-carrousel-item>
+      </div>
+    </ng-template>
+  </swiper>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-pagination"></div>
+</div>

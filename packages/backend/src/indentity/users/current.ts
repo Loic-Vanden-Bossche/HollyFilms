@@ -13,7 +13,7 @@ export default class CurrentUser {
     this.username = user.username;
     this.roles = user.roles;
     this.isAdmin = this.roles.includes(Role.Admin);
-    this.playedMedias = user.playedMedias;
+    this.playedMedias = user.playedMedias.filter((p) => p.media);
   }
 
   @ApiProperty({

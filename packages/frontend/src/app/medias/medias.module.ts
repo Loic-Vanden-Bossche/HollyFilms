@@ -18,6 +18,9 @@ import { MarkdownModule } from 'ngx-markdown';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MediaCarrouselComponent } from './media-carrousel/media-carrousel.component';
+import { MediaCarrouselItemComponent } from './media-carrousel/media-carrousel-item/media-carrousel-item.component';
+import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
   declarations: [
@@ -34,9 +37,12 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     MediaCardTabsComponent,
     MediaCardDataComponent,
     ActorListComponent,
+    MediaCarrouselComponent,
+    MediaCarrouselItemComponent,
   ],
-  exports: [MediaModalComponent, MediaListComponent],
+  exports: [MediaModalComponent, MediaListComponent, MediaCarrouselComponent],
   imports: [
+    SwiperModule,
     CommonModule,
     SharedModule,
     MarkdownModule,
