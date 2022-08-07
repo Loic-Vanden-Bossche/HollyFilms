@@ -1,5 +1,38 @@
-<div class="flex flex-row overflow-x-scroll overflow-y-visible scrollbar-hide">
-  <div *ngFor="let media of mediaList" class="mt-5 h-96">
+<div
+  #scroller
+  infinite-scroll
+  [scrollWindow]="false"
+  [horizontal]="true"
+  [infiniteScrollDistance]="scrollDistance"
+  [infiniteScrollUpDistance]="scrollUpDistance"
+  [infiniteScrollThrottle]="throttle"
+  (scrolled)="onScrollDown()"
+  class="flex scroll-smooth flex-row overflow-x-scroll overflow-y-visible first:pl-10 last:pr-10 scrollbar-hide"
+>
+  <div
+    *ngIf="canScrollLeft"
+    (click)="onScrollLeft()"
+    [@onControl]="{ value: '', params: { transform: -100 } }"
+    class="group transition-all absolute text-white text-xl cursor-pointer flex flex-col justify-center items-center bg-opacity-30 hover:bg-opacity-70 z-50 top-5 left-0 h-72 w-14 bg-black"
+  >
+    <fa-icon
+      class="group-hover:scale-125 transition-all"
+      [icon]="chevronLeftIcon"
+    ></fa-icon>
+  </div>
+  <div
+    *ngIf="canScrollRight"
+    (click)="onScrollRight()"
+    [@onControl]="{ value: '', params: { transform: 100 } }"
+    class="group transition-all absolute text-white text-xl cursor-pointer flex flex-col justify-center items-center bg-opacity-30 hover:bg-opacity-70 z-50 top-5 right-0 h-72 w-14 bg-black"
+  >
+    <fa-icon
+      class="group-hover:scale-125 transition-all"
+      [icon]="chevronRightIcon"
+    ></fa-icon>
+  </div>
+
+  <div *ngFor="let media of medias" class="mt-5 h-96">
     <div class="aspect-[475/712] h-72 mr-2">
       <app-media-card
         (mediaSelected)="mediaSelected.emit(media)"

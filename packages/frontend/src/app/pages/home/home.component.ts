@@ -10,7 +10,6 @@ import { catchError, of } from 'rxjs';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  allMedias: MediaWithType[] = [];
   private _selectedMedia: MediaWithType | null = null;
 
   constructor(
@@ -66,10 +65,6 @@ export class HomeComponent implements OnInit {
         this.modalService.close('mediaModal');
         this.selectedMedia = null;
       }
-    });
-
-    this.mediasService.getMedias().subscribe((medias) => {
-      this.allMedias = medias;
     });
   }
 }

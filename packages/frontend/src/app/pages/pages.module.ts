@@ -6,9 +6,16 @@ import { MediasModule } from '../medias/medias.module';
 import { RouterModule } from '@angular/router';
 import { NavigationModule } from '../navigation/navigation.module';
 import { CommonModule } from '@angular/common';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [PagesComponent, HomeComponent, ShowcaseComponent],
-  imports: [MediasModule, RouterModule, NavigationModule, CommonModule],
+  imports: [
+    MediasModule,
+    RouterModule,
+    NavigationModule,
+    CommonModule,
+    InfiniteScrollModule,
+  ],
 })
 export class PagesModule {}

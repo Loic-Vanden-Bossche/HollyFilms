@@ -2658,26 +2658,26 @@ This operation does not require authentication
 
 <h1 id="hollyfilms-api-medias">Medias</h1>
 
-## MediasController_getAllMedias
+## MediasController_getMedias
 
-<a id="opIdMediasController_getAllMedias"></a>
+<a id="opIdMediasController_getMedias"></a>
 
 > Code samples
 
 ```shell
 # You can also use wget
-curl -X GET /medias?query=string
+curl -X GET /medias
 
 ```
 
 ```http
-GET /medias?query=string HTTP/1.1
+GET /medias HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/medias?query=string',
+fetch('/medias',
 {
   method: 'GET'
 
@@ -2696,8 +2696,7 @@ require 'json'
 
 result = RestClient.get '/medias',
   params: {
-  'query' => 'string'
-}
+  }
 
 p JSON.parse(result)
 
@@ -2706,9 +2705,7 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/medias', params={
-  'query': 'string'
-})
+r = requests.get('/medias')
 
 print(r.json())
 
@@ -2742,7 +2739,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/medias?query=string");
+URL obj = new URL("/medias");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -2783,13 +2780,155 @@ func main() {
 
 *[User] Get all medias sorted by titles*
 
-<h3 id="mediascontroller_getallmedias-parameters">Parameters</h3>
+<h3 id="mediascontroller_getmedias-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|query|query|string|true|none|
+|skip|query|number|false|none|
+|limit|query|number|false|none|
+|type|query|string|false|none|
 
-<h3 id="mediascontroller_getallmedias-responses">Responses</h3>
+<h3 id="mediascontroller_getmedias-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getSearchQuery
+
+<a id="opIdMediasController_getSearchQuery"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/search
+
+```
+
+```http
+GET /medias/search HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/search',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/search',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/search')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/search', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/search");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/search", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/search`
+
+*[User] Get all medias corresponding to query*
+
+<h3 id="mediascontroller_getsearchquery-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|skip|query|number|false|none|
+|limit|query|number|false|none|
+|query|query|string|false|none|
+
+<h3 id="mediascontroller_getsearchquery-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|

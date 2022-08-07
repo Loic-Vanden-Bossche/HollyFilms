@@ -182,6 +182,7 @@ importers:
       karma-coverage: ~2.2.0
       karma-jasmine: ~5.1.0
       karma-jasmine-html-reporter: ~2.0.0
+      ngx-infinite-scroll: ^14.0.0
       ngx-markdown: ^14.0.1
       ngx-socket-io: ^4.3.0
       pnpm: ^7.8.0
@@ -213,6 +214,7 @@ importers:
       '@types/uuid': 8.3.4
       '@videojs/http-streaming': 2.14.2
       dayjs: 1.11.4
+      ngx-infinite-scroll: 14.0.0_ekenp3nso5gir7vsvgspyllbxi
       ngx-markdown: 14.0.1_23qohf6ueurcndr2zb2uubryey
       ngx-socket-io: 4.3.0_ybgtotgnqunb4jezjwo5rlkvva
       pnpm: 7.8.0
@@ -9844,6 +9846,17 @@ packages:
   /netmask/2.0.2:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
     engines: {node: '>= 0.4.0'}
+    dev: false
+
+  /ngx-infinite-scroll/14.0.0_ekenp3nso5gir7vsvgspyllbxi:
+    resolution: {integrity: sha512-YZB5PBPXSERNtCGQRZTVflbgkh5asp01NPfC8KPItemmQik1Ip8ZCCbcyHA77TDTdilmaiu8TbguA3geg/LMWw==}
+    peerDependencies:
+      '@angular/common': '>=14.0.0 <15.0.0'
+      '@angular/core': '>=14.0.0 <15.0.0'
+    dependencies:
+      '@angular/common': 14.1.0_36wbdubzobvek5dwkv7hqxvz7e
+      '@angular/core': 14.1.0_rxjs@7.5.6+zone.js@0.11.7
+      tslib: 2.4.0
     dev: false
 
   /ngx-markdown/14.0.1_23qohf6ueurcndr2zb2uubryey:

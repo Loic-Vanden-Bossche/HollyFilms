@@ -13,7 +13,7 @@ import {
 import { Response } from 'express';
 import { Media, MediaDocument } from './media.schema';
 import CurrentUser from '../indentity/users/current';
-import { Model } from 'mongoose';
+import { Model, Query } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   formatManyMedias,
@@ -31,6 +31,7 @@ import { QueuedProcess } from '../processing/queued-process.schema';
 import * as rimraf from 'rimraf';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
+import { ListType } from './dto/medias.query.dto';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -321,10 +322,38 @@ export class MediasService {
     return points;
   }
 
-  async getMedias(onlyAvailable = false): Promise<MediaWithType[]> {
-    return this.mediaModel
-      .find(onlyAvailable ? { available: true } : {})
-      .sort({ title: 'asc' })
+  mediasQueryFromType(
+    query: Query<MediaDocument[], MediaDocument>,
+    type: ListType,
+  ): Query<MediaDocument[], MediaDocument> {
+    switch (type) {
+      case ListType.ALL:
+        return query.find({});
+    }
+  }
+
+  applyLimiters(
+    query: Query<MediaDocument[], MediaDocument>,
+    skip: number,
+    limit: number,
+  ): Query<MediaDocument[], MediaDocument> {
+    return limit ? query.skip(skip).limit(limit) : query;
+  }
+
+  async getMedias(
+    onlyAvailable = false,
+    type: ListType = ListType.ALL,
+    skip = 0,
+    limit = 0,
+  ): Promise<MediaWithType[]> {
+    return this.applyLimiters(
+      this.mediasQueryFromType(
+        this.mediaModel.find(onlyAvailable ? { available: true } : {}),
+        type,
+      ),
+      skip,
+      limit,
+    )
       .exec()
       .then(formatManyMedias);
   }

@@ -257,11 +257,21 @@ paths:
       tags: *a3
   /medias:
     get:
-      operationId: MediasController_getAllMedias
+      operationId: MediasController_getMedias
       summary: "[User] Get all medias sorted by titles"
       parameters:
-        - name: query
-          required: true
+        - name: skip
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: type
+          required: false
           in: query
           schema:
             type: string
@@ -271,6 +281,30 @@ paths:
       tags:
         &a4
         - Medias
+  /medias/search:
+    get:
+      operationId: MediasController_getSearchQuery
+      summary: "[User] Get all medias corresponding to query"
+      parameters:
+        - name: skip
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
   /medias/adminSearch:
     get:
       operationId: MediasController_adminSearchQuery

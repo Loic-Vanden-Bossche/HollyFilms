@@ -17,6 +17,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MarkdownModule } from 'ngx-markdown';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     YouTubePlayerModule,
     FontAwesomeModule,
     MarkdownModule.forRoot(),
+    InfiniteScrollModule,
   ],
 })
 export class MediasModule {}

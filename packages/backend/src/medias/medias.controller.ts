@@ -17,6 +17,8 @@ import CurrentUser from '../indentity/users/current';
 import { Role } from '../shared/role';
 import { MediaWithType } from './medias.utils';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { MediasQueryDto } from './dto/medias.query.dto';
+import { SearchQueryDto } from './dto/search.query.dto';
 
 @ApiTags('Medias')
 @Controller('medias')
@@ -26,8 +28,22 @@ export class MediasController {
   @Roles(Role.User)
   @Get()
   @ApiOperation({ summary: '[User] Get all medias sorted by titles' })
-  async getAllMedias(@Query('query') query: string): Promise<MediaWithType[]> {
-    return this.mediasService.searchQuery(query, true);
+  async getMedias(@Query() query: MediasQueryDto): Promise<MediaWithType[]> {
+    return this.mediasService.getMedias(
+      true,
+      query.type,
+      query.skip,
+      query.limit,
+    );
+  }
+
+  @Roles(Role.User)
+  @Get('search')
+  @ApiOperation({ summary: '[User] Get all medias corresponding to query' })
+  async getSearchQuery(
+    @Query() query: SearchQueryDto,
+  ): Promise<MediaWithType[]> {
+    return this.mediasService.searchQuery(query.query, true);
   }
 
   @Roles(Role.Admin)

@@ -1,8 +1,5 @@
-<div class="px-10">
-  <app-media-list
-    (mediaSelected)="openModal($event)"
-    [mediaList]="allMedias"
-  ></app-media-list>
+<div class="relative">
+  <app-media-list (mediaSelected)="openModal($event)"></app-media-list>
 </div>
 <app-media-modal
   (closed)="selectedMedia = null"
