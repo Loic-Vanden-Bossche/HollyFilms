@@ -120,12 +120,11 @@ export class MediaListComponent implements OnChanges, OnInit {
   constructor(private readonly mediasService: MediasService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    this.viewInit = false;
-    setTimeout(() => {
-      this.viewInit = true;
-    }, 500);
-
     if (changes['type']) {
+      this.viewInit = false;
+      setTimeout(() => {
+        this.viewInit = true;
+      }, 500);
       if (this.cachedMedias.length > 0) {
         this.skip.next({ value: 10, propagate: false });
         this.medias.next(this.cachedMedias);
