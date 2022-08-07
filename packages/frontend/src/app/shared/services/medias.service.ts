@@ -5,12 +5,16 @@ import { AuthService } from './auth.service';
 
 export enum ListType {
   ALL = '',
+  RECOMMENDED = 'recommended',
   POPULAR = 'popular',
   RECENT = 'recent',
   INLIST = 'inlist',
   LIKED = 'liked',
   WATCHED = 'watched',
-  CONTINUED = 'continue',
+  CONTINUE = 'continue',
+  MOVIE = 'movie',
+  SERIES = 'series',
+  ANIME = 'anime',
 }
 
 @Injectable({

@@ -36,6 +36,10 @@ body {
   }
 }
 
+.cdk-virtual-scroll-content-wrapper {
+  width: 100% !important;
+}
+
 iframe {
   pointer-events: none;
   position: absolute;

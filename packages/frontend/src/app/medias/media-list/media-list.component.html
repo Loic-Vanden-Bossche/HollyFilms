@@ -32,7 +32,11 @@
     ></fa-icon>
   </div>
 
-  <div *ngFor="let media of medias" class="mt-5 h-96">
+  <div
+    [@onCard]="{ value: '', params: { delay: animationDelay(index) } }"
+    *ngFor="let media of medias | async; let index = index"
+    class="mt-5 h-96"
+  >
     <div class="aspect-[475/712] h-72 mr-2">
       <app-media-card
         (mediaSelected)="mediaSelected.emit(media)"

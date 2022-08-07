@@ -1,15 +1,6 @@
 import { IsEnum, IsNumberString, IsOptional } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-
-export enum ListType {
-  ALL = '',
-  POPULAR = 'popular',
-  RECENT = 'recent',
-  INLIST = 'inlist',
-  LIKED = 'liked',
-  WATCHED = 'watched',
-  CONTINUED = 'continue',
-}
+import { ListType } from '../medias.utils';
 
 export class MediasQueryDto {
   @ApiPropertyOptional()

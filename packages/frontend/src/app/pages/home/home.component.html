@@ -1,6 +1,22 @@
-<div class="relative">
-  <app-media-list (mediaSelected)="openModal($event)"></app-media-list>
+<div class="text-white h-full w-full overflow-hidden">
+  <cdk-virtual-scroll-viewport class="h-full w-full pt-5" itemSize="432">
+    <ng-container *cdkVirtualFor="let list of mediaLists">
+      <div class="h-[432px]">
+        <h1 class="font-bold ml-10 text-xl">{{ list.name }}</h1>
+        <div class="relative overflow-hidden">
+          <app-media-list
+            (noData)="onNoData(list.type)"
+            [cachedMedias]="list.medias"
+            (mediasRetrieved)="list.medias = $event"
+            [type]="list.type"
+            (mediaSelected)="openModal($event)"
+          ></app-media-list>
+        </div>
+      </div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
 </div>
+
 <app-media-modal
   (closed)="selectedMedia = null"
   [media]="selectedMedia"

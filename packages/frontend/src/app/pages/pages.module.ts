@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { NavigationModule } from '../navigation/navigation.module';
 import { CommonModule } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [PagesComponent, HomeComponent, ShowcaseComponent],
@@ -16,6 +17,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     NavigationModule,
     CommonModule,
     InfiniteScrollModule,
+    ScrollingModule,
   ],
 })
 export class PagesModule {}

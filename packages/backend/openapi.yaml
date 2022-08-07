@@ -346,42 +346,6 @@ paths:
         "200":
           description: ""
       tags: *a4
-  /medias/mostPopular:
-    get:
-      operationId: MediasController_getMostPopular
-      summary: "[User] Get all medias sorted by most populars"
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags: *a4
-  /medias/recommended:
-    get:
-      operationId: MediasController_getRecommended
-      summary: "[User] Get all medias sorted by recommended for the current user"
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags: *a4
-  /medias/continueToWatch:
-    get:
-      operationId: MediasController_getContinueToWatch
-      summary: "[User] Get all not entirely watched"
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags: *a4
-  /medias/seeAgain:
-    get:
-      operationId: MediasController_getSeeAgain
-      summary: "[User] Get all medias already seen"
-      parameters: []
-      responses:
-        "200":
-          description: ""
-      tags: *a4
   "/medias/search/{query}":
     get:
       operationId: MediasController_searchQuery

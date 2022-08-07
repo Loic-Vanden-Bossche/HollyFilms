@@ -18,6 +18,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   formatManyMedias,
   formatOneMedia,
+  ListType,
   MediaType,
   MediaWithType,
   MediaWithTypeAndQueue,
@@ -31,7 +32,6 @@ import { QueuedProcess } from '../processing/queued-process.schema';
 import * as rimraf from 'rimraf';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
-import { ListType } from './dto/medias.query.dto';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -82,76 +82,6 @@ export class MediasService {
   async removeMediaFromDisk(mediaId): Promise<void> {
     const path = this.processingService.getTargetPath(mediaId);
     if (fs.existsSync(path)) rimraf.sync(path);
-  }
-
-  async getMostPopular(): Promise<MediaWithType[]> {
-    return this.mediaModel
-      .find({})
-      .sort({ popularity: 'asc' })
-      .exec()
-      .then(formatManyMedias);
-  }
-
-  async getRecommended(user: CurrentUser): Promise<MediaWithType[]> {
-    const medias = await this.getMedias();
-
-    const calculateMediaPoints = medias.map(
-      (
-        media,
-      ): {
-        media: MediaWithType;
-        points: number;
-      } => {
-        return {
-          media: media,
-          points: this.calculateMediaPoints(
-            media,
-            this.countOccurences(medias, user.playedMedias),
-          ),
-        };
-      },
-    );
-
-    return calculateMediaPoints
-      .filter(
-        (cm) =>
-          !user.playedMedias.some((played) => played.media === cm.media.data),
-      )
-      .sort((a, b) => {
-        if (a.points > b.points) {
-          return -1;
-        }
-        if (a.points < b.points) {
-          return 1;
-        }
-        return 0;
-      })
-      .map((cm) => cm.media);
-  }
-
-  async getContinueToWatch(user: CurrentUser): Promise<MediaWithType[]> {
-    return this.mediaModel
-      .find({
-        _id: {
-          $in: user.playedMedias
-            .filter((pm) => !this.isWatched(pm))
-            .map((played) => played.media),
-        },
-      })
-      .then(formatManyMedias);
-  }
-
-  async getSeeAgain(user: CurrentUser): Promise<MediaWithType[]> {
-    return this.mediaModel
-      .find({
-        _id: {
-          $in: user.playedMedias
-            .filter((pm) => this.isWatched(pm))
-            .map((played) => played.media),
-        },
-      })
-      .exec()
-      .then(formatManyMedias);
   }
 
   async searchQuery(
@@ -322,13 +252,139 @@ export class MediasService {
     return points;
   }
 
+  allQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({}).sort({ title: 'asc' });
+  }
+
+  recentQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({}).sort({ createdAt: 'desc' });
+  }
+
+  popularQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({}).sort({ popularity: 'asc' });
+  }
+
+  inlistQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find().sort({ title: 'asc' });
+  }
+
+  likedQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({}).sort({ title: 'asc' });
+  }
+
+  watchedQuery(
+    query: Query<MediaDocument[], MediaDocument>,
+    user: CurrentUser,
+  ) {
+    return query.find({
+      _id: {
+        $in: user.playedMedias
+          .filter((pm) => this.isWatched(pm))
+          .map((played) => played.media),
+      },
+    });
+  }
+
+  continueQuery(
+    query: Query<MediaDocument[], MediaDocument>,
+    user: CurrentUser,
+  ) {
+    return query.find({
+      _id: {
+        $in: user.playedMedias
+          .filter((pm) => !this.isWatched(pm))
+          .map((played) => played.media),
+      },
+    });
+  }
+
+  moviesQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({
+      tvs: { $exists: false },
+    });
+  }
+
+  tvsQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({
+      tvs: { $exists: true },
+    });
+  }
+
+  animeQuery(query: Query<MediaDocument[], MediaDocument>) {
+    return query.find({ genres: 'Animation' });
+  }
+
+  async getRecommended(
+    user: CurrentUser,
+    skip = 0,
+    limit = 0,
+  ): Promise<MediaWithType[]> {
+    const medias = await this.getMedias();
+
+    const calculateMediaPoints = medias.map(
+      (
+        media,
+      ): {
+        media: MediaWithType;
+        points: number;
+      } => {
+        return {
+          media: media,
+          points: this.calculateMediaPoints(
+            media,
+            this.countOccurences(medias, user.playedMedias),
+          ),
+        };
+      },
+    );
+
+    const recommendedMedias = calculateMediaPoints
+      .filter(
+        (cm) =>
+          !user.playedMedias.some((played) => played.media === cm.media.data),
+      )
+      .sort((a, b) => {
+        if (a.points > b.points) {
+          return -1;
+        }
+        if (a.points < b.points) {
+          return 1;
+        }
+        return 0;
+      })
+      .map((cm) => cm.media);
+
+    return limit
+      ? recommendedMedias.slice(skip, skip + limit)
+      : recommendedMedias;
+  }
+
   mediasQueryFromType(
     query: Query<MediaDocument[], MediaDocument>,
     type: ListType,
+    user: CurrentUser,
   ): Query<MediaDocument[], MediaDocument> {
     switch (type) {
       case ListType.ALL:
-        return query.find({});
+        return this.allQuery(query);
+      case ListType.RECENT:
+        return this.recentQuery(query);
+      case ListType.POPULAR:
+        return this.popularQuery(query);
+      case ListType.INLIST:
+        return this.inlistQuery(query);
+      case ListType.LIKED:
+        return this.likedQuery(query);
+      case ListType.WATCHED:
+        return this.watchedQuery(query, user);
+      case ListType.CONTINUE:
+        return this.continueQuery(query, user);
+      case ListType.MOVIE:
+        return this.moviesQuery(query);
+      case ListType.SERIES:
+        return this.tvsQuery(query);
+      case ListType.ANIME:
+        return this.animeQuery(query);
     }
   }
 
@@ -342,20 +398,26 @@ export class MediasService {
 
   async getMedias(
     onlyAvailable = false,
+    user?: CurrentUser,
     type: ListType = ListType.ALL,
     skip = 0,
     limit = 0,
   ): Promise<MediaWithType[]> {
-    return this.applyLimiters(
-      this.mediasQueryFromType(
-        this.mediaModel.find(onlyAvailable ? { available: true } : {}),
-        type,
-      ),
-      skip,
-      limit,
-    )
-      .exec()
-      .then(formatManyMedias);
+    if (type !== ListType.RECOMMENDED) {
+      return this.applyLimiters(
+        this.mediasQueryFromType(
+          this.mediaModel.find(onlyAvailable ? { available: true } : {}),
+          type,
+          user,
+        ),
+        skip,
+        limit,
+      )
+        .exec()
+        .then(formatManyMedias);
+    }
+
+    return this.getRecommended(user, skip, limit);
   }
 
   async updatePopularity() {

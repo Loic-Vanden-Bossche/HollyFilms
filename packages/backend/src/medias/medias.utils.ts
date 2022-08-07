@@ -12,6 +12,20 @@ type QueueData = {
 type MediaWithType = { data: Media; mediaType: MediaType };
 type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
 
+enum ListType {
+  ALL = '',
+  RECOMMENDED = 'recommended',
+  POPULAR = 'popular',
+  RECENT = 'recent',
+  INLIST = 'inlist',
+  LIKED = 'liked',
+  WATCHED = 'watched',
+  CONTINUE = 'continue',
+  MOVIE = 'movie',
+  SERIES = 'series',
+  ANIME = 'anime',
+}
+
 const getMediaType = (media: Media): MediaType => {
   return media.tvs ? 'tv' : 'movie';
 };
@@ -50,4 +64,5 @@ export {
   formatOneMedia,
   formatAdminMedia,
   formatManyAdminMedias,
+  ListType,
 };

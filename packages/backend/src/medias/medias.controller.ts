@@ -28,9 +28,13 @@ export class MediasController {
   @Roles(Role.User)
   @Get()
   @ApiOperation({ summary: '[User] Get all medias sorted by titles' })
-  async getMedias(@Query() query: MediasQueryDto): Promise<MediaWithType[]> {
+  async getMedias(
+    @User() user: CurrentUser,
+    @Query() query: MediasQueryDto,
+  ): Promise<MediaWithType[]> {
     return this.mediasService.getMedias(
       true,
+      user,
       query.type,
       query.skip,
       query.limit,
@@ -67,38 +71,6 @@ export class MediasController {
   @ApiOperation({ summary: '[Admin] Delete a specific media by id' })
   async deleteMedia(@Param('id') id: string) {
     return this.mediasService.deleteMedia(id);
-  }
-
-  @Roles(Role.User)
-  @Get('mostPopular')
-  @ApiOperation({ summary: '[User] Get all medias sorted by most populars' })
-  async getMostPopular(): Promise<MediaWithType[]> {
-    return this.mediasService.getMostPopular();
-  }
-
-  @Roles(Role.User)
-  @Get('recommended')
-  @ApiOperation({
-    summary: '[User] Get all medias sorted by recommended for the current user',
-  })
-  async getRecommended(@User() user: CurrentUser): Promise<MediaWithType[]> {
-    return this.mediasService.getRecommended(user);
-  }
-
-  @Roles(Role.User)
-  @Get('continueToWatch')
-  @ApiOperation({ summary: '[User] Get all not entirely watched' })
-  async getContinueToWatch(
-    @User() user: CurrentUser,
-  ): Promise<MediaWithType[]> {
-    return this.mediasService.getContinueToWatch(user);
-  }
-
-  @Roles(Role.User)
-  @Get('seeAgain')
-  @ApiOperation({ summary: '[User] Get all medias already seen' })
-  async getSeeAgain(@User() user: CurrentUser): Promise<MediaWithType[]> {
-    return this.mediasService.getSeeAgain(user);
   }
 
   @Roles(Role.User)
