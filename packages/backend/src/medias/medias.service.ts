@@ -259,11 +259,11 @@ export class MediasService {
   }
 
   recentQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ createdAt: 'desc' });
+    return query.find({}).sort({ createdAt: 'asc' });
   }
 
   popularQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ popularity: 'asc' });
+    return query.find({}).sort({ popularity: 'desc' });
   }
 
   inlistQuery(query: Query<MediaDocument[], MediaDocument>) {

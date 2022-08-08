@@ -15,7 +15,10 @@
       @onCardOpenClose
     >
       <div class="flex flex-col justify-end flex-grow">
-        <div class="text-success mb-auto font-bold flex flex-row items-center">
+        <div
+          @onStatusFeatured
+          class="text-success mb-auto font-bold flex flex-row items-center"
+        >
           <fa-icon
             class="text-2xl mr-4"
             *ngIf="vendorIcon"
@@ -71,14 +74,16 @@
       <div
         class="flex-row flex items-end justify-end flex-shrink flex-grow-0 ml-20"
       >
-        <app-progress-circle
-          [circleRadius]="50"
-          [strokeSize]="10"
-          [innerStrokeSize]="5"
-          [textSize]="16"
-          [subText]="'évaluation' | titlecase"
-          [progress]="ratingProgress"
-        ></app-progress-circle>
+        <div @onProgressCircle>
+          <app-progress-circle
+            [circleRadius]="50"
+            [strokeSize]="10"
+            [innerStrokeSize]="5"
+            [textSize]="16"
+            [subText]="'évaluation' | titlecase"
+            [progress]="ratingProgress"
+          ></app-progress-circle>
+        </div>
       </div>
     </div>
   </div>
