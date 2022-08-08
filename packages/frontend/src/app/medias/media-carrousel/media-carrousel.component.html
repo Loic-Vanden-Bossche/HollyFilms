@@ -1,16 +1,30 @@
-<div class="w-full h-96 relative">
-  <swiper class="w-full h-full pb-14" [config]="config">
+<div @onCarouselGlobal class="w-full relative">
+  <swiper
+    (slideChange)="slideChanged($event)"
+    class="w-full h-full pb-14 pt-10"
+    [config]="config"
+  >
     <ng-template
-      class="w-5/12 h-full rounded-xl bg-amber-300"
-      *ngFor="let media of featured"
+      class="w-5/12 aspect-video h-full"
+      *ngFor="let media of featured; let i = index"
       swiperSlide
     >
-      <div id="swiper-carousel-animate-opacity" class="h-full">
-        <app-media-carrousel-item [media]="media"></app-media-carrousel-item>
+      <div
+        [@onCarousel]="{ value: '', params: { delay: i * 50 } }"
+        [ngClass]="index === i ? ['hover:scale-105'] : []"
+        class="h-full w-full transition-all rounded-xl overflow-hidden bg-base-600"
+      >
+        <div id="swiper-carousel-animate-opacity" class="h-full">
+          <app-media-carrousel-item
+            (mediaSelected)="mediaSelected.emit(media)"
+            [selected]="index === i"
+            [media]="media"
+          ></app-media-carrousel-item>
+        </div>
       </div>
     </ng-template>
   </swiper>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev ml-10"></div>
+  <div class="swiper-button-next mr-10"></div>
   <div class="swiper-pagination"></div>
 </div>
