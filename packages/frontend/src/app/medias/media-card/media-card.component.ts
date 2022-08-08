@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MediaWithType } from '../../shared/models/media.model';
 import { fromEvent, sampleTime } from 'rxjs';
 
@@ -8,7 +8,6 @@ import { fromEvent, sampleTime } from 'rxjs';
 })
 export class MediaCardComponent implements OnInit {
   @Input() media: MediaWithType | null = null;
-  @Output() mediaSelected = new EventEmitter<void>();
 
   overview = '';
   position: 'left' | 'center' | 'right' = 'center';

@@ -1,8 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {
-  MediaWithType,
-  MediaWithTypeAndFeatured,
-} from '../../shared/models/media.model';
+import { Component, OnInit } from '@angular/core';
+import { MediaWithTypeAndFeatured } from '../../shared/models/media.model';
 import { MediasService } from '../../shared/services/medias.service';
 import { shuffle } from '../../shared/utils';
 
@@ -65,8 +62,6 @@ SwiperCore.use([
   ],
 })
 export class MediaCarrouselComponent implements OnInit {
-  @Output() mediaSelected = new EventEmitter<MediaWithType>();
-
   featured: MediaWithTypeAndFeatured[] = [];
   index = 0;
 

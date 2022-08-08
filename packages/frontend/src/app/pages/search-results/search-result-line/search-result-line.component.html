@@ -1,0 +1,13 @@
+<div class="flex-row flex w-full pb-10 overflow-hidden">
+  <div
+    [@onCard]="{ value: '', params: { delay: index * 100 } }"
+    class="flex-1 max-w-[18rem] mt-5 mr-2"
+    *ngFor="let media of medias; let index = index"
+  >
+    <div
+      class="aspect-[475/712] transition-all duration-300 w-full hover:w-[125%]"
+    >
+      <app-media-card [media]="media"></app-media-card>
+    </div>
+  </div>
+</div>

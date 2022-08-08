@@ -37,11 +37,10 @@
     *ngFor="let media of medias | async; let index = index"
     class="mt-5 h-96"
   >
-    <div class="aspect-[475/712] h-72 mr-2">
-      <app-media-card
-        (mediaSelected)="mediaSelected.emit(media)"
-        [media]="media"
-      ></app-media-card>
+    <div
+      class="aspect-[475/712] transition-all duration-300 w-48 hover:w-64 mr-2"
+    >
+      <app-media-card [media]="media"></app-media-card>
     </div>
   </div>
 </div>

@@ -1,1 +1,30 @@
-<p>page-not-found works!</p>
+<div class="h-full w-full text-white">
+  <div
+    class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 items-center flex flex-col font-bold"
+  >
+    <div class="flex flex-row select-none">
+      <div
+        [@on404Letter]="{ value: '', params: { delay: index * 100 } }"
+        *ngFor="let letter of '404'.split(''); let index = index"
+      >
+        <span
+          class="font-['hollyfilms'] text-[35vh] bg-clip-text text-transparent bg-gradient-to-r gradient-colors"
+          >{{ letter }}</span
+        >
+      </div>
+    </div>
+    <p
+      [@onTextDisplay]="{ value: '', params: { delay: 500 } }"
+      class="text-xl mb-10"
+    >
+      Désolé, nous ne parvenons pas à trouver cette page
+    </p>
+    <a
+      [@onTextDisplay]="{ value: '', params: { delay: 700 } }"
+      routerLink="/home"
+      ><button class="bg-base-600 hover:bg-base-700 rounded px-4 py-2">
+        Retourner au menu principal
+      </button></a
+    >
+  </div>
+</div>

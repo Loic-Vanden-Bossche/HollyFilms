@@ -18,7 +18,7 @@
       >
       <a
         ><button
-          (click)="mediaSelected.emit()"
+          (click)="openModal(media)"
           class="text-black whitespace-nowrap h-full bg-white rounded-md font-bold px-4 py-1"
         >
           Voir plus
@@ -28,7 +28,7 @@
     <div *ngIf="media.mediaType === 'tv'">
       <a
         ><button
-          (click)="mediaSelected.emit()"
+          (click)="openModal(media)"
           class="text-black whitespace-nowrap h-full bg-white rounded-md font-bold px-4 py-1"
         >
           Voir les épisodes

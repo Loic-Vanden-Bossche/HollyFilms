@@ -67,7 +67,6 @@ import {
 export class MediaListComponent implements OnChanges, OnInit {
   @Input() type: ListType = ListType.ALL;
   @Input() cachedMedias: MediaWithType[] = [];
-  @Output() mediaSelected = new EventEmitter<MediaWithType>();
   @Output() mediasRetrieved = new EventEmitter<MediaWithType[]>();
   @Output() noData = new EventEmitter<void>();
 

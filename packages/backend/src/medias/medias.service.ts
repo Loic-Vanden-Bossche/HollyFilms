@@ -34,6 +34,7 @@ import { QueuedProcess } from '../processing/queued-process.schema';
 import * as rimraf from 'rimraf';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
+import { getMoviesToMigrate } from '../bootstrap/migrations';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -465,6 +466,10 @@ export class MediasService {
         });
       }
     }*/
+  }
+
+  migrateFromDatabase() {
+    getMoviesToMigrate().then((movies) => this.mediaModel.insertMany(movies));
   }
 
   async getStream(

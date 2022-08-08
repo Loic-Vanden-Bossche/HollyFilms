@@ -25,6 +25,7 @@ import { UsersService } from '../indentity/users/users.service';
 import { warpSSLConfig } from './ssl';
 import { prepareProcessing } from './prepare-processing';
 import { ProcessingService } from '../processing/processing.service';
+import { MediasService } from '../medias/medias.service';
 
 dotenv.config({ path: '.env' });
 
@@ -128,6 +129,8 @@ export default async () => {
 
   await app.get(UsersService).createAdminAccount();
   await app.get(ProcessingService).purgeProcessing();
+
+  // await app.get(MediasService).migrateFromDatabase();
 
   await app.listen(configService.get<number>('port')).then(() => {
     Logger.log(

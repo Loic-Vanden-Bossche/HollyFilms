@@ -12,6 +12,7 @@ import { AdminGuardService as AdminGuard } from './admin/admin.guard';
 import { PlayerComponent } from './player/player.component';
 import { AdminMediasComponent } from './admin/admin-medias/admin-medias.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { SearchResultsComponent } from './pages/search-results/search-results.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,12 @@ const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         data: { title: 'Films' },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'search',
+        component: SearchResultsComponent,
+        data: { title: 'Search' },
         canActivate: [AuthGuard],
       },
       {

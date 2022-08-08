@@ -25,9 +25,6 @@ export class Media {
   title: string;
 
   @Prop()
-  mediaType: string;
-
-  @Prop()
   runtime: number;
 
   @Prop()
@@ -83,6 +80,9 @@ export class Media {
 
   @Prop(FileInfos)
   fileInfos?: FileInfos;
+
+  @Prop({ default: () => new Date() })
+  createdAt?: Date;
 }
 
 export const MediaSchema = SchemaFactory.createForClass(Media);

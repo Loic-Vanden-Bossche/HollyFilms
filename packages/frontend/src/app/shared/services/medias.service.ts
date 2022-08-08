@@ -7,6 +7,7 @@ import {
   MediaWithTypeAndFeatured,
 } from '../models/media.model';
 import { AuthService } from './auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,20 @@ import { AuthService } from './auth.service';
 export class MediasService {
   limit = 10;
 
+  selectedMedia = new BehaviorSubject<MediaWithType | null>(null);
+
   constructor(
     private readonly http: HttpClient,
     private readonly auth: AuthService
   ) {}
+
+  clearSelectedMedia() {
+    this.selectedMedia.next(null);
+  }
+
+  selectMedia(media: MediaWithType) {
+    this.selectedMedia.next(media);
+  }
 
   getMedias(type: ListType = ListType.ALL, skip = 0) {
     return this.http.get<MediaWithType[]>(
@@ -26,9 +37,10 @@ export class MediasService {
     );
   }
 
-  searchQuery(query: string, skip = 0) {
+  searchQuery(query: string, all: boolean, skip = 0) {
     return this.http.get<MediaWithType[]>(
-      `medias/search?query=${query}&limit=${this.limit}&skip=${skip}`
+      `medias/search?query=${query}&limit=${all ? 0 : this.limit}&skip=${skip}`,
+      { withCredentials: true }
     );
   }
 

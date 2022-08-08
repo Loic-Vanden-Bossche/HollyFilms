@@ -8,9 +8,19 @@ import { NavigationModule } from '../navigation/navigation.module';
 import { CommonModule } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { SearchResultLineComponent } from './search-results/search-result-line/search-result-line.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [PagesComponent, HomeComponent, ShowcaseComponent],
+  declarations: [
+    PagesComponent,
+    HomeComponent,
+    ShowcaseComponent,
+    SearchResultsComponent,
+    SearchResultLineComponent,
+  ],
   imports: [
     MediasModule,
     RouterModule,
@@ -18,6 +28,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CommonModule,
     InfiniteScrollModule,
     ScrollingModule,
+    FontAwesomeModule,
+    SharedModule,
   ],
 })
 export class PagesModule {}

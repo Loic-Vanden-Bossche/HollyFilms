@@ -27,6 +27,11 @@ export class NavbarComponent implements OnInit {
   searchIcon = faMagnifyingGlass;
 
   ngOnInit() {
+    this.searchService
+      .onChange()
+      .subscribe((query) =>
+        this.searchCtrl.setValue(query, { emitEvent: false })
+      );
     this.searchCtrl.valueChanges.subscribe((query) =>
       this.onSearch(query || '')
     );

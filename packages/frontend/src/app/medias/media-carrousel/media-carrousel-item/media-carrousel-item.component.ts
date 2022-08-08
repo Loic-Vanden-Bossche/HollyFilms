@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FeaturedType,
+  MediaWithType,
   MediaWithTypeAndFeatured,
 } from '../../../shared/models/media.model';
 import {
@@ -22,6 +23,8 @@ import {
   trigger,
 } from '@angular/animations';
 import { PlayerService } from '../../../shared/services/player.service';
+import { MediasService } from '../../../shared/services/medias.service';
+import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'app-media-carrousel-item',
@@ -97,8 +100,6 @@ export class MediaCarrouselItemComponent implements OnInit {
   @Input() media: MediaWithTypeAndFeatured | null = null;
   @Input() selected = false;
 
-  @Output() mediaSelected = new EventEmitter<void>();
-
   vendorTag = '';
   vendorIcon: IconDefinition | null = null;
 
@@ -107,7 +108,16 @@ export class MediaCarrouselItemComponent implements OnInit {
 
   ratingProgress = 0;
 
-  constructor(private readonly playerService: PlayerService) {}
+  constructor(
+    private readonly playerService: PlayerService,
+    private readonly mediasService: MediasService,
+    private readonly modalService: ModalService
+  ) {}
+
+  openModal(media: MediaWithType) {
+    this.mediasService.selectMedia(media);
+    this.modalService.open('mediaModal');
+  }
 
   getTagAndIconFromFeatured(featured: FeaturedType): [string, IconDefinition] {
     switch (featured) {

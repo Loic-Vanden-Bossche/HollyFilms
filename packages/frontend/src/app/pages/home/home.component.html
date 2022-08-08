@@ -3,9 +3,7 @@
   cdkVirtualScrollingElement
 >
   <div class="mb-14">
-    <app-media-carrousel
-      (mediaSelected)="openModal($event)"
-    ></app-media-carrousel>
+    <app-media-carrousel></app-media-carrousel>
   </div>
   <cdk-virtual-scroll-viewport class="h-full w-full" itemSize="432">
     <ng-container *cdkVirtualFor="let list of mediaLists">
@@ -17,15 +15,9 @@
             [cachedMedias]="list.medias"
             (mediasRetrieved)="list.medias = $event"
             [type]="list.type"
-            (mediaSelected)="openModal($event)"
           ></app-media-list>
         </div>
       </div>
     </ng-container>
   </cdk-virtual-scroll-viewport>
 </div>
-
-<app-media-modal
-  (closed)="selectedMedia = null"
-  [media]="selectedMedia"
-></app-media-modal>

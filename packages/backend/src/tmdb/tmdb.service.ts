@@ -96,7 +96,6 @@ export class TmdbService {
     return {
       data: {
         title: tv.name,
-        mediaType: 'tv',
         TMDB_id: tv.id,
         runtime: tv.episode_run_time[0],
         genres: tv.genres.map((g) => g.name),
@@ -191,7 +190,6 @@ export class TmdbService {
       data: {
         TMDB_id: movie.id,
         title: movie.title,
-        mediaType: 'movie',
         runtime: movie.runtime[0],
         budget: movie.budget,
         genres: movie.genres.map((g) => g.name),

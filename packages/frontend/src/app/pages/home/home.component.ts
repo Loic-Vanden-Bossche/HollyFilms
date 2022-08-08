@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MediasService } from '../../shared/services/medias.service';
+import { Component } from '@angular/core';
 import { ListType, MediaWithType } from '../../shared/models/media.model';
-import { ModalService } from '../../shared/services/modal.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, catchError, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 export interface MediaList {
   type: ListType;
@@ -15,7 +12,7 @@ export interface MediaList {
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   private _selectedMedia: MediaWithType | null = null;
 
   mediaLists = new BehaviorSubject<MediaList[]>([
@@ -32,26 +29,7 @@ export class HomeComponent implements OnInit {
     { type: ListType.CONTINUE, name: 'En cours', medias: [] },
   ]);
 
-  constructor(
-    private readonly mediasService: MediasService,
-    private modalService: ModalService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
-
   set selectedMedia(media: MediaWithType | null) {
-    if (media) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { mediaId: media.data._id },
-      });
-    } else {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { mediaId: null },
-      });
-    }
-
     this._selectedMedia = media;
   }
 
@@ -59,39 +37,9 @@ export class HomeComponent implements OnInit {
     return this._selectedMedia;
   }
 
-  openModal(media: MediaWithType) {
-    this.selectedMedia = media;
-    this.modalService.open('mediaModal');
-  }
-
   onNoData(type: ListType) {
-    // Delete the media list if it's empty
     this.mediaLists.next(
       this.mediaLists.getValue().filter((mediaList) => mediaList.type !== type)
     );
-  }
-
-  ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      const mediaId = params['mediaId'];
-      if (mediaId) {
-        this.mediasService
-          .getMedia(mediaId)
-          .pipe(
-            catchError(() => {
-              this.selectedMedia = null;
-              return of(null);
-            })
-          )
-          .subscribe((media) => {
-            if (media) {
-              this.openModal(media);
-            }
-          });
-      } else {
-        this.modalService.close('mediaModal');
-        this.selectedMedia = null;
-      }
-    });
   }
 }

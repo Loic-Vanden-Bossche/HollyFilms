@@ -10,3 +10,7 @@
   [@playMode]="{ value: playData, params: { x: playData.x, y: playData.y } }"
   class="fixed rounded z-50 bg-black"
 ></div>
+<app-media-modal
+  (closed)="clearSelectedMedia()"
+  [media]="selectedMedia | async"
+></app-media-modal>

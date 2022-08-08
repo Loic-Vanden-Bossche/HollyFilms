@@ -40,7 +40,12 @@ import { SwiperModule } from 'swiper/angular';
     MediaCarrouselComponent,
     MediaCarrouselItemComponent,
   ],
-  exports: [MediaModalComponent, MediaListComponent, MediaCarrouselComponent],
+  exports: [
+    MediaModalComponent,
+    MediaListComponent,
+    MediaCarrouselComponent,
+    MediaCardComponent,
+  ],
   imports: [
     SwiperModule,
     CommonModule,

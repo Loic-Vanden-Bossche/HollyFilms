@@ -1,0 +1,32 @@
+<div class="relative h-full w-full">
+  <div class="flex-col flex p-5">
+    <div class="relative w-full" *ngIf="!loading">
+      <div class="w-full" *ngFor="let medias of mediasChunks; let i = index">
+        <app-search-result-line [medias]="medias"></app-search-result-line>
+      </div>
+    </div>
+  </div>
+  <div
+    class="text-white absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2"
+  >
+    <div @onNoData *ngIf="noData" class="flex flex-col items-center">
+      <fa-icon
+        class="text-base-500 text-8xl mb-10"
+        [mask]="mask"
+        [classes]="['bg-gradient-to-r', 'gradient-colors']"
+        [icon]="noDataIcon"
+      ></fa-icon>
+      <p class="font-bold">Pas de contenu trouvé pour cette recherche</p>
+    </div>
+  </div>
+
+  <div
+    @onLoader
+    *ngIf="loading"
+    class="text-white absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 flex flex-col items-center"
+  >
+    <div
+      class="h-24 w-24 border-8 border-l-base-300 border-r-base-300 border-b-base-300 border-t-base-700 animate-spin ease-linear rounded-full"
+    ></div>
+  </div>
+</div>
