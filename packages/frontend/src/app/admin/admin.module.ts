@@ -16,6 +16,8 @@ import { SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../../environments/environment';
 import { MediaStreamComponent } from './admin-medias/media-row/media-stream/media-stream.component';
 import { QueueControlsComponent } from './admin-dashboard/queue-controls/queue-controls.component';
+import { ServerMetricsComponent } from './server-metrics/server-metrics.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { QueueControlsComponent } from './admin-dashboard/queue-controls/queue-c
     UserRowComponent,
     MediaStreamComponent,
     QueueControlsComponent,
+    ServerMetricsComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +43,7 @@ import { QueueControlsComponent } from './admin-dashboard/queue-controls/queue-c
       url: `${environment.websocketUrl}${environment.websocketNamespace}`,
       options: { path: environment.websocketNamespace, withCredentials: true },
     }),
+    NgChartsModule,
   ],
 })
 export class AdminModule {}

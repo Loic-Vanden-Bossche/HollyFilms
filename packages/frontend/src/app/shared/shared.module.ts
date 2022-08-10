@@ -15,6 +15,7 @@ import { RatingCircleComponent } from './components/ratings/rating-circle/rating
 import { RatingBarComponent } from './components/ratings/rating-bar/rating-bar.component';
 import { SentenceCasePipe } from './pipes/sentence-case.pipe';
 import { ProgressCircleComponent } from './components/progress-circle/progress-circle.component';
+import { BytesToHumanPipe } from './pipes/bytes-to-human.pipe';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ProgressCircleComponent } from './components/progress-circle/progress-c
     RatingBarComponent,
     SentenceCasePipe,
     ProgressCircleComponent,
+    BytesToHumanPipe,
   ],
   exports: [
     ModalComponent,
@@ -34,6 +36,7 @@ import { ProgressCircleComponent } from './components/progress-circle/progress-c
     RatingBarComponent,
     SentenceCasePipe,
     ProgressCircleComponent,
+    BytesToHumanPipe,
   ],
   providers: [
     UsersService,

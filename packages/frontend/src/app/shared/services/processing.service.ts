@@ -58,6 +58,10 @@ export class ProcessingService {
     this.socket = socket;
   }
 
+  unregisterSocket() {
+    this.socket.disconnect();
+  }
+
   onStatusUpdated() {
     return this.socket.fromEvent<ProgressStatus>('processing-media').pipe(
       map((status) => {

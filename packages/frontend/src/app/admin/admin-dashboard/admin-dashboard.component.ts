@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { map, startWith, tap } from 'rxjs';
@@ -48,7 +48,7 @@ type Tabs = 'users' | 'medias';
     ]),
   ],
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboardComponent implements OnInit, OnDestroy {
   selectedTab: Tabs = 'medias';
   addingMovie = true;
 
@@ -92,6 +92,11 @@ export class AdminDashboardComponent implements OnInit {
       outlet.activatedRouteData &&
       outlet.activatedRouteData['animation']
     );
+  }
+
+  ngOnDestroy() {
+    this.processingService.progressStatus = null;
+    this.processingService.unregisterSocket();
   }
 
   ngOnInit() {

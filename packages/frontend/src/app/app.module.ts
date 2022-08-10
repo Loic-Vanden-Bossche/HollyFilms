@@ -12,6 +12,7 @@ import { AdminModule } from './admin/admin.module';
 import { interceptors } from './api/interceptors';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlayerComponent } from './player/player.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [AppComponent, PlayerComponent],
@@ -25,6 +26,7 @@ import { PlayerComponent } from './player/player.component';
     AuthModule,
     AdminModule,
     FontAwesomeModule,
+    NgChartsModule,
   ],
   providers: [interceptors],
   bootstrap: [AppComponent],

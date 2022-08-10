@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class WebsocketService {
-  clients: any[] = [];
+  clients: Socket[] = [];
+
+  get clientsConnected() {
+    return !!this.clients.length;
+  }
 
   addClient(client: any) {
     this.clients.push(client);

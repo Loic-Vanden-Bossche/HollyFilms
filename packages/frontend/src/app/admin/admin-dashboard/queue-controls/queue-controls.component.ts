@@ -39,18 +39,21 @@ export class QueueControlsComponent implements OnInit {
   onStartQueue() {
     this.adminService.startQueue().subscribe(() => {
       this.queueStarted = true;
+      this.queueUpdated.emit(true);
     });
   }
 
   onStopQueue() {
     this.adminService.stopQueue().subscribe(() => {
       this.queueStarted = false;
+      this.queueUpdated.emit(false);
     });
   }
 
   onClearQueue() {
     this.adminService.clearQueue().subscribe(() => {
       this.queueStarted = false;
+      this.queueUpdated.emit(false);
     });
   }
 }

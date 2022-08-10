@@ -1,15 +1,25 @@
 export interface SystemMetrics {
-  cpu: { maxTemp: number; temp: number; usage: number };
-  disks: Array<{
-    used: number;
-    use: number;
-    available: number;
-    size: number;
-  }>;
-  mem: {
-    used: number;
-    available: number;
-    total: number;
-  };
+  cpu: CpuMetrics;
+  disks: DiskMetrics[];
+  mem: MemoryMetrics;
   uptime: number;
+}
+
+export interface MemoryMetrics {
+  used: number;
+  available: number;
+  total: number;
+}
+
+export interface CpuMetrics {
+  maxTemp: number;
+  temp: number;
+  usage: number;
+}
+
+export interface DiskMetrics {
+  used: number;
+  use: number;
+  available: number;
+  size: number;
 }

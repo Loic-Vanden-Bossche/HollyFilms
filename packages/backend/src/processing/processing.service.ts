@@ -29,7 +29,7 @@ import { Model } from 'mongoose';
 import { QueuedProcess, QueuedProcessDocument } from './queued-process.schema';
 import { FileInfos } from '../medias/schemas/file-infos.schema';
 import { MoviesService } from '../medias/movies/movies.service';
-import { interval } from 'rxjs';
+import { filter, interval } from 'rxjs';
 
 export interface FileData {
   path: string;
@@ -81,19 +81,21 @@ export class ProcessingService {
 
   constructor(
     @InjectModel(QueuedProcess.name)
-    private queuedProcessModel: Model<QueuedProcessDocument>,
-    private readonly websocketService: WebsocketService,
+    private readonly queuedProcessModel: Model<QueuedProcessDocument>,
     @Inject(forwardRef(() => MediasService))
     private readonly mediasService: MediasService,
     @Inject(forwardRef(() => MoviesService))
     private readonly moviesService: MoviesService,
+    private readonly websocketService: WebsocketService,
     private readonly configService: ConfigService,
   ) {
-    interval(1000).subscribe(() => {
-      this.getSiInfos().then((data) =>
-        this.websocketService.emit('si-data', data),
-      );
-    });
+    interval(1000)
+      .pipe(filter(() => !!this.websocketService.clientsConnected))
+      .subscribe(() => {
+        this.getSiInfos().then((data) =>
+          this.websocketService.emit('si-data', data),
+        );
+      });
   }
 
   async getInitialData() {
