@@ -12,7 +12,7 @@ const getSSLOptions = async (
           fs.readFile(sslConfig.keyPath),
           fs.readFile(sslConfig.certPath),
         ])
-          .then(([key, cert]) => ({ key, cert }))
+          .then(([key, cert]) => ({ key, cert, passphrase: sslConfig.certPassphrase || undefined }))
           .catch((e) => {
             throw new Error(e);
           }),

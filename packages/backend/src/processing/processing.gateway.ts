@@ -13,8 +13,8 @@ import { WebsocketService } from './websocket.service';
     origin: ['http://localhost:4200', 'https://hollyfilms.fr'],
     credentials: true,
   },
-  namespace: '/api/processing',
-  path: '/api/processing',
+  namespace: '/api/processing-socket',
+  path: '/api/processing-socket',
 })
 export class ProcessingGateway
   implements OnGatewayConnection, OnGatewayDisconnect

@@ -5,6 +5,11 @@ const checkOrigin = (
   origin: string,
   whitelistUrls: string[],
 ) => {
+  // On reverse proxy, the origin is not set.
+  if (origin === undefined) {
+    return true;
+  }
+
   if (whitelistUrls.indexOf('all') !== -1) {
     return true;
   }

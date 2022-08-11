@@ -13,6 +13,7 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_APP_VERBOSE: false,
   HF_APP_URLS_WHITELIST: ['http://localhost:4200'],
   HF_APP_FRONTEND_URL: 'http://localhost:4200',
+  HF_APP_LOGS_PATH: './logs/hollyfilms.log',
 
   // Database
   HF_DB_HOST: 'localhost',
@@ -25,6 +26,7 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_SSL_ENABLED: false,
   HF_SSL_KEY_PATH: '/ssl/hollyfilms.key',
   HF_SSL_CERT_PATH: '/ssl/hollyfilms.crt',
+  HF_SSL_PASSPHRASE: '',
 
   // JWT
   HF_JWT_SECRET: 'myverysecretkey',

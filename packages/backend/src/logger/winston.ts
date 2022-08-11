@@ -37,6 +37,7 @@ const logValues = () => {
 
 export const getWinstonLogger = (
   env: Environment,
+  logsPath: string,
   verbose = false,
 ): LoggerService => {
   const levels = logValues();
@@ -95,7 +96,7 @@ export const getWinstonLogger = (
         ),
       }),
       new winston.transports.File({
-        filename: 'logs/hollyfilms.log',
+        filename: logsPath,
         format: winston.format.combine(
           winston.format.timestamp(),
           winston.format.splat(),

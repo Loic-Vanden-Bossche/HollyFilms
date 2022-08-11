@@ -8,6 +8,7 @@ export interface BaseConfig {
   verbose: boolean;
   whitelistedOrigins: string[];
   frontendUrl: string;
+  logsPath: string;
 }
 
 export interface APIConfig extends BaseConfig {
@@ -37,6 +38,7 @@ export interface SSLConfig {
   enabled: boolean;
   keyPath: string;
   certPath: string;
+  certPassphrase: string;
 }
 
 export interface DatabaseConfig {
@@ -86,6 +88,7 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
     verbose: config.HF_APP_VERBOSE,
     whitelistedOrigins: config.HF_APP_URLS_WHITELIST,
     frontendUrl: config.HF_APP_FRONTEND_URL,
+    logsPath: config.HF_APP_LOGS_PATH,
     database: {
       host: config.HF_DB_HOST,
       port: config.HF_DB_PORT,
@@ -97,6 +100,7 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
       enabled: config.HF_SSL_ENABLED,
       keyPath: config.HF_SSL_KEY_PATH,
       certPath: config.HF_SSL_CERT_PATH,
+      certPassphrase: config.HF_SSL_PASSPHRASE,
     },
     jwt: {
       secret: config.HF_JWT_SECRET,

@@ -61,6 +61,12 @@ export class ConfigEnvironmentDto {
   @Desc('Path of the frontend')
   HF_APP_FRONTEND_URL: string;
 
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path of the logs')
+  HF_APP_LOGS_PATH: string;
+
   // Database
   @ConfigValidator(isString)
   @Expose()
@@ -111,6 +117,12 @@ export class ConfigEnvironmentDto {
   @UseDefault()
   @Desc('Database ssl cert path')
   HF_SSL_CERT_PATH: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Database ssl cert pass')
+  HF_SSL_PASSPHRASE: string;
 
   // JWT
   @ConfigValidators(isString)
