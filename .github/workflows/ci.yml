@@ -17,10 +17,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-          
+
       - name: Install dependencies
         working-directory: ./packages/frontend
         run: npm i
+
+      - name: Check lint
+        working-directory: ./packages/frontend
+        run: npm run lint
 
       - name: Build
         working-directory: ./packages/frontend
@@ -58,6 +62,10 @@ jobs:
       - name: Build
         working-directory: ./packages/backend
         run: npm run build
+
+      - name: Check lint
+        working-directory: ./packages/backend
+        run: npm run lint
 
       - name: Deploy - remove old version
         run: find /apps/backend -mindepth 1 ! -regex '^/apps/backend/node_modules\(/.*\)?' -delete
