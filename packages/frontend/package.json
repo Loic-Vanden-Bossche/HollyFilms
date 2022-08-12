@@ -61,6 +61,7 @@
     "@angular/compiler-cli": "^14.1.0",
     "@types/jasmine": "~4.0.0",
     "@types/video.js": "^7.3.43",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
