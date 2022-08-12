@@ -469,7 +469,11 @@ export class MediasService {
   }
 
   migrateFromDatabase() {
-    getMoviesToMigrate().then((movies) => this.mediaModel.insertMany(movies));
+    this.mediaModel.countDocuments().exec().then(count => {
+      if (count <= 0) {
+        getMoviesToMigrate().then((movies) => this.mediaModel.insertMany(movies));
+      }
+    })
   }
 
   async getStream(
