@@ -4,7 +4,7 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: self-hosted
 
     strategy:
@@ -17,4 +17,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: ls -la
+      - name: Install dependencies
+        working-directory: ./packages/frontend
+        run: npm i
+      - name: Build
+        working-directory: ./packages/frontend
+        run: npm run build
+      - name: Deploy
+        working-directory: ./packages/frontend
+        run: cp -r dist/* /apps/test
