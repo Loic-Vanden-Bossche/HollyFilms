@@ -1,24 +1,20 @@
-name: Node.js CD
-
+name: CI
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [12.x]
 
     steps:
-      - name: Deploy using ssh
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          script: |
-            cd ~/home/test
-            git pull origin main
-            git status
-            npm install --only=prod
-            pm2 restart test
+          node-version: ${{ matrix.node-version }}
+      - run: ls -la
