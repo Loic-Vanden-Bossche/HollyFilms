@@ -23,6 +23,10 @@ jobs:
       - name: Build
         working-directory: ./packages/frontend
         run: npm run build
-      - name: Deploy
+      - name: Deploy - remove old version
+        run: rm -rf /apps/frontend/*
+      - name: Deploy - copy sources
         working-directory: ./packages/frontend
-        run: cp -r dist/* /apps/test
+        run: cp -r dist/frontend/* /apps/frontend
+      - name: Deploy - copy .htaccess
+        run: cp .htaccess /apps/frontend

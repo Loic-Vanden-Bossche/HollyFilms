@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteRule ^([^\.]+)$ index.html [NC,L]
+
+RewriteCond %{HTTP_HOST} ^hollyfilms.fr 
+RewriteRule (.*) https://www.hollyfilms.fr/$1 [R=301,L]
