@@ -22,13 +22,13 @@ jobs:
         working-directory: ./packages/frontend
         run: npm i
 
-      - name: Check lint
-        working-directory: ./packages/frontend
-        run: npm run lint
-
       - name: Build
         working-directory: ./packages/frontend
         run: npm run build
+
+      - name: Check lint
+        working-directory: ./packages/frontend
+        run: npm run lint
 
       - name: Deploy - remove old version
         run: rm -rf /apps/frontend/*

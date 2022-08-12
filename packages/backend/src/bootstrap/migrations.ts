@@ -75,7 +75,8 @@ export class Movie {
 const loadJsonFile = (path: string) =>
   fsp.readFile(path).then((data) => JSON.parse(data.toString()));
 
-const loadMovies = () => loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
+const loadMovies = () =>
+  loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
 
 const movieToMedia = (movie: Movie): Media => ({
   _id: movie._id.$oid,

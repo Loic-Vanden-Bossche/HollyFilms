@@ -34,7 +34,11 @@ export default async () => {
     .then(({ config, sslOptions }) =>
       NestFactory.create(AppModule.register(config), {
         ...sslOptions,
-        logger: getWinstonLogger(config.currentEnv, config.logsPath, config.verbose),
+        logger: getWinstonLogger(
+          config.currentEnv,
+          config.logsPath,
+          config.verbose,
+        ),
       }),
     )
     .catch((err) => {
