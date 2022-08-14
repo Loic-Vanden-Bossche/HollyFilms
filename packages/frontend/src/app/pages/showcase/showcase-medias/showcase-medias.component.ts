@@ -41,6 +41,8 @@ export class ShowcaseMediasComponent implements OnInit {
   private _medias: ShowcaseMedia[] = [];
   private _resize$ = new Subject<void>();
 
+  private _mediasSelectable = false;
+
   mediaCols: {
     display: boolean;
     medias: ShowcaseMedia[];
@@ -65,7 +67,7 @@ export class ShowcaseMediasComponent implements OnInit {
       return Math.floor(window.innerWidth / 100);
     }
 
-    return Math.floor(window.innerWidth / 300);
+    return Math.floor(window.innerWidth / 200);
   }
 
   isEven(index: number) {
@@ -78,12 +80,26 @@ export class ShowcaseMediasComponent implements OnInit {
     );
   }
 
+  checkIfSelectable() {
+    const selectable = window.innerWidth >= 1100;
+    if (this._mediasSelectable && !selectable) {
+      this.resetSelectedMedias();
+      return false;
+    } else if (!this._mediasSelectable && selectable) {
+      return true;
+    }
+
+    return false;
+  }
+
   // rearrange medias in random order
   randomizeColumn(medias: ShowcaseMedia[]) {
     return medias.sort(() => Math.random() - 0.5);
   }
 
   selectRandomMedia() {
+    if (!this._mediasSelectable) return;
+
     const columnsToDisplay = 3;
     this.resetSelectedMedias();
     const randomCol = this.isBackgroundMode
@@ -94,7 +110,7 @@ export class ShowcaseMediasComponent implements OnInit {
               (this.mediaCols.length - (columnsToDisplay + 1)))
         ) +
         (this.mediaCols.length - (columnsToDisplay + 1))
-      : Math.floor(Math.random() * (this.mediaCols.length - 1 - 1)) + 1;
+      : Math.floor(Math.random() * (this.mediaCols.length - 1 - 2)) + 2;
 
     const isEven = this.isEven(randomCol);
 
@@ -153,6 +169,7 @@ export class ShowcaseMediasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._mediasSelectable = this.checkIfSelectable();
     interval(10000).subscribe(() => this.selectRandomMedia());
 
     this.mediasService
@@ -163,6 +180,7 @@ export class ShowcaseMediasComponent implements OnInit {
           this._resize$.pipe(
             debounceTime(50),
             map(() => this.calculateColsCount()),
+            tap(() => (this._mediasSelectable = this.checkIfSelectable())),
             filter((count) => count !== this.colCount)
           )
         ),

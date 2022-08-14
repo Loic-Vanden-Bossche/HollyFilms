@@ -14,6 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '../shared/shared.module';
 import { ShowcaseMediasComponent } from './showcase/showcase-medias/showcase-medias.component';
 import { ShowcaseMediaContentComponent } from './showcase/showcase-medias/showcase-media-content/showcase-media-content.component';
+import { ShowcaseTextAnimationComponent } from './showcase/showcase-text-animation/showcase-text-animation.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ShowcaseMediaContentComponent } from './showcase/showcase-medias/showca
     SearchResultLineComponent,
     ShowcaseMediasComponent,
     ShowcaseMediaContentComponent,
+    ShowcaseTextAnimationComponent,
   ],
   imports: [
     MediasModule,
