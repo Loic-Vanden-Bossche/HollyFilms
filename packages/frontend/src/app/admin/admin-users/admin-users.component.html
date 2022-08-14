@@ -1,5 +1,10 @@
 <div class="w-full relative">
-  <div *ngFor="let user of users" class="mb-2">
-    <app-user-row [user]="user"></app-user-row>
+  <div *ngFor="let user of users | async" class="mb-2">
+    <app-user-row
+      (userDeleted)="onDeleted($event)"
+      (userRefused)="onRejected($event)"
+      (userValidated)="onActivated($event)"
+      [user]="user"
+    ></app-user-row>
   </div>
 </div>

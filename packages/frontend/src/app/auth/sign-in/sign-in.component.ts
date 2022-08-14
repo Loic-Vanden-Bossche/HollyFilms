@@ -54,8 +54,10 @@ export class SignInComponent implements OnInit {
                 ['/' + url.root.children['primary'].segments.join('/') + '/'],
                 { queryParams: url.queryParams }
               );
-            } else {
+            } else if (this.auth.isActivated) {
               this.router.navigate(['home']);
+            } else {
+              this.router.navigate(['']);
             }
           },
           error: (err) => {

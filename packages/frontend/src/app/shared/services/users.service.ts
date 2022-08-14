@@ -26,4 +26,22 @@ export class UsersService {
       withCredentials: true,
     });
   }
+
+  refuseUser(userId: string) {
+    return this.api.get<User>(`users/admin/refuse/${userId}`, {
+      withCredentials: true,
+    });
+  }
+
+  validateUser(userId: string) {
+    return this.api.get<User>(`users/admin/activate/${userId}`, {
+      withCredentials: true,
+    });
+  }
+
+  deleteUser(userId: string) {
+    return this.api.delete<User>(`users/admin/${userId}`, {
+      withCredentials: true,
+    });
+  }
 }

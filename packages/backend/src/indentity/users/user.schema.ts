@@ -24,7 +24,7 @@ export class User {
   password: string;
 
   @Prop({
-    default: [Role.User],
+    default: [],
     enum: Role,
     type: Array,
   })

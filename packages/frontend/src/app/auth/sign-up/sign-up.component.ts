@@ -155,7 +155,7 @@ export class SignUpComponent {
             message: 'Compte créé avec succès',
             lifetime: 3000,
           });
-          this.router.navigate(['home']);
+          this.router.navigate(['']);
         },
         error: (err) => {
           if (err.status === 403) {

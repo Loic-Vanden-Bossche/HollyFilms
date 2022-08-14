@@ -6,9 +6,10 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NotActivatedComponent } from './not-activated/not-activated.component';
 
 @NgModule({
-  declarations: [NavbarComponent, PageNotFoundComponent],
+  declarations: [NavbarComponent, PageNotFoundComponent, NotActivatedComponent],
   exports: [NavbarComponent],
   imports: [
     CommonModule,

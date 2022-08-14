@@ -37,6 +37,10 @@ export class AuthService {
     return this._user != null;
   }
 
+  get isActivated(): boolean {
+    return this._user?.isActivated ?? false;
+  }
+
   logout() {
     return this.api.get('auth/logout', { withCredentials: true }).pipe(
       tap(() => {

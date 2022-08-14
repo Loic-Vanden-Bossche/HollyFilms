@@ -12,7 +12,8 @@ export default class CurrentUser {
     this.lastname = user.lastname;
     this.username = user.username;
     this.roles = user.roles;
-    this.isAdmin = this.roles.includes(Role.Admin);
+    this.isActivated = user.roles.length > 0;
+    this.isAdmin = user.roles.includes(Role.Admin);
     this.playedMedias = user.playedMedias.filter((p) => p.media);
   }
 
@@ -57,6 +58,12 @@ export default class CurrentUser {
     example: 'true',
   })
   isAdmin?: boolean;
+
+  @ApiProperty({
+    description: 'Is the user activated',
+    example: 'true',
+  })
+  isActivated: boolean;
 
   @ApiProperty({
     description: 'Array of medias that the user has played',

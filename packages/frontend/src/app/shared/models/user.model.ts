@@ -18,5 +18,6 @@ export interface User {
   lastname: string;
   username: string;
   isAdmin?: boolean;
+  isActivated?: boolean;
   playedMedias: PlayedMedia[];
 }

@@ -132,6 +132,34 @@ paths:
         "200":
           description: ""
       tags: *a2
+  "/users/admin/activate/{id}":
+    get:
+      operationId: UsersAdminController_activateUser
+      summary: "[Admin] Activate specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a2
+  "/users/admin/refuse/{id}":
+    get:
+      operationId: UsersAdminController_refuseUser
+      summary: "[Admin] Refuse specific user"
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a2
   /auth/login:
     post:
       operationId: AuthController_login
@@ -822,6 +850,10 @@ components:
           type: boolean
           description: Is the user an Admin
           example: "true"
+        isActivated:
+          type: boolean
+          description: Is the user activated
+          example: "true"
         playedMedias:
           description: Array of medias that the user has played
           type: array
@@ -835,6 +867,7 @@ components:
         - username
         - roles
         - isAdmin
+        - isActivated
         - playedMedias
     RegisterAuthDto:
       type: object

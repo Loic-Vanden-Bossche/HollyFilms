@@ -1429,6 +1429,282 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## UsersAdminController_activateUser
+
+<a id="opIdUsersAdminController_activateUser"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/admin/activate/{id}
+
+```
+
+```http
+GET /users/admin/activate/{id} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/admin/activate/{id}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/admin/activate/{id}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/admin/activate/{id}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/admin/activate/{id}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/admin/activate/{id}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/admin/activate/{id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/admin/activate/{id}`
+
+*[Admin] Activate specific user*
+
+<h3 id="usersadmincontroller_activateuser-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|string|true|none|
+
+<h3 id="usersadmincontroller_activateuser-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersAdminController_refuseUser
+
+<a id="opIdUsersAdminController_refuseUser"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/admin/refuse/{id}
+
+```
+
+```http
+GET /users/admin/refuse/{id} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/admin/refuse/{id}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/admin/refuse/{id}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/admin/refuse/{id}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/admin/refuse/{id}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/admin/refuse/{id}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/admin/refuse/{id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/admin/refuse/{id}`
+
+*[Admin] Refuse specific user*
+
+<h3 id="usersadmincontroller_refuseuser-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|string|true|none|
+
+<h3 id="usersadmincontroller_refuseuser-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="hollyfilms-api-auth">Auth</h1>
 
 ## AuthController_login
@@ -1617,6 +1893,7 @@ func main() {
     "admin"
   ],
   "isAdmin": "true",
+  "isActivated": "true",
   "playedMedias": [
     "string"
   ]
@@ -1966,6 +2243,7 @@ func main() {
     "admin"
   ],
   "isAdmin": "true",
+  "isActivated": "true",
   "playedMedias": [
     "string"
   ]
@@ -2290,6 +2568,7 @@ func main() {
     "admin"
   ],
   "isAdmin": "true",
+  "isActivated": "true",
   "playedMedias": [
     "string"
   ]
@@ -6373,6 +6652,7 @@ This operation does not require authentication
     "admin"
   ],
   "isAdmin": "true",
+  "isActivated": "true",
   "playedMedias": [
     "string"
   ]
@@ -6391,6 +6671,7 @@ This operation does not require authentication
 |username|string|true|none|The user's nickname|
 |roles|[string]|true|none|The user's roles|
 |isAdmin|boolean|true|none|Is the user an Admin|
+|isActivated|boolean|true|none|Is the user activated|
 |playedMedias|[string]|true|none|Array of medias that the user has played|
 
 <h2 id="tocS_RegisterAuthDto">RegisterAuthDto</h2>

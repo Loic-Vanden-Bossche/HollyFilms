@@ -54,4 +54,18 @@ export class UsersAdminController {
   async deleteUser(@Param('id') id: string) {
     return this.usersService.delete(checkObjectId(id));
   }
+
+  @Roles(Role.Admin)
+  @Get('/activate/:id')
+  @ApiOperation({ summary: '[Admin] Activate specific user' })
+  async activateUser(@Param('id') id: string) {
+    return this.usersService.activateUser(checkObjectId(id));
+  }
+
+  @Roles(Role.Admin)
+  @Get('/refuse/:id')
+  @ApiOperation({ summary: '[Admin] Refuse specific user' })
+  async refuseUser(@Param('id') id: string) {
+    return this.usersService.refuseUser(checkObjectId(id));
+  }
 }

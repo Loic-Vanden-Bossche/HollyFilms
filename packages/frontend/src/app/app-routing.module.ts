@@ -13,6 +13,9 @@ import { PlayerComponent } from './player/player.component';
 import { AdminMediasComponent } from './admin/admin-medias/admin-medias.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
+import { ActivatedGuard } from './auth/activated.guard';
+import { NotActivatedComponent } from './navigation/not-activated/not-activated.component';
+import { AlreadyActivatedGuard } from './auth/already-activated.guard';
 
 const routes: Routes = [
   {
@@ -28,13 +31,13 @@ const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         data: { title: 'Films' },
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, ActivatedGuard],
       },
       {
         path: 'search',
         component: SearchResultsComponent,
         data: { title: 'Search' },
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, ActivatedGuard],
       },
       {
         path: 'admin',
@@ -59,6 +62,11 @@ const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'not-activated',
+        component: NotActivatedComponent,
+        canActivate: [AlreadyActivatedGuard],
+      },
     ],
   },
   {
@@ -72,12 +80,12 @@ const routes: Routes = [
   {
     path: 'play/:mediaId',
     component: PlayerComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ActivatedGuard],
   },
   {
     path: 'play/:mediaId/:seasonIndex/:episodeIndex',
     component: PlayerComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ActivatedGuard],
   },
   { path: '**', redirectTo: 'not-found' },
   {

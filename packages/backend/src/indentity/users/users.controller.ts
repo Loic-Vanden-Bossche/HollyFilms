@@ -21,13 +21,13 @@ export class UsersController {
     return this.usersService.findByIdLimited(checkObjectId(id));
   }
 
-  @Roles(Role.User)
   @Put('/me')
   @ApiOperation({ summary: '[User] Update self' })
   async updateMe(@User() user: CurrentUser, @Body() selfUpdate: UpdateMeDto) {
     return this.usersService.updateMe(user, selfUpdate);
   }
 
+  @Roles(Role.User)
   @Post('setMediaCurrentTime/:mediaId')
   @ApiOperation({ summary: '[User] Set media current time' })
   async setMediaCurrentTime(

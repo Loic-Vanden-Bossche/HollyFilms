@@ -1,17 +1,72 @@
 <div
   *ngIf="user"
-  class="h-16 hover:h-80 border-2 duration-700 border-base-600 border-transparent hover:border-white border-opacity-60 hover:border-opacity-100 group w-full cursor-pointer opacity-60 hover:opacity-100 transition-all h-full rounded bg-base-600"
+  (mouseenter)="expanded = true"
+  (mouseleave)="expanded = false"
+  [ngClass]="
+    isUserActivated
+      ? isUserAdmin
+        ? ['border-error']
+        : ['border-transparent', 'hover:border-white']
+      : ['border-warning']
+  "
+  class="border-2 overflow-hidden duration-300 border-base-600 border-opacity-60 hover:border-opacity-100 group w-full cursor-pointer opacity-60 hover:opacity-100 transition-all h-full rounded bg-base-600"
 >
-  <div class="h-16 flex items-center px-1.5 flex-row">
-    <div class="h-full mr-4 p-2">
-      <div
-        class="h-full rounded-full aspect-square bg-center bg-cover"
-        [ngStyle]="{ 'background-image': 'url(assets/img/avatar-blank.png)' }"
-      ></div>
+  <div class="flex flex-col px-3">
+    <div class="h-16 flex items-center flex-row">
+      <div class="h-full mr-4 py-2">
+        <div
+          class="h-full rounded-full w-12 bg-center bg-cover"
+          [ngStyle]="{ 'background-image': 'url(assets/img/avatar-blank.png)' }"
+        ></div>
+      </div>
+      <div class="flex flex-col">
+        <h1 class="font-bold text-lg">{{ user.email }}</h1>
+        <p class="text-xs opacity-70">@{{ user._id }}</p>
+      </div>
+      <h1
+        [ngStyle]="{ 'background-color': statusColor }"
+        class="px-2 ml-auto font-bold rounded bg-success"
+      >
+        {{ currentStatus }}
+      </h1>
     </div>
-    <div class="flex flex-col">
-      <h1 class="font-bold text-lg">{{ user.email }}</h1>
-      <p class="text-xs opacity-70">@{{ user._id }}</p>
+    <div
+      [ngStyle]="{
+        height: expanded ? contentHeight + 'px' : 0
+      }"
+      [ngClass]="expanded ? ['mb-4'] : []"
+      class="transition-all duration-700"
+    >
+      <div class="pt-4" #userContent>
+        <div class="h-8 flex flex-row gap-2">
+          <button
+            (click)="userDeleted.emit(user._id)"
+            *ngIf="isUserActivated"
+            [ngClass]="
+              isUserAdmin
+                ? ['pointer-events-none', 'opacity-20']
+                : ['opacity-70']
+            "
+            class="rounded transition-all hover:opacity-100 h-full bg-error px-2"
+          >
+            supprimer
+          </button>
+          <button
+            (click)="userValidated.emit(user._id)"
+            *ngIf="!isUserActivated"
+            class="rounded opacity-80 transition-all hover:opacity-100 h-full bg-success px-2"
+          >
+            valider
+          </button>
+          <button
+            (click)="userRefused.emit(user._id)"
+            *ngIf="!isUserActivated"
+            class="rounded opacity-80 transition-all hover:opacity-100 h-full bg-warning px-2"
+          >
+            refuser
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

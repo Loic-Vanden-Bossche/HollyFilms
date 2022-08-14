@@ -24,7 +24,10 @@ export class UsersService {
   ) {}
 
   findAll() {
-    return this.userModel.find().exec();
+    return this.userModel
+      .find()
+      .exec()
+      .then((users) => users.map((u) => new CurrentUser(u)));
   }
 
   findById(id: string) {
@@ -33,7 +36,8 @@ export class UsersService {
       .orFail(() => {
         throw new HttpException(`User ${id} not found`, HttpStatus.NOT_FOUND);
       })
-      .exec();
+      .exec()
+      .then((user) => new CurrentUser(user));
   }
 
   findByIdLimited(id: string) {
@@ -247,5 +251,17 @@ export class UsersService {
       roles: [Role.Admin, Role.User],
     });
     this.logger.log(`Admin ${adminConfig.email} created`);
+  }
+
+  activateUser(id: string) {
+    this.logger.log(`Activating user ${id}`);
+    return this.userModel
+      .findByIdAndUpdate(id, { roles: [Role.User] }, { new: true })
+      .exec();
+  }
+
+  refuseUser(id: string) {
+    this.logger.log(`Refusing user ${id}`);
+    return this.userModel.findByIdAndDelete(id).exec();
   }
 }
