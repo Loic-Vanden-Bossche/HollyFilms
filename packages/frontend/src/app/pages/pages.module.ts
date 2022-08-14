@@ -12,6 +12,8 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { SearchResultLineComponent } from './search-results/search-result-line/search-result-line.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '../shared/shared.module';
+import { ShowcaseMediasComponent } from './showcase/showcase-medias/showcase-medias.component';
+import { ShowcaseMediaContentComponent } from './showcase/showcase-medias/showcase-media-content/showcase-media-content.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { SharedModule } from '../shared/shared.module';
     ShowcaseComponent,
     SearchResultsComponent,
     SearchResultLineComponent,
+    ShowcaseMediasComponent,
+    ShowcaseMediaContentComponent,
   ],
   imports: [
     MediasModule,

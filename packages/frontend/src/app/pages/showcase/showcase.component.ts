@@ -6,7 +6,7 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './showcase.component.html',
 })
 export class ShowcaseComponent {
-  constructor(private auth: AuthService) {}
+  constructor(private readonly auth: AuthService) {}
 
   get isAuthenticated() {
     return this.auth.isAuthenticated;

@@ -37,6 +37,13 @@ export class MediasService {
     );
   }
 
+  getAllMedias() {
+    return this.http.get<MediaWithType[]>(
+      `medias?type=${ListType.POPULAR}&limit=${0}&skip=${0}`,
+      { withCredentials: true }
+    );
+  }
+
   searchQuery(query: string, all: boolean, skip = 0) {
     return this.http.get<MediaWithType[]>(
       `medias/search?query=${query}&limit=${all ? 0 : this.limit}&skip=${skip}`,

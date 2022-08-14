@@ -38,9 +38,5 @@ export class AdminMediasComponent implements OnInit {
     this.processingService
       .onStatusUpdated()
       .subscribe((status) => (this.processingService.progressStatus = status));
-
-    this.processingService
-      .onDownloadStatusUpdated()
-      .subscribe((status) => console.log(status));
   }
 }

@@ -55,7 +55,6 @@ export class MediaEpisodesComponent implements OnInit {
 
   ngOnInit(): void {
     this.seasonsWithWatchedTime = this.calculateWatchedTime();
-    console.log(this.seasonsWithWatchedTime);
     this.selectedSeasonIndex = this.selectDefaultSeason();
   }
 }

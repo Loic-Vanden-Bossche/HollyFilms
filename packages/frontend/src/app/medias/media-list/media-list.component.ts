@@ -170,7 +170,6 @@ export class MediaListComponent implements OnChanges, OnInit {
   }
 
   onScrollDown() {
-    console.log('onScrollDown');
     this.skip.next({
       value: this.skip.value.value + this.mediasService.limit,
       propagate: true,

@@ -6,6 +6,20 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'slide-y': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-50%)' },
+        },
+        'slide-y-invert': {
+          '0%, 100%': { transform: 'translateY(-50%) ' },
+          '50%': { transform: 'translateY(0px) ' },
+        }
+      },
+      animation: {
+        'slide-y': 'slide-y 140s linear infinite',
+        'slide-y-invert': 'slide-y-invert 140s linear infinite',
+      },
       groups: ['example', 'example2'],
       colors: {
         'success': '#36D399',

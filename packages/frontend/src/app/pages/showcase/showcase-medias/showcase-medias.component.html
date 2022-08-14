@@ -1,0 +1,51 @@
+<div class="h-full w-full overflow-hidden flex flex-row pr-8 pl-0 xl:pl-28">
+  <div class="w-full" *ngFor="let medias of mediaCols; let index = index">
+    <div
+      [ngClass]="isEven(index) ? 'animate-slide-y' : 'animate-slide-y-invert'"
+    >
+      <div
+        [ngStyle]="{ transform: 'scale(' + (100 + index * 10) + '%)' }"
+        class="origin-center"
+        *ngIf="medias.display"
+      >
+        <div
+          [ngClass]="media.selected ? ['scale-125', 'z-10'] : []"
+          [id]="'media-' + index + '-' + cardIndex"
+          [@animCard]="{ value: '', params: { delay: cardIndex * 200 } }"
+          *ngFor="let media of medias.medias; let cardIndex = index"
+          class="relative w-full mb-3 aspect-[475/712] bg-base-500 rounded-lg origin-center"
+        >
+          <div
+            [ngStyle]="{
+              opacity: media.selected ? 100 : (index + 1) / colCount
+            }"
+            [ngClass]="
+              media.selected
+                ? [
+                    'aspect-video',
+                    '-translate-x-1/2',
+                    'p-0.5',
+                    'bg-white',
+                    'z-10'
+                  ]
+                : ['aspect-[475/712]', 'p-[1px]', 'bg-white/80']
+            "
+            class="relative h-full duration-700 transition-all overflow-hidden rounded-lg shadow-2xl"
+          >
+            <div
+              class="h-full w-full bg-cover bg-center rounded-lg overflow-hidden"
+              [ngStyle]="{
+                'background-image': 'url(' + media.data.backdrop_path + ')'
+              }"
+            >
+              <app-showcase-media-content
+                [media]="media"
+                *ngIf="media.selected"
+              ></app-showcase-media-content>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
