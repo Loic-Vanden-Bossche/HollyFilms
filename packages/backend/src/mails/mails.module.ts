@@ -13,7 +13,9 @@ import { appendExecutionPath } from '../shared/utils';
         const env = configService.get('currentEnv');
         const mailsConfig = configService.get<MailsConfig>('mails');
         return {
-          transport: `smtp://${mailsConfig.user}:${mailsConfig.password}@${mailsConfig.host}`,
+          transport: `smtp://${mailsConfig.user}:${encodeURI(
+            mailsConfig.password,
+          )}@${mailsConfig.host}`,
           defaults: {
             from: `"${mailsConfig.userTag}" <${mailsConfig.user}>`,
           },

@@ -20,13 +20,14 @@ export class MailsService {
     this.logger.verbose(`Sending ${config.subject} email to ${config.to}`);
     return this.mailer.sendMail({
       ...config,
-      attachments: config.attachments.map((attachment) => ({
-        ...attachment,
-        path: appendExecutionPath(
-          this.configService.get<Environment>('currentEnv'),
-          `assets/${attachment.path}`,
-        ),
-      })),
+      attachments:
+        config.attachments?.map((attachment) => ({
+          ...attachment,
+          path: appendExecutionPath(
+            this.configService.get<Environment>('currentEnv'),
+            `assets/${attachment.path}`,
+          ),
+        })) || [],
     });
   }
 

@@ -18,6 +18,7 @@ import colorize = require('json-colorizer');
 import { MediasModule } from './medias/medias.module';
 import { TmdbModule } from './tmdb/tmdb.module';
 import { ProcessingModule } from './processing/processing.module';
+import { MailsModule } from './mails/mails.module';
 
 @Module({})
 export class AppModule {
@@ -55,6 +56,7 @@ export class AppModule {
         }),
         IdentityModule,
         MediasModule,
+        MailsModule,
         TmdbModule,
         ProcessingModule,
       ],

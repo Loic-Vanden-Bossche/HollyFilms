@@ -109,19 +109,20 @@ export class ConfigEnvironmentDto {
   @ConfigValidators(isString)
   @Expose()
   @UseDefault()
-  @Desc('Database ssl key path')
+  @Desc('SSL key path')
   HF_SSL_KEY_PATH: string;
 
   @ConfigValidators(isString)
   @Expose()
   @UseDefault()
-  @Desc('Database ssl cert path')
+  @Desc('SSL cert path')
   HF_SSL_CERT_PATH: string;
 
   @ConfigValidators(isString)
   @Expose()
   @UseDefault()
-  @Desc('Database ssl cert pass')
+  @Desc('SSL cert pass')
+  @Secret()
   HF_SSL_PASSPHRASE: string;
 
   // JWT
@@ -177,7 +178,6 @@ export class ConfigEnvironmentDto {
   @Expose()
   @UseDefault()
   @Desc('Mail host')
-  @Secret()
   HF_MAILS_HOST: string;
 
   @ConfigValidators(isEmail, isString)
