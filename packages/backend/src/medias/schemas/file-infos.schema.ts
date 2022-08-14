@@ -3,9 +3,9 @@ import { Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class FileInfos {
   isProcessing: boolean;
-  maxQualilty: number;
-  audioLangAvaliables: string[];
-  maxQualiltyTag: string;
+  maxQuality: number;
+  audioLangAvailable: string[];
+  maxQualityTag: string;
   Sduration: number;
   thumbnailsGenerated: boolean;
   extraQualities: number[];

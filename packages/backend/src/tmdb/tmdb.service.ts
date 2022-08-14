@@ -252,9 +252,9 @@ export class TmdbService {
           .map((c) => c.key)[0],
         fileInfos: {
           isProcessing: true,
-          maxQualilty: null,
-          audioLangAvaliables: [],
-          maxQualiltyTag: '',
+          maxQuality: null,
+          audioLangAvailable: [],
+          maxQualityTag: '',
           Sduration: null,
           thumbnailsGenerated: false,
           extraQualities: [],

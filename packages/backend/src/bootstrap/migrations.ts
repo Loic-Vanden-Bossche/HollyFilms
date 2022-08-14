@@ -76,7 +76,7 @@ const loadJsonFile = (path: string) =>
   fsp.readFile(path).then((data) => JSON.parse(data.toString()));
 
 const loadMovies = () =>
-  loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
+  loadJsonFile('movies.json') as Promise<Movie[]>;
 
 const movieToMedia = (movie: Movie): Media => ({
   _id: movie._id.$oid,
@@ -113,7 +113,12 @@ const movieToMedia = (movie: Movie): Media => ({
     })) || null,
   available: true,
   trailer_key: movie.trailer_key,
-  fileInfos: movie.fileInfos,
+  fileInfos: {
+    ...movie.fileInfos,
+    audioLangAvailable: movie.fileInfos.audioLangAvaliables,
+    maxQualityTag: movie.fileInfos.maxQualiltyTag,
+    maxQuality: movie.fileInfos.maxQualilty,
+  },
 });
 
 export const getMoviesToMigrate = () => {

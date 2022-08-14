@@ -43,7 +43,7 @@ export class ShowcaseMediaContentComponent {
   constructor(private readonly router: Router) {}
 
   get isFrench() {
-    return this.media?.data.fileInfos?.audioLangAvaliables?.includes('fre');
+    return this.media?.data.fileInfos?.audioLangAvailable?.includes('fre');
   }
 
   watchMovie() {
@@ -53,6 +53,6 @@ export class ShowcaseMediaContentComponent {
   }
 
   get isEnglish() {
-    return this.media?.data.fileInfos?.audioLangAvaliables?.includes('eng');
+    return this.media?.data.fileInfos?.audioLangAvailable?.includes('eng');
   }
 }

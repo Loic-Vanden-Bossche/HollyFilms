@@ -664,31 +664,31 @@ export class ProcessingService {
     const writeFileInfo = () => {
       this.progressStatus.fileInfos = {
         isProcessing: false,
-        maxQualilty: Math.round(0.5625 * largestVideoStream.data.width),
-        audioLangAvaliables: getUnique(
+        maxQuality: Math.round(0.5625 * largestVideoStream.data.width),
+        audioLangAvailable: getUnique(
           fileData.streams
             .filter((stream) => stream.codec_type == 'audio')
             .map((obj) => {
               return obj.tags.language;
             }),
         ),
-        maxQualiltyTag: null,
+        maxQualityTag: null,
         thumbnailsGenerated: false,
         extraQualities: [],
         location: this.processLocation,
         Sduration: Math.round(fileData.format.duration),
       };
 
-      if (this.progressStatus.fileInfos.maxQualilty >= 2160) {
-        this.progressStatus.fileInfos.maxQualiltyTag = 'UHD';
-      } else if (this.progressStatus.fileInfos.maxQualilty >= 1440) {
-        this.progressStatus.fileInfos.maxQualiltyTag = 'QHD';
-      } else if (this.progressStatus.fileInfos.maxQualilty >= 1080) {
-        this.progressStatus.fileInfos.maxQualiltyTag = 'FHD';
-      } else if (this.progressStatus.fileInfos.maxQualilty >= 720) {
-        this.progressStatus.fileInfos.maxQualiltyTag = 'HD';
-      } else if (this.progressStatus.fileInfos.maxQualilty >= 480) {
-        this.progressStatus.fileInfos.maxQualiltyTag = 'SD';
+      if (this.progressStatus.fileInfos.maxQuality >= 2160) {
+        this.progressStatus.fileInfos.maxQualityTag = 'UHD';
+      } else if (this.progressStatus.fileInfos.maxQuality >= 1440) {
+        this.progressStatus.fileInfos.maxQualityTag = 'QHD';
+      } else if (this.progressStatus.fileInfos.maxQuality >= 1080) {
+        this.progressStatus.fileInfos.maxQualityTag = 'FHD';
+      } else if (this.progressStatus.fileInfos.maxQuality >= 720) {
+        this.progressStatus.fileInfos.maxQualityTag = 'HD';
+      } else if (this.progressStatus.fileInfos.maxQuality >= 480) {
+        this.progressStatus.fileInfos.maxQualityTag = 'SD';
       }
     };
 

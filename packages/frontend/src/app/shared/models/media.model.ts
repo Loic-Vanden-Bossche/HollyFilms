@@ -40,11 +40,18 @@ export enum FeaturedType {
   INLIST = 'inlist',
 }
 
+export interface ShowcaseMedia {
+  _id: string;
+  title: string;
+  poster_path: string;
+  backdrop_path: string;
+  audioLangAvailable: string[];
+}
+
 export interface Media {
   _id: string;
   TMDB_id: number;
   title: string;
-  mediaType: string;
   runtime: number;
   budget: number;
   genres: string[];
