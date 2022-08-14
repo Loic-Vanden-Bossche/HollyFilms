@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MediasService } from '../../../shared/services/medias.service';
-import { MediaWithType } from '../../../shared/models/media.model';
+import { ShowcaseMedia } from '../../../shared/models/media.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   debounceTime,
@@ -38,12 +38,12 @@ import {
   ],
 })
 export class ShowcaseMediasComponent implements OnInit {
-  private _medias: MediaWithType[] = [];
+  private _medias: ShowcaseMedia[] = [];
   private _resize$ = new Subject<void>();
 
   mediaCols: {
     display: boolean;
-    medias: Array<MediaWithType & { selected: boolean }>;
+    medias: ShowcaseMedia[];
   }[] = [];
 
   colCount = 5;
@@ -79,7 +79,7 @@ export class ShowcaseMediasComponent implements OnInit {
   }
 
   // rearrange medias in random order
-  randomizeColumn(medias: Array<MediaWithType & { selected: boolean }>) {
+  randomizeColumn(medias: ShowcaseMedia[]) {
     return medias.sort(() => Math.random() - 0.5);
   }
 
@@ -156,7 +156,7 @@ export class ShowcaseMediasComponent implements OnInit {
     interval(10000).subscribe(() => this.selectRandomMedia());
 
     this.mediasService
-      .getAllMedias()
+      .getShowCaseMedias()
       .pipe(
         tap((medias) => (this._medias = medias)),
         mergeWith(

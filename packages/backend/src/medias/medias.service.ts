@@ -24,6 +24,7 @@ import {
   MediaWithType,
   MediaWithTypeAndFeatured,
   MediaWithTypeAndQueue,
+  ShowcaseMedia,
 } from './medias.utils';
 import { PlayedMedia } from './schemas/played-media.schema';
 import { Episode } from './tvs/schemas/episode.schema';
@@ -421,6 +422,20 @@ export class MediasService {
     }
 
     return this.getRecommended(user, skip, limit);
+  }
+
+  getShowcaseMedias(): Promise<ShowcaseMedia[]> {
+    return this.getMedias(true, null, ListType.POPULAR).then((medias) =>
+      medias.map((media) => ({
+        _id: media.data._id,
+        title: media.data.title,
+        poster_path: media.data.poster_path,
+        backdrop_path: media.data.backdrop_path,
+        selected: false,
+        mediaType: media.mediaType,
+        audioLangAvailable: media.data.fileInfos.audioLangAvailable,
+      })),
+    );
   }
 
   getFeatured(user: CurrentUser): Promise<MediaWithTypeAndFeatured[]> {

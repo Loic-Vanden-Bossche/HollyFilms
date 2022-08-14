@@ -45,6 +45,8 @@ export interface ShowcaseMedia {
   title: string;
   poster_path: string;
   backdrop_path: string;
+  selected: boolean;
+  mediaType: MediaType;
   audioLangAvailable: string[];
 }
 

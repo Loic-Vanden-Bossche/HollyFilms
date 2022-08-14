@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MediaWithType } from '../../../../shared/models/media.model';
+import { ShowcaseMedia } from '../../../../shared/models/media.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
 
@@ -38,21 +38,21 @@ import { Router } from '@angular/router';
   ],
 })
 export class ShowcaseMediaContentComponent {
-  @Input() media: MediaWithType | null = null;
+  @Input() media: ShowcaseMedia | null = null;
 
   constructor(private readonly router: Router) {}
 
   get isFrench() {
-    return this.media?.data.fileInfos?.audioLangAvailable?.includes('fre');
+    return this.media?.audioLangAvailable?.includes('fre');
   }
 
   watchMovie() {
     this.router.navigate(['/home'], {
-      queryParams: { mediaId: this.media?.data._id },
+      queryParams: { mediaId: this.media?._id },
     });
   }
 
   get isEnglish() {
-    return this.media?.data.fileInfos?.audioLangAvailable?.includes('eng');
+    return this.media?.audioLangAvailable?.includes('eng');
   }
 }

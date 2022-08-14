@@ -13,6 +13,16 @@ type MediaWithType = { data: Media; mediaType: MediaType };
 type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
 type MediaWithTypeAndFeatured = MediaWithType & { featured: FeaturedType };
 
+interface ShowcaseMedia {
+  _id: string;
+  title: string;
+  poster_path: string;
+  backdrop_path: string;
+  selected: boolean;
+  mediaType: MediaType;
+  audioLangAvailable: string[];
+}
+
 enum ListType {
   ALL = '',
   RECOMMENDED = 'recommended',
@@ -67,6 +77,7 @@ export {
   MediaType,
   QueueData,
   MediaWithType,
+  ShowcaseMedia,
   MediaWithTypeAndQueue,
   MediaWithTypeAndFeatured,
   getMediaType,

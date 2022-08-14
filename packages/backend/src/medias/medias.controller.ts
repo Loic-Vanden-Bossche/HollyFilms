@@ -20,6 +20,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MediasQueryDto } from './dto/medias.query.dto';
 import { SearchQueryDto } from './dto/search.query.dto';
 import { checkObjectId } from '../shared/mongoose';
+import { Public } from '../shared/decorators/public.decorator';
 
 @ApiTags('Medias')
 @Controller('medias')
@@ -65,6 +66,13 @@ export class MediasController {
   @ApiOperation({ summary: '[User] Get n of featured medias' })
   async getFeatured(@User() user: CurrentUser) {
     return this.mediasService.getFeatured(user);
+  }
+
+  @Public()
+  @Get('showcase')
+  @ApiOperation({ summary: '[User] Get all minified medias' })
+  async getShowcase() {
+    return this.mediasService.getShowcaseMedias();
   }
 
   @Roles(Role.User)

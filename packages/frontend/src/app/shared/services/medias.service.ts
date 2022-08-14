@@ -5,6 +5,7 @@ import {
   Media,
   MediaWithType,
   MediaWithTypeAndFeatured,
+  ShowcaseMedia,
 } from '../models/media.model';
 import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs';
@@ -35,6 +36,12 @@ export class MediasService {
       `medias?type=${type}&limit=${this.limit}&skip=${skip}`,
       { withCredentials: true }
     );
+  }
+
+  getShowCaseMedias() {
+    return this.http.get<ShowcaseMedia[]>(`medias/showcase`, {
+      withCredentials: true,
+    });
   }
 
   getAllMedias() {
