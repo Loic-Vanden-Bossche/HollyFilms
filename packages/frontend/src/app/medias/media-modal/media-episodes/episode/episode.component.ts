@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Episode } from '../../../../shared/models/episode.model';
 import * as dayjs from 'dayjs';
 import { faCirclePlay } from '@fortawesome/free-solid-svg-icons';
-import { TvsService } from '../../../../shared/services/tvs.service';
 
 @Component({
   selector: 'app-episode',
@@ -17,14 +16,15 @@ export class EpisodeComponent implements OnInit {
 
   duration = '';
 
-  constructor(private readonly tvsService: TvsService) {}
-
   onPlay(event: MouseEvent) {
     this.play.emit(event);
   }
 
   ngOnInit(): void {
-    const duration = dayjs.duration(this.episode?.runtime || 0);
+    const duration = dayjs.duration(
+      this.episode?.fileInfos?.Sduration || 0,
+      'seconds'
+    );
     this.duration =
       (duration.asHours() >= 1 ? duration.hours() + 'h' : '') +
       duration.minutes() +

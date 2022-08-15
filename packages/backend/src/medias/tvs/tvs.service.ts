@@ -5,12 +5,8 @@ import { Media, MediaDocument } from '../media.schema';
 import { Model } from 'mongoose';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { TMDBConfig } from '../../config/config';
-import { firstValueFrom } from 'rxjs';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { MediaWithType } from '../medias.utils';
-import { TMDBSeason } from '../../tmdb/tmdb.models';
-import { Episode } from './schemas/episode.schema';
 import { ProcessingService } from '../../processing/processing.service';
 
 @Injectable()
@@ -47,39 +43,16 @@ export class TvsService {
   }
 
   async addSeason(id: string, seasonIndex: number): Promise<Media> {
-    const config = this.configService.get<TMDBConfig>('tmdb');
-
     this.logger.verbose(`Adding season ${seasonIndex} of tv ${id}`);
     return this.mediaModel
       .findById(id)
       .exec()
       .then(async (media) => {
-        const episodes = await firstValueFrom(
-          this.http.get<TMDBSeason>(
-            `${config.apiUrl}/tv/${media.TMDB_id}/season/${seasonIndex}?api_key=${config.apiKey}&language=fr-FR&append_to_response=content_ratings`,
-          ),
-        )
-          .then((response) => response.data.episodes)
-          .then((episodes) =>
-            episodes.map(
-              (episode): Episode => ({
-                name: episode.name,
-                index: episode.episode_number,
-                overview: episode.overview,
-                releaseDate: new Date(episode.air_date),
-                still_path: episode.still_path
-                  ? 'https://image.tmdb.org/t/p/w1280' + episode.still_path
-                  : null,
-                vote_average: episode.vote_average,
-                available: false,
-              }),
-            ),
-          );
-
         return this.mediaModel
           .findByIdAndUpdate(id, {
             $set: {
-              [`tvs.${seasonIndex - 1}.episodes`]: episodes,
+              [`tvs.${seasonIndex - 1}.episodes`]:
+                await this.tmdbService.getEpisodes(media.TMDB_id, seasonIndex),
               [`tvs.${seasonIndex - 1}.dateAdded`]: new Date(),
             },
           })

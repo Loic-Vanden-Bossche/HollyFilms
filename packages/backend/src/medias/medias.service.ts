@@ -35,7 +35,7 @@ import { QueuedProcess } from '../processing/queued-process.schema';
 import * as rimraf from 'rimraf';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
-import { getMoviesToMigrate } from '../bootstrap/migrations';
+import { getMoviesToMigrate, getTvsToMigrate } from '../bootstrap/migrations';
 import { TmdbService } from '../tmdb/tmdb.service';
 
 export interface OccurrencesSummary {
@@ -421,7 +421,7 @@ export class MediasService {
         backdrop_path: media.data.backdrop_path,
         selected: false,
         mediaType: media.mediaType,
-        audioLangAvailable: media.data.fileInfos.audioLangAvailable,
+        audioLangAvailable: media.data.fileInfos?.audioLangAvailable || [],
       })),
     );
   }
@@ -461,8 +461,35 @@ export class MediasService {
           getMoviesToMigrate().then((movies) =>
             this.mediaModel.insertMany(movies),
           );
+
+          getTvsToMigrate().then((tvs) => this.mediaModel.insertMany(tvs));
         }
       });
+  }
+
+  async updateEpisodes(
+    originalEpisodes: Episode[] | undefined,
+    TMDB_id: number,
+    seasonIndex,
+  ): Promise<Episode[]> {
+    const isAvailable = (ei: number) => {
+      if (!originalEpisodes || !originalEpisodes[ei]) return false;
+      return originalEpisodes[ei].available;
+    };
+
+    if (!originalEpisodes) {
+      return originalEpisodes;
+    } else {
+      return this.tmdbService
+        .getEpisodes(TMDB_id, seasonIndex)
+        .then((episodes) =>
+          episodes.map((episode, i) => ({
+            ...(originalEpisodes[i] || {}),
+            ...episode,
+            available: isAvailable(i),
+          })),
+        );
+    }
   }
 
   async updateOne(media: MediaWithType) {
@@ -474,13 +501,23 @@ export class MediasService {
     return this.mediaModel.findByIdAndUpdate(media.data._id, {
       $set: {
         ...newMedia.data,
-        tvs:
-          newMedia.data?.tvs?.map((season, i) => ({
-            ...season,
-            available: media.data.available,
-            dateAdded: media.data.tvs[i].dateAdded,
-            episodes: media.data.tvs[i].episodes,
-          })) || undefined,
+        tvs: newMedia.data?.tvs
+          ? await Promise.all(
+              newMedia.data?.tvs?.map((season, i) => {
+                console.log(season);
+                return this.updateEpisodes(
+                  media.data.tvs[i].episodes,
+                  media.data.TMDB_id,
+                  i + 1,
+                ).then((episodes) => ({
+                  ...(season || {}),
+                  available: media.data.tvs[i].available,
+                  dateAdded: media.data.tvs[i].dateAdded,
+                  episodes,
+                }));
+              }),
+            )
+          : undefined,
         available: media.data.available,
         fileInfos: media.data.fileInfos,
         createdAt: media.data.createdAt,
@@ -495,6 +532,10 @@ export class MediasService {
       )
       .catch((err) => {
         this.logger.error(`An error occurred while updating medias: ${err}`);
+        throw new HttpException(
+          'Une erreur est survenue',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       });
   }
 

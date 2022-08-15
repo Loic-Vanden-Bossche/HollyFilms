@@ -70,13 +70,114 @@ export class Movie {
   trailer_key: string;
 
   fileInfos: FileInfos;
+
+  dateAdded: {
+    $date: {
+      $numberLong: string;
+    };
+  };
+}
+
+export class TVSeason {
+  index: number;
+  name: string;
+  episode_count: number;
+  overview: string;
+  poster_path: string;
+  avaliable: boolean;
+  episodes: TVEpisode[];
+  dateAdded: {
+    $date: {
+      $numberLong: string;
+    };
+  };
+}
+
+export class TVEpisode {
+  name: string;
+  index: number;
+  overview: string;
+  still_path: string;
+  vote_average: number;
+  avaliable: boolean;
+  dateAdded: {
+    $date: {
+      $numberLong: string;
+    };
+  };
+  fileInfos: FileInfos;
+  runtime: number;
+}
+
+export class TVShow {
+  _id: {
+    $oid: string;
+  };
+
+  TMDB_id: number;
+
+  title: string;
+
+  titleFr: string;
+
+  mediaType: string;
+
+  runtime: number[];
+
+  seasons: TVSeason[];
+
+  number_of_episodes: number;
+
+  number_of_seasons: number;
+
+  status: string;
+
+  genres: Array<string>;
+
+  overview: string;
+
+  overviewFR: string;
+
+  popularity: number;
+
+  release_date: string;
+
+  poster_path: string;
+
+  backdrop_path: string;
+
+  tagline: string;
+
+  taglineFr: string;
+
+  production_companies: Array<{ name: string; logo_path: string }>;
+
+  creator: Director;
+
+  actors: Array<{ name: string; character: string; profile_path: string }>;
+
+  rating: number;
+
+  reviews: Array<{
+    author: { username: string; avatar_path: string; rating: number };
+    content: string;
+  }>;
+
+  trailer_key: string;
+
+  dateAdded: {
+    $date: {
+      $numberLong: string;
+    };
+  };
 }
 
 const loadJsonFile = (path: string) =>
   fsp.readFile(path).then((data) => JSON.parse(data.toString()));
 
-const loadMovies = () =>
-  loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
+const loadMovies = () => loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
+
+const loadTvs = () => loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
 
 const movieToMedia = (movie: Movie): Media => ({
   _id: movie._id.$oid,
@@ -119,7 +220,85 @@ const movieToMedia = (movie: Movie): Media => ({
     maxQualityTag: movie.fileInfos.maxQualiltyTag,
     maxQuality: movie.fileInfos.maxQualilty,
   },
+  createdAt: movie?.dateAdded?.$date.$numberLong
+    ? new Date(parseInt(movie?.dateAdded?.$date.$numberLong))
+    : new Date(),
 });
+
+const tvShowToMedia = (tvShow: TVShow): Media => ({
+  _id: tvShow._id.$oid,
+  TMDB_id: tvShow.TMDB_id,
+  title: tvShow.titleFr,
+  runtime: tvShow.runtime[0] || 0,
+  genres: tvShow.genres,
+  budget: 0,
+  revenue: 0,
+  overview: tvShow.overviewFR,
+  popularity: tvShow.popularity,
+  release_date: tvShow.release_date,
+  poster_path: tvShow.poster_path,
+  backdrop_path: tvShow.backdrop_path,
+  tagline: tvShow.taglineFr,
+  production_companies: tvShow.production_companies,
+  director: tvShow.creator,
+  actors: tvShow.actors,
+  tvs: tvShow.seasons.map((season) => ({
+    index: season.index,
+    name: season.name,
+    episode_count: season.episode_count,
+    overview: season.overview,
+    poster_path: season.poster_path,
+    available: season.avaliable,
+    dateAdded: season?.dateAdded?.$date.$numberLong
+      ? new Date(parseInt(season?.dateAdded?.$date.$numberLong))
+      : new Date(),
+    episodes: season.episodes.map((episode) => ({
+      name: episode.name,
+      index: episode.index,
+      overview: episode.overview,
+      runtime: episode.runtime,
+      queued: false,
+      still_path: episode.still_path,
+      vote_average: episode.vote_average,
+      available: episode.avaliable,
+      dateAdded: episode?.dateAdded?.$date.$numberLong
+        ? new Date(parseInt(episode?.dateAdded?.$date.$numberLong))
+        : new Date(),
+      releaseDate: new Date(),
+      fileInfos: episode.fileInfos
+        ? {
+            isProcessing: false,
+            Sduration: episode.fileInfos.Sduration,
+            thumbnailsGenerated: episode.fileInfos.thumbnailsGenerated,
+            extraQualities: episode.fileInfos.extraQualities,
+            location: episode.fileInfos.location,
+            audioLangAvailable: episode.fileInfos.audioLangAvaliables,
+            maxQualityTag: episode.fileInfos.maxQualiltyTag,
+            maxQuality: episode.fileInfos.maxQualilty,
+          }
+        : undefined,
+    })),
+  })),
+  rating: tvShow.rating,
+  reviews:
+    tvShow.reviews?.map((review) => ({
+      author: {
+        name: review.author.username,
+        profile_path: review.author.avatar_path,
+      },
+      content: review.content,
+      rating: review.author.rating,
+    })) || null,
+  available: true,
+  trailer_key: tvShow.trailer_key,
+  createdAt: tvShow?.dateAdded?.$date.$numberLong
+    ? new Date(parseInt(tvShow?.dateAdded?.$date.$numberLong))
+    : new Date(),
+});
+
+export const getTvsToMigrate = () => {
+  return loadTvs().then((movies) => movies.map(tvShowToMedia));
+};
 
 export const getMoviesToMigrate = () => {
   return loadMovies().then((movies) => movies.map(movieToMedia));

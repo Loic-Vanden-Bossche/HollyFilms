@@ -9,8 +9,10 @@ import {
   TMDBMedia,
   TMDBMovie,
   TMDBSearchResult,
+  TMDBSeason,
   TMDBTVShow,
 } from './tmdb.models';
+import { Episode } from '../medias/tvs/schemas/episode.schema';
 
 export type SearchType = 'movie' | 'tv' | 'both';
 
@@ -82,6 +84,36 @@ export class TmdbService {
           : null,
       mediaType: type === 'both' ? (media.media_type as 'tv' | 'movie') : type,
     }));
+  }
+
+  async getSeason(TMDB_id: number, seasonIndex: number) {
+    const config = this.configService.get<TMDBConfig>('tmdb');
+
+    return firstValueFrom(
+      this.httpService.get<TMDBSeason>(
+        `${config.apiUrl}/tv/${TMDB_id}/season/${seasonIndex}?api_key=${config.apiKey}&language=fr-FR&append_to_response=content_ratings`,
+      ),
+    ).then((response) => response.data);
+  }
+
+  getEpisodes(TMDB_id: number, seasonIndex: number): Promise<Episode[]> {
+    return this.getSeason(TMDB_id, seasonIndex)
+      .then((response) => response.episodes)
+      .then((episodes) =>
+        episodes.map(
+          (episode): Episode => ({
+            name: episode.name,
+            index: episode.episode_number,
+            overview: episode.overview,
+            releaseDate: new Date(episode.air_date),
+            still_path: episode.still_path
+              ? 'https://image.tmdb.org/t/p/w1280' + episode.still_path
+              : null,
+            vote_average: episode.vote_average,
+            available: false,
+          }),
+        ),
+      );
   }
 
   async getTv(tmdbId: number): Promise<MediaWithType> {
