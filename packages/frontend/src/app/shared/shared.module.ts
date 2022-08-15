@@ -8,7 +8,6 @@ import { NotificationsService } from './services/notifications.service';
 import { ModalService } from './services/modal.service';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
-import { LogoComponent } from './components/logo/logo.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SafePipe } from './pipes/safe.pipe';
 import { RatingCircleComponent } from './components/ratings/rating-circle/rating-circle.component';
@@ -20,7 +19,6 @@ import { BytesToHumanPipe } from './pipes/bytes-to-human.pipe';
 @NgModule({
   declarations: [
     ModalComponent,
-    LogoComponent,
     SafePipe,
     RatingCircleComponent,
     RatingBarComponent,
@@ -30,7 +28,6 @@ import { BytesToHumanPipe } from './pipes/bytes-to-human.pipe';
   ],
   exports: [
     ModalComponent,
-    LogoComponent,
     SafePipe,
     RatingCircleComponent,
     RatingBarComponent,
