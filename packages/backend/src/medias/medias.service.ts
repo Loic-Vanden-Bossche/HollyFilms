@@ -153,20 +153,6 @@ export class MediasService {
     return [...queuedMedias, ...medias];
   }
 
-  async getRandomBackdrop(): Promise<{ path: string }> {
-    const medias = await this.getMedias();
-
-    const res = medias
-      .filter((media) => {
-        return media.data.backdrop_path;
-      })
-      .map((media) => {
-        return { path: media.data.backdrop_path };
-      });
-
-    return res[Math.floor(Math.random() * res.length)];
-  }
-
   isTimePlayed(watchTime: number, videoTime: number): boolean {
     return watchTime >= 0.9 * videoTime;
   }
@@ -193,7 +179,7 @@ export class MediasService {
     }
   }
 
-  countOccurences(
+  countOccurrences(
     medias: MediaWithType[],
     playedMedias: PlayedMedia[],
   ): OccurrencesSummary {
@@ -239,19 +225,19 @@ export class MediasService {
 
   calculateMediaPoints(
     media: { data: Media; mediaType: string },
-    occurences: OccurrencesSummary,
+    occurrences: OccurrencesSummary,
   ): number {
     let points = 0;
 
-    const keys = Object.keys(occurences.genres);
+    const keys = Object.keys(occurrences.genres);
 
     keys.forEach((key) => {
       if (media.data.genres.includes(key)) {
-        points += occurences.genres[key];
+        points += occurrences.genres[key];
       }
 
       if (media.data.actors.some((a) => a.name === key)) {
-        points += occurences.actors[key];
+        points += occurrences.actors[key];
       }
     });
 
@@ -338,7 +324,7 @@ export class MediasService {
           media: media,
           points: this.calculateMediaPoints(
             media,
-            this.countOccurences(medias, user.playedMedias),
+            this.countOccurrences(medias, user.playedMedias),
           ),
         };
       },
