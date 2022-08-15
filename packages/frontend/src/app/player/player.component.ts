@@ -53,7 +53,9 @@ export class PlayerComponent implements AfterViewInit {
       .subscribe((medias) => {
         this.media = medias;
         this.source = this.media?.data._id
-          ? `${environment.apiUrl}/medias/stream/secondary/${this.media?.data._id}/master.m3u8`
+          ? `${environment.apiUrl}/medias/stream/${
+              this.media?.data.fileInfos?.location || 'default'
+            }/${this.media?.data._id}/master.m3u8`
           : '';
         this.player = videojs.default(this.playerElement?.nativeElement, {
           bigPlayButton: false,
