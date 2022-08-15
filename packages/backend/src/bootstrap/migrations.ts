@@ -175,9 +175,11 @@ export class TVShow {
 const loadJsonFile = (path: string) =>
   fsp.readFile(path).then((data) => JSON.parse(data.toString()));
 
-const loadMovies = () => loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
+const loadMovies = () =>
+  loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
 
-const loadTvs = () => loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
+const loadTvs = () =>
+  loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
 
 const movieToMedia = (movie: Movie): Media => ({
   _id: movie._id.$oid,
