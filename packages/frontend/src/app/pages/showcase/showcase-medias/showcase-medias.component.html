@@ -35,7 +35,10 @@
             <div
               class="h-full w-full bg-cover bg-center rounded-lg overflow-hidden"
               [ngStyle]="{
-                'background-image': 'url(' + media.backdrop_path + ')'
+                'background-image':
+                  'url(' +
+                  (media.selected ? media.backdrop_path : media.poster_path) +
+                  ')'
               }"
             >
               <app-showcase-media-content
