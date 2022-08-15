@@ -5,7 +5,8 @@
   </div>
   <div class="flex w-full justify-between flex-row h-10">
     <button
-      (mouseenter)="showMore.emit()"
+      (click)="onDetailsClick()"
+      (mouseenter)="onMouseOnDetails()"
       class="text-black h-full bg-white rounded-md font-bold px-4 py-1"
     >
       Détails
