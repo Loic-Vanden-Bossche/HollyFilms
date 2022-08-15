@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MediaWithType } from '../shared/models/media.model';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { MediasService } from '../shared/services/medias.service';
 
 import * as videojs from 'video.js';
@@ -47,15 +47,23 @@ export class PlayerComponent implements AfterViewInit {
     this.route.paramMap
       .pipe(
         switchMap((params) =>
-          this.mediasService.getMedia(params.get('mediaId') || '')
+          this.mediasService.getMedia(params.get('mediaId') || '').pipe(
+            map((media) => ({
+              media,
+              seasonIndex: params.get('seasonIndex'),
+              episodeIndex: params.get('episodeIndex'),
+            }))
+          )
         )
       )
-      .subscribe((medias) => {
-        this.media = medias;
+      .subscribe(({ media, episodeIndex, seasonIndex }) => {
+        const tvIndexes =
+          seasonIndex && seasonIndex ? `${seasonIndex}/${episodeIndex}/` : '';
+        this.media = media;
         this.source = this.media?.data._id
           ? `${environment.apiUrl}/medias/stream/${
               this.media?.data.fileInfos?.location || 'default'
-            }/${this.media?.data._id}/master.m3u8`
+            }/${this.media?.data._id}/${tvIndexes}master.m3u8`
           : '';
         this.player = videojs.default(this.playerElement?.nativeElement, {
           bigPlayButton: false,
