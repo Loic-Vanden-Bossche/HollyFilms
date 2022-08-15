@@ -108,6 +108,14 @@ export class MediaCarrouselItemComponent implements OnInit {
 
   ratingProgress = 0;
 
+  get circleRadius() {
+    if (window.innerWidth <= 768) {
+      return { radius: 35, textSize: 13, innerStrokeSize: 3, strokeSize: 7 };
+    } else {
+      return { radius: 50, textSize: 16, innerStrokeSize: 5, strokeSize: 10 };
+    }
+  }
+
   constructor(
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,

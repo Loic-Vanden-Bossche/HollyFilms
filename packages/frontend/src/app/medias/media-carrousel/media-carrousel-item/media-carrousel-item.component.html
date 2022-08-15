@@ -7,7 +7,7 @@
 >
   <div
     [ngClass]="selected ? ['hover:border-white'] : []"
-    class="bg-base-600/50 transition-all border-2 border-transparent rounded-xl p-8 h-full w-full"
+    class="bg-base-600/50 transition-all border-2 border-transparent rounded-xl p-4 md:p-8 h-full w-full"
   >
     <div
       *ngIf="selected"
@@ -26,9 +26,11 @@
           ></fa-icon>
           <span>{{ vendorTag }}</span>
         </div>
-        <h1 class="font-bold text-4xl mb-1">{{ media.data.title }}</h1>
-        <p class="text-xs">{{ media.data.tagline }}</p>
-        <div class="h-10 mt-5 flex flex-row">
+        <div class="flex-1 flex-col flex justify-end overflow-hidden">
+          <h1 class="font-bold text-2xl md:text-4xl mb-1">{{ media.data.title }}</h1>
+        </div>
+        <p class="text-xs md:text-sm">{{ media.data.tagline }}</p>
+        <div class="h-7 md:h-10 text-sm md:text-lg mt-5 flex flex-row">
           <div class="flex flex-row" *ngIf="media.mediaType === 'movie'">
             <a
               ><button
@@ -57,14 +59,14 @@
               </button></a
             >
           </div>
-          <div class="ml-auto mr-5 flex flex-row">
+          <div class="hidden md:flex h-full ml-5 mt-0 mr-5 flex-row">
             <button
-              class="transition-opacity mr-5 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-full aspect-square text-white"
+              class="transition-opacity mr-5 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm md:text-xl h-full aspect-square text-white"
             >
               <fa-icon [icon]="addToListIcon"></fa-icon>
             </button>
             <button
-              class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-full aspect-square text-white"
+              class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-sm md:text-xl h-full aspect-square text-white"
             >
               <fa-icon [icon]="likeButton"></fa-icon>
             </button>
@@ -72,14 +74,14 @@
         </div>
       </div>
       <div
-        class="flex-row flex items-end justify-end flex-shrink flex-grow-0 ml-20"
+        class="flex-row flex items-end justify-end flex-shrink flex-grow-0 ml-auto"
       >
         <div @onProgressCircle>
-          <app-progress-circle
-            [circleRadius]="50"
-            [strokeSize]="10"
-            [innerStrokeSize]="5"
-            [textSize]="16"
+          <app-progress-circle *ngFor="let radius of [circleRadius]"
+            [circleRadius]="radius.radius"
+            [strokeSize]="radius.strokeSize"
+            [innerStrokeSize]="radius.innerStrokeSize"
+            [textSize]="radius.textSize"
             [subText]="'évaluation' | titlecase"
             [progress]="ratingProgress"
           ></app-progress-circle>
