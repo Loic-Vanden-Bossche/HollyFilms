@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import * as up from 'uptobox';
 
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
 import { WebsocketService } from './websocket.service';
 
@@ -9,7 +9,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-export class ScrapperService implements OnModuleInit {
+export class ScrapperService {
   constructor(
     @Inject(forwardRef(() => WebsocketService))
     private readonly websocketService: WebsocketService,
@@ -20,10 +20,6 @@ export class ScrapperService implements OnModuleInit {
   inDownloadResolver = false;
 
   searchProgress = '';
-
-  onModuleInit() {
-    up.setToken('2ede52f0820824ade29156d3e6a02e472vl4f');
-  }
 
   async query(querry: string): Promise<void> {
     if (this.searchEngaged) throw 'Already engaged';

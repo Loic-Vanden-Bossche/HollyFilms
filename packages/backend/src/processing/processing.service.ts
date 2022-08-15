@@ -335,12 +335,14 @@ export class ProcessingService {
         os.cpuUsage((data) => resolve(Math.round(data * 100))),
       ),
       si.fsSize().then((res) =>
-        res.map((el) => ({
-          used: el.used,
-          use: el.use,
-          available: el.available,
-          size: el.size,
-        })),
+        res
+          .filter((el) => !!el.used)
+          .map((el) => ({
+            used: el.used,
+            use: el.use,
+            available: el.available,
+            size: el.size,
+          })),
       ),
       si.mem().then((res) => ({
         used: res.used,
