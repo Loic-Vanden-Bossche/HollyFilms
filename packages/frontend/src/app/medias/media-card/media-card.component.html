@@ -23,7 +23,7 @@
       class="p-5 h-full w-full flex flex-col text-white justify-end"
     >
       <app-media-card-data
-        (showMore)="showMore = true"
+        (showMore)="onShowMore($event)"
         [media]="media"
       ></app-media-card-data>
     </div>

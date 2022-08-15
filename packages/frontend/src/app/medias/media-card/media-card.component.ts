@@ -1,16 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MediaWithType } from '../../shared/models/media.model';
-import { fromEvent, sampleTime } from 'rxjs';
+
+export type Position = 'left' | 'center' | 'right';
 
 @Component({
   selector: 'app-media-card',
   templateUrl: './media-card.component.html',
 })
-export class MediaCardComponent implements OnInit {
+export class MediaCardComponent {
   @Input() media: MediaWithType | null = null;
 
   overview = '';
-  position: 'left' | 'center' | 'right' = 'center';
+  position: Position = 'center';
   positionClasses: string[] = [];
 
   private _showMore = false;
@@ -26,22 +27,9 @@ export class MediaCardComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    fromEvent(document.body, 'mousemove')
-      .pipe(sampleTime(500))
-      .subscribe((e: any) => {
-        const XPosition = e.pageX;
-        if (XPosition < document.body.getBoundingClientRect().width / 3) {
-          this.position = 'left';
-        } else if (
-          XPosition >
-          (document.body.getBoundingClientRect().width / 3) * 2
-        ) {
-          this.position = 'right';
-        } else {
-          this.position = 'center';
-        }
-      });
+  onShowMore(pos: Position) {
+    this.position = pos;
+    this.showMore = true;
   }
 
   set showMore(value: boolean) {
