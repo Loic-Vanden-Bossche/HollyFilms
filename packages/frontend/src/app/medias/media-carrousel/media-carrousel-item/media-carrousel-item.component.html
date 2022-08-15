@@ -20,11 +20,13 @@
           class="text-success mb-auto font-bold flex flex-row items-center"
         >
           <fa-icon
-            class="text-2xl mr-4"
+            class="text-base md:text-xl xl:text-2xl mr-4"
             *ngIf="vendorIcon"
             [icon]="vendorIcon"
           ></fa-icon>
-          <span>{{ vendorTag }}</span>
+          <span class="whitespace-nowrap text-sm md:text-base xl:text-xl">{{
+            vendorTag
+          }}</span>
         </div>
         <div class="flex-1 flex-col flex justify-end overflow-hidden">
           <h1 class="font-bold text-2xl md:text-4xl mb-1">
@@ -76,7 +78,7 @@
         </div>
       </div>
       <div
-        class="flex-row flex items-end justify-end flex-shrink flex-grow-0 ml-auto"
+        class="hidden sm:flex flex-row items-end justify-end flex-shrink flex-grow-0 ml-auto"
       >
         <div @onProgressCircle>
           <app-progress-circle
