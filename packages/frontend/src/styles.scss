@@ -4,22 +4,9 @@
 
 @import "~swiper/swiper-bundle.css";
 
-
 @font-face {
   font-family: "hollyfilms";
   src: url("assets/fonts/HollyFont.ttf");
-}
-
-html {
-  height: 100vh;
-  width: 100vw;
-}
-
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  @apply bg-base-500;
 }
 
 .gradient-colors {
