@@ -29,8 +29,8 @@ export class AuthService {
     );
   }
 
-  get user(): User {
-    return Object.assign({}, this._user);
+  get user(): User | null {
+    return this._user ? Object.assign({}, this._user) : null;
   }
 
   get isAuthenticated(): boolean {
@@ -39,6 +39,10 @@ export class AuthService {
 
   get isActivated(): boolean {
     return this._user?.isActivated ?? false;
+  }
+
+  get isAdmin(): boolean {
+    return this._user?.isAdmin ?? false;
   }
 
   logout() {

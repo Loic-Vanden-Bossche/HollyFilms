@@ -15,19 +15,45 @@ export class ShowcaseTextAnimationComponent implements AfterViewInit {
     ElementRef<HTMLSpanElement>
   > | null = null;
 
-  words: { text: string; color: string }[] = [
-    { text: 'Welcome', color: '#1abc9c' },
-    { text: 'to', color: '#2ecc71' },
-    { text: 'Angular', color: '#3498db' },
-    { text: '7', color: '#9b59b6' },
-    { text: 'Showcase', color: '#34495e' },
-    { text: 'Text', color: '#16a085' },
-    { text: 'Animation', color: '#27ae60' },
+  words: string[] = [
+    'des films en haute qualité',
+    'un service 100% gratuit',
+    'un contenu régulièrement mis à jour',
+    'des recommendations personnalisés',
+    'une synchronisation sur tous vos appareils',
+    'vos films sans interruptions ni publicités',
   ];
 
   effectiveWords: HTMLSpanElement[] = [];
   wordArray: HTMLSpanElement[][] = [];
   currentWordIndex = 0;
+
+  colorFromGradiant(colorStart: string, colorEnd: string, percent: number) {
+    const start = {
+      r: parseInt(colorStart.substring(1, 3), 16),
+      g: parseInt(colorStart.substring(3, 5), 16),
+      b: parseInt(colorStart.substring(5, 7), 16),
+    };
+    const end = {
+      r: parseInt(colorEnd.substring(1, 3), 16),
+      g: parseInt(colorEnd.substring(3, 5), 16),
+      b: parseInt(colorEnd.substring(5, 7), 16),
+    };
+    const r = Math.floor(start.r * (1 - percent) + end.r * percent).toString(
+      16
+    );
+    const g = Math.floor(start.g * (1 - percent) + end.g * percent).toString(
+      16
+    );
+    const b = Math.floor(start.b * (1 - percent) + end.b * percent).toString(
+      16
+    );
+    return '#' + this.pad(r) + this.pad(g) + this.pad(b);
+  }
+
+  pad(num: string) {
+    return num.length < 2 ? '0' + num : num;
+  }
 
   changeWord() {
     let i;
@@ -61,25 +87,30 @@ export class ShowcaseTextAnimationComponent implements AfterViewInit {
     const letters = [];
     for (let i = 0; i < content.length; i++) {
       const letter = document.createElement('span');
+      const letterContent = content.charAt(i);
       letter.className = 'letter';
-      letter.innerHTML = content.charAt(i);
+      letter.style.color = this.colorFromGradiant(
+        '#4ade80',
+        '#3b82f6',
+        i / content.length
+      );
+      letter.innerHTML = letterContent === ' ' ? '&nbsp;' : letterContent;
       word.appendChild(letter);
       letters.push(letter);
     }
-
     this.wordArray.push(letters);
   }
 
   animateLetterOut(cw: { [x: number]: { className: string } }, i: number) {
     setTimeout(function () {
       cw[i].className = 'letter out';
-    }, i * 80);
+    }, i * 10);
   }
 
   animateLetterIn(nw: { [x: number]: { className: string } }, i: number) {
     setTimeout(function () {
       nw[i].className = 'letter in';
-    }, 340 + i * 80);
+    }, 340 + i * 10);
   }
 
   ngAfterViewInit() {
@@ -92,6 +123,6 @@ export class ShowcaseTextAnimationComponent implements AfterViewInit {
     }
 
     this.changeWord();
-    setInterval(() => this.changeWord(), 4000);
+    setInterval(() => this.changeWord(), 6000);
   }
 }

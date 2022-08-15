@@ -1,12 +1,11 @@
-<div>
-  <p class="inline-block align-top">Test films</p>
+<div class="text-xl">
+  <p class="inline-block align-top">Découvrez</p>
   <p class="inline-block align-top">
     <span
-      class="absolute ml-2 opacity-0 w-52"
+      class="absolute font-bold flex flex-row ml-2 opacity-0 w-52"
       *ngFor="let word of words"
-      [ngStyle]="{ color: word.color }"
       #word
-      >{{ word.text }}</span
+      >{{ word }}</span
     >
   </p>
 </div>

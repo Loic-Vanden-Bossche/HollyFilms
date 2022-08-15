@@ -1,12 +1,42 @@
-<!--<div class="gradiant-animated bg-clip-text inline-block">
-  <h1 class="text-8xl font-['hollyfilms'] font text-transparent">HollyFilms</h1>
-</div>-->
-
-<div class="pl-4 xl:pl-16 relative text-white flex-row flex h-full w-full">
+<div
+  class="showcase-bg pl-4 xl:pl-16 relative text-white flex-row flex h-full w-full"
+>
   <div
-    class="xl:relative xl:left-0 left-16 z-10 absolute top-0 py-16 h-full flex-1"
+    class="xl:relative xl:left-0 left-16 z-10 absolute top-0 py-16 h-2/3 flex-1 flex flex-col"
   >
-    <app-showcase-text-animation></app-showcase-text-animation>
+    <h1 @onMainTitle class="text-7xl font-bold">
+      Bienvenue {{ isAuthenticated ? " " + user?.firstname : "" }}!
+    </h1>
+    <p @onSubtitle class="text-xl">
+      sur HollyFilms
+      <span class="gradiant-animated bg-clip-text inline-block"
+        ><span class="text-2xl font-bold text-transparent">2.0</span></span
+      >
+    </p>
+    <div @onButtonInfos class="flex flex-col mt-auto">
+      <app-showcase-text-animation></app-showcase-text-animation>
+      <div class="h-10 mt-3 flex flex-row">
+        <a
+          [ngClass]="
+            isUserActivated || !isAuthenticated
+              ? ['opacity-100']
+              : ['opacity-40', 'pointer-events-none']
+          "
+          routerLink="/home"
+          ><button
+            class="text-black h-full bg-white font-bold rounded py-1 px-2"
+          >
+            Accéder au contenu
+          </button></a
+        >
+      </div>
+      <div *ngIf="!isUserActivated && isAuthenticated">
+        <span
+          class="rounded text-sm font-bold py-1 px-2 bg-warning mt-4 inline-block"
+          >Votre demande d'accès est en cours d'examination</span
+        >
+      </div>
+    </div>
   </div>
   <div
     class="xl:w-2/3 w-full opacity-60 xl:opacity-100 h-full flex-grow-0 flex-shrink-0"

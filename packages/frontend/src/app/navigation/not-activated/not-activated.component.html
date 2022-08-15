@@ -1,1 +1,39 @@
-<p>not-activated works!</p>
+<div class="h-full w-full bg-black">
+  <div
+    class="absolute flex flex-col aspect-[475/712] top-1/2 left-1/2 h-3/4 -translate-x-1/2 -translate-y-1/2"
+  >
+    <div @onNotActivated class="h-full w-full rounded-3xl overflow-hidden">
+      <div
+        [ngStyle]="{ 'background-image': 'url(assets/img/no-no.webp)' }"
+        class="bg-center h-full bg-cover"
+      >
+        <div
+          class="h-full w-full flex flex-col bg-gradient-to-b from-transparent to-black/50"
+        >
+          <div class="mt-auto text-white text-center p-5">
+            <p>
+              Vous devez attendre qu'un administrateur valide votre compte,
+              soyez patients.
+            </p>
+          </div>
+          <div
+            class="h-16 flex flex-row items-center justify-center bg-warning"
+          >
+            <p class="font-bold text-2xl text-center text-white">
+              Votre compte n'est pas activé
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div @onReturnToMenuButton class="h-12 mt-10 flex flex-col items-center">
+      <a class="h-full" routerLink="/"
+        ><button
+          class="h-full bg-white px-3 text-lg rounded font-bold text-black"
+        >
+          Retourner à l'accueil
+        </button></a
+      >
+    </div>
+  </div>
+</div>

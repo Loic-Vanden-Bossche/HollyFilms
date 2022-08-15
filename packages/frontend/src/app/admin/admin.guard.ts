@@ -8,7 +8,7 @@ import { AuthService } from '../shared/services/auth.service';
 export class AdminGuardService implements CanActivate {
   constructor(public auth: AuthService, public router: Router) {}
   canActivate(): boolean | UrlTree {
-    if (!this.auth.user.isAdmin) {
+    if (!this.auth.isAdmin) {
       return this.router.createUrlTree(['/home']);
     }
     return true;
