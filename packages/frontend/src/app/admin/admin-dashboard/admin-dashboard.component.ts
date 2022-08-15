@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { map, startWith, tap } from 'rxjs';
 import {
+  faArrowsRotate,
   faFileCirclePlus,
   faSquarePlus,
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +18,8 @@ import {
 import { ProcessingService } from '../../shared/services/processing.service';
 import { AdminService } from '../../shared/services/admin.service';
 import { SystemMetrics } from '../../shared/models/system-metrics.model';
+import { NotificationsService } from '../../shared/services/notifications.service';
+import { NotificationType } from '../../shared/models/notification.model';
 
 interface NavButton {
   label: string;
@@ -66,14 +69,18 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     },
   ];
 
+  updatingMedias = false;
+
   addFileIcon = faFileCirclePlus;
   addMediaIcon = faSquarePlus;
+  updateMediasIcon = faArrowsRotate;
 
   constructor(
     private readonly router: Router,
     private readonly modalService: ModalService,
     private readonly processingService: ProcessingService,
-    private readonly adminService: AdminService
+    private readonly adminService: AdminService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   addMovie() {
@@ -84,6 +91,28 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   addTv() {
     this.addingMovie = false;
     this.modalService.open('add-media-modal');
+  }
+
+  updateAllMedias() {
+    this.updatingMedias = true;
+    this.adminService.updateAllMedias().subscribe({
+      next: () => {
+        this.updatingMedias = false;
+        this.notificationsService.push({
+          type: NotificationType.Success,
+          message: 'Tous les médias ont étés mis à jour',
+          lifetime: 3000,
+        });
+      },
+      error: () => {
+        this.updatingMedias = false;
+        this.notificationsService.push({
+          type: NotificationType.Error,
+          message: 'Une erreur est survenue lors de la mise à jour des médias',
+          lifetime: 3000,
+        });
+      },
+    });
   }
 
   prepareRoute(outlet: RouterOutlet): boolean {

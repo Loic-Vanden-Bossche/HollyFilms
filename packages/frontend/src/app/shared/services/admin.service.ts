@@ -67,6 +67,10 @@ export class AdminService {
     });
   }
 
+  updateAllMedias() {
+    return this.http.get('medias/updateAll', { withCredentials: true });
+  }
+
   deleteMedia(id: string) {
     return this.http
       .delete(`medias/${id}`, { withCredentials: true })

@@ -75,6 +75,13 @@ export class MediasController {
     return this.mediasService.getShowcaseMedias();
   }
 
+  @Roles(Role.Admin)
+  @Get('updateAll')
+  @ApiOperation({ summary: '[Admin] Update all medias with new values' })
+  updateAllMedias() {
+    return this.mediasService.updateAllMedias();
+  }
+
   @Roles(Role.User)
   @Get(':id')
   @ApiOperation({ summary: '[User] Get a specific media by id' })
@@ -94,13 +101,6 @@ export class MediasController {
   @ApiOperation({ summary: '[User] Search for medias' })
   async searchQuery(@Param('query') query: string): Promise<MediaWithType[]> {
     return this.mediasService.searchQuery(query);
-  }
-
-  @Roles(Role.Admin)
-  @Get('randomBackdrop')
-  @ApiOperation({ summary: '[Admin] Get a random movie or tv backdrop' })
-  async getRandomBackdrop(): Promise<{ path: string }> {
-    return this.mediasService.getRandomBackdrop();
   }
 
   @Roles(Role.User)

@@ -365,6 +365,15 @@ paths:
         "200":
           description: ""
       tags: *a4
+  /medias/updateAll:
+    get:
+      operationId: MediasController_updateAllMedias
+      summary: "[Admin] Update all medias with new values"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a4
   "/medias/{id}":
     get:
       operationId: MediasController_getMedia
@@ -402,15 +411,6 @@ paths:
           in: path
           schema:
             type: string
-      responses:
-        "200":
-          description: ""
-      tags: *a4
-  /medias/randomBackdrop:
-    get:
-      operationId: MediasController_getRandomBackdrop
-      summary: "[Admin] Get a random movie or tv backdrop"
-      parameters: []
       responses:
         "200":
           description: ""

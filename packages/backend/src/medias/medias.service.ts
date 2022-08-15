@@ -36,6 +36,7 @@ import * as rimraf from 'rimraf';
 import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
 import { getMoviesToMigrate } from '../bootstrap/migrations';
+import { TmdbService } from '../tmdb/tmdb.service';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -63,6 +64,7 @@ export class MediasService {
     @Inject(forwardRef(() => ProcessingService))
     private readonly processingService: ProcessingService,
     private readonly configService: ConfigService,
+    private readonly tmdbService: TmdbService,
   ) {}
 
   async getMedia(id: string) {
@@ -464,25 +466,6 @@ export class MediasService {
     ]).then((medias) => medias.flat());
   }
 
-  async updatePopularity() {
-    /*this.getMedias().then((medias) => {
-
-    });
-    console.log('updating tvs populatiry ...');
-    const tvs = await this.findAll();
-
-    for (const tv of tvs) {
-      const TMDBTv = await this.tmdbService.getTv(tv.TMDB_id.toString());
-
-      if (TMDBTv) {
-        console.log(TMDBTv.title, TMDBTv.popularity);
-        this.updateOne(tv._id.valueOf().toString(), {
-          $set: { popularity: TMDBTv.popularity },
-        });
-      }
-    }*/
-  }
-
   migrateFromDatabase() {
     this.mediaModel
       .countDocuments()
@@ -493,6 +476,39 @@ export class MediasService {
             this.mediaModel.insertMany(movies),
           );
         }
+      });
+  }
+
+  async updateOne(media: MediaWithType) {
+    this.logger.log(`updating ${media.data.title}`);
+    const newMedia = await (media.mediaType === 'tv'
+      ? this.tmdbService.getTv(media.data.TMDB_id)
+      : this.tmdbService.getMovie(media.data.TMDB_id));
+
+    return this.mediaModel.findByIdAndUpdate(media.data._id, {
+      $set: {
+        ...newMedia.data,
+        tvs:
+          newMedia.data?.tvs?.map((season, i) => ({
+            ...season,
+            available: media.data.available,
+            dateAdded: media.data.tvs[i].dateAdded,
+            episodes: media.data.tvs[i].episodes,
+          })) || undefined,
+        available: media.data.available,
+        fileInfos: media.data.fileInfos,
+        createdAt: media.data.createdAt,
+      },
+    });
+  }
+
+  updateAllMedias() {
+    this.getMedias()
+      .then((medias) =>
+        Promise.all(medias.map((media) => this.updateOne(media))),
+      )
+      .catch((err) => {
+        this.logger.error(`An error occurred while updating medias: ${err}`);
       });
   }
 
