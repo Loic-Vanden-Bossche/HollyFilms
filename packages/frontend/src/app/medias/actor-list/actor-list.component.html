@@ -1,28 +1,55 @@
-<div class="flex flex-row cursor-pointer overflow-x-scroll scrollbar-hide">
+<div class="relative">
   <div
-    class="transition-all mr-2 group p-2 bg-base-600/30 rounded-xl hover:shadow-xl"
-    *ngFor="let actor of actors"
+    #container
+    class="flex py-2 scroll-smooth flex-row overflow-x-scroll scrollbar-hide"
   >
     <div
-      class="rounded-2xl h-16 w-16 bg-center bg-cover"
-      [ngStyle]="{
-        'background-image':
-          'url(' +
-          (actor.profile_path
-            ? 'https://image.tmdb.org/t/p/w92' + actor.profile_path
-            : 'assets/img/avatar-blank.png') +
-          ')'
-      }"
-    ></div>
-    <div
-      class="mt-2 p-2 transition-all bg-base-600 rounded-xl hover:bg-base-700"
+      class="transition-all first:ml-4 mr-2 group p-2 bg-base-600/30 hover:bg-base-600/60 rounded-xl cursor-pointer hover:shadow-md hover:scale-105 hover:-translate-y-1"
+      *ngFor="let actor of actors"
     >
-      <h1 class="font-bold whitespace-nowrap">
-        {{ actor.name }}
-      </h1>
-      <h1 class="whitespace-nowrap opacity-80">
-        {{ actor.character }}
-      </h1>
+      <div
+        class="rounded-2xl h-16 w-16 bg-center bg-cover"
+        [ngStyle]="{
+          'background-image':
+            'url(' +
+            (actor.profile_path
+              ? 'https://image.tmdb.org/t/p/w92' + actor.profile_path
+              : 'assets/img/avatar-blank.png') +
+            ')'
+        }"
+      ></div>
+      <div
+        class="mt-2 p-2 transition-all bg-base-600 rounded-xl hover:bg-base-700"
+      >
+        <h1 class="font-bold whitespace-nowrap">
+          {{ actor.name }}
+        </h1>
+        <h1 class="whitespace-nowrap opacity-80">
+          {{ actor.character }}
+        </h1>
+      </div>
     </div>
+  </div>
+  <div
+    *ngIf="canScrollLeft"
+    (click)="onScrollLeft()"
+    [@onControl]="{ value: '', params: { transform: -100 } }"
+    class="absolute cursor-pointer transition-all group flex flex-col justify-center items-center left-0 top-0 w-10 h-full bg-black/20 hover:bg-black/50"
+  >
+    <fa-icon
+      class="group-hover:scale-125 transition-all"
+      [icon]="chevronLeftIcon"
+    ></fa-icon>
+  </div>
+  <div
+    *ngIf="canScrollRight"
+    (click)="onScrollRight()"
+    [@onControl]="{ value: '', params: { transform: 100 } }"
+    class="absolute cursor-pointer transition-all group flex flex-col justify-center items-center right-0 top-0 w-10 h-full bg-black/20 hover:bg-black/50"
+  >
+    <fa-icon
+      class="group-hover:scale-125 transition-all"
+      [icon]="chevronRightIcon"
+    ></fa-icon>
   </div>
 </div>

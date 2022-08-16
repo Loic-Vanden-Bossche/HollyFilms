@@ -1,6 +1,6 @@
 <app-modal id="mediaModal" (closed)="closed.emit()">
   <div
-    class="w-10/12 h-3/4 sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
+    class="w-10/12 h-[90%] md:h-3/4 sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 absolute"
   >
     <div
       *ngIf="media"
@@ -11,7 +11,7 @@
     >
       <youtube-player
         *ngIf="media.data.trailer_key"
-        class="overflow-hidden -translate-y-16 relative pb-[56%]"
+        class="overflow-hidden -translate-y-[15%] relative pb-[56%]"
         [playerVars]="playerVars"
         (stateChange)="onVideoStateChange($event)"
         (ready)="onVideoReady()"
@@ -27,7 +27,7 @@
       ></div>
       <div class="absolute w-full bg-base-500 bg-opacity-50 z-10 pb-[56%]">
         <div class="absolute flex flex-col h-full w-full">
-          <div class="relative h-full w-full">
+          <div class="relative flex-shrink-0 h-[72%] xl:h-[65%] w-full">
             <div class="absolute p-4 top-0 left-0">
               <div class="flex flex-row justify-start h-3">
                 <img
@@ -104,38 +104,68 @@
                 </div>
 
                 <div
-                  class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
+                  class="hidden md:flex transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
                 >
                   <p class="font-bold contents h-full w-full">
                     {{ displayedTime }}
                   </p>
                 </div>
                 <div
-                  class="transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
+                  class="hidden md:flex transition-opacity px-2 flex flex-col justify-center mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm h-5/6 text-white"
                 >
                   <p class="font-bold contents h-full w-full">
                     {{ media.data.release_date.split("-")[0] }}
                   </p>
                 </div>
                 <button
-                  class="transition-opacity mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-5/6 aspect-square text-white"
+                  class="hidden md:block transition-opacity mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-5/6 aspect-square text-white"
                 >
                   <fa-icon [icon]="addToListIcon"></fa-icon>
                 </button>
                 <button
-                  class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-5/6 aspect-square text-white"
+                  class="hidden md:block transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-5/6 aspect-square text-white"
                 >
                   <fa-icon [icon]="likeButton"></fa-icon>
                 </button>
               </div>
             </div>
           </div>
-          <div class="bg-gradient-to-r gradient-colors h-1 w-full"></div>
+          <div
+            class="bg-gradient-to-r gradient-colors flex-grow-0 flex-shrink-0 h-1 w-full"
+          ></div>
+          <div
+            class="flex md:hidden flex-grow-0 px-4 text-base-700 flex-shrink-0 h-10 flex-row items-center bg-base-600"
+          >
+            <div
+              class="transition-opacity px-2 flex flex-col justify-center mr-2 bg-white rounded-md text-xs h-2/3"
+            >
+              <p class="font-bold contents h-full w-full">
+                {{ displayedTime }}
+              </p>
+            </div>
+            <div
+              class="transition-opacity px-2 flex flex-col justify-center mr-2 bg-white rounded-md text-xs h-2/3"
+            >
+              <p class="font-bold contents h-full w-full">
+                {{ media.data.release_date.split("-")[0] }}
+              </p>
+            </div>
+            <button
+              class="transition-opacity mr-2 bg-white rounded-md text-base h-2/3 aspect-square"
+            >
+              <fa-icon [icon]="addToListIcon"></fa-icon>
+            </button>
+            <button
+              class="transition-opacity bg-white rounded-md text-base h-2/3 aspect-square"
+            >
+              <fa-icon [icon]="likeButton"></fa-icon>
+            </button>
+          </div>
           <div class="bg-base-500 w-full h-32">
             <div
               *ngIf="!showEpisodes"
               @onTabChange
-              class="w-full p-4 text-white"
+              class="w-full py-4 text-white"
             >
               <app-media-infos
                 [casting]="media.data.actors"
