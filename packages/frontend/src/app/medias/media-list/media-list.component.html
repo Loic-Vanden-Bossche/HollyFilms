@@ -13,7 +13,7 @@
     *ngIf="canScrollLeft"
     (click)="onScrollLeft()"
     [@onControl]="{ value: '', params: { transform: -100 } }"
-    class="group transition-all absolute text-white text-xl cursor-pointer flex flex-col justify-center items-center bg-opacity-30 hover:bg-opacity-70 z-50 top-5 left-0 h-72 w-14 bg-black"
+    class="group transition-all absolute text-white text-xl cursor-pointer hidden sm:flex flex-col justify-center items-center bg-opacity-30 hover:bg-opacity-70 z-50 top-5 left-0 h-72 w-14 bg-black"
   >
     <fa-icon
       class="group-hover:scale-125 transition-all"
@@ -24,7 +24,7 @@
     *ngIf="canScrollRight"
     (click)="onScrollRight()"
     [@onControl]="{ value: '', params: { transform: 100 } }"
-    class="group transition-all absolute text-white text-xl cursor-pointer flex flex-col justify-center items-center bg-opacity-30 hover:bg-opacity-70 z-50 top-5 right-0 h-72 w-14 bg-black"
+    class="group transition-all absolute text-white text-xl cursor-pointer hidden sm:flex flex-col justify-center items-center bg-opacity-30 hover:bg-opacity-70 z-50 top-5 right-0 h-72 w-14 bg-black"
   >
     <fa-icon
       class="group-hover:scale-125 transition-all"
