@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import * as up from 'uptobox';
 
-import {forwardRef, Inject, Injectable, Logger} from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 
 import { WebsocketService } from './websocket.service';
 
@@ -10,7 +10,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ScrapperService {
-  private logger = new Logger("Scrapper");
+  private logger = new Logger('Scrapper');
 
   constructor(
     @Inject(forwardRef(() => WebsocketService))
