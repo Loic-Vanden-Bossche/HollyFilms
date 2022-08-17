@@ -8,7 +8,7 @@
     <div class="w-full px-3">
       <app-notification
         (close)="onClose(notification.id)"
-        (action)="notification.button?.action()"
+        (action)="notification.buttons[$event].action()"
         *ngFor="let notification of notifications"
         [notification]="notification"
       ></app-notification>

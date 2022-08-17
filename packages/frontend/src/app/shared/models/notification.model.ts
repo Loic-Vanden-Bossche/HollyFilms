@@ -10,7 +10,7 @@ export interface Notification {
   id?: string;
   message: string;
   type: NotificationType;
-  button?: { action: () => void; label: string };
-  lifetime?: number;
+  buttons: { action: () => void; label: string }[];
+  lifetime: number | null;
   close?: () => void;
 }

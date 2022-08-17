@@ -27,7 +27,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 export class NotificationComponent implements OnInit {
   @Input() notification: Notification | null = null;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
-  @Output() action: EventEmitter<void> = new EventEmitter<void>();
+  @Output() action: EventEmitter<number> = new EventEmitter<number>();
 
   typeClasses: string[] = [];
 
@@ -72,10 +72,10 @@ export class NotificationComponent implements OnInit {
     return !!(this.notification && this.notification.type === type);
   }
 
-  onAction(event: any) {
+  onAction(event: MouseEvent, index: number) {
     event.stopPropagation();
     event.preventDefault();
-    this.action.emit();
+    this.action.emit(index);
     this.closeNotification();
   }
 

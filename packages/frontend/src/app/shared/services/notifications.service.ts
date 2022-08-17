@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Notification } from '../models/notification.model';
+import { Notification, NotificationType } from '../models/notification.model';
 import { v4 as uuid } from 'uuid';
 
 @Injectable({
@@ -8,8 +8,15 @@ import { v4 as uuid } from 'uuid';
 export class NotificationsService {
   private _notifications: Notification[] = [];
 
-  push(notification: Notification) {
-    this._notifications.push({ ...notification, id: uuid() });
+  push(notification: Partial<Notification>) {
+    this._notifications.push({
+      message: '',
+      buttons: [],
+      lifetime: 3000,
+      type: NotificationType.Neutral,
+      ...notification,
+      id: uuid(),
+    });
   }
 
   close(id: string) {

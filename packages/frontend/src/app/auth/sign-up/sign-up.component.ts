@@ -162,12 +162,14 @@ export class SignUpComponent {
             this.notifications.push({
               type: NotificationType.Error,
               message: 'Email déjà utilisé',
-              button: {
-                label: 'Se connecter',
-                action: () => {
-                  this.router.navigate(['/sign-in']);
+              buttons: [
+                {
+                  label: 'Se connecter',
+                  action: () => {
+                    this.router.navigate(['/sign-in']);
+                  },
                 },
-              },
+              ],
               lifetime: 3000,
             });
           } else {

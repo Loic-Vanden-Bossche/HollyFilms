@@ -154,15 +154,17 @@ export class ShowcaseMediasComponent implements OnInit {
       });
       prevRows += rows;
       setTimeout(() => {
-        this.mediaCols[i].medias = this.randomizeColumn(
-          this.mediaCols[i].medias
-        );
-        this.mediaCols[i].display = true;
+        if (this.mediaCols[i]) {
+          this.mediaCols[i].medias = this.randomizeColumn(
+            this.mediaCols[i].medias
+          );
+          this.mediaCols[i].display = true;
 
-        if (i === this.colCount - 1) {
-          setTimeout(() => {
-            this.selectRandomMedia();
-          }, 2000);
+          if (i === this.colCount - 1) {
+            setTimeout(() => {
+              this.selectRandomMedia();
+            }, 2000);
+          }
         }
       }, i * 300);
     }

@@ -26,6 +26,17 @@ export class PwaService {
         updates.activateUpdate().then(() => document.location.reload())
       );
     if (localStorage.getItem('promptPwa') === 'false') this._promptPwa = false;
+
+    this.notifications.push({
+      close: () => this.closePrompt(),
+      buttons: [
+        { action: () => this.installPwa(), label: 'Installer' },
+        { action: () => this.disableDisplay(), label: 'Ne plus afficher' },
+      ],
+      lifetime: null,
+      type: NotificationType.Neutral,
+      message: "Installer l'application",
+    });
   }
 
   set promptEvent(event: any) {
@@ -35,10 +46,11 @@ export class PwaService {
 
       this.notifications.push({
         close: () => this.closePrompt(),
-        button: {
-          action: () => this.installPwa(),
-          label: 'Install',
-        },
+        buttons: [
+          { action: () => this.installPwa(), label: 'Installer' },
+          { action: () => this.disableDisplay(), label: 'Ne plus afficher' },
+        ],
+        lifetime: null,
         type: NotificationType.Neutral,
         message: "Installer l'application",
       });
@@ -47,10 +59,14 @@ export class PwaService {
     }
   }
 
+  disableDisplay(): void {
+    localStorage.setItem('promptPwa', 'false');
+    this.closePrompt();
+  }
+
   closePrompt(): void {
     if (this._promptEvent) {
       this.promptEvent = null;
-      localStorage.setItem('promptPwa', 'false');
       this._promptPwa = false;
     }
   }
