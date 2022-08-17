@@ -26,17 +26,6 @@ export class PwaService {
         updates.activateUpdate().then(() => document.location.reload())
       );
     if (localStorage.getItem('promptPwa') === 'false') this._promptPwa = false;
-
-    this.notifications.push({
-      close: () => this.closePrompt(),
-      buttons: [
-        { action: () => this.installPwa(), label: 'Installer' },
-        { action: () => this.disableDisplay(), label: 'Ne plus afficher' },
-      ],
-      lifetime: null,
-      type: NotificationType.Neutral,
-      message: "Installer l'application",
-    });
   }
 
   set promptEvent(event: any) {
