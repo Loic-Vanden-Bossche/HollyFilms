@@ -75,14 +75,17 @@
         ></div>
       </div>
     </div>
-    <div class="h-full items-center flex flex-row" *ngIf="!isAuthenticated">
+    <div
+      class="h-full text-sm sm:text-base items-center flex flex-row"
+      *ngIf="!isAuthenticated"
+    >
       <a routerLink="sign-in"
-        ><button class="bg-white mr-4 py-1.5 px-4 rounded-lg font-bold">
+        ><button class="bg-white ml-4 py-1.5 px-4 rounded-lg font-bold">
           Se connecter
         </button></a
       >
       <a routerLink="sign-up"
-        ><button class="bg-white mr-4 py-1.5 px-4 rounded-lg font-bold">
+        ><button class="bg-white ml-4 py-1.5 px-4 rounded-lg font-bold">
           Créer un compte
         </button></a
       >
