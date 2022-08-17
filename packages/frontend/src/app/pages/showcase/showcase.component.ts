@@ -61,7 +61,6 @@ export class ShowcaseComponent {
   }
 
   get user() {
-    console.log(this.auth.user);
     return this.auth.user;
   }
 

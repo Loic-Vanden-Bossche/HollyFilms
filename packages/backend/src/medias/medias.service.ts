@@ -504,7 +504,6 @@ export class MediasService {
         tvs: newMedia.data?.tvs
           ? await Promise.all(
               newMedia.data?.tvs?.map((season, i) => {
-                console.log(season);
                 return this.updateEpisodes(
                   media.data.tvs[i].episodes,
                   media.data.TMDB_id,
@@ -565,7 +564,7 @@ export class MediasService {
     const filename = path.join(location, mediaPath);
 
     if (!fs.existsSync(filename)) {
-      console.log('file not found: ' + filename);
+      this.logger.error('file not found: ' + filename);
       res.writeHead(404, {
         'Content-Type': 'text/plain',
       });
@@ -638,7 +637,7 @@ export class MediasService {
           stream.pipe(res);
           break;
         default:
-          console.log('unknown file type: ' + path.extname(mediaPath));
+          this.logger.verbose('unknown file type: ' + path.extname(mediaPath));
           res.writeHead(500);
           res.end();
       }

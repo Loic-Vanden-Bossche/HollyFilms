@@ -262,7 +262,6 @@ export class ScrapperService {
             'searchProgressDataEvent',
             (shortUrlArr = shortUrlArr.filter((elem) => elem.files.length)),
           );
-          console.log(shortUrlArr);
         }
       } else {
         this.searchProgress = 'no movie found';
@@ -281,9 +280,7 @@ export class ScrapperService {
   }
 
   async getPremiumLink(link: string) {
-    const onError = (err) => {
-      console.log(err);
-
+    const onError = () => {
       this.websocketService.emit('mediaLinkDataEvent', {
         msg: 'Fatal error',
         link: null,

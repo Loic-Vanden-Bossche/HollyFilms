@@ -7,7 +7,7 @@
 | HF_APP_PORT | 3000 | Port to listen on | isPortNumber | No |
 | HF_APP_ENV | dev | Environment to run in | isEnum | No |
 | HF_APP_VERBOSE | false | Enable debug mode | isBoolean | No |
-| HF_APP_URLS_WHITELIST | http://localhost:4200 | List of urls to proxy | isUrlArray | No |
+| HF_APP_URLS_WHITELIST | http://localhost:4200, http://localhost:8080 | List of urls to proxy | isUrlArray | No |
 | HF_APP_FRONTEND_URL | http://localhost:4200 | Path of the frontend | isString | No |
 | HF_APP_LOGS_PATH | ./logs/hollyfilms.log | Path of the logs | isString | No |
 | HF_DB_HOST | localhost | Database host | isString | Yes |
@@ -40,4 +40,4 @@
 | HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
 | HF_MEDIAS_FILES_PATH | ../../medias_files | Path where the videos files are stored before upload | isString | No |
 
-Generated on 14/08/2022, 15:54:59
+Generated on 17/08/2022, 00:50:39

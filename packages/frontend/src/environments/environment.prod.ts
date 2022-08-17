@@ -3,5 +3,6 @@ export const environment = {
   name: 'prod',
   websocketUrl: 'https://www.hollyfilms.fr',
   websocketNamespace: '/api/processing-socket',
+  serviceWorker: true,
   production: true,
 };

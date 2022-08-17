@@ -7,6 +7,7 @@ export const environment = {
   name: 'dev',
   websocketUrl: 'http://localhost:3000',
   websocketNamespace: '/api/processing-socket',
+  serviceWorker: false,
   production: false,
 };
 

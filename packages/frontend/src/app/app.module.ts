@@ -13,6 +13,8 @@ import { interceptors } from './api/interceptors';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlayerComponent } from './player/player.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, PlayerComponent],
@@ -27,6 +29,12 @@ import { NgChartsModule } from 'ng2-charts';
     AdminModule,
     FontAwesomeModule,
     NgChartsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.serviceWorker,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [interceptors],
   bootstrap: [AppComponent],

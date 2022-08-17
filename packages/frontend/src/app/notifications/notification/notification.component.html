@@ -7,7 +7,7 @@
   class="w-full"
 >
   <div
-    class="flex flex-row rounded-xl items-center text-white pointer-events-auto rounded-box transition-opacity cursor-pointer hover:opacity-95 shadow-lg my-3 p-1 pl-3"
+    class="flex flex-row rounded-xl items-center text-white pointer-events-auto rounded-box transition-opacity cursor-pointer opacity-95 hover:opacity-100 shadow-lg my-3 p-1 pl-3"
     [ngClass]="typeClasses"
   >
     <div class="mr-5">
@@ -87,15 +87,15 @@
         notification.message
       }}</span>
     </div>
-    <div class="ml-auto my-0-important">
+    <div class="ml-auto items-center flex my-0-important">
       <button
         (click)="onAction($event)"
         *ngIf="notification?.button"
-        class="btn btn-sm"
+        class="px-2 py-1 text-black font-bold rounded bg-white/60 hover:bg-white transition-all"
       >
         {{ notification.button?.label }}
       </button>
-      <button class="btn-anim ml-3 p-2">
+      <button class="ml-3 p-2 text-error">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"

@@ -11,7 +11,7 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_APP_PORT: 3000,
   HF_APP_ENV: Environment.DEV,
   HF_APP_VERBOSE: false,
-  HF_APP_URLS_WHITELIST: ['http://localhost:4200'],
+  HF_APP_URLS_WHITELIST: ['http://localhost:4200', 'http://localhost:8080'],
   HF_APP_FRONTEND_URL: 'http://localhost:4200',
   HF_APP_LOGS_PATH: './logs/hollyfilms.log',
 

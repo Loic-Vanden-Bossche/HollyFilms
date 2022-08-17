@@ -704,7 +704,7 @@ export class ProcessingService {
 
     this.queueStarted = true;
 
-    console.log(
+    this.logger.log(
       'processing ' + inputVideo.filePath + 'in ' + inputVideo.media._id,
     );
 
@@ -767,7 +767,6 @@ export class ProcessingService {
       fileData = data;
 
       if (err) {
-        console.log(err);
       } else {
         this.progressStatus.mainStatus = 'PROCESSING';
         this.progressStatus.mainMsg = 'Processing streams';
@@ -823,7 +822,7 @@ export class ProcessingService {
                   emitProcessEvent();
                 })
                 .on('error', (err) => {
-                  console.log(err);
+                  this.logger.error(err);
 
                   endedStreamsWErrors++;
                   emitProcessEvent();
@@ -918,7 +917,7 @@ export class ProcessingService {
                   emitProcessEvent();
                 })
                 .on('error', (err) => {
-                  console.log(err);
+                  this.logger.error(err);
 
                   endedStreamsWErrors++;
                   emitProcessEvent();
@@ -991,7 +990,7 @@ export class ProcessingService {
                     emitProcessEvent();
                   })
                   .on('error', (err) => {
-                    console.log(err);
+                    this.logger.error(err);
 
                     emitProcessEvent();
                   })
@@ -1095,7 +1094,7 @@ export class ProcessingService {
             },
           });*/
 
-          console.log(extraQualities);
+          this.logger.verbose(extraQualities);
 
           for (const quality of extraQualities) {
             fs.appendFileSync(
@@ -1310,7 +1309,7 @@ export class ProcessingService {
               );
             })
             .on('error', (err) => {
-              console.log('An error occurred: ' + err.message);
+              this.logger.error('An error occurred: ' + err.message);
             })
             .on('end', () => {
               endedStreams++;
@@ -1403,7 +1402,7 @@ export class ProcessingService {
       scaledWidth,
     );
 
-    console.log(optimalSettings);
+    this.logger.verbose(optimalSettings);
 
     const complexFilter =
       'select=' +
