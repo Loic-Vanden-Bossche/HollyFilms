@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import * as up from 'uptobox';
 
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {forwardRef, Inject, Injectable, Logger} from '@nestjs/common';
 
 import { WebsocketService } from './websocket.service';
 
@@ -10,6 +10,8 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ScrapperService {
+  private logger = new Logger("Scrapper");
+
   constructor(
     @Inject(forwardRef(() => WebsocketService))
     private readonly websocketService: WebsocketService,
@@ -280,7 +282,8 @@ export class ScrapperService {
   }
 
   async getPremiumLink(link: string) {
-    const onError = () => {
+    const onError = (err) => {
+      this.logger.error(err);
       this.websocketService.emit('mediaLinkDataEvent', {
         msg: 'Fatal error',
         link: null,
