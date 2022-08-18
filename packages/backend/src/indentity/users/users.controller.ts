@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import UpdateMeDto from './dto/update.me.dto';
@@ -7,7 +7,9 @@ import { Roles } from '../../shared/decorators/roles.decorator';
 import { User } from '../../shared/decorators/user.decorator';
 import { checkObjectId } from '../../shared/mongoose';
 import CurrentUser from './current';
-import UpdateMeMediaPlayedTimeDto from './dto/update.me-media-played-time.dto';
+import UpdateTrackDto from './dto/update.track.dto';
+import { dtoToTrackData } from '../../medias/medias.utils';
+import GetPlayerStatusDto from './dto/get.playerStatus.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -28,19 +30,27 @@ export class UsersController {
   }
 
   @Roles(Role.User)
-  @Post('setMediaCurrentTime/:mediaId')
-  @ApiOperation({ summary: '[User] Set media current time' })
+  @Get('track')
+  @ApiOperation({ summary: '[User] Set media track properties' })
   async setMediaCurrentTime(
     @User() user: CurrentUser,
-    @Param('mediaId') mediaId: string,
-    @Body() body: UpdateMeMediaPlayedTimeDto,
+    @Query() trackData: UpdateTrackDto,
   ) {
-    return this.usersService.setMediaPlayedTime(
+    return this.usersService.trackUser(user, dtoToTrackData(trackData));
+  }
+
+  @Roles(Role.User)
+  @Get('playerStatus')
+  @ApiOperation({ summary: '[User] Get current player status' })
+  async getPlayerStatus(
+    @User() user: CurrentUser,
+    @Query() query: GetPlayerStatusDto,
+  ) {
+    return this.usersService.getPlayerStatus(
       user,
-      mediaId,
-      body.currentTime,
-      body.seasonIndex,
-      body.episodeIndex,
+      query.mediaId,
+      query.si ? parseInt(query.si) : undefined,
+      query.ei ? parseInt(query.ei) : undefined,
     );
   }
 }

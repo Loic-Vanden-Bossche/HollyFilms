@@ -16,11 +16,11 @@ export class PlayedMedia {
   @Prop({ default: undefined })
   episodeIndex?: number;
 
-  @Prop()
-  audioTrack: number;
+  @Prop({ default: undefined })
+  audioTrack?: number;
 
-  @Prop()
-  subtitleTrack: number;
+  @Prop({ default: undefined })
+  subtitleTrack?: number;
 }
 
 export const PlayedMediaSchema = SchemaFactory.createForClass(PlayedMedia);

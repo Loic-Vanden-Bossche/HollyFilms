@@ -1,5 +1,6 @@
 import { Media } from './media.schema';
 import { AdminMedia } from './medias.service';
+import UpdateTrackDto from '../indentity/users/dto/update.track.dto';
 
 type MediaType = 'movie' | 'tv';
 type QueueData = {
@@ -12,6 +13,15 @@ type QueueData = {
 type MediaWithType = { data: Media; mediaType: MediaType };
 type MediaWithTypeAndQueue = MediaWithType & { queue?: QueueData };
 type MediaWithTypeAndFeatured = MediaWithType & { featured: FeaturedType };
+
+interface TrackData {
+  mediaId: string;
+  time?: number;
+  ai?: number;
+  ti?: number;
+  si?: number;
+  ei?: number;
+}
 
 interface ShowcaseMedia {
   _id: string;
@@ -45,6 +55,17 @@ enum FeaturedType {
   INLIST = 'inlist',
 }
 
+const dtoToTrackData = (dto: UpdateTrackDto): TrackData => {
+  return {
+    mediaId: dto.mediaId,
+    time: dto.time ? parseInt(dto.time) : undefined,
+    si: dto.si ? parseInt(dto.si) : undefined,
+    ei: dto.ei ? parseInt(dto.ei) : undefined,
+    ai: dto.ai ? parseInt(dto.ai) : undefined,
+    ti: dto.ti ? parseInt(dto.ti) : undefined,
+  };
+};
+
 const getMediaType = (media: Media): MediaType => {
   return media.tvs ? 'tv' : 'movie';
 };
@@ -76,11 +97,13 @@ const formatManyMedias = (medias: Media[]): MediaWithType[] =>
 export {
   MediaType,
   QueueData,
+  TrackData,
   MediaWithType,
   ShowcaseMedia,
   MediaWithTypeAndQueue,
   MediaWithTypeAndFeatured,
   getMediaType,
+  dtoToTrackData,
   formatManyMedias,
   formatOneMedia,
   formatAdminMedia,

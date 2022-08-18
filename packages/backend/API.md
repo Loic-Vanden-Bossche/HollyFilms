@@ -474,33 +474,21 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X POST /users/setMediaCurrentTime/{mediaId} \
-  -H 'Content-Type: application/json'
+curl -X GET /users/track?mediaId=98167639264982&time=40&ai=1&ti=1&si=0&ei=0
 
 ```
 
 ```http
-POST /users/setMediaCurrentTime/{mediaId} HTTP/1.1
-
-Content-Type: application/json
+GET /users/track?mediaId=98167639264982&time=40&ai=1&ti=1&si=0&ei=0 HTTP/1.1
 
 ```
 
 ```javascript
-const inputBody = '{
-  "currentTime": 40,
-  "seasonIndex": 1,
-  "episodeIndex": 1
-}';
-const headers = {
-  'Content-Type':'application/json'
-};
 
-fetch('/users/setMediaCurrentTime/{mediaId}',
+fetch('/users/track?mediaId=98167639264982&time=40&ai=1&ti=1&si=0&ei=0',
 {
-  method: 'POST',
-  body: inputBody,
-  headers: headers
+  method: 'GET'
+
 })
 .then(function(res) {
     return res.json();
@@ -514,13 +502,15 @@ fetch('/users/setMediaCurrentTime/{mediaId}',
 require 'rest-client'
 require 'json'
 
-headers = {
-  'Content-Type' => 'application/json'
-}
-
-result = RestClient.post '/users/setMediaCurrentTime/{mediaId}',
+result = RestClient.get '/users/track',
   params: {
-  }, headers: headers
+  'mediaId' => 'string',
+'time' => 'string',
+'ai' => 'string',
+'ti' => 'string',
+'si' => 'string',
+'ei' => 'string'
+}
 
 p JSON.parse(result)
 
@@ -528,11 +518,10 @@ p JSON.parse(result)
 
 ```python
 import requests
-headers = {
-  'Content-Type': 'application/json'
-}
 
-r = requests.post('/users/setMediaCurrentTime/{mediaId}', headers = headers)
+r = requests.get('/users/track', params={
+  'mediaId': '98167639264982',  'time': '40',  'ai': '1',  'ti': '1',  'si': '0',  'ei': '0'
+})
 
 print(r.json())
 
@@ -543,17 +532,13 @@ print(r.json())
 
 require 'vendor/autoload.php';
 
-$headers = array(
-    'Content-Type' => 'application/json',
-);
-
 $client = new \GuzzleHttp\Client();
 
 // Define array of request body.
 $request_body = array();
 
 try {
-    $response = $client->request('POST','/users/setMediaCurrentTime/{mediaId}', array(
+    $response = $client->request('GET','/users/track', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -570,9 +555,9 @@ try {
 ```
 
 ```java
-URL obj = new URL("/users/setMediaCurrentTime/{mediaId}");
+URL obj = new URL("/users/track?mediaId=98167639264982&time=40&ai=1&ti=1&si=0&ei=0");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("POST");
+con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
 BufferedReader in = new BufferedReader(
     new InputStreamReader(con.getInputStream()));
@@ -596,12 +581,8 @@ import (
 
 func main() {
 
-    headers := map[string][]string{
-        "Content-Type": []string{"application/json"},
-    }
-
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "/users/setMediaCurrentTime/{mediaId}", data)
+    req, err := http.NewRequest("GET", "/users/track", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -611,32 +592,171 @@ func main() {
 
 ```
 
-`POST /users/setMediaCurrentTime/{mediaId}`
+`GET /users/track`
 
-*[User] Set media current time*
-
-> Body parameter
-
-```json
-{
-  "currentTime": 40,
-  "seasonIndex": 1,
-  "episodeIndex": 1
-}
-```
+*[User] Set media track properties*
 
 <h3 id="userscontroller_setmediacurrenttime-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|mediaId|path|string|true|none|
-|body|body|[UpdateMeMediaPlayedTimeDto](#schemaupdatememediaplayedtimedto)|true|none|
+|mediaId|query|string|true|Id of the played media|
+|time|query|string|true|Current play time of the movie or episode|
+|ai|query|string|true|Current audio track index of the movie or episode|
+|ti|query|string|true|Current text track index of the movie or episode|
+|si|query|string|true|Season index of the movie or episode|
+|ei|query|string|true|Episode index of the movie or episode|
 
 <h3 id="userscontroller_setmediacurrenttime-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_getPlayerStatus
+
+<a id="opIdUsersController_getPlayerStatus"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/playerStatus?mediaId=98167639264982&si=0&ei=0
+
+```
+
+```http
+GET /users/playerStatus?mediaId=98167639264982&si=0&ei=0 HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/playerStatus?mediaId=98167639264982&si=0&ei=0',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/playerStatus',
+  params: {
+  'mediaId' => 'string',
+'si' => 'string',
+'ei' => 'string'
+}
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/playerStatus', params={
+  'mediaId': '98167639264982',  'si': '0',  'ei': '0'
+})
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/playerStatus', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/playerStatus?mediaId=98167639264982&si=0&ei=0");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/playerStatus", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/playerStatus`
+
+*[User] Get current player status*
+
+<h3 id="userscontroller_getplayerstatus-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|mediaId|query|string|true|Id of the played media|
+|si|query|string|true|Season index of the movie or episode|
+|ei|query|string|true|Episode index of the movie or episode|
+
+<h3 id="userscontroller_getplayerstatus-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -6650,30 +6770,6 @@ This operation does not require authentication
 |username|string|true|none|User nickname|
 |newPassword|string|true|none|New user password|
 |newPasswordConfirm|string|true|none|New user password confirmation|
-
-<h2 id="tocS_UpdateMeMediaPlayedTimeDto">UpdateMeMediaPlayedTimeDto</h2>
-<!-- backwards compatibility -->
-<a id="schemaupdatememediaplayedtimedto"></a>
-<a id="schema_UpdateMeMediaPlayedTimeDto"></a>
-<a id="tocSupdatememediaplayedtimedto"></a>
-<a id="tocsupdatememediaplayedtimedto"></a>
-
-```json
-{
-  "currentTime": 40,
-  "seasonIndex": 1,
-  "episodeIndex": 1
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|currentTime|number|true|none|Current play time of the movie or episode|
-|seasonIndex|number|true|none|Season index of the movie or episode|
-|episodeIndex|number|true|none|Episode index of the movie or episode|
 
 <h2 id="tocS_CreateUserDto">CreateUserDto</h2>
 <!-- backwards compatibility -->

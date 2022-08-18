@@ -12,6 +12,7 @@ import { AdminConfig } from '../../config/config';
 import { defaultConfig } from '../../config/config.default';
 import { Role } from '../../shared/role';
 import { getObjectId } from '../../shared/mongoose';
+import { TrackData } from '../../medias/medias.utils';
 
 @Injectable()
 export class UsersService {
@@ -125,16 +126,54 @@ export class UsersService {
     return this.userModel.deleteOne({ _id: getObjectId(id) });
   }
 
-  // Updated current time if a playedMedia is found esle create a new one
-  setMediaPlayedTime(
+  getPlayerStatus(
     user: CurrentUser,
     mediaId: string,
-    currentTime: number,
-    seasonIndex: number,
+    seasonIndex?: number,
     episodeIndex?: number,
   ) {
     const indexes = { seasonIndex, episodeIndex };
-    const tvReady = seasonIndex && episodeIndex;
+    const tvReady = indexes.seasonIndex && indexes.episodeIndex;
+
+    const indexesParams = tvReady
+      ? indexes
+      : {
+          seasonIndex: { $exists: false },
+          episodeIndex: { $exists: false },
+        };
+
+    return this.userModel
+      .aggregate([
+        {
+          $match: {
+            _id: getObjectId(user._id),
+            playedMedias: {
+              $elemMatch: {
+                media: getObjectId(mediaId) as any,
+                ...indexesParams,
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            playedMedias: {
+              $filter: {
+                input: '$playedMedias',
+                as: 'playedMedia',
+                cond: { $eq: ['$$playedMedia.media', getObjectId(mediaId)] },
+              },
+            },
+          },
+        },
+      ])
+      .exec()
+      .then((user: User[]) => (!user.length ? {} : user[0].playedMedias[0]));
+  }
+
+  trackUser(user: CurrentUser, trackData: TrackData) {
+    const indexes = { seasonIndex: trackData.si, episodeIndex: trackData.ei };
+    const tvReady = indexes.seasonIndex && indexes.episodeIndex;
 
     const indexesParams = tvReady
       ? indexes
@@ -149,14 +188,22 @@ export class UsersService {
           _id: user._id,
           playedMedias: {
             $elemMatch: {
-              media: getObjectId(mediaId) as any,
+              media: getObjectId(trackData.mediaId) as any,
               ...indexesParams,
             },
           },
         },
         {
           $set: {
-            'playedMedias.$.currentTime': currentTime,
+            ...(trackData.time !== undefined
+              ? { 'playedMedias.$.currentTime': trackData.time }
+              : {}),
+            ...(trackData.ai !== undefined
+              ? { 'playedMedias.$.audioTrack': trackData.ai }
+              : {}),
+            ...(trackData.ti !== undefined
+              ? { 'playedMedias.$.subtitleTrack': trackData.ti }
+              : {}),
           },
         },
         { new: true },
@@ -164,18 +211,24 @@ export class UsersService {
       .then((foundUser) => {
         if (!foundUser) {
           this.logger.verbose(
-            `User ${user._id} added playtime entry for media ${mediaId}`,
+            `User ${user._id} added playedMedias entry for media ${trackData.mediaId}`,
           );
           return this.userModel.findByIdAndUpdate(
             user._id,
             {
               $push: {
                 playedMedias: {
-                  media: getObjectId(mediaId) as any,
-                  currentTime,
+                  media: getObjectId(trackData.mediaId) as any,
+                  ...(trackData.time !== undefined
+                    ? { currentTime: trackData.time }
+                    : {}),
+                  ...(trackData.ai !== undefined
+                    ? { audioTrack: trackData.ai }
+                    : {}),
+                  ...(trackData.ti !== undefined
+                    ? { subtitleTrack: trackData.ti }
+                    : {}),
                   ...(tvReady ? indexes : {}),
-                  audioTrack: 0,
-                  subtitleTrack: 0,
                 },
               },
             },
@@ -186,7 +239,7 @@ export class UsersService {
         }
       })
       .then((u) => {
-        this.logger.log(`User ${u._id} updated playtime`);
+        this.logger.verbose(`User ${u._id} updated playedMedias`);
         return u?.playedMedias;
       });
   }
