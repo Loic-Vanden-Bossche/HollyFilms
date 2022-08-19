@@ -15,6 +15,8 @@ import { MediasService } from '../../shared/services/medias.service';
 import { MediaCategoryAndSelected } from './category-list/category-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap } from 'rxjs';
+import { NotificationsService } from '../../shared/services/notifications.service';
+import { NotificationType } from '../../shared/models/notification.model';
 
 export class NavBarButton {
   name = '';
@@ -74,6 +76,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private readonly searchService: SearchService,
     private readonly mediasService: MediasService,
     private readonly route: ActivatedRoute,
+    private readonly notificationsService: NotificationsService,
     private readonly router: Router
   ) {}
 
@@ -165,6 +168,16 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   showSearch() {
     this.showSearchBar = !this.showSearchBar;
+  }
+
+  logout() {
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+      this.notificationsService.push({
+        type: NotificationType.Neutral,
+        message: 'Vous êtes maintenant déconnecté',
+      });
+    });
   }
 
   onSubmit(event: SubmitEvent) {

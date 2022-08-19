@@ -45,7 +45,7 @@
       <div class="ml-6">
         <app-dropdown-menu>
           <a
-            class="text-lg font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+            class="text-lg cursor-pointer font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
           >
             <p>Autre</p>
           </a>
@@ -63,7 +63,7 @@
       </div>
     </div>
   </div>
-  <div class="h-full">
+  <div class="h-full overflow-hidden">
     <div *ngIf="isAuthenticated" class="flex h-full flex-row">
       <div
         class="text-white text-opacity-80 hover:text-opacity-100 flex flex-row items-center"
@@ -82,12 +82,33 @@
           />
         </form>
       </div>
-      <div class="h-full p-1.5">
+      <app-dropdown-menu floatPosition="right">
+        <div class="h-full flex items-center cursor-pointer p-1.5">
+          <div
+            class="h-10 w-10 rounded-full bg-center bg-cover"
+            [ngStyle]="{
+              'background-image': 'url(assets/img/avatar-blank.png)'
+            }"
+          ></div>
+        </div>
         <div
-          class="h-full rounded-full aspect-square bg-center bg-cover"
-          [ngStyle]="{ 'background-image': 'url(assets/img/avatar-blank.png)' }"
-        ></div>
-      </div>
+          class="px-4 text-white py-2 bg-base-600 shadow-2xl rounded-lg"
+          menu
+        >
+          <a
+            class="text-lg h-10 cursor-pointer justify-end font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+            routerLink="/account"
+          >
+            <p class="whitespace-nowrap">Mon compte</p>
+          </a>
+          <a
+            class="text-lg h-10 cursor-pointer justify-end font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+            (click)="logout()"
+          >
+            <p class="whitespace-nowrap">Se déconnecter</p>
+          </a>
+        </div>
+      </app-dropdown-menu>
     </div>
     <div
       class="h-full text-sm sm:text-base items-center flex flex-row"
