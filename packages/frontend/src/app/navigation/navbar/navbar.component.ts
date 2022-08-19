@@ -120,6 +120,10 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     });
 
     this.searchService
+      .onClearControl()
+      .subscribe(() => this.searchCtrl.setValue('', { emitEvent: false }));
+
+    this.searchService
       .onChange()
       .pipe(
         tap((query) => {
@@ -129,9 +133,19 @@ export class NavbarComponent implements OnInit, AfterViewInit {
           }
         })
       )
-      .subscribe((query) =>
-        this.searchCtrl.setValue(query, { emitEvent: false })
-      );
+      .subscribe((query) => {
+        this.searchCtrl.setValue(query, { emitEvent: false });
+
+        if (query) {
+          this.router.navigate(['/search'], {
+            queryParams: { q: query },
+            queryParamsHandling: 'merge',
+          });
+        } else {
+          this.router.navigate(['/home']);
+        }
+      });
+
     this.searchCtrl.valueChanges.subscribe((query) =>
       this.onSearch(query || '')
     );

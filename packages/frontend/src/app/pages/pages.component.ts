@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from '../shared/services/player.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { SearchService } from '../shared/services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, skip } from 'rxjs';
 import { MediasService } from '../shared/services/medias.service';
@@ -53,7 +52,6 @@ export class PagesComponent implements OnInit {
 
   constructor(
     private readonly playerService: PlayerService,
-    private readonly searchService: SearchService,
     private readonly mediasService: MediasService,
     private readonly modalService: ModalService,
     private readonly router: Router,
@@ -94,17 +92,6 @@ export class PagesComponent implements OnInit {
         });
       }
     });
-    this.searchService
-      .onChange()
-      .pipe(skip(1))
-      .subscribe((q) =>
-        q
-          ? this.router.navigate(['/search'], {
-              queryParams: { q },
-              queryParamsHandling: 'merge',
-            })
-          : this.router.navigate(['/home'])
-      );
 
     this.route.queryParams.subscribe(({ mediaId }) => {
       if (mediaId) {

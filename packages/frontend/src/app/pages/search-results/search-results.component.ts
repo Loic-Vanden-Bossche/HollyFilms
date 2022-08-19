@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MediaWithType } from '../../shared/models/media.model';
 import { filter, switchMap, take, tap } from 'rxjs';
@@ -26,7 +26,7 @@ import { SearchService } from '../../shared/services/search.service';
     ]),
   ],
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnDestroy {
   medias: MediaWithType[] = [];
 
   noData = false;
@@ -61,5 +61,9 @@ export class SearchResultsComponent implements OnInit {
         tap(() => (this.loading = false))
       )
       .subscribe((medias) => (this.medias = medias));
+  }
+
+  ngOnDestroy() {
+    this.searchService.clearControl();
   }
 }
