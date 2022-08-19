@@ -17,6 +17,7 @@ import { MediasService } from '../../shared/services/medias.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { TvsService } from '../../shared/services/tvs.service';
 import { PlayerService } from '../../shared/services/player.service';
+import { TitleService } from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-media-modal',
@@ -63,7 +64,8 @@ export class MediaModalComponent implements OnChanges, OnInit {
     private readonly modalService: ModalService,
     private readonly mediasService: MediasService,
     private readonly tvsService: TvsService,
-    private readonly playerService: PlayerService
+    private readonly playerService: PlayerService,
+    private readonly title: TitleService
   ) {}
 
   ngOnInit() {
@@ -76,6 +78,8 @@ export class MediaModalComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
+    this.title.setTitle(this.media?.data.title);
+
     if (this.media?.mediaType === 'tv' && this.media) {
       this.showEpisodes = true;
       const indexes = this.tvsService.getTvClosestIndexes(this.media.data);

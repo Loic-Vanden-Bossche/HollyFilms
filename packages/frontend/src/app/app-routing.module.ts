@@ -16,27 +16,42 @@ import { SearchResultsComponent } from './pages/search-results/search-results.co
 import { ActivatedGuard } from './auth/activated.guard';
 import { NotActivatedComponent } from './navigation/not-activated/not-activated.component';
 import { AlreadyActivatedGuard } from './auth/already-activated.guard';
+import { MyListComponent } from './pages/my-list/my-list.component';
+import { CategoryResultsComponent } from './pages/category-results/category-results.component';
 
 const routes: Routes = [
   {
     path: '',
+    data: { title: '' },
     component: PagesComponent,
     children: [
       {
         path: '',
-        data: { title: 'HollyFilms' },
+        data: { title: '' },
         component: ShowcaseComponent,
       },
       {
         path: 'home',
         component: HomeComponent,
-        data: { title: 'Films' },
+        data: { title: 'Accueil' },
         canActivate: [AuthGuard, ActivatedGuard],
       },
       {
         path: 'search',
         component: SearchResultsComponent,
-        data: { title: 'Search' },
+        data: { title: 'Recherche' },
+        canActivate: [AuthGuard, ActivatedGuard],
+      },
+      {
+        path: 'my-list',
+        component: MyListComponent,
+        data: { title: 'Ma liste' },
+        canActivate: [AuthGuard, ActivatedGuard],
+      },
+      {
+        path: 'category',
+        component: CategoryResultsComponent,
+        data: { title: 'Categories' },
         canActivate: [AuthGuard, ActivatedGuard],
       },
       {
@@ -47,23 +62,24 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { animation: 'default' },
+            data: { animation: 'default', title: 'Médias' },
             component: AdminMediasComponent,
           },
           {
             path: 'medias',
-            data: { animation: 'medias' },
+            data: { animation: 'medias', title: 'Médias' },
             component: AdminMediasComponent,
           },
           {
             path: 'users',
-            data: { animation: 'users' },
+            data: { animation: 'users', title: 'Utilisateurs' },
             component: AdminUsersComponent,
           },
         ],
       },
       {
         path: 'not-activated',
+        data: { title: 'Non activé' },
         component: NotActivatedComponent,
         canActivate: [AlreadyActivatedGuard],
       },
@@ -71,10 +87,12 @@ const routes: Routes = [
   },
   {
     path: 'sign-in',
+    data: { title: 'Se connecter' },
     component: SignInComponent,
   },
   {
     path: 'sign-up',
+    data: { title: 'Créer un compte' },
     component: SignUpComponent,
   },
   {
@@ -90,6 +108,7 @@ const routes: Routes = [
   { path: '**', redirectTo: 'not-found' },
   {
     path: 'not-found',
+    data: { title: '404' },
     component: PageNotFoundComponent,
   },
 ];

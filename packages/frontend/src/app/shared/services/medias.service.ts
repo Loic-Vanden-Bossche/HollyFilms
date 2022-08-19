@@ -44,9 +44,9 @@ export class MediasService {
     });
   }
 
-  getAllMedias() {
+  getAllMedias(type: ListType = ListType.ALL) {
     return this.http.get<MediaWithType[]>(
-      `medias?type=${ListType.POPULAR}&limit=${0}&skip=${0}`,
+      `medias?type=${type}&limit=${0}&skip=${0}`,
       { withCredentials: true }
     );
   }

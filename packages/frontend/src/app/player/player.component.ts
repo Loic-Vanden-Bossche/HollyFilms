@@ -24,6 +24,7 @@ import {
   faChevronRight,
   faLeftLong,
 } from '@fortawesome/free-solid-svg-icons';
+import { TitleService } from '../shared/services/title.service';
 
 @Component({
   selector: 'app-player',
@@ -106,7 +107,8 @@ export class PlayerComponent implements AfterViewInit {
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,
     private readonly previousRouteService: PreviousRouteService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly title: TitleService
   ) {}
 
   @HostListener('window:keyup', ['$event'])
@@ -289,6 +291,8 @@ export class PlayerComponent implements AfterViewInit {
               this.media?.data.fileInfos?.location || 'default'
             }/${this.media?.data._id}/${tvIndexes}master.m3u8`
           : '';
+
+        this.title.setTitle(this.media?.data.title || '');
 
         videojs.default.addLanguage('fr', {
           Play: 'Reprendre',
