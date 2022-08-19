@@ -3197,6 +3197,276 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## MediasController_getAllCategories
+
+<a id="opIdMediasController_getAllCategories"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/categories
+
+```
+
+```http
+GET /medias/categories HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/categories',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/categories',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/categories')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/categories', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/categories");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/categories", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/categories`
+
+*[User] Get all categories*
+
+<h3 id="mediascontroller_getallcategories-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## MediasController_getMediasByCategories
+
+<a id="opIdMediasController_getMediasByCategories"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /medias/category/{category}
+
+```
+
+```http
+GET /medias/category/{category} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/medias/category/{category}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/medias/category/{category}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/medias/category/{category}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/medias/category/{category}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/medias/category/{category}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/medias/category/{category}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /medias/category/{category}`
+
+*[User] Get all categories*
+
+<h3 id="mediascontroller_getmediasbycategories-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|category|path|string|true|none|
+
+<h3 id="mediascontroller_getmediasbycategories-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 ## MediasController_getSearchQuery
 
 <a id="opIdMediasController_getSearchQuery"></a>

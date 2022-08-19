@@ -370,6 +370,29 @@ paths:
       tags:
         &a4
         - Medias
+  /medias/categories:
+    get:
+      operationId: MediasController_getAllCategories
+      summary: "[User] Get all categories"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+  "/medias/category/{category}":
+    get:
+      operationId: MediasController_getMediasByCategories
+      summary: "[User] Get all categories"
+      parameters:
+        - name: category
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a4
   /medias/search:
     get:
       operationId: MediasController_getSearchQuery

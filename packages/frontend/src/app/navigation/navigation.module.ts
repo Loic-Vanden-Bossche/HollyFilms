@@ -7,9 +7,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotActivatedComponent } from './not-activated/not-activated.component';
+import { CategoryListComponent } from './navbar/category-list/category-list.component';
 
 @NgModule({
-  declarations: [NavbarComponent, PageNotFoundComponent, NotActivatedComponent],
+  declarations: [NavbarComponent, PageNotFoundComponent, NotActivatedComponent, CategoryListComponent],
   exports: [NavbarComponent],
   imports: [
     CommonModule,

@@ -90,6 +90,18 @@ export class MediasService {
     if (fs.existsSync(path)) rimraf.sync(path);
   }
 
+  getCategories() {
+    return this.mediaModel.distinct('genres').exec();
+  }
+
+  getMediasByCategories(category: string) {
+    return this.mediaModel
+      .find({ genres: category })
+      .sort({ title: 'asc' })
+      .exec()
+      .then(formatManyMedias);
+  }
+
   async searchQuery(
     query = '',
     onlyAvailable = false,

@@ -44,6 +44,20 @@ export class MediasController {
   }
 
   @Roles(Role.User)
+  @Get('categories')
+  @ApiOperation({ summary: '[User] Get all categories' })
+  async getAllCategories() {
+    return this.mediasService.getCategories();
+  }
+
+  @Roles(Role.User)
+  @Get('category/:category')
+  @ApiOperation({ summary: '[User] Get all categories' })
+  async getMediasByCategories(@Param('category') category: string) {
+    return this.mediasService.getMediasByCategories(category);
+  }
+
+  @Roles(Role.User)
   @Get('search')
   @ApiOperation({ summary: '[User] Get all medias corresponding to query' })
   async getSearchQuery(
