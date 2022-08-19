@@ -3,6 +3,7 @@ import { MediasService } from '../../shared/services/medias.service';
 import { MediaWithType } from '../../shared/models/media.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
+import { TitleService } from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-category-results',
@@ -15,7 +16,8 @@ export class CategoryResultsComponent implements OnInit {
   constructor(
     private readonly mediasService: MediasService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly title: TitleService
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +28,9 @@ export class CategoryResultsComponent implements OnInit {
         map((names) => names.split(',').filter((name) => name)),
         tap((names) =>
           !names.length ? this.router.navigate(['/home']) : void 0
+        ),
+        tap((names) =>
+          setTimeout(() => this.title.setTitle(`${names.join(', ')}`), 500)
         ),
         filter((names) => names.length > 0),
         switchMap((categories) =>
