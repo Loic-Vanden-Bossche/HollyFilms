@@ -11,21 +11,6 @@ import { SearchService } from '../../shared/services/search.service';
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
   animations: [
-    trigger('onNoData', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'TranslateY(-10px)',
-        }),
-        animate(
-          '1s ease',
-          style({
-            opacity: 1,
-            transform: 'TranslateY(0)',
-          })
-        ),
-      ]),
-    ]),
     trigger('onLoader', [
       transition(':leave', [
         style({

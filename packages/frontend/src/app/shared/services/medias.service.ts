@@ -38,6 +38,13 @@ export class MediasService {
     );
   }
 
+  getMediasByCategory(category: string) {
+    return this.http.get<MediaWithType[]>(
+      `medias/category/${category}`,
+      { withCredentials: true }
+    );
+  }
+
   getShowCaseMedias() {
     return this.http.get<ShowcaseMedia[]>(`medias/showcase`, {
       withCredentials: true,
