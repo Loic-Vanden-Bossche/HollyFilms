@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import {
   MediaWithType,
   MediaWithTypeAndFeatured,
@@ -84,14 +90,6 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('customPlayer')
   customPlayerElement: ElementRef<HTMLElement> | null = null;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly playerService: PlayerService,
-    private readonly mediasService: MediasService,
-    private readonly previousRouteService: PreviousRouteService,
-    private readonly router: Router
-  ) {}
-
   featuredMedias: MediaWithTypeAndFeatured[] = [];
 
   cueCount = 0;
@@ -102,6 +100,41 @@ export class PlayerComponent implements AfterViewInit {
   leftIcon = faLeftLong;
   chevronLeftIcon = faChevronLeft;
   chevronRightIcon = faChevronRight;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly playerService: PlayerService,
+    private readonly mediasService: MediasService,
+    private readonly previousRouteService: PreviousRouteService,
+    private readonly router: Router
+  ) {}
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.player) {
+      switch (event.key) {
+        case 'ArrowLeft':
+          this.player.currentTime(this.player.currentTime() - 5);
+          break;
+        case 'ArrowRight':
+          this.player.currentTime(this.player.currentTime() + 5);
+          break;
+        case 'ArrowUp':
+          this.player.volume(this.player.volume() + 0.1);
+          break;
+        case 'ArrowDown':
+          this.player.volume(this.player.volume() - 0.1);
+          break;
+        case ' ':
+          if (this.player?.paused()) {
+            this.player?.play();
+          } else {
+            this.player?.pause();
+          }
+          break;
+      }
+    }
+  }
 
   addOffset(offset: number) {
     if (this.player && !this.cueSet) {
