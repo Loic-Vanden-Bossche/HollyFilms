@@ -21,6 +21,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MediaCarrouselComponent } from './media-carrousel/media-carrousel.component';
 import { MediaCarrouselItemComponent } from './media-carrousel/media-carrousel-item/media-carrousel-item.component';
 import { SwiperModule } from 'swiper/angular';
+import { MediaRawListComponent } from './media-raw-list/media-raw-list.component';
+import { MediaRawLineComponent } from './media-raw-list/media-raw-result-line/media-raw-line.component';
 
 @NgModule({
   declarations: [
@@ -39,12 +41,15 @@ import { SwiperModule } from 'swiper/angular';
     ActorListComponent,
     MediaCarrouselComponent,
     MediaCarrouselItemComponent,
+    MediaRawListComponent,
+    MediaRawLineComponent,
   ],
   exports: [
     MediaModalComponent,
     MediaListComponent,
     MediaCarrouselComponent,
     MediaCardComponent,
+    MediaRawListComponent,
   ],
   imports: [
     SwiperModule,

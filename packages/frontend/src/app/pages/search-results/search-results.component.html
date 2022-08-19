@@ -1,9 +1,7 @@
 <div class="relative h-full w-full">
   <div class="flex-col flex p-5">
     <div class="relative w-full" *ngIf="!loading">
-      <div class="w-full" *ngFor="let medias of mediasChunks; let i = index">
-        <app-search-result-line [medias]="medias"></app-search-result-line>
-      </div>
+      <app-media-raw-list [medias]="medias"></app-media-raw-list>
     </div>
   </div>
   <div

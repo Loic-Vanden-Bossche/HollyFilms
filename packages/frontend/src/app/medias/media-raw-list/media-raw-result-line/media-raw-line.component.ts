@@ -3,8 +3,8 @@ import { MediaWithType } from '../../../shared/models/media.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'app-search-result-line',
-  templateUrl: './search-result-line.component.html',
+  selector: 'app-media-raw-result-line',
+  templateUrl: './media-raw-line.component.html',
   animations: [
     trigger('onCard', [
       transition(
@@ -27,6 +27,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
     ]),
   ],
 })
-export class SearchResultLineComponent {
+export class MediaRawLineComponent {
   @Input() medias: MediaWithType[] = [];
 }
