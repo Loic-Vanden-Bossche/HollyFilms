@@ -379,16 +379,11 @@ paths:
         "200":
           description: ""
       tags: *a4
-  "/medias/category/{category}":
+  /medias/category/*:
     get:
       operationId: MediasController_getMediasByCategories
-      summary: "[User] Get all categories"
-      parameters:
-        - name: category
-          required: true
-          in: path
-          schema:
-            type: string
+      summary: "[User] Get medias for categories"
+      parameters: []
       responses:
         "200":
           description: ""

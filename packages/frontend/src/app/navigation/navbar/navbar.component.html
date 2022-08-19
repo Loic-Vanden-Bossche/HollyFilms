@@ -94,7 +94,12 @@
   </div>
 </nav>
 <div class="relative h-1 w-full bg-gradient-to-r gradient-colors"></div>
-<div @onSearchBar *ngIf="showSearchBar" tabindex="1" class="relative -z-10 flex items-center text-white text-opacity-80 hover:text-opacity-100 lg:hidden w-full p-5 bg-base-600">
+<div
+  @onDeploy
+  *ngIf="showSearchBar"
+  tabindex="1"
+  class="relative flex items-center text-white text-opacity-80 hover:text-opacity-100 lg:hidden w-full p-5 bg-base-600"
+>
   <form class="w-full" (submit)="onSubmit($event)">
     <input
       [formControl]="searchCtrl"
@@ -104,4 +109,16 @@
       type="search"
     />
   </form>
+</div>
+
+<div
+  @onDeploy
+  *ngIf="showCategories"
+  tabindex="1"
+  class="relative text-white w-full p-5 bg-base-600"
+>
+  <app-category-list
+    (close)="showCategories = false"
+    [categories]="categories"
+  ></app-category-list>
 </div>

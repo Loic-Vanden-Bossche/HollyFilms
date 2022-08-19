@@ -3337,18 +3337,18 @@ This operation does not require authentication
 
 ```shell
 # You can also use wget
-curl -X GET /medias/category/{category}
+curl -X GET /medias/category/*
 
 ```
 
 ```http
-GET /medias/category/{category} HTTP/1.1
+GET /medias/category/* HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/medias/category/{category}',
+fetch('/medias/category/*',
 {
   method: 'GET'
 
@@ -3365,7 +3365,7 @@ fetch('/medias/category/{category}',
 require 'rest-client'
 require 'json'
 
-result = RestClient.get '/medias/category/{category}',
+result = RestClient.get '/medias/category/*',
   params: {
   }
 
@@ -3376,7 +3376,7 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/medias/category/{category}')
+r = requests.get('/medias/category/*')
 
 print(r.json())
 
@@ -3393,7 +3393,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('GET','/medias/category/{category}', array(
+    $response = $client->request('GET','/medias/category/*', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -3410,7 +3410,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/medias/category/{category}");
+URL obj = new URL("/medias/category/*");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -3437,7 +3437,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/category/{category}", data)
+    req, err := http.NewRequest("GET", "/medias/category/*", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3447,15 +3447,9 @@ func main() {
 
 ```
 
-`GET /medias/category/{category}`
+`GET /medias/category/*`
 
-*[User] Get all categories*
-
-<h3 id="mediascontroller_getmediasbycategories-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|category|path|string|true|none|
+*[User] Get medias for categories*
 
 <h3 id="mediascontroller_getmediasbycategories-responses">Responses</h3>
 

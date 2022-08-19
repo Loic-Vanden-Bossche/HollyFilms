@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {animate, style, transition, trigger} from "@angular/animations";
+import { Component, Input } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-no-content',
@@ -20,7 +20,7 @@ import {animate, style, transition, trigger} from "@angular/animations";
         ),
       ]),
     ]),
-  ]
+  ],
 })
 export class NoContentComponent {
   @Input() text = '';

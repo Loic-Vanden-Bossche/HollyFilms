@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   ListType,
   Media,
+  MediaCategory,
   MediaWithType,
   MediaWithTypeAndFeatured,
   ShowcaseMedia,
@@ -38,11 +39,19 @@ export class MediasService {
     );
   }
 
-  getMediasByCategory(category: string) {
+  getMediasByCategory(category: string[]) {
     return this.http.get<MediaWithType[]>(
-      `medias/category/${category}`,
-      { withCredentials: true }
+      `medias/category/${category.join('/')}`,
+      {
+        withCredentials: true,
+      }
     );
+  }
+
+  getCategories() {
+    return this.http.get<MediaCategory[]>(`medias/categories`, {
+      withCredentials: true,
+    });
   }
 
   getShowCaseMedias() {

@@ -54,6 +54,11 @@ export interface AdminMedia {
   fileInfos: FileInfos;
 }
 
+export interface MediaCategory {
+  name: string;
+  count: number;
+}
+
 @Injectable()
 export class MediasService {
   logger = new Logger('Medias');
@@ -90,13 +95,24 @@ export class MediasService {
     if (fs.existsSync(path)) rimraf.sync(path);
   }
 
-  getCategories() {
-    return this.mediaModel.distinct('genres').exec();
+  getCategories(): Promise<MediaCategory[]> {
+    return this.mediaModel
+      .aggregate([
+        { $unwind: '$genres' },
+        { $group: { _id: '$genres', count: { $sum: 1 } } },
+      ])
+      .exec()
+      .then((categories: { _id: string; count: number }[]) =>
+        categories.map((category) => ({
+          name: category._id,
+          count: category.count,
+        })),
+      );
   }
 
-  getMediasByCategories(category: string) {
+  getMediasByCategories(categories: string[]) {
     return this.mediaModel
-      .find({ genres: category })
+      .find({ genres: { $all: categories } })
       .sort({ title: 'asc' })
       .exec()
       .then(formatManyMedias);

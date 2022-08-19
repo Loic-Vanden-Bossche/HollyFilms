@@ -1,1 +1,28 @@
-<p>category-list works!</p>
+<div class="h-full w-full flex-wrap gap-3 flex flex-row">
+  <div
+    (click)="onChangeCategory(category)"
+    [ngClass]="
+      category.selected
+        ? ['opacity-100', 'border-white']
+        : ['opacity-60', 'hover:opacity-100', 'border-transparent']
+    "
+    class="group px-2 relative py-1 border-2 text-sm flex flex-row items-center font-bold rounded-lg bg-base-300 cursor-pointer"
+    *ngFor="let category of categories"
+  >
+    <span>{{ category.name }}</span>
+    <span class="text-xs ml-2 text-white/50">{{ category.count }}</span>
+    <div
+      (click)="onAppendCategory($event, category)"
+      *ngIf="!category.selected"
+      class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-5"
+    >
+      <div class="transition-all scale-0 group-hover:scale-100">
+        <div
+          class="h-full p-2 w-full text-white/70 flex flex-row justify-center relative transition-all bg-gradient-to-r hover:text-white hover:scale-150"
+        >
+          <fa-icon [icon]="plusIcon"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

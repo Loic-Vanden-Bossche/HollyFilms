@@ -10,7 +10,12 @@ import { NotActivatedComponent } from './not-activated/not-activated.component';
 import { CategoryListComponent } from './navbar/category-list/category-list.component';
 
 @NgModule({
-  declarations: [NavbarComponent, PageNotFoundComponent, NotActivatedComponent, CategoryListComponent],
+  declarations: [
+    NavbarComponent,
+    PageNotFoundComponent,
+    NotActivatedComponent,
+    CategoryListComponent,
+  ],
   exports: [NavbarComponent],
   imports: [
     CommonModule,

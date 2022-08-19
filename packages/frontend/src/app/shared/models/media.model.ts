@@ -18,6 +18,11 @@ export type MediaWithTypeAndFeatured = MediaWithType & {
   featured: FeaturedType;
 };
 
+export interface MediaCategory {
+  name: string;
+  count: number;
+}
+
 export enum ListType {
   ALL = '',
   RECOMMENDED = 'recommended',
