@@ -4,6 +4,20 @@ import { FormControl } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { SearchService } from '../../shared/services/search.service';
 
+export class NavBarButton {
+  name: string = '';
+  path?: string;
+  action: () => void = () => {};
+
+  constructor(name: string, path?: string, action?: () => void) {
+    this.name = name;
+    this.path = path;
+    if (action) {
+      this.action = action;
+    }
+  }
+}
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -17,11 +31,10 @@ export class NavbarComponent implements OnInit {
   searchCtrl = new FormControl('');
   showSearchBar = true;
 
-  navButtons = [
-    { name: 'Accueil', path: '/home' },
-    { name: 'Films', path: '/movies' },
-    { name: 'Séries', path: '/tvs' },
-    { name: 'Ma liste', path: '/my-list' },
+  navButtons: NavBarButton[] = [
+    new NavBarButton('Accueil', '/home'),
+    new NavBarButton('Ma liste', '/my-list'),
+    new NavBarButton('Categories', undefined, () => console.log('TEST') ),
   ];
 
   searchIcon = faMagnifyingGlass;
@@ -35,6 +48,10 @@ export class NavbarComponent implements OnInit {
     this.searchCtrl.valueChanges.subscribe((query) =>
       this.onSearch(query || '')
     );
+
+    if (this.authService.isAdmin) {
+      this.navButtons.push(new NavBarButton('Admin', '/admin'));
+    }
   }
 
   get isAuthenticated() {

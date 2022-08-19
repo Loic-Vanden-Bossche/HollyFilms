@@ -23,8 +23,9 @@
       class="hidden sm:flex h-full text-white mr-5 flex flex-row items-center"
     >
       <a
-        class="ml-6 text-lg font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+        class="ml-6 text-lg cursor-pointer font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
         [routerLink]="button.path"
+        (click)="button?.action()"
         *ngFor="let button of navButtons"
       >
         <p>{{ button.name }}</p>
