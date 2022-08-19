@@ -96,15 +96,17 @@
           menu
         >
           <a
-            class="text-lg h-10 cursor-pointer justify-end font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+            class="text-lg h-10 cursor-pointer justify-between font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
             routerLink="/account"
           >
+            <fa-icon class="mr-4" [icon]="userGearIcon"></fa-icon>
             <p class="whitespace-nowrap">Mon compte</p>
           </a>
           <a
-            class="text-lg h-10 cursor-pointer justify-end font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+            class="text-lg h-10 cursor-pointer justify-between font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
             (click)="logout()"
           >
+            <fa-icon class="mr-4" [icon]="logoutIcon"></fa-icon>
             <p class="whitespace-nowrap">Se déconnecter</p>
           </a>
         </div>

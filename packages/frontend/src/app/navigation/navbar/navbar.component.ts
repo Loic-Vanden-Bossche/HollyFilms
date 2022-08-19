@@ -6,7 +6,11 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMagnifyingGlass,
+  faRightFromBracket,
+  faUserGear,
+} from '@fortawesome/free-solid-svg-icons';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { SearchService } from '../../shared/services/search.service';
@@ -96,6 +100,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   ];
 
   searchIcon = faMagnifyingGlass;
+  userGearIcon = faUserGear;
+  logoutIcon = faRightFromBracket;
 
   ngAfterViewInit() {
     this.searchInput?.changes.subscribe((list: QueryList<ElementRef>) => {
