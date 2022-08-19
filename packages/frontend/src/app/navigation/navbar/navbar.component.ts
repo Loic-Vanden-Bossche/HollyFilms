@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { SearchService } from '../../shared/services/search.service';
+import {animate, style, transition, trigger} from "@angular/animations";
 
 export class NavBarButton {
   name: string = '';
@@ -21,15 +22,35 @@ export class NavBarButton {
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
+  animations: [
+    trigger('onSearchBar', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'translateY(-100%)'
+        }),
+        animate(
+          '0.5s ease',
+          style({
+            opacity: 1,
+            transform: 'translateY(0%)'
+          })
+        ),
+      ]),
+    ]),
+
+  ]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterViewInit {
+  @ViewChildren('searchInput') searchInput: QueryList<ElementRef<HTMLInputElement>> | null = null;
+
   constructor(
     private readonly authService: AuthService,
     private readonly searchService: SearchService
   ) {}
 
   searchCtrl = new FormControl('');
-  showSearchBar = true;
+  showSearchBar = false;
 
   navButtons: NavBarButton[] = [
     new NavBarButton('Accueil', '/home'),
@@ -38,6 +59,14 @@ export class NavbarComponent implements OnInit {
   ];
 
   searchIcon = faMagnifyingGlass;
+
+  ngAfterViewInit() {
+    this.searchInput?.changes.subscribe((list: QueryList<ElementRef>) => {
+      if (list.length > 0) {
+        list.first.nativeElement.focus();
+      }
+    });
+  }
 
   ngOnInit() {
     this.searchService
@@ -56,6 +85,11 @@ export class NavbarComponent implements OnInit {
 
   get isAuthenticated() {
     return this.authService.isAuthenticated;
+  }
+
+  showSearch() {
+    this.showSearchBar = !this.showSearchBar;
+    this.searchCtrl
   }
 
   onSubmit(event: SubmitEvent) {

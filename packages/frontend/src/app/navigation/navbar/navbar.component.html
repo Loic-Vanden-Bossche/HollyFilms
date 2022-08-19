@@ -1,5 +1,5 @@
 <nav
-  class="w-full px-2 sm:px-5 overflow-hidden h-14 bg-base-600 flex flex-row justify-between"
+  class="relative w-full px-2 sm:px-5 overflow-hidden h-14 bg-base-600 flex flex-row justify-between"
 >
   <div class="h-full flex flex-row">
     <div class="flex flex-row flex-1 items-center">
@@ -58,10 +58,10 @@
         <fa-icon
           class="text-2xl xl:mr-2 mr-5 cursor-pointer"
           [icon]="searchIcon"
+          (click)="showSearch()"
         ></fa-icon>
         <form class="hidden lg:block" (submit)="onSubmit($event)">
           <input
-            *ngIf="showSearchBar"
             [formControl]="searchCtrl"
             placeholder="Rechercher..."
             class="bg-transparent outline-none px-3"
@@ -93,4 +93,15 @@
     </div>
   </div>
 </nav>
-<div class="h-1 w-full bg-gradient-to-r gradient-colors"></div>
+<div class="relative h-1 w-full bg-gradient-to-r gradient-colors"></div>
+<div @onSearchBar *ngIf="showSearchBar" tabindex="1" class="relative -z-10 flex items-center text-white text-opacity-80 hover:text-opacity-100 lg:hidden w-full p-5 bg-base-600">
+  <form class="w-full" (submit)="onSubmit($event)">
+    <input
+      [formControl]="searchCtrl"
+      #searchInput
+      placeholder="Rechercher..."
+      class="bg-transparent outline-none px-3 w-full"
+      type="search"
+    />
+  </form>
+</div>
