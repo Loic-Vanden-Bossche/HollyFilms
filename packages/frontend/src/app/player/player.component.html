@@ -34,17 +34,16 @@
               <fa-icon [icon]="chevronRightIcon"></fa-icon>
             </div>
             <div
-              @onFeatured
               *ngIf="displayFeatured"
-              class="h-4/5 w-72 pointer-events-auto gap-2 flex flex-col"
+              class="h-full w-72 overflow-y-auto scrollbar-hide pointer-events-auto gap-2 flex flex-col"
             >
               <div
-                [ngStyle]="{
-                  'background-image': 'url(' + media.data.backdrop_path + ')'
-                }"
-                class="h-full w-full bg-white bg-cover bg-center rounded"
-                *ngFor="let media of featuredMedias"
-              ></div>
+                class="first:mt-8"
+                [@onContent]="{ value: '', params: { delay: i * 100 } }"
+                *ngFor="let media of featuredMedias; let i = index"
+              >
+                <app-play-next-media [media]="media"></app-play-next-media>
+              </div>
             </div>
           </div>
         </div>

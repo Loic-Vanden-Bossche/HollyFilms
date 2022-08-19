@@ -38,29 +38,33 @@ import {
         ),
       ]),
     ]),
-    trigger('onFeatured', [
-      transition(':enter', [
-        style({
-          'max-width': '0rem',
-          opacity: 0,
-        }),
-        animate(
-          '0.5s ease',
+    trigger('onContent', [
+      transition(
+        ':enter',
+        [
           style({
-            'max-width': '18rem',
-            opacity: 1,
-          })
-        ),
-      ]),
+            transform: 'TranslateX(100%)',
+            opacity: 0,
+          }),
+          animate(
+            '0.5s {{delay}}ms ease',
+            style({
+              transform: 'TranslateX(0%)',
+              opacity: 1,
+            })
+          ),
+        ],
+        { params: { delay: '500' } }
+      ),
       transition(':leave', [
         style({
-          'max-width': '18rem',
+          transform: 'TranslateX(0%)',
           opacity: 1,
         }),
         animate(
           '0.5s ease',
           style({
-            'max-width': '0rem',
+            transform: 'TranslateX(100%)',
             opacity: 0,
           })
         ),
@@ -377,6 +381,8 @@ export class PlayerComponent implements AfterViewInit {
             )
             .subscribe();
         });
+
+        this.player.on('ended', () => (this.displayFeatured = true));
 
         this.player.on('texttrackchange', () => this.addOffset(1.2));
         this.player.on('seeked', () => {

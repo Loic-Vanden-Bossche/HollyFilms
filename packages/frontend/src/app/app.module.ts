@@ -15,9 +15,10 @@ import { PlayerComponent } from './player/player.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { PlayNextMediaComponent } from './player/play-next-media/play-next-media.component';
 
 @NgModule({
-  declarations: [AppComponent, PlayerComponent],
+  declarations: [AppComponent, PlayerComponent, PlayNextMediaComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

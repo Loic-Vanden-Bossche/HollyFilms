@@ -1,0 +1,30 @@
+<div
+  *ngIf="media"
+  [ngStyle]="{
+    'background-image': 'url(' + media.data.backdrop_path + ')'
+  }"
+  class="aspect-video relative cursor-pointer overflow-hidden group flex-shrink-0 w-full bg-cover bg-center rounded-lg"
+>
+  <div
+    class="bg-base-600/50 flex flex-col justify-between font-bold text-xl h-full w-full p-4"
+  >
+    <div class="flex text-success flex-row">
+      <fa-icon
+        class="text-base mr-4"
+        *ngIf="vendorIcon"
+        [icon]="vendorIcon"
+      ></fa-icon>
+      <span class="text-sm">{{ vendorTag }}</span>
+    </div>
+    <h1>{{ media.data.title }}</h1>
+  </div>
+  <div
+    class="transition-all absolute top-0 left-0 bg-black/70 group-hover:opacity-100 opacity-0 h-full w-full"
+  >
+    <a [routerLink]="mediaPlayLink(media)">
+      <div class="w-full h-full text-center flex-col flex justify-center">
+        <p class="text-sm font-bold">Voir le film</p>
+      </div>
+    </a>
+  </div>
+</div>
