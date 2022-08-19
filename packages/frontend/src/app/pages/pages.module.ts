@@ -14,6 +14,8 @@ import { SharedModule } from '../shared/shared.module';
 import { ShowcaseMediasComponent } from './showcase/showcase-medias/showcase-medias.component';
 import { ShowcaseMediaContentComponent } from './showcase/showcase-medias/showcase-media-content/showcase-media-content.component';
 import { ShowcaseTextAnimationComponent } from './showcase/showcase-text-animation/showcase-text-animation.component';
+import { MyListComponent } from './my-list/my-list.component';
+import { CategoryResultsComponent } from './category-results/category-results.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { ShowcaseTextAnimationComponent } from './showcase/showcase-text-animati
     ShowcaseMediasComponent,
     ShowcaseMediaContentComponent,
     ShowcaseTextAnimationComponent,
+    MyListComponent,
+    CategoryResultsComponent,
   ],
   imports: [
     MediasModule,
