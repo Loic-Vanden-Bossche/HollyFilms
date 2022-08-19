@@ -17,6 +17,11 @@ $center-big-play-button: false;
   border-radius: 10px;
 }
 
+.featured-container {
+  pointer-events: none;
+  @apply h-full w-full #{!important};
+}
+
 .vjs-slider-bar {
   background-color: #3a4350 !important;
   border-radius: 10px;

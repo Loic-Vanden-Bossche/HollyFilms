@@ -6,13 +6,48 @@
       controls
     ></video>
     <div #customPlayer>
-      <div class="vjs-control-bar p-3 w-full top-0">
-        <a
-          [routerLink]="'/' + returnUrl.route"
-          [queryParams]="returnUrl.params"
-        >
-          <fa-icon class="text-3xl" [icon]="leftIcon"></fa-icon>
-        </a>
+      <div
+        class="vjs-control-bar featured-container top-0 right-0 left-0 bottom-0"
+      >
+        <div class="relative h-full w-full">
+          <div class="py-3 px-6 absolute pointer-events-auto top-0 w-full">
+            <a
+              [routerLink]="'/' + returnUrl.route"
+              [queryParams]="returnUrl.params"
+            >
+              <fa-icon class="text-3xl" [icon]="leftIcon"></fa-icon>
+            </a>
+          </div>
+          <div class="absolute flex flex-row items-center right-4 top-0 h-full">
+            <div
+              (mouseenter)="displayFeatured = true"
+              *ngIf="!displayFeatured"
+              class="pointer-events-auto text-4xl cursor-pointer"
+            >
+              <fa-icon [icon]="chevronLeftIcon"></fa-icon>
+            </div>
+            <div
+              *ngIf="displayFeatured"
+              (click)="displayFeatured = false"
+              class="pointer-events-auto text-4xl mr-8 cursor-pointer"
+            >
+              <fa-icon [icon]="chevronRightIcon"></fa-icon>
+            </div>
+            <div
+              @onFeatured
+              *ngIf="displayFeatured"
+              class="h-4/5 w-72 pointer-events-auto gap-2 flex flex-col"
+            >
+              <div
+                [ngStyle]="{
+                  'background-image': 'url(' + media.data.backdrop_path + ')'
+                }"
+                class="h-full w-full bg-white bg-cover bg-center rounded"
+                *ngFor="let media of featuredMedias"
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

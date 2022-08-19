@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { MediaWithType } from '../shared/models/media.model';
+import {
+  MediaWithType,
+  MediaWithTypeAndFeatured,
+} from '../shared/models/media.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable, sampleTime, switchMap } from 'rxjs';
 import { MediasService } from '../shared/services/medias.service';
@@ -10,7 +13,11 @@ import { environment } from '../../environments/environment';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { PlayerService } from '../shared/services/player.service';
 import { PreviousRouteService } from '../shared/services/previous-route.service';
-import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faLeftLong,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-player',
@@ -27,6 +34,34 @@ import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
           style({
             transform: 'Scale(1)',
             opacity: 1,
+          })
+        ),
+      ]),
+    ]),
+    trigger('onFeatured', [
+      transition(':enter', [
+        style({
+          'max-width': '0rem',
+          opacity: 0,
+        }),
+        animate(
+          '0.5s ease',
+          style({
+            'max-width': '18rem',
+            opacity: 1,
+          })
+        ),
+      ]),
+      transition(':leave', [
+        style({
+          'max-width': '18rem',
+          opacity: 1,
+        }),
+        animate(
+          '0.5s ease',
+          style({
+            'max-width': '0rem',
+            opacity: 0,
           })
         ),
       ]),
@@ -53,10 +88,16 @@ export class PlayerComponent implements AfterViewInit {
     private readonly router: Router
   ) {}
 
+  featuredMedias: MediaWithTypeAndFeatured[] = [];
+
   cueCount = 0;
   cueSet = false;
 
+  displayFeatured = false;
+
   leftIcon = faLeftLong;
+  chevronLeftIcon = faChevronLeft;
+  chevronRightIcon = faChevronRight;
 
   addOffset(offset: number) {
     if (this.player && !this.cueSet) {
@@ -186,6 +227,10 @@ export class PlayerComponent implements AfterViewInit {
       this.returnUrl.params = this.router.parseUrl(prevRoute).queryParams;
     }
 
+    this.mediasService
+      .getFeaturedMedias()
+      .subscribe((medias) => (this.featuredMedias = medias));
+
     this.route.paramMap
       .pipe(
         switchMap((params) =>
@@ -268,7 +313,12 @@ export class PlayerComponent implements AfterViewInit {
         const indexesParams = si && ei ? { si, ei } : {};
 
         this.customPlayerElement?.nativeElement.childNodes.forEach((node) => {
-          this.playerElement?.nativeElement.parentElement?.appendChild(node);
+          this.playerElement?.nativeElement.parentElement?.insertBefore(
+            node,
+            this.playerElement?.nativeElement.parentElement?.getElementsByClassName(
+              'vjs-control-bar'
+            )[0]
+          );
         });
 
         this.player.on('loadeddata', () => {
