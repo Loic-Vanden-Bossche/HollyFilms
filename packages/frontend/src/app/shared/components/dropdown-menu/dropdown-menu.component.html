@@ -1,0 +1,16 @@
+<div
+  (mouseenter)="menuOpen = true"
+  (mouseleave)="menuOpen = false"
+  class="cursor-pointer"
+>
+  <div #content>
+    <ng-content></ng-content>
+  </div>
+  <div *ngIf="menuOpen" @onOpen class="absolute pt-2 z-50">
+    <div [ngStyle]="{ transform: 'TranslateX(' + translateValue + 'px)' }">
+      <div [ngStyle]="{ transform: 'TranslateX(' + translatePercent + '%)' }">
+        <ng-content select="[menu]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

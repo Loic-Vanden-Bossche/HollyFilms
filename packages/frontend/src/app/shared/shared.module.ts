@@ -16,6 +16,7 @@ import { SentenceCasePipe } from './pipes/sentence-case.pipe';
 import { ProgressCircleComponent } from './components/progress-circle/progress-circle.component';
 import { BytesToHumanPipe } from './pipes/bytes-to-human.pipe';
 import { NoContentComponent } from './components/no-content/no-content.component';
+import { DropdownMenuComponent } from './components/dropdown-menu/dropdown-menu.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NoContentComponent } from './components/no-content/no-content.component
     ProgressCircleComponent,
     BytesToHumanPipe,
     NoContentComponent,
+    DropdownMenuComponent,
   ],
   exports: [
     ModalComponent,
@@ -37,6 +39,7 @@ import { NoContentComponent } from './components/no-content/no-content.component
     ProgressCircleComponent,
     BytesToHumanPipe,
     NoContentComponent,
+    DropdownMenuComponent,
   ],
   providers: [
     UsersService,

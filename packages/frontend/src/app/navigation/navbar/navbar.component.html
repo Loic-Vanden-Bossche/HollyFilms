@@ -1,5 +1,5 @@
 <nav
-  class="relative w-full px-2 sm:px-5 overflow-hidden h-14 bg-base-600 flex flex-row justify-between"
+  class="w-full px-2 sm:px-5 overflow-hidden h-14 bg-base-600 flex flex-row justify-between"
 >
   <div class="h-full flex flex-row">
     <div class="flex flex-row flex-1 items-center">
@@ -42,12 +42,25 @@
       >
         <p>{{ navButtons[0].name }}</p>
       </a>
-
-      <a
-        class="ml-6 text-lg font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
-      >
-        <p>Autre</p>
-      </a>
+      <div class="ml-6">
+        <app-dropdown-menu>
+          <a
+            class="text-lg font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+          >
+            <p>Autre</p>
+          </a>
+          <div class="px-4 py-2 bg-base-600 shadow-2xl rounded-lg" menu>
+            <a
+              class="text-lg h-10 cursor-pointer justify-center font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
+              [routerLink]="button.path"
+              (click)="button?.action()"
+              *ngFor="let button of navButtons.slice(1)"
+            >
+              <p>{{ button.name }}</p>
+            </a>
+          </div>
+        </app-dropdown-menu>
+      </div>
     </div>
   </div>
   <div class="h-full">
