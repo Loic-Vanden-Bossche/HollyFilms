@@ -40,4 +40,4 @@
 | HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
 | HF_MEDIAS_FILES_PATH | ../../medias_files | Path where the videos files are stored before upload | isString | No |
 
-Generated on 17/08/2022, 00:50:39
+Generated on 18/08/2022, 23:45:05

@@ -1,0 +1,55 @@
+$primary-foreground-color: #fff;
+$primary-background-color: rgba(0, 0, 0, 0);
+$center-big-play-button: false;
+
+.video-js .vjs-text-track-display > div > div > div{
+  font-size: 40px !important;
+  line-height: 45px !important;
+  padding:5px !important;
+  background:transparent !important;
+  text-shadow: 1px 1px 2px #000000;
+  display: inline-block !important;
+  color: #e7c82c !important;
+}
+
+.vjs-volume-level {
+  @apply bg-gradient-to-r gradient-colors #{!important};
+  border-radius: 10px;
+}
+
+.vjs-slider-bar {
+  background-color: #3a4350 !important;
+  border-radius: 10px;
+}
+
+.vjs-menu-content {
+  @apply bg-base-500 #{!important};
+}
+
+.vjs-slider {
+  border-radius: 10px;
+}
+
+.vjs-volume-bar {
+
+  .vjs-mouse-display {
+    transform: translateY(-25px);
+  }
+}
+
+.vjs-play-progress {
+  @apply bg-gradient-to-r gradient-colors #{!important};
+}
+
+.video-js {
+  font-size: 15px;
+  color: $primary-foreground-color;
+}
+
+.video-js .vjs-control-bar,
+.video-js .vjs-big-play-button,
+.video-js .vjs-menu-button .vjs-menu-content {
+  background-color: $primary-background-color;
+}
+
+$slider-bg-color: lighten($primary-background-color, 33%);

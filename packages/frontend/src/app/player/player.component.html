@@ -5,5 +5,15 @@
       class="video-js w-full h-full vjs-default-skin"
       controls
     ></video>
+    <div #customPlayer>
+      <div class="vjs-control-bar p-3 w-full top-0">
+        <a
+          [routerLink]="'/' + returnUrl.route"
+          [queryParams]="returnUrl.params"
+        >
+          <fa-icon class="text-3xl" [icon]="leftIcon"></fa-icon>
+        </a>
+      </div>
+    </div>
   </div>
 </div>

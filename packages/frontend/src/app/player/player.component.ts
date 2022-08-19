@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MediaWithType } from '../shared/models/media.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable, sampleTime, switchMap } from 'rxjs';
 import { MediasService } from '../shared/services/medias.service';
 
@@ -9,6 +9,8 @@ import { VideoJsPlayer } from 'video.js';
 import { environment } from '../../environments/environment';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { PlayerService } from '../shared/services/player.service';
+import { PreviousRouteService } from '../shared/services/previous-route.service';
+import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-player',
@@ -37,16 +39,24 @@ export class PlayerComponent implements AfterViewInit {
   private player: VideoJsPlayer | null = null;
   source: string | null = null;
 
-  @ViewChild('player') playerElement: ElementRef | null = null;
+  returnUrl = { route: '/home', params: {} };
+
+  @ViewChild('player') playerElement: ElementRef<HTMLElement> | null = null;
+  @ViewChild('customPlayer')
+  customPlayerElement: ElementRef<HTMLElement> | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly playerService: PlayerService,
-    private readonly mediasService: MediasService
+    private readonly mediasService: MediasService,
+    private readonly previousRouteService: PreviousRouteService,
+    private readonly router: Router
   ) {}
 
   cueCount = 0;
   cueSet = false;
+
+  leftIcon = faLeftLong;
 
   addOffset(offset: number) {
     if (this.player && !this.cueSet) {
@@ -167,6 +177,15 @@ export class PlayerComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    const prevRoute = this.previousRouteService.previousRoute;
+    if (prevRoute !== this.router.url) {
+      this.returnUrl.route =
+        this.router.parseUrl(prevRoute).root.children[
+          'primary'
+        ].segments[0].path;
+      this.returnUrl.params = this.router.parseUrl(prevRoute).queryParams;
+    }
+
     this.route.paramMap
       .pipe(
         switchMap((params) =>
@@ -188,15 +207,54 @@ export class PlayerComponent implements AfterViewInit {
               this.media?.data.fileInfos?.location || 'default'
             }/${this.media?.data._id}/${tvIndexes}master.m3u8`
           : '';
-        this.player = videojs.default(this.playerElement?.nativeElement, {
-          bigPlayButton: false,
-          autoplay: true,
-          controlBar: {
-            liveDisplay: false,
-            seekToLive: false,
-            pictureInPictureToggle: false,
-          },
+
+        videojs.default.addLanguage('fr', {
+          Play: 'Reprendre',
+          Pause: 'Pause',
+          'Current Time': 'Temps actuel',
+          Duration: 'Durée',
+          'Remaining Time': 'Temps restant',
+          'Stream Type': 'Type de flux',
+          LIVE: 'EN DIRECT',
+          Loaded: 'Chargé',
+          Progress: 'Progression',
+          Fullscreen: 'Plein écran',
+          'Non-Fullscreen': 'Plein écran',
+          Mute: 'Muet',
+          Unmute: 'Non muet',
+          'Playback Rate': 'Vitesse de lecture',
+          Subtitles: 'Sous-titres',
+          'subtitles off': 'sous-titres désactivés',
+          Captions: 'Sous-titres',
+          'captions off': 'sous-titres désactivés',
+          Chapters: 'Chapitres',
+          'Close Modal Dialog': 'Fermer la boîte de dialogue',
+          'You aborted the video playback':
+            'Vous avez interrompu la lecture de la vidéo.',
+          'A network error caused the video download to fail part-way.':
+            'Une erreur de réseau a interrompu la lecture de la vidéo.',
+          'The video could not be loaded, either because the server or network failed or because the format is not supported.':
+            "La vidéo n'a pas pu être chargée à cause d'une erreur de réseau ou de format non supporté.",
+          'The video playback was aborted due to a corruption problem or because the video used features your browser did not support.':
+            "La lecture de la vidéo a été interrompue à cause d'un problème de corruption ou parce que la vidéo utilise des fonctionnalités non supportées par votre navigateur.",
+          'No compatible source was found for this video.':
+            "Aucune source compatible n'a été trouvée pour cette vidéo.",
         });
+
+        this.player = videojs.default(
+          this.playerElement?.nativeElement as Element,
+          {
+            bigPlayButton: false,
+            autoplay: true,
+            language: 'fr',
+            textTrackSettings: false as any,
+            controlBar: {
+              liveDisplay: false,
+              seekToLive: false,
+              pictureInPictureToggle: false,
+            },
+          }
+        );
 
         this.player.src({
           src: this.source,
@@ -208,6 +266,10 @@ export class PlayerComponent implements AfterViewInit {
         const ei = episodeIndex ? parseInt(episodeIndex) : undefined;
 
         const indexesParams = si && ei ? { si, ei } : {};
+
+        this.customPlayerElement?.nativeElement.childNodes.forEach((node) => {
+          this.playerElement?.nativeElement.parentElement?.appendChild(node);
+        });
 
         this.player.on('loadeddata', () => {
           this.setLanguageAsName();
