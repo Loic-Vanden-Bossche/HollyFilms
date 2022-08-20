@@ -54,27 +54,17 @@
           </div>
           <div class="flex flex-col p-4 h-full w-full">
             <div
+              *ngIf="insightsEntries.length"
               class="bg-slate-100 p-2 rounded-lg mt-8 flex-row gap-2 flex w-full"
             >
-              <div class="flex flex-col items-center">
+              <div
+                *ngFor="let insight of insightsEntries"
+                class="flex flex-col items-center"
+              >
                 <span class="font-bold text-xl whitespace-nowrap">{{
-                  21
+                  insight.value
                 }}</span>
-                <span class="text-xs text-center">Films regardés</span>
-              </div>
-              <div class="flex flex-col items-center">
-                <span class="font-bold text-xl whitespace-nowrap"
-                  >{{ 123 }}h</span
-                >
-                <span class="text-xs text-center">de visionnage</span>
-              </div>
-              <div class="flex flex-col items-center">
-                <span class="font-bold text-xl whitespace-nowrap"
-                  >{{ 1 }} ans</span
-                >
-                <span class="text-xs text-center"
-                  >depuis la création du compte</span
-                >
+                <span class="text-xs text-center">{{ insight.label }}</span>
               </div>
             </div>
             <div

@@ -86,6 +86,8 @@ import { UserProfile } from '../../shared/models/user-profile.model';
 export class UserModalComponent implements OnInit {
   @Output() closed: EventEmitter<void> = new EventEmitter<void>();
 
+  insightsEntries: { value: string; label: string }[] = [];
+
   editProfileForm = new FormGroup({
     firstname: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required]),
@@ -106,6 +108,7 @@ export class UserModalComponent implements OnInit {
   ) {}
 
   updateData() {
+    this.updateInsights();
     this.cancelEdit();
   }
 
@@ -122,6 +125,46 @@ export class UserModalComponent implements OnInit {
         lastname: this.user.lastname,
         username: this.user.username,
       });
+    }
+  }
+
+  fromSecondsToTime(seconds: number) {
+    if (seconds < 60) {
+      return `${seconds}s`;
+    }
+    if (seconds < 3600) {
+      return `${Math.floor(seconds / 60)}m`;
+    }
+
+    return `${Math.floor(seconds / 3600)}h`;
+  }
+
+  updateInsights() {
+    if (this.user) {
+      this.usersService
+        .getProfileInsights(this.user?.profileUniqueId)
+        .subscribe((insights) => {
+          this.insightsEntries = [
+            {
+              value: insights.watchedMedias.toString(),
+              label:
+                insights.watchedMedias === 1
+                  ? 'film regardé'
+                  : 'films regardés',
+            },
+            {
+              value: this.fromSecondsToTime(insights.totalPlayTime),
+              label: 'de visionnage',
+            },
+            {
+              value: insights.favoriteGenre,
+              label:
+                insights.favoriteGenre === 'Aucun'
+                  ? 'genre favori'
+                  : 'est votre genre favori',
+            },
+          ];
+        });
     }
   }
 
@@ -152,6 +195,7 @@ export class UserModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateInsights();
     this.usersService
       .getProfileList()
       .subscribe((profiles) => (this.userProfiles = profiles));

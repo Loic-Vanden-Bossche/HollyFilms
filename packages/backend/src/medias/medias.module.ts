@@ -15,7 +15,7 @@ import { MoviesController } from './movies/movies.controller';
 @Module({
   imports: [
     forwardRef(() => ProcessingModule),
-    IdentityModule,
+    forwardRef(() => IdentityModule),
     HttpModule,
     TmdbModule,
     MongooseModule.forFeature([{ name: Media.name, schema: MediaSchema }]),

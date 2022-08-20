@@ -16,6 +16,8 @@ import { TrackData } from '../../medias/medias.utils';
 import * as randomToken from 'rand-token';
 import CreateProfileDto from './dto/create.profile.dto';
 import { getRandomColor, getRandomizedColors } from './colors-profiles';
+import { UserProfile } from './user-profile.schema';
+import { MediasService } from '../../medias/medias.service';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +25,7 @@ export class UsersService {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly mediasService: MediasService,
     private readonly configService: ConfigService,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
@@ -56,7 +59,21 @@ export class UsersService {
       .then((u) => u.profiles);
   }
 
-  getProfile(user: CurrentUser, uniqueId: string) {
+  getProfileInsights(user: CurrentUser, uniqueId: string) {
+    return this.getProfile(user, uniqueId).then(async (profile) => ({
+      totalPlayTime: (profile.playedMedias || []).reduce((acc, media) => {
+        return acc + media.currentTime || 0;
+      }, 0),
+      watchedMedias: profile.playedMedias?.length || 0,
+      favoriteGenre: profile.playedMedias?.length
+        ? await this.mediasService.getMostRedondantGenreFromMedias(
+            profile.playedMedias.map((pm) => pm.media._id.toString()),
+          )
+        : 'Aucun',
+    }));
+  }
+
+  getProfile(user: CurrentUser, uniqueId: string): Promise<UserProfile> {
     const profileUniqueId =
       uniqueId === 'current' ? user.profileUniqueId : uniqueId;
     return this.userModel

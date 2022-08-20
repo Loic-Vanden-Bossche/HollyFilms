@@ -42,6 +42,16 @@ export class UsersController {
   }
 
   @Roles(Role.User)
+  @Get('insights/:uniqueId')
+  @ApiOperation({ summary: '[User] Get profile insights' })
+  async getProfileInsights(
+    @User() user: CurrentUser,
+    @Param('uniqueId') uniqueId: string,
+  ) {
+    return this.usersService.getProfileInsights(user, uniqueId);
+  }
+
+  @Roles(Role.User)
   @Get('/profile/current')
   @ApiOperation({ summary: '[User] Set media track properties' })
   async getCurrentUserProfile(@User() user: CurrentUser) {

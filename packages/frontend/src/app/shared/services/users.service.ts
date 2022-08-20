@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UpdateUserDTO, User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../models/user-profile.model';
+import { ProfileInsights } from '../models/profile-Insights.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +45,12 @@ export class UsersService {
 
   getUser(userId: string): Observable<User> {
     return this.api.get<User>(`users/limited/${userId}`, {
+      withCredentials: true,
+    });
+  }
+
+  getProfileInsights(profileUniqueId: string) {
+    return this.api.get<ProfileInsights>(`users/insights/${profileUniqueId}`, {
       withCredentials: true,
     });
   }

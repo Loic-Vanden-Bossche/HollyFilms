@@ -2,7 +2,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { User, UserSchema } from './users/user.schema';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getExpirationDuration } from './auth/auth.utils';
 import { APIConfig, JWTConfig } from '../config/config';
@@ -17,6 +17,7 @@ import { AuthController } from './auth/auth.controller';
 import { TokensService } from './tokens/tokens.service';
 import { UsersAdminController } from './users/users.admin.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { MediasModule } from '../medias/medias.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { JwtModule } from '@nestjs/jwt';
       },
       inject: [ConfigService],
     }),
+    forwardRef(() => MediasModule),
   ],
   providers: [
     UsersService,

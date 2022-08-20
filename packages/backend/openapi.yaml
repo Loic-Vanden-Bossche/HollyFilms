@@ -92,6 +92,20 @@ paths:
         "200":
           description: ""
       tags: *a1
+  "/users/insights/{uniqueId}":
+    get:
+      operationId: UsersController_getProfileInsights
+      summary: "[User] Get profile insights"
+      parameters:
+        - name: uniqueId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
   /users/profile/current:
     get:
       operationId: UsersController_getCurrentUserProfile

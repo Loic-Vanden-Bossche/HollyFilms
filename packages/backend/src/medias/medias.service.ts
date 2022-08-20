@@ -37,6 +37,7 @@ import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
 import { getMoviesToMigrate, getTvsToMigrate } from '../bootstrap/migrations';
 import { TmdbService } from '../tmdb/tmdb.service';
+import { getObjectId } from '../shared/mongoose';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -65,6 +66,7 @@ export class MediasService {
 
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
     @Inject(forwardRef(() => ProcessingService))
     private readonly processingService: ProcessingService,
@@ -93,6 +95,19 @@ export class MediasService {
   async removeMediaFromDisk(mediaId): Promise<void> {
     const path = this.processingService.getTargetPath(mediaId);
     if (fs.existsSync(path)) rimraf.sync(path);
+  }
+
+  getMostRedondantGenreFromMedias(mediaIds: string[]) {
+    return this.mediaModel
+      .aggregate([
+        { $match: { _id: { $in: mediaIds.map((id) => getObjectId(id)) } } },
+        { $unwind: '$genres' },
+        { $group: { _id: '$genres', count: { $sum: 1 } } },
+        { $sort: { _id: 1, count: -1 } },
+        { $limit: 1 },
+      ])
+      .exec()
+      .then(([{ _id: genre }]) => genre);
   }
 
   getCategories(): Promise<MediaCategory[]> {
