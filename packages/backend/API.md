@@ -617,6 +617,759 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## UsersController_getCurrentUserProfile
+
+<a id="opIdUsersController_getCurrentUserProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/profile/current
+
+```
+
+```http
+GET /users/profile/current HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/profile/current',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/profile/current',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/profile/current')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/profile/current', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile/current");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/profile/current", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/profile/current`
+
+*[User] Set media track properties*
+
+<h3 id="userscontroller_getcurrentuserprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_getUserProfile
+
+<a id="opIdUsersController_getUserProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/profile/{uniqueId}
+
+```
+
+```http
+GET /users/profile/{uniqueId} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/profile/{uniqueId}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/profile/{uniqueId}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/profile/{uniqueId}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/profile/{uniqueId}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile/{uniqueId}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/profile/{uniqueId}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/profile/{uniqueId}`
+
+*[User] Set media track properties*
+
+<h3 id="userscontroller_getuserprofile-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|uniqueId|path|string|true|none|
+
+<h3 id="userscontroller_getuserprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_updateUserProfile
+
+<a id="opIdUsersController_updateUserProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X PUT /users/profile/{uniqueId} \
+  -H 'Content-Type: application/json'
+
+```
+
+```http
+PUT /users/profile/{uniqueId} HTTP/1.1
+
+Content-Type: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/users/profile/{uniqueId}',
+{
+  method: 'PUT',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json'
+}
+
+result = RestClient.put '/users/profile/{uniqueId}',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json'
+}
+
+r = requests.put('/users/profile/{uniqueId}', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('PUT','/users/profile/{uniqueId}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile/{uniqueId}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("PUT");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("PUT", "/users/profile/{uniqueId}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`PUT /users/profile/{uniqueId}`
+
+*[User] Update a specific user profile*
+
+> Body parameter
+
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}
+```
+
+<h3 id="userscontroller_updateuserprofile-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|uniqueId|path|string|true|none|
+|body|body|[CreateProfileDto](#schemacreateprofiledto)|true|none|
+
+<h3 id="userscontroller_updateuserprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_getUserProfiles
+
+<a id="opIdUsersController_getUserProfiles"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/profiles
+
+```
+
+```http
+GET /users/profiles HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/profiles',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/profiles',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/profiles')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/profiles', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profiles");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/profiles", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/profiles`
+
+*[User] Get all profiles of the user*
+
+<h3 id="userscontroller_getuserprofiles-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_createUserProfile
+
+<a id="opIdUsersController_createUserProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /users/profile \
+  -H 'Content-Type: application/json'
+
+```
+
+```http
+POST /users/profile HTTP/1.1
+
+Content-Type: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/users/profile',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json'
+}
+
+result = RestClient.post '/users/profile',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json'
+}
+
+r = requests.post('/users/profile', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/users/profile', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/users/profile", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /users/profile`
+
+*[User] Create a new user profile*
+
+> Body parameter
+
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}
+```
+
+<h3 id="userscontroller_createuserprofile-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[CreateProfileDto](#schemacreateprofiledto)|true|none|
+
+<h3 id="userscontroller_createuserprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 ## UsersController_getPlayerStatus
 
 <a id="opIdUsersController_getPlayerStatus"></a>
@@ -2031,6 +2784,144 @@ func main() {
 |Status|Header|Type|Format|Description|
 |---|---|---|---|---|
 |200|Set-Cookie|undefined||Authorization cookie|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## AuthController_switchUserProfile
+
+<a id="opIdAuthController_switchUserProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /auth/switchProfile/{uniqueId}
+
+```
+
+```http
+GET /auth/switchProfile/{uniqueId} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/auth/switchProfile/{uniqueId}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/auth/switchProfile/{uniqueId}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/auth/switchProfile/{uniqueId}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/auth/switchProfile/{uniqueId}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/auth/switchProfile/{uniqueId}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/auth/switchProfile/{uniqueId}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /auth/switchProfile/{uniqueId}`
+
+*[User] Get a cookie for a specific profile*
+
+<h3 id="authcontroller_switchuserprofile-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|uniqueId|path|string|true|none|
+
+<h3 id="authcontroller_switchuserprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -7035,6 +7926,30 @@ This operation does not require authentication
 |username|string|true|none|User nickname|
 |newPassword|string|true|none|New user password|
 |newPasswordConfirm|string|true|none|New user password confirmation|
+
+<h2 id="tocS_CreateProfileDto">CreateProfileDto</h2>
+<!-- backwards compatibility -->
+<a id="schemacreateprofiledto"></a>
+<a id="schema_CreateProfileDto"></a>
+<a id="tocScreateprofiledto"></a>
+<a id="tocscreateprofiledto"></a>
+
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|firstname|string|true|none|User first name|
+|lastname|string|true|none|User last name|
+|username|string|true|none|User nickname|
 
 <h2 id="tocS_CreateUserDto">CreateUserDto</h2>
 <!-- backwards compatibility -->

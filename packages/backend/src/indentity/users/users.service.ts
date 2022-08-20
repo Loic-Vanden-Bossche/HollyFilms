@@ -14,6 +14,7 @@ import { Role } from '../../shared/role';
 import { getObjectId } from '../../shared/mongoose';
 import { TrackData } from '../../medias/medias.utils';
 import * as randomToken from 'rand-token';
+import CreateProfileDto from './dto/create.profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -40,6 +41,80 @@ export class UsersService {
       })
       .exec()
       .then((user) => new CurrentUser(user));
+  }
+
+  getProfiles(user: CurrentUser) {
+    return this.userModel
+      .findOne(getObjectId(user._id))
+      .orFail(() => {
+        throw new HttpException(
+          `User ${user._id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      })
+      .then((u) => u.profiles);
+  }
+
+  getProfile(user: CurrentUser, uniqueId: string) {
+    const profileUniqueId =
+      uniqueId === 'current' ? user.profileUniqueId : uniqueId;
+    return this.userModel
+      .findById(getObjectId(user._id))
+      .orFail(() => {
+        throw new HttpException(
+          `User ${user._id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      })
+      .then((u) => {
+        const profile = u.profiles.find((p) => p.uniqueId === profileUniqueId);
+        if (!profile)
+          throw new HttpException(
+            `Profile ${profileUniqueId} not found for user ${user._id}`,
+            HttpStatus.NOT_FOUND,
+          );
+        return profile;
+      });
+  }
+
+  createProfile(user: CurrentUser, dto: CreateProfileDto) {
+    return this.userModel
+      .findByIdAndUpdate(
+        getObjectId(user._id),
+        {
+          $push: {
+            profiles: {
+              uniqueId: randomToken.generate(16),
+              username: dto.username,
+              firstname: dto.firstname,
+              lastname: dto.lastname,
+            },
+          },
+        },
+        {
+          new: true,
+        },
+      )
+      .exec();
+  }
+
+  updateProfile(user: CurrentUser, dto: CreateProfileDto, uniqueId: string) {
+    return this.userModel
+      .findByIdAndUpdate(
+        getObjectId(user._id),
+        {
+          $set: {
+            'profiles.$[elem].username': dto.username,
+            'profiles.$[elem].firstname': dto.firstname,
+            'profiles.$[elem].lastname': dto.lastname,
+          },
+        },
+        {
+          arrayFilters: [{ 'elem.uniqueId': uniqueId }],
+          returnOriginal: false,
+        },
+      )
+      .exec();
   }
 
   findByIdLimited(id: string) {

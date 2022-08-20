@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBody,
   ApiCookieAuth,
@@ -19,6 +27,9 @@ import { Public } from '../../shared/decorators/public.decorator';
 import { User } from '../../shared/decorators/user.decorator';
 import ResetPasswordDto from './dto/reset-password.auth.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../../shared/decorators/roles.decorator';
+import { Role } from '../../shared/role';
+import { checkUniqueId } from './auth.utils';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -51,6 +62,25 @@ export class AuthController {
   ): Promise<CurrentUser> {
     this.authService.attachCookie(res, await this.authService.getTokens(user));
     return user;
+  }
+
+  @Roles(Role.User)
+  @Get('/switchProfile/:uniqueId')
+  @ApiOperation({ summary: '[User] Get a cookie for a specific profile' })
+  async switchUserProfile(
+    @User() user: CurrentUser,
+    @Res({ passthrough: true }) res: Response,
+    @Param('uniqueId') uniqueId: string,
+  ) {
+    return this.authService
+      .checkUserProfile(user, checkUniqueId(uniqueId))
+      .then((user) => new CurrentUser(user, uniqueId))
+      .then((currentUser) =>
+        this.authService
+          .getTokens(currentUser)
+          .then((tokens) => this.authService.attachCookie(res, tokens))
+          .then(() => currentUser),
+      );
   }
 
   @Public()

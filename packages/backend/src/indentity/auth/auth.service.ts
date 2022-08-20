@@ -74,6 +74,26 @@ export class AuthService {
     };
   }
 
+  checkUserProfile(user: CurrentUser, uniqueId: string) {
+    return this.userModel
+      .findById(getObjectId(user._id))
+      .orFail(() => {
+        throw new HttpException(
+          `User ${user._id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      })
+      .then((u) => {
+        const profile = u.profiles.find((p) => p.uniqueId === uniqueId);
+        if (!profile)
+          throw new HttpException(
+            `Profile ${uniqueId} not found for user ${user._id}`,
+            HttpStatus.NOT_FOUND,
+          );
+        return u;
+      });
+  }
+
   generateRefreshToken(userId: string): Promise<Token> {
     const config = this.configService.get<RTokenConfig>('rToken');
     return this.tokensService.generateToken({

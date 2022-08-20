@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import UpdateMeDto from './dto/update.me.dto';
@@ -10,6 +10,8 @@ import CurrentUser from './current';
 import UpdateTrackDto from './dto/update.track.dto';
 import { dtoToTrackData } from '../../medias/medias.utils';
 import GetPlayerStatusDto from './dto/get.playerStatus.dto';
+import CreateProfileDto from './dto/create.profile.dto';
+import { checkUniqueId } from '../auth/auth.utils';
 
 @ApiTags('Users')
 @Controller('users')
@@ -37,6 +39,55 @@ export class UsersController {
     @Query() trackData: UpdateTrackDto,
   ) {
     return this.usersService.trackUser(user, dtoToTrackData(trackData));
+  }
+
+  @Roles(Role.User)
+  @Get('/profile/current')
+  @ApiOperation({ summary: '[User] Set media track properties' })
+  async getCurrentUserProfile(@User() user: CurrentUser) {
+    return this.usersService.getProfile(user, 'current');
+  }
+
+  @Roles(Role.User)
+  @Get('/profile/:uniqueId')
+  @ApiOperation({ summary: '[User] Set media track properties' })
+  async getUserProfile(
+    @User() user: CurrentUser,
+    @Param('uniqueId') uniqueId: string,
+  ) {
+    return this.usersService.getProfile(user, checkUniqueId(uniqueId));
+  }
+
+  @Roles(Role.User)
+  @Get('/profiles')
+  @ApiOperation({ summary: '[User] Get all profiles of the user' })
+  async getUserProfiles(@User() user: CurrentUser) {
+    return this.usersService.getProfiles(user);
+  }
+
+  @Roles(Role.User)
+  @Post('/profile')
+  @ApiOperation({ summary: '[User] Create a new user profile' })
+  async createUserProfile(
+    @User() user: CurrentUser,
+    @Body() profileDto: CreateProfileDto,
+  ) {
+    return this.usersService.createProfile(user, profileDto);
+  }
+
+  @Roles(Role.User)
+  @Put('/profile/:uniqueId')
+  @ApiOperation({ summary: '[User] Update a specific user profile' })
+  async updateUserProfile(
+    @User() user: CurrentUser,
+    @Param('uniqueId') uniqueId: string,
+    @Body() profileDto: CreateProfileDto,
+  ) {
+    return this.usersService.updateProfile(
+      user,
+      profileDto,
+      checkUniqueId(uniqueId),
+    );
   }
 
   @Roles(Role.User)

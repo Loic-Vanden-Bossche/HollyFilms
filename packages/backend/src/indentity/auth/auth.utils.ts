@@ -13,6 +13,13 @@ import { Media } from '../../medias/media.schema';
 
 dayjs.extend(duration);
 
+export const checkUniqueId = (id: string) => {
+  if (id.length !== 16) {
+    throw new HttpException('Invalid profile unique id', 400);
+  }
+  return id;
+};
+
 export const getExpirationDate = (dateString: string): Date | undefined => {
   const seconds = getExpirationDuration(dateString);
   if (!seconds) return undefined;

@@ -92,6 +92,72 @@ paths:
         "200":
           description: ""
       tags: *a1
+  /users/profile/current:
+    get:
+      operationId: UsersController_getCurrentUserProfile
+      summary: "[User] Set media track properties"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  "/users/profile/{uniqueId}":
+    get:
+      operationId: UsersController_getUserProfile
+      summary: "[User] Set media track properties"
+      parameters:
+        - name: uniqueId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+    put:
+      operationId: UsersController_updateUserProfile
+      summary: "[User] Update a specific user profile"
+      parameters:
+        - name: uniqueId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProfileDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /users/profiles:
+    get:
+      operationId: UsersController_getUserProfiles
+      summary: "[User] Get all profiles of the user"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /users/profile:
+    post:
+      operationId: UsersController_createUserProfile
+      summary: "[User] Create a new user profile"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProfileDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a1
   /users/playerStatus:
     get:
       operationId: UsersController_getPlayerStatus
@@ -248,6 +314,20 @@ paths:
       tags:
         &a3
         - Auth
+  "/auth/switchProfile/{uniqueId}":
+    get:
+      operationId: AuthController_switchUserProfile
+      summary: "[User] Get a cookie for a specific profile"
+      parameters:
+        - name: uniqueId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a3
   /auth/logout:
     get:
       operationId: AuthController_logout
@@ -783,6 +863,25 @@ components:
         - username
         - newPassword
         - newPasswordConfirm
+    CreateProfileDto:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: User first name
+          example: John
+        lastname:
+          type: string
+          description: User last name
+          example: Doe
+        username:
+          type: string
+          description: User nickname
+          example: Johnny
+      required:
+        - firstname
+        - lastname
+        - username
     CreateUserDto:
       type: object
       properties:
