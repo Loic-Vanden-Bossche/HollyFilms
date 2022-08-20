@@ -64,11 +64,11 @@ export const currentUserFromPayload = (
       throw new HttpException('Invalid user', HttpStatus.UNAUTHORIZED);
     })
     .populate({
-      path: 'playedMedias',
+      path: 'profiles.playedMedias',
       populate: {
         path: 'media',
         model: Media.name,
       },
     })
     .exec()
-    .then((user) => new CurrentUser(user));
+    .then((user) => new CurrentUser(user, payload.profileUniqueId));

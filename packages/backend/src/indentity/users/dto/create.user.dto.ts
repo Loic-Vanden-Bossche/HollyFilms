@@ -1,7 +1,6 @@
 import {
   IsArray,
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -47,14 +46,6 @@ export default class CreateUserDto {
     example: 'Johnny',
   })
   username?: string;
-
-  @IsEnum(Role)
-  @IsOptional()
-  @ApiProperty({
-    description: 'User role',
-    example: 'super_admin',
-  })
-  role?: Role;
 
   @IsString()
   @IsOptional()

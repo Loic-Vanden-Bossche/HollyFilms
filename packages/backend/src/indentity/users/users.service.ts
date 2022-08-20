@@ -13,6 +13,7 @@ import { defaultConfig } from '../../config/config.default';
 import { Role } from '../../shared/role';
 import { getObjectId } from '../../shared/mongoose';
 import { TrackData } from '../../medias/medias.utils';
+import * as randomToken from 'rand-token';
 
 @Injectable()
 export class UsersService {
@@ -65,7 +66,16 @@ export class UsersService {
     await this.isAlreadyExist(user.email);
 
     return this.userModel.create({
-      ...user,
+      email: user.email,
+      roles: [user.roles],
+      profiles: [
+        {
+          uniqueId: randomToken.generate(16),
+          username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
+        },
+      ],
       password: await this.authService.hashPassword(user.password),
     });
   }
@@ -147,31 +157,40 @@ export class UsersService {
         {
           $match: {
             _id: getObjectId(user._id),
-            playedMedias: {
+            profiles: {
               $elemMatch: {
-                media: getObjectId(mediaId) as any,
-                ...indexesParams,
+                uniqueId: user.profileUniqueId,
+                playedMedias: {
+                  $elemMatch: {
+                    media: getObjectId(mediaId),
+                    ...indexesParams,
+                  },
+                },
               },
             },
           },
         },
+        { $unwind: '$profiles' },
         {
           $project: {
+            'profiles.uniqueId': user.profileUniqueId,
             playedMedias: {
               $filter: {
-                input: '$playedMedias',
+                input: '$profiles.playedMedias',
                 as: 'playedMedia',
-                cond: { $eq: ['$$playedMedia.media', getObjectId(mediaId)] },
+                cond: {
+                  $eq: ['$$playedMedia.media', getObjectId(mediaId)],
+                },
               },
             },
           },
         },
       ])
       .exec()
-      .then((user: User[]) => (!user.length ? {} : user[0].playedMedias[0]));
+      .then((user: any[]) => (!user.length ? {} : user[0].playedMedias[0]));
   }
 
-  trackUser(user: CurrentUser, trackData: TrackData) {
+  trackUser(user: CurrentUser, trackData: TrackData): any {
     const indexes = { seasonIndex: trackData.si, episodeIndex: trackData.ei };
     const tvReady = indexes.seasonIndex && indexes.episodeIndex;
 
@@ -185,40 +204,66 @@ export class UsersService {
     return this.userModel
       .findOneAndUpdate(
         {
-          _id: user._id,
-          playedMedias: {
+          _id: getObjectId(user._id),
+          profiles: {
             $elemMatch: {
-              media: getObjectId(trackData.mediaId) as any,
-              ...indexesParams,
+              uniqueId: user.profileUniqueId,
+              playedMedias: {
+                $elemMatch: {
+                  media: getObjectId(trackData.mediaId),
+                  ...indexesParams,
+                },
+              },
             },
           },
         },
         {
           $set: {
             ...(trackData.time !== undefined
-              ? { 'playedMedias.$.currentTime': trackData.time }
+              ? {
+                  'profiles.$[outer].playedMedias.$[inner].currentTime':
+                    trackData.time,
+                }
               : {}),
             ...(trackData.ai !== undefined
-              ? { 'playedMedias.$.audioTrack': trackData.ai }
+              ? {
+                  'profiles.$[outer].playedMedias.$[inner].audioTrack':
+                    trackData.ai,
+                }
               : {}),
             ...(trackData.ti !== undefined
-              ? { 'playedMedias.$.subtitleTrack': trackData.ti }
+              ? {
+                  'profiles.$[outer].playedMedias.$[inner].subtitleTrack':
+                    trackData.ti,
+                }
               : {}),
           },
         },
-        { new: true },
+        {
+          arrayFilters: [
+            { 'outer.uniqueId': user.profileUniqueId },
+            { 'inner.media': getObjectId(trackData.mediaId) },
+          ],
+        },
       )
       .then((foundUser) => {
         if (!foundUser) {
           this.logger.verbose(
             `User ${user._id} added playedMedias entry for media ${trackData.mediaId}`,
           );
-          return this.userModel.findByIdAndUpdate(
-            user._id,
+          return this.userModel.findOneAndUpdate(
+            {
+              _id: getObjectId(user._id),
+              profiles: {
+                $elemMatch: {
+                  uniqueId: user.profileUniqueId,
+                },
+              },
+            },
             {
               $push: {
-                playedMedias: {
-                  media: getObjectId(trackData.mediaId) as any,
+                'profiles.$.playedMedias': {
+                  media: getObjectId(trackData.mediaId),
                   ...(trackData.time !== undefined
                     ? { currentTime: trackData.time }
                     : {}),
@@ -232,7 +277,6 @@ export class UsersService {
                 },
               },
             },
-            { new: true },
           );
         } else {
           return foundUser;
@@ -240,7 +284,8 @@ export class UsersService {
       })
       .then((u) => {
         this.logger.verbose(`User ${u._id} updated playedMedias`);
-        return u?.playedMedias;
+        return u?.profiles.find((p) => p.uniqueId === user.profileUniqueId)
+          .playedMedias;
       });
   }
 
@@ -297,9 +342,14 @@ export class UsersService {
 
     await this.userModel.create({
       email: adminConfig.email,
-      firstname: 'Admin',
-      lastname: 'Admin',
-      username: 'Admin',
+      profiles: [
+        {
+          uniqueId: randomToken.generate(16),
+          firstname: 'Admin',
+          lastname: 'Admin',
+          username: 'Admin',
+        },
+      ],
       password: await this.authService.hashPassword(adminConfig.password),
       roles: [Role.Admin, Role.User],
     });

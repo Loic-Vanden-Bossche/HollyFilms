@@ -1,20 +1,37 @@
 import { User } from './user.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../shared/role';
-import { Types } from 'mongoose';
 import { PlayedMedia } from '../../medias/schemas/played-media.schema';
+import { UserProfile } from './user-profile.schema';
 
 export default class CurrentUser {
-  constructor(user: Partial<User & { _id: Types.ObjectId }>) {
+  getProfileFromUniqueId(
+    user: Partial<User>,
+    profileUniqueId?: string,
+  ): UserProfile {
+    if (!profileUniqueId) {
+      return user.profiles[0];
+    }
+
+    return (
+      user.profiles.find((p) => p.uniqueId === profileUniqueId) ||
+      user.profiles[0]
+    );
+  }
+
+  constructor(user: Partial<User>, profileUniqueId?: string) {
+    const currentProfile = this.getProfileFromUniqueId(user, profileUniqueId);
     this._id = user._id.toString();
     this.email = user.email;
-    this.firstname = user.firstname;
-    this.lastname = user.lastname;
-    this.username = user.username;
+    this.profileUniqueId = currentProfile.uniqueId;
+    this.firstname = currentProfile.firstname;
+    this.lastname = currentProfile.lastname;
+    this.username = currentProfile.username;
     this.roles = user.roles;
     this.isActivated = user.roles.length > 0;
     this.isAdmin = user.roles.includes(Role.Admin);
-    this.playedMedias = user.playedMedias.filter((p) => p.media);
+    this.playedMedias =
+      currentProfile.playedMedias?.filter((p) => p.media) || [];
   }
 
   @ApiProperty({
@@ -22,6 +39,12 @@ export default class CurrentUser {
     example: '5e9f8f8f8f8f8f8f8f8f8f8f8',
   })
   _id: string = null;
+
+  @ApiProperty({
+    description: "Current profile's unique id",
+    example: '5e9f8f8f8f8f8f8f8f8f8f8f8',
+  })
+  profileUniqueId: string = null;
 
   @ApiProperty({
     description: "The user's email",

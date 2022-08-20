@@ -18,6 +18,7 @@ import { getSameSiteStrategy } from '../../config/config.utils';
 import ResetPasswordDto from './dto/reset-password.auth.dto';
 import { getObjectId } from '../../shared/mongoose';
 import { JwtService } from '@nestjs/jwt';
+import * as randomToken from 'rand-token';
 
 @Injectable()
 export class AuthService {
@@ -41,9 +42,17 @@ export class AuthService {
     }
 
     return this.userModel.create({
-      ...userInfos,
-      username:
-        userInfos.username || `${userInfos.firstname} ${userInfos.lastname}`,
+      email: userInfos.email,
+      profiles: [
+        {
+          uniqueId: randomToken.generate(16),
+          firstname: userInfos.firstname,
+          lastname: userInfos.lastname,
+          username:
+            userInfos.username ||
+            `${userInfos.firstname} ${userInfos.lastname}`,
+        },
+      ],
       password: await this.hashPassword(userInfos.password),
     });
   }

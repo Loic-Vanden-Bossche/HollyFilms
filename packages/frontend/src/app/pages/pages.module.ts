@@ -16,6 +16,7 @@ import { ShowcaseMediaContentComponent } from './showcase/showcase-medias/showca
 import { ShowcaseTextAnimationComponent } from './showcase/showcase-text-animation/showcase-text-animation.component';
 import { MyListComponent } from './my-list/my-list.component';
 import { CategoryResultsComponent } from './category-results/category-results.component';
+import { UserModule } from '../user/user.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { CategoryResultsComponent } from './category-results/category-results.co
     ScrollingModule,
     FontAwesomeModule,
     SharedModule,
+    UserModule,
   ],
 })
 export class PagesModule {}

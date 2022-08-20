@@ -922,7 +922,6 @@ const inputBody = '{
   "firstname": "John",
   "lastname": "Doe",
   "username": "Johnny",
-  "role": "super_admin",
   "password": "123456",
   "roles": [
     "user",
@@ -1060,7 +1059,6 @@ func main() {
   "firstname": "John",
   "lastname": "Doe",
   "username": "Johnny",
-  "role": "super_admin",
   "password": "123456",
   "roles": [
     "user",
@@ -2004,6 +2002,7 @@ func main() {
 ```json
 {
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
@@ -2354,6 +2353,7 @@ func main() {
 ```json
 {
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
@@ -2679,6 +2679,7 @@ func main() {
 ```json
 {
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
@@ -7048,7 +7049,6 @@ This operation does not require authentication
   "firstname": "John",
   "lastname": "Doe",
   "username": "Johnny",
-  "role": "super_admin",
   "password": "123456",
   "roles": [
     "user",
@@ -7066,7 +7066,6 @@ This operation does not require authentication
 |firstname|string|true|none|User first name|
 |lastname|string|true|none|User last name|
 |username|string|true|none|User nickname|
-|role|string|true|none|User role|
 |password|string|true|none|User password|
 |roles|[string]|true|none|User roles|
 
@@ -7135,6 +7134,7 @@ This operation does not require authentication
 ```json
 {
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
@@ -7157,6 +7157,7 @@ This operation does not require authentication
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |_id|string|true|none|The user's id|
+|profileUniqueId|string|true|none|Current profile's unique id|
 |email|string|true|none|The user's email|
 |firstname|string|true|none|The user's first name|
 |lastname|string|true|none|The user's last name|

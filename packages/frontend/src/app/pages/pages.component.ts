@@ -66,17 +66,24 @@ export class PagesComponent implements OnInit {
     this.mediasService.clearSelectedMedia();
   }
 
-  openModal(media: MediaWithType) {
+  openMediaModal(media: MediaWithType) {
     this.mediasService.selectMedia(media);
     this.modalService.open('mediaModal');
   }
 
-  closeModal() {
+  closeMediaModal() {
     this.modalService.close('mediaModal');
     this.clearSelectedMedia();
   }
 
+  openUserModal() {
+    setTimeout(() => {
+      this.modalService.open('userModal');
+    }, 300);
+  }
+
   ngOnInit() {
+    this.openUserModal();
     this.mediasService.selectedMedia.pipe(skip(1)).subscribe((media) => {
       if (media) {
         this.router.navigate([], {
@@ -100,13 +107,13 @@ export class PagesComponent implements OnInit {
           .pipe(catchError(() => of(null)))
           .subscribe((media) => {
             if (media) {
-              this.openModal(media);
+              this.openMediaModal(media);
             } else {
-              this.closeModal();
+              this.closeMediaModal();
             }
           });
       } else {
-        this.closeModal();
+        this.closeMediaModal();
       }
     });
   }

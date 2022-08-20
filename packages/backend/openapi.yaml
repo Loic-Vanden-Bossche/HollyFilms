@@ -802,10 +802,6 @@ components:
           type: string
           description: User nickname
           example: Johnny
-        role:
-          type: string
-          description: User role
-          example: super_admin
         password:
           type: string
           description: User password
@@ -826,7 +822,6 @@ components:
         - firstname
         - lastname
         - username
-        - role
         - password
         - roles
     UpdateUserDto:
@@ -891,6 +886,10 @@ components:
           type: string
           description: The user's id
           example: 5e9f8f8f8f8f8f8f8f8f8f8f8
+        profileUniqueId:
+          type: string
+          description: Current profile's unique id
+          example: 5e9f8f8f8f8f8f8f8f8f8f8f8
         email:
           type: string
           description: The user's email
@@ -930,6 +929,7 @@ components:
             type: string
       required:
         - _id
+        - profileUniqueId
         - email
         - firstname
         - lastname

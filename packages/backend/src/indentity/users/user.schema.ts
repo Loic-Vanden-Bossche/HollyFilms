@@ -1,24 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Token } from '../tokens/token.schema';
 import { Role } from '../../shared/role';
-import { PlayedMedia } from '../../medias/schemas/played-media.schema';
+import { UserProfile } from './user-profile.schema';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  @Prop({ auto: true, type: MongooseSchema.Types.ObjectId })
+  _id?: string;
+
   @Prop({ required: true })
   email: string;
 
   @Prop()
-  firstname: string;
-
-  @Prop()
-  lastname: string;
-
-  @Prop()
-  username: string;
+  profiles: UserProfile[];
 
   @Prop()
   password: string;
@@ -32,9 +29,6 @@ export class User {
 
   @Prop()
   tokens: Token[];
-
-  @Prop()
-  playedMedias: PlayedMedia[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

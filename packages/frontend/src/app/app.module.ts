@@ -16,6 +16,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { PlayNextMediaComponent } from './player/play-next-media/play-next-media.component';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [AppComponent, PlayerComponent, PlayNextMediaComponent],
@@ -24,6 +25,7 @@ import { PlayNextMediaComponent } from './player/play-next-media/play-next-media
     AppRoutingModule,
     SharedModule,
     PagesModule,
+    UserModule,
     NotificationsModule,
     NavigationModule,
     AuthModule,
