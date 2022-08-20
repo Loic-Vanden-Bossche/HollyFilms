@@ -95,7 +95,7 @@ export class UsersService {
           new: true,
         },
       )
-      .exec();
+      .then((u) => u.profiles[u.profiles.length - 1]);
   }
 
   updateProfile(user: CurrentUser, dto: CreateProfileDto, uniqueId: string) {

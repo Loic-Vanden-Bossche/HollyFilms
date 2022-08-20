@@ -54,6 +54,19 @@ export class AuthService {
     );
   }
 
+  switchUserProfile(profileUniqueId: string) {
+    return this.api
+      .get<User>(`auth/switchProfile/${profileUniqueId}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((user) => {
+          this._user = user;
+          AuthService.storeUser(user);
+        })
+      );
+  }
+
   private static getUser(): User | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UpdateUserDTO, User } from '../models/user.model';
 import { Observable } from 'rxjs';
+import { UserProfile } from '../models/user-profile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,22 @@ export class UsersService {
 
   getCurrentUser() {
     return this.api.get<User>(`auth/me`, {
+      withCredentials: true,
+    });
+  }
+
+  getProfileList() {
+    return this.api.get<UserProfile[]>(`users/profiles`, {
+      withCredentials: true,
+    });
+  }
+
+  createProfile(data: {
+    firstName: string;
+    lastName: string;
+    username: string;
+  }) {
+    return this.api.post<UserProfile>(`users/profile`, data, {
       withCredentials: true,
     });
   }

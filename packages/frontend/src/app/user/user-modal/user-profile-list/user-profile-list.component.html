@@ -1,0 +1,55 @@
+<div class="flex h-full w-full flex-col">
+  <div class="h-full w-full overflow-y-auto flex text-base-800 flex-col gap-2">
+    <div
+      (click)="switchProfile(profile)"
+      [ngClass]="
+        currentProfileId === profile.uniqueId
+          ? ['opacity-100', 'pointer-events-none']
+          : ['opacity-50', 'hover:opacity-100']
+      "
+      class="w-full cursor-pointer p-3 pr-5 bg-success items-center flex flex-row rounded-lg"
+      *ngFor="let profile of profileList"
+    >
+      <div
+        class="h-14 border-2 border-white aspect-square rounded-full bg-center bg-cover"
+        [ngStyle]="{
+          'background-image': 'url(assets/img/avatar-blank.png)'
+        }"
+      ></div>
+      <div class="flex flex-col">
+        <h1 class="text-lg ml-3 font-bold">{{ profile.username }}</h1>
+        <div class="flex flex-row">
+          <p class="text-xs ml-3">{{ profile.firstname }}</p>
+          <p class="text-xs ml-2">{{ profile.lastname }}</p>
+        </div>
+      </div>
+      <fa-icon
+        *ngIf="currentProfileId === profile.uniqueId"
+        class="ml-auto text-lg"
+        [icon]="selectedIcon"
+      ></fa-icon>
+    </div>
+  </div>
+  <div class="bg-slate-100 mt-5 p-2 w-full h-16 rounded-lg">
+    <form
+      [formGroup]="addProfileForm"
+      (submit)="onCreateUser()"
+      class="flex gap-2 flex-row h-full [&>input]:min-w-0 [&>input]:px-2 [&>input]:h-full [&>input]:rounded"
+    >
+      <input formControlName="firstname" placeholder="prénom" />
+      <input formControlName="lastname" placeholder="nom" />
+      <input formControlName="username" placeholder="surnom" />
+      <button
+        type="submit"
+        [ngClass]="
+          addProfileForm.valid
+            ? ['cursor-pointer', 'hover:opacity-100', 'opacity-80']
+            : ['cursor-default', 'opacity-60']
+        "
+        class="h-full w-9 flex-shrink-0 bg-success text-sm rounded"
+      >
+        <fa-icon [icon]="addUserIcon"></fa-icon>
+      </button>
+    </form>
+  </div>
+</div>
