@@ -14,7 +14,7 @@
     }"
     class="absolute z-50"
   >
-    <div @onOpen>
+    <div (mouseup)="onMouseUp()" @onOpen>
       <ng-content select="[menu]"></ng-content>
     </div>
   </div>

@@ -15,4 +15,4 @@
   [media]="selectedMedia | async"
 ></app-media-modal>
 
-<app-user-modal> </app-user-modal>
+<app-user-modal (closed)="onUserModalClose()"></app-user-modal>

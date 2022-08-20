@@ -7,6 +7,7 @@ import { UsersService } from '../../shared/services/users.service';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { NotificationType } from '../../shared/models/notification.model';
 import { UserProfile } from '../../shared/models/user-profile.model';
+import { ModalService } from '../../shared/services/modal.service';
 
 @Component({
   selector: 'app-user-modal',
@@ -101,9 +102,14 @@ export class UserModalComponent implements OnInit {
 
   editMode = false;
 
+  get display(): boolean {
+    return this.modalService.isDisplay('userModal') || false;
+  }
+
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly modalService: ModalService,
     private readonly notificationsService: NotificationsService
   ) {}
 

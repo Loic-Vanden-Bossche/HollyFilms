@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { PlayerService } from '../shared/services/player.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -41,7 +41,7 @@ import { ModalService } from '../shared/services/modal.service';
     ]),
   ],
 })
-export class PagesComponent implements OnInit {
+export class PagesComponent implements AfterViewInit {
   get playData() {
     return this.playerService.playerData;
   }
@@ -76,14 +76,16 @@ export class PagesComponent implements OnInit {
     this.clearSelectedMedia();
   }
 
-  openUserModal() {
-    setTimeout(() => {
-      this.modalService.open('userModal');
-    }, 300);
+  onUserModalClose() {
+    this.router.navigate([], {
+      queryParams: {
+        userAccount: null,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 
-  ngOnInit() {
-    this.openUserModal();
+  ngAfterViewInit() {
     this.mediasService.selectedMedia.pipe(skip(1)).subscribe((media) => {
       if (media) {
         this.router.navigate([], {
@@ -100,7 +102,11 @@ export class PagesComponent implements OnInit {
       }
     });
 
-    this.route.queryParams.subscribe(({ mediaId }) => {
+    this.route.queryParams.subscribe(({ mediaId, userAccount }) => {
+      userAccount
+        ? this.modalService.open('userModal')
+        : this.modalService.close('userModal');
+
       if (mediaId) {
         this.mediasService
           .getMedia(mediaId)

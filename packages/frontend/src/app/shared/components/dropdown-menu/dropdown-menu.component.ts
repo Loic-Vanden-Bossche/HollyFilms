@@ -68,4 +68,10 @@ export class DropdownMenuComponent implements AfterViewInit {
         break;
     }
   }
+
+  onMouseUp() {
+    setTimeout(() => {
+      this.menuOpen = false;
+    }, 0);
+  }
 }

@@ -164,6 +164,15 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openUserModal() {
+    this.router.navigate([], {
+      queryParams: {
+        userAccount: true,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
   resetSelectedCategories() {
     this.categories.forEach((category) => (category.selected = false));
   }

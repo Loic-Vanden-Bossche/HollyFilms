@@ -95,13 +95,13 @@
           class="px-4 text-white py-2 bg-base-600 shadow-2xl rounded-lg"
           menu
         >
-          <a
+          <div
+            (click)="openUserModal()"
             class="text-lg h-10 cursor-pointer justify-between font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
-            routerLink="/account"
           >
             <fa-icon class="mr-4" [icon]="userGearIcon"></fa-icon>
             <p class="whitespace-nowrap">Mon compte</p>
-          </a>
+          </div>
           <a
             class="text-lg h-10 cursor-pointer justify-between font-bold opacity-80 hover:opacity-100 h-full flex flex-row items-center"
             (click)="logout()"
