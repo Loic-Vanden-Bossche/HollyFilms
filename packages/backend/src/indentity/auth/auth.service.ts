@@ -47,6 +47,7 @@ export class AuthService {
       profiles: [
         {
           color: getRandomColor(),
+          isDefault: true,
           profileUniqueId: randomToken.generate(16),
           firstname: userInfos.firstname,
           lastname: userInfos.lastname,

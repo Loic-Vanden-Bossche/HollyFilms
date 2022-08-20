@@ -33,6 +33,12 @@ export class UsersService {
     );
   }
 
+  deleteProfile() {
+    return this.api.delete<User>(`users/profile`, {
+      withCredentials: true,
+    });
+  }
+
   createProfile(data: {
     firstName: string;
     lastName: string;

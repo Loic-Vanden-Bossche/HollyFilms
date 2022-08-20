@@ -90,9 +90,9 @@ export class UserModalComponent implements OnInit {
   insightsEntries: { value: string; label: string }[] = [];
 
   editProfileForm = new FormGroup({
-    firstname: new FormControl('', [Validators.required]),
-    lastname: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.required]),
+    firstname: new FormControl('', Validators.pattern(/\S/)),
+    lastname: new FormControl('', Validators.pattern(/\S/)),
+    username: new FormControl('', Validators.pattern(/\S/)),
   });
 
   userProfiles: UserProfile[] = [];
@@ -121,6 +121,45 @@ export class UserModalComponent implements OnInit {
   cancelEdit() {
     this.editMode = false;
     this.editProfileForm.reset();
+  }
+
+  onDeleteProfile() {
+    if (this.user && !this.user.isDefault) {
+      this.usersService.deleteProfile().subscribe({
+        next: () => {
+          this.userProfiles = this.userProfiles.filter(
+            (profile) => profile.profileUniqueId !== this.user?.profileUniqueId
+          );
+
+          this.notificationsService.push({
+            type: NotificationType.Success,
+            message: 'Votre profil a bien été supprimé',
+          });
+          const defaultProfile = this.userProfiles.find(
+            (profile) => profile.isDefault
+          );
+
+          if (defaultProfile) {
+            this.authService
+              .switchUserProfile(defaultProfile.profileUniqueId)
+              .subscribe(() => {
+                this.notificationsService.push({
+                  type: NotificationType.Neutral,
+                  message:
+                    'Vous êtes maintenant connecté avec votre profil par défaut',
+                });
+              });
+          }
+        },
+        error: () => {
+          this.notificationsService.push({
+            type: NotificationType.Error,
+            message:
+              'Une erreur est survenue lors de la suppression de votre profil',
+          });
+        },
+      });
+    }
   }
 
   onEditProfile() {
@@ -183,16 +222,25 @@ export class UserModalComponent implements OnInit {
           lastname: this.editProfileForm.value.lastname || this.user.lastname,
           username: this.editProfileForm.value.username || this.user.username,
         })
-        .subscribe((profile) => {
-          this.authService.updateUserProfile(profile);
-          this.userProfiles = this.userProfiles.map((p) =>
-            p.profileUniqueId === profile.profileUniqueId ? profile : p
-          );
-          this.notificationsService.push({
-            type: NotificationType.Success,
-            message: 'Votre profile à été mis à jour avec succès',
-          });
-          this.cancelEdit();
+        .subscribe({
+          next: (profile) => {
+            this.authService.updateUserProfile(profile);
+            this.userProfiles = this.userProfiles.map((p) =>
+              p.profileUniqueId === profile.profileUniqueId ? profile : p
+            );
+            this.notificationsService.push({
+              type: NotificationType.Success,
+              message: 'Votre profile à été mis à jour avec succès',
+            });
+            this.cancelEdit();
+          },
+          error: () => {
+            this.notificationsService.push({
+              type: NotificationType.Error,
+              message:
+                'Une erreur est survenue lors de la mise à jour de votre profile',
+            });
+          },
         });
     }
   }

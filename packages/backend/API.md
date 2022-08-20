@@ -755,6 +755,313 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## UsersController_deleteProfile
+
+<a id="opIdUsersController_deleteProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X DELETE /users/profile
+
+```
+
+```http
+DELETE /users/profile HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/profile',
+{
+  method: 'DELETE'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.delete '/users/profile',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.delete('/users/profile')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('DELETE','/users/profile', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("DELETE");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "/users/profile", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /users/profile`
+
+*[User] Delete profile*
+
+<h3 id="userscontroller_deleteprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_createUserProfile
+
+<a id="opIdUsersController_createUserProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /users/profile \
+  -H 'Content-Type: application/json'
+
+```
+
+```http
+POST /users/profile HTTP/1.1
+
+Content-Type: application/json
+
+```
+
+```javascript
+const inputBody = '{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/users/profile',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json'
+}
+
+result = RestClient.post '/users/profile',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json'
+}
+
+r = requests.post('/users/profile', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/users/profile', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/users/profile", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /users/profile`
+
+*[User] Create a new user profile*
+
+> Body parameter
+
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "Johnny"
+}
+```
+
+<h3 id="userscontroller_createuserprofile-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[CreateProfileDto](#schemacreateprofiledto)|true|none|
+
+<h3 id="userscontroller_createuserprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 ## UsersController_getCurrentUserProfile
 
 <a id="opIdUsersController_getCurrentUserProfile"></a>
@@ -1328,181 +1635,6 @@ func main() {
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## UsersController_createUserProfile
-
-<a id="opIdUsersController_createUserProfile"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X POST /users/profile \
-  -H 'Content-Type: application/json'
-
-```
-
-```http
-POST /users/profile HTTP/1.1
-
-Content-Type: application/json
-
-```
-
-```javascript
-const inputBody = '{
-  "firstname": "John",
-  "lastname": "Doe",
-  "username": "Johnny"
-}';
-const headers = {
-  'Content-Type':'application/json'
-};
-
-fetch('/users/profile',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-headers = {
-  'Content-Type' => 'application/json'
-}
-
-result = RestClient.post '/users/profile',
-  params: {
-  }, headers: headers
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-headers = {
-  'Content-Type': 'application/json'
-}
-
-r = requests.post('/users/profile', headers = headers)
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$headers = array(
-    'Content-Type' => 'application/json',
-);
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('POST','/users/profile', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/users/profile");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("POST");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    headers := map[string][]string{
-        "Content-Type": []string{"application/json"},
-    }
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "/users/profile", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`POST /users/profile`
-
-*[User] Create a new user profile*
-
-> Body parameter
-
-```json
-{
-  "firstname": "John",
-  "lastname": "Doe",
-  "username": "Johnny"
-}
-```
-
-<h3 id="userscontroller_createuserprofile-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[CreateProfileDto](#schemacreateprofiledto)|true|none|
-
-<h3 id="userscontroller_createuserprofile-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -2893,10 +3025,17 @@ func main() {
 ```json
 {
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
   "color": "#ff0000",
   "playedMedias": [
+    "string"
+  ],
+  "mediasInList": [
+    "string"
+  ],
+  "likedMedias": [
     "string"
   ],
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
@@ -3382,10 +3521,17 @@ func main() {
 ```json
 {
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
   "color": "#ff0000",
   "playedMedias": [
+    "string"
+  ],
+  "mediasInList": [
+    "string"
+  ],
+  "likedMedias": [
     "string"
   ],
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
@@ -3708,10 +3854,17 @@ func main() {
 ```json
 {
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
   "color": "#ff0000",
   "playedMedias": [
+    "string"
+  ],
+  "mediasInList": [
+    "string"
+  ],
+  "likedMedias": [
     "string"
   ],
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
@@ -8187,10 +8340,17 @@ This operation does not require authentication
 ```json
 {
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
   "color": "#ff0000",
   "playedMedias": [
+    "string"
+  ],
+  "mediasInList": [
+    "string"
+  ],
+  "likedMedias": [
     "string"
   ],
   "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
@@ -8210,10 +8370,13 @@ This operation does not require authentication
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |profileUniqueId|string|true|none|Current profile's unique id|
+|isDefault|boolean|true|none|Is the profile the default one|
 |firstname|string|true|none|The user's first name|
 |lastname|string|true|none|The user's last name|
 |color|string|true|none|Color profile color|
 |playedMedias|[string]|true|none|Array of medias that the user has played|
+|mediasInList|[string]|true|none|Array of medias that the user added to his list|
+|likedMedias|[string]|true|none|Array of medias that the user liked|
 |_id|string|true|none|The user's id|
 |email|string|true|none|The user's email|
 |roles|[string]|true|none|The user's roles|

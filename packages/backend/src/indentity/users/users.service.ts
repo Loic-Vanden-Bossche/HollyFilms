@@ -123,9 +123,9 @@ export class UsersService {
                 userProfiles.map((p) => p.color),
               ),
               profileUniqueId: randomToken.generate(16),
-              username: dto.username,
-              firstname: dto.firstname,
-              lastname: dto.lastname,
+              username: dto.username.trim(),
+              firstname: dto.firstname.trim(),
+              lastname: dto.lastname.trim(),
             },
           },
         },
@@ -142,9 +142,9 @@ export class UsersService {
         getObjectId(user._id),
         {
           $set: {
-            'profiles.$[elem].username': dto.username,
-            'profiles.$[elem].firstname': dto.firstname,
-            'profiles.$[elem].lastname': dto.lastname,
+            'profiles.$[elem].username': dto.username.trim(),
+            'profiles.$[elem].firstname': dto.firstname.trim(),
+            'profiles.$[elem].lastname': dto.lastname.trim(),
           },
         },
         {
@@ -247,6 +247,31 @@ export class UsersService {
   async delete(id: string): Promise<any> {
     await this.isExist(id);
     return this.userModel.deleteOne({ _id: getObjectId(id) });
+  }
+
+  deleteProfile(user: CurrentUser) {
+    if (user.isDefault) {
+      throw new HttpException(
+        `You can't delete your default profile`,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    return this.userModel
+      .findByIdAndUpdate(
+        getObjectId(user._id),
+        {
+          $pull: {
+            profiles: {
+              profileUniqueId: user.profileUniqueId,
+            },
+          },
+        },
+        {
+          returnOriginal: false,
+        },
+      )
+      .exec();
   }
 
   getPlayerStatus(
@@ -459,6 +484,7 @@ export class UsersService {
       profiles: [
         {
           color: getRandomColor(),
+          isDefault: true,
           profileUniqueId: randomToken.generate(16),
           firstname: 'Admin',
           lastname: 'Admin',

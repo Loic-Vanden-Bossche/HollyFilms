@@ -106,6 +106,29 @@ paths:
         "200":
           description: ""
       tags: *a1
+  /users/profile:
+    delete:
+      operationId: UsersController_deleteProfile
+      summary: "[User] Delete profile"
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+    post:
+      operationId: UsersController_createUserProfile
+      summary: "[User] Create a new user profile"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProfileDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a1
   /users/profile/current:
     get:
       operationId: UsersController_getCurrentUserProfile
@@ -155,21 +178,6 @@ paths:
       parameters: []
       responses:
         "200":
-          description: ""
-      tags: *a1
-  /users/profile:
-    post:
-      operationId: UsersController_createUserProfile
-      summary: "[User] Create a new user profile"
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateProfileDto"
-      responses:
-        "201":
           description: ""
       tags: *a1
   /users/playerStatus:
@@ -999,6 +1007,10 @@ components:
           type: string
           description: Current profile's unique id
           example: 5e9f8f8f8f8f8f8f8f8f8f8f8
+        isDefault:
+          type: boolean
+          description: Is the profile the default one
+          example: false
         firstname:
           type: string
           description: The user's first name
@@ -1013,6 +1025,16 @@ components:
           example: "#ff0000"
         playedMedias:
           description: Array of medias that the user has played
+          type: array
+          items:
+            type: string
+        mediasInList:
+          description: Array of medias that the user added to his list
+          type: array
+          items:
+            type: string
+        likedMedias:
+          description: Array of medias that the user liked
           type: array
           items:
             type: string
@@ -1042,10 +1064,13 @@ components:
           example: "true"
       required:
         - profileUniqueId
+        - isDefault
         - firstname
         - lastname
         - color
         - playedMedias
+        - mediasInList
+        - likedMedias
         - _id
         - email
         - roles

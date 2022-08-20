@@ -19,9 +19,9 @@ export class UserProfileListComponent {
   addUserIcon = faUserPlus;
 
   addProfileForm = new FormGroup({
-    firstname: new FormControl('', [Validators.required]),
-    lastname: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.required]),
+    firstname: new FormControl('', Validators.pattern(/\S/)),
+    lastname: new FormControl('', Validators.pattern(/\S/)),
+    username: new FormControl('', Validators.pattern(/\S/)),
   });
 
   get currentProfileId() {

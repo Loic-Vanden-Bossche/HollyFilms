@@ -1,6 +1,7 @@
 import { Prop } from '@nestjs/mongoose';
 import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 import { ApiProperty } from '@nestjs/swagger';
+import { Media } from '../../medias/media.schema';
 
 export class Profile {
   @ApiProperty({
@@ -8,6 +9,12 @@ export class Profile {
     example: '5e9f8f8f8f8f8f8f8f8f8f8f8',
   })
   profileUniqueId: string;
+
+  @ApiProperty({
+    description: 'Is the profile the default one',
+    example: false,
+  })
+  isDefault: boolean;
 
   @ApiProperty({
     description: "The user's first name",
@@ -34,4 +41,14 @@ export class Profile {
     description: 'Array of medias that the user has played',
   })
   playedMedias?: PlayedMedia[];
+
+  @ApiProperty({
+    description: 'Array of medias that the user added to his list',
+  })
+  mediasInList?: Media[];
+
+  @ApiProperty({
+    description: 'Array of medias that the user liked',
+  })
+  likedMedias?: Media[];
 }

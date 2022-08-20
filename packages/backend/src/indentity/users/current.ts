@@ -21,20 +21,25 @@ export default class CurrentUser extends Profile {
 
   constructor(user: Partial<User>, profileUniqueId?: string) {
     super();
-    const currentProfile = this.getProfileFromUniqueId(user, profileUniqueId);
-
     this._id = user._id.toString();
     this.email = user.email;
+    this.roles = user.roles;
+    this.isActivated = user.roles.length > 0;
+    this.isAdmin = user.roles.includes(Role.Admin);
+
+    // apply profile data
+    const currentProfile = this.getProfileFromUniqueId(user, profileUniqueId);
+
+    this.playedMedias =
+      currentProfile.playedMedias?.filter((p) => p.media) || [];
+    this.isDefault = currentProfile.isDefault;
+    this.mediasInList = currentProfile.mediasInList || [];
+    this.likedMedias = currentProfile.likedMedias || [];
     this.profileUniqueId = currentProfile.profileUniqueId;
     this.firstname = currentProfile.firstname;
     this.lastname = currentProfile.lastname;
     this.username = currentProfile.username;
     this.color = currentProfile.color;
-    this.roles = user.roles;
-    this.isActivated = user.roles.length > 0;
-    this.isAdmin = user.roles.includes(Role.Admin);
-    this.playedMedias =
-      currentProfile.playedMedias?.filter((p) => p.media) || [];
   }
 
   @ApiProperty({

@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import UpdateMeDto from './dto/update.me.dto';
@@ -49,6 +58,13 @@ export class UsersController {
     @Param('uniqueId') uniqueId: string,
   ) {
     return this.usersService.getProfileInsights(user, uniqueId);
+  }
+
+  @Roles(Role.User)
+  @Delete('profile')
+  @ApiOperation({ summary: '[User] Delete profile' })
+  async deleteProfile(@User() user: CurrentUser) {
+    return this.usersService.deleteProfile(user);
   }
 
   @Roles(Role.User)

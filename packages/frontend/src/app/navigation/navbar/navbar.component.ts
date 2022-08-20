@@ -18,7 +18,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { MediasService } from '../../shared/services/medias.service';
 import { MediaCategoryAndSelected } from './category-list/category-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { skip, tap } from 'rxjs';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { NotificationType } from '../../shared/models/notification.model';
 
@@ -135,6 +135,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.searchService
       .onChange()
       .pipe(
+        skip(1),
         tap((query) => {
           if (query) {
             this.resetSelectedCategories();

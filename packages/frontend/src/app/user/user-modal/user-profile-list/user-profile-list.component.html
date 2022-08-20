@@ -24,11 +24,14 @@
           <p class="text-xs ml-2">{{ profile.lastname }}</p>
         </div>
       </div>
-      <fa-icon
-        *ngIf="currentProfileId === profile.profileUniqueId"
-        class="ml-auto text-lg"
-        [icon]="selectedIcon"
-      ></fa-icon>
+      <div class="ml-auto flex flex-col items-center">
+        <fa-icon
+          *ngIf="currentProfileId === profile.profileUniqueId"
+          class="text-lg"
+          [icon]="selectedIcon"
+        ></fa-icon>
+        <p class="text-xs" *ngIf="profile.isDefault">par défaut</p>
+      </div>
     </div>
   </div>
   <div class="bg-slate-100 mt-5 p-2 w-full h-16 rounded-lg">
