@@ -12,6 +12,7 @@ import {
   faList,
   faUserCheck,
 } from '@fortawesome/free-solid-svg-icons';
+import { PlayerService } from '../../shared/services/player.service';
 
 @Component({
   selector: 'app-play-next-media',
@@ -22,6 +23,8 @@ export class PlayNextMediaComponent implements OnInit {
 
   vendorTag = '';
   vendorIcon: IconDefinition | null = null;
+
+  constructor(private readonly playerService: PlayerService) {}
 
   getTagAndIconFromFeatured(featured: FeaturedType): [string, IconDefinition] {
     switch (featured) {
@@ -43,6 +46,16 @@ export class PlayNextMediaComponent implements OnInit {
 
   mediaPlayLink(media: MediaWithType) {
     return `/play/${media.data._id}${media.mediaType === 'tv' ? '/1/1' : ''}`;
+  }
+
+  onPlay(event: MouseEvent) {
+    if (this.media) {
+      this.playerService.play({
+        mediaId: this.media.data._id,
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
   }
 
   ngOnInit(): void {

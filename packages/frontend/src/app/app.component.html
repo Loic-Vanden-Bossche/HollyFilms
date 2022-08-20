@@ -4,4 +4,10 @@
 >
   <router-outlet></router-outlet>
 </div>
+<div
+  *ngIf="playData"
+  (@playMode.done)="onPlayReady()"
+  [@playMode]="{ value: playData, params: { x: playData.x, y: playData.y } }"
+  class="fixed rounded z-50 bg-black"
+></div>
 <app-notifications-list></app-notifications-list>

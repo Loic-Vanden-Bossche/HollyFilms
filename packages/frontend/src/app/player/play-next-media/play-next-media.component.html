@@ -21,10 +21,11 @@
   <div
     class="transition-all absolute top-0 left-0 bg-black/70 group-hover:opacity-100 opacity-0 h-full w-full"
   >
-    <a [routerLink]="mediaPlayLink(media)">
-      <div class="w-full h-full text-center flex-col flex justify-center">
-        <p class="text-sm font-bold">Voir le film</p>
-      </div>
-    </a>
+    <div
+      (click)="onPlay($event)"
+      class="w-full h-full text-center flex-col flex justify-center"
+    >
+      <p class="text-sm font-bold">Voir le film</p>
+    </div>
   </div>
 </div>
