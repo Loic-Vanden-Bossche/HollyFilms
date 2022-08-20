@@ -1,13 +1,14 @@
-<div class="flex h-full w-full flex-col">
+<div class="flex h-full w-full flex-col text-base-100">
   <div class="h-full w-full overflow-y-auto flex text-base-800 flex-col gap-2">
     <div
       (click)="switchProfile(profile)"
       [ngClass]="
-        currentProfileId === profile.uniqueId
+        currentProfileId === profile.profileUniqueId
           ? ['opacity-100', 'pointer-events-none']
           : ['opacity-50', 'hover:opacity-100']
       "
-      class="w-full cursor-pointer p-3 pr-5 bg-success items-center flex flex-row rounded-lg"
+      [ngStyle]="{ 'background-color': profile.color }"
+      class="w-full cursor-pointer p-3 pr-5 items-center flex flex-row rounded-lg text-base-100"
       *ngFor="let profile of profileList"
     >
       <div
@@ -24,7 +25,7 @@
         </div>
       </div>
       <fa-icon
-        *ngIf="currentProfileId === profile.uniqueId"
+        *ngIf="currentProfileId === profile.profileUniqueId"
         class="ml-auto text-lg"
         [icon]="selectedIcon"
       ></fa-icon>
@@ -44,7 +45,7 @@
         [ngClass]="
           addProfileForm.valid
             ? ['cursor-pointer', 'hover:opacity-100', 'opacity-80']
-            : ['cursor-default', 'opacity-60']
+            : ['cursor-default', 'pointer-events-none', 'opacity-60']
         "
         class="h-full w-9 flex-shrink-0 bg-success text-sm rounded"
       >

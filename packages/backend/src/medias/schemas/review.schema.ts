@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Profile } from './profile.schema';
+import { DataProfile } from './profile.schema';
 
 @Schema()
 export class Review {
   @Prop()
-  author: Profile;
+  author: DataProfile;
 
   @Prop()
   rating: number;

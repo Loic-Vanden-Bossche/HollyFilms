@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { UsersService } from '../../../shared/services/users.service';
 import { UserProfile } from '../../../shared/models/user-profile.model';
@@ -11,8 +11,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   selector: 'app-user-profile-list',
   templateUrl: './user-profile-list.component.html',
 })
-export class UserProfileListComponent implements OnInit {
-  profileList: UserProfile[] = [];
+export class UserProfileListComponent {
+  @Output() profileSwitched = new EventEmitter<void>();
+  @Input() profileList: UserProfile[] = [];
 
   selectedIcon = faUserCheck;
   addUserIcon = faUserPlus;
@@ -32,12 +33,6 @@ export class UserProfileListComponent implements OnInit {
     private readonly usersService: UsersService,
     private readonly notificationService: NotificationsService
   ) {}
-
-  ngOnInit(): void {
-    this.usersService
-      .getProfileList()
-      .subscribe((profiles) => (this.profileList = profiles));
-  }
 
   onCreateUser() {
     if (this.addProfileForm.valid) {
@@ -63,12 +58,13 @@ export class UserProfileListComponent implements OnInit {
   }
 
   switchProfile(profile: UserProfile) {
-    if (this.currentProfileId !== profile.uniqueId) {
-      this.auth.switchUserProfile(profile.uniqueId).subscribe(() => {
+    if (this.currentProfileId !== profile.profileUniqueId) {
+      this.auth.switchUserProfile(profile.profileUniqueId).subscribe(() => {
         this.notificationService.push({
           type: NotificationType.Success,
           message: `Vous utilisez maintenant le profil: ${profile.username}`,
         });
+        this.profileSwitched.emit();
       });
     }
   }

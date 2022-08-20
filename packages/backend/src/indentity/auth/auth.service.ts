@@ -19,6 +19,7 @@ import ResetPasswordDto from './dto/reset-password.auth.dto';
 import { getObjectId } from '../../shared/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as randomToken from 'rand-token';
+import { getRandomColor } from '../users/colors-profiles';
 
 @Injectable()
 export class AuthService {
@@ -45,7 +46,8 @@ export class AuthService {
       email: userInfos.email,
       profiles: [
         {
-          uniqueId: randomToken.generate(16),
+          color: getRandomColor(),
+          profileUniqueId: randomToken.generate(16),
           firstname: userInfos.firstname,
           lastname: userInfos.lastname,
           username:
@@ -84,7 +86,7 @@ export class AuthService {
         );
       })
       .then((u) => {
-        const profile = u.profiles.find((p) => p.uniqueId === uniqueId);
+        const profile = u.profiles.find((p) => p.profileUniqueId === uniqueId);
         if (!profile)
           throw new HttpException(
             `Profile ${uniqueId} not found for user ${user._id}`,

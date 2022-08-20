@@ -15,6 +15,7 @@ import { getObjectId } from '../../shared/mongoose';
 import { TrackData } from '../../medias/medias.utils';
 import * as randomToken from 'rand-token';
 import CreateProfileDto from './dto/create.profile.dto';
+import { getRandomColor, getRandomizedColors } from './colors-profiles';
 
 @Injectable()
 export class UsersService {
@@ -67,7 +68,9 @@ export class UsersService {
         );
       })
       .then((u) => {
-        const profile = u.profiles.find((p) => p.uniqueId === profileUniqueId);
+        const profile = u.profiles.find(
+          (p) => p.profileUniqueId === profileUniqueId,
+        );
         if (!profile)
           throw new HttpException(
             `Profile ${profileUniqueId} not found for user ${user._id}`,
@@ -77,14 +80,32 @@ export class UsersService {
       });
   }
 
-  createProfile(user: CurrentUser, dto: CreateProfileDto) {
+  getRandomProfileColor(userColors: string[]) {
+    const randomizedColors = getRandomizedColors();
+    for (const userColor of randomizedColors) {
+      if (!userColors.includes(userColor)) {
+        return userColor;
+      }
+    }
+
+    return randomizedColors[0];
+  }
+
+  async createProfile(user: CurrentUser, dto: CreateProfileDto) {
+    const userProfiles = await this.userModel
+      .findById(getObjectId(user._id))
+      .then((u) => u.profiles);
+
     return this.userModel
       .findByIdAndUpdate(
         getObjectId(user._id),
         {
           $push: {
             profiles: {
-              uniqueId: randomToken.generate(16),
+              color: this.getRandomProfileColor(
+                userProfiles.map((p) => p.color),
+              ),
+              profileUniqueId: randomToken.generate(16),
               username: dto.username,
               firstname: dto.firstname,
               lastname: dto.lastname,
@@ -110,11 +131,11 @@ export class UsersService {
           },
         },
         {
-          arrayFilters: [{ 'elem.uniqueId': uniqueId }],
+          arrayFilters: [{ 'elem.profileUniqueId': uniqueId }],
           returnOriginal: false,
         },
       )
-      .exec();
+      .then((u) => u.profiles.find((p) => p.profileUniqueId === uniqueId));
   }
 
   findByIdLimited(id: string) {
@@ -145,7 +166,7 @@ export class UsersService {
       roles: [user.roles],
       profiles: [
         {
-          uniqueId: randomToken.generate(16),
+          profileUniqueId: randomToken.generate(16),
           username: user.username,
           firstname: user.firstname,
           lastname: user.lastname,
@@ -234,7 +255,7 @@ export class UsersService {
             _id: getObjectId(user._id),
             profiles: {
               $elemMatch: {
-                uniqueId: user.profileUniqueId,
+                profileUniqueId: user.profileUniqueId,
                 playedMedias: {
                   $elemMatch: {
                     media: getObjectId(mediaId),
@@ -248,7 +269,7 @@ export class UsersService {
         { $unwind: '$profiles' },
         {
           $project: {
-            'profiles.uniqueId': user.profileUniqueId,
+            'profiles.profileUniqueId': user.profileUniqueId,
             playedMedias: {
               $filter: {
                 input: '$profiles.playedMedias',
@@ -282,7 +303,7 @@ export class UsersService {
           _id: getObjectId(user._id),
           profiles: {
             $elemMatch: {
-              uniqueId: user.profileUniqueId,
+              profileUniqueId: user.profileUniqueId,
               playedMedias: {
                 $elemMatch: {
                   media: getObjectId(trackData.mediaId),
@@ -316,7 +337,7 @@ export class UsersService {
         },
         {
           arrayFilters: [
-            { 'outer.uniqueId': user.profileUniqueId },
+            { 'outer.profileUniqueId': user.profileUniqueId },
             { 'inner.media': getObjectId(trackData.mediaId) },
           ],
         },
@@ -331,7 +352,7 @@ export class UsersService {
               _id: getObjectId(user._id),
               profiles: {
                 $elemMatch: {
-                  uniqueId: user.profileUniqueId,
+                  profileUniqueId: user.profileUniqueId,
                 },
               },
             },
@@ -359,8 +380,9 @@ export class UsersService {
       })
       .then((u) => {
         this.logger.verbose(`User ${u._id} updated playedMedias`);
-        return u?.profiles.find((p) => p.uniqueId === user.profileUniqueId)
-          .playedMedias;
+        return u?.profiles.find(
+          (p) => p.profileUniqueId === user.profileUniqueId,
+        ).playedMedias;
       });
   }
 
@@ -419,7 +441,8 @@ export class UsersService {
       email: adminConfig.email,
       profiles: [
         {
-          uniqueId: randomToken.generate(16),
+          color: getRandomColor(),
+          profileUniqueId: randomToken.generate(16),
           firstname: 'Admin',
           lastname: 'Admin',
           username: 'Admin',

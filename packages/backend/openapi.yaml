@@ -981,18 +981,10 @@ components:
     CurrentUser:
       type: object
       properties:
-        _id:
-          type: string
-          description: The user's id
-          example: 5e9f8f8f8f8f8f8f8f8f8f8f8
         profileUniqueId:
           type: string
           description: Current profile's unique id
           example: 5e9f8f8f8f8f8f8f8f8f8f8f8
-        email:
-          type: string
-          description: The user's email
-          example: exemplle.test@gmail.com
         firstname:
           type: string
           description: The user's first name
@@ -1001,10 +993,23 @@ components:
           type: string
           description: The user's last name
           example: Doe
-        username:
+        color:
           type: string
-          description: The user's nickname
-          example: Johnny
+          description: Color profile color
+          example: "#ff0000"
+        playedMedias:
+          description: Array of medias that the user has played
+          type: array
+          items:
+            type: string
+        _id:
+          type: string
+          description: The user's id
+          example: 5e9f8f8f8f8f8f8f8f8f8f8f8
+        email:
+          type: string
+          description: The user's email
+          example: exemplle.test@gmail.com
         roles:
           description: The user's roles
           example:
@@ -1021,22 +1026,17 @@ components:
           type: boolean
           description: Is the user activated
           example: "true"
-        playedMedias:
-          description: Array of medias that the user has played
-          type: array
-          items:
-            type: string
       required:
-        - _id
         - profileUniqueId
-        - email
         - firstname
         - lastname
-        - username
+        - color
+        - playedMedias
+        - _id
+        - email
         - roles
         - isAdmin
         - isActivated
-        - playedMedias
     RegisterAuthDto:
       type: object
       properties:

@@ -1,7 +1,8 @@
 import { PlayedMedia } from './played-media.model';
 
 export interface UserProfile {
-  uniqueId: string;
+  color: string;
+  profileUniqueId: string;
   firstname: string;
   lastname: string;
   username: string;

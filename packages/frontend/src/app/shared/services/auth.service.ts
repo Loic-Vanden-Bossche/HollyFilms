@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
 import { catchError, of, tap } from 'rxjs';
+import { UserProfile } from '../models/user-profile.model';
 
 export interface registerDto {
   email: string;
@@ -52,6 +53,15 @@ export class AuthService {
         localStorage.removeItem('user');
       })
     );
+  }
+
+  updateUserProfile(data: UserProfile) {
+    if (this._user) {
+      this._user = {
+        ...this._user,
+        ...data,
+      };
+    }
   }
 
   switchUserProfile(profileUniqueId: string) {

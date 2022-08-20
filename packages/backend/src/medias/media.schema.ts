@@ -3,7 +3,7 @@ import { Season } from './tvs/schemas/season.schema';
 import { FileInfos } from './schemas/file-infos.schema';
 import { Review } from './schemas/review.schema';
 import { Actor } from './schemas/actor.schema';
-import { Profile } from './schemas/profile.schema';
+import { DataProfile } from './schemas/profile.schema';
 import { Schema as MongooseSchema } from 'mongoose';
 
 export class Director {
@@ -57,8 +57,8 @@ export class Media {
   @Prop()
   production_companies: Array<{ name: string; logo_path: string }>;
 
-  @Prop(Profile)
-  director: Profile;
+  @Prop(DataProfile)
+  director: DataProfile;
 
   @Prop()
   actors: Actor[];

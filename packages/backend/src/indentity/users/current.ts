@@ -1,10 +1,10 @@
 import { User } from './user.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../shared/role';
-import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 import { UserProfile } from './user-profile.schema';
+import { Profile } from './profile';
 
-export default class CurrentUser {
+export default class CurrentUser extends Profile {
   getProfileFromUniqueId(
     user: Partial<User>,
     profileUniqueId?: string,
@@ -14,19 +14,22 @@ export default class CurrentUser {
     }
 
     return (
-      user.profiles.find((p) => p.uniqueId === profileUniqueId) ||
+      user.profiles.find((p) => p.profileUniqueId === profileUniqueId) ||
       user.profiles[0]
     );
   }
 
   constructor(user: Partial<User>, profileUniqueId?: string) {
+    super();
     const currentProfile = this.getProfileFromUniqueId(user, profileUniqueId);
+
     this._id = user._id.toString();
     this.email = user.email;
-    this.profileUniqueId = currentProfile.uniqueId;
+    this.profileUniqueId = currentProfile.profileUniqueId;
     this.firstname = currentProfile.firstname;
     this.lastname = currentProfile.lastname;
     this.username = currentProfile.username;
+    this.color = currentProfile.color;
     this.roles = user.roles;
     this.isActivated = user.roles.length > 0;
     this.isAdmin = user.roles.includes(Role.Admin);
@@ -41,34 +44,10 @@ export default class CurrentUser {
   _id: string = null;
 
   @ApiProperty({
-    description: "Current profile's unique id",
-    example: '5e9f8f8f8f8f8f8f8f8f8f8f8',
-  })
-  profileUniqueId: string = null;
-
-  @ApiProperty({
     description: "The user's email",
     example: 'exemplle.test@gmail.com',
   })
   email: string = null;
-
-  @ApiProperty({
-    description: "The user's first name",
-    example: 'John',
-  })
-  firstname: string = null;
-
-  @ApiProperty({
-    description: "The user's last name",
-    example: 'Doe',
-  })
-  lastname: string = null;
-
-  @ApiProperty({
-    description: "The user's nickname",
-    example: 'Johnny',
-  })
-  username: string = null;
 
   @ApiProperty({
     description: "The user's roles",
@@ -87,9 +66,4 @@ export default class CurrentUser {
     example: 'true',
   })
   isActivated: boolean;
-
-  @ApiProperty({
-    description: 'Array of medias that the user has played',
-  })
-  playedMedias?: PlayedMedia[];
 }

@@ -1,4 +1,5 @@
 import { PlayedMedia } from './played-media.model';
+import { UserProfile } from './user-profile.model';
 
 export enum Role {
   User = 'user',
@@ -11,14 +12,10 @@ export interface UpdateUserDTO {
   username: string;
 }
 
-export interface User {
+export interface User extends UserProfile {
   _id: string;
   email: string;
-  firstname: string;
-  lastname: string;
-  username: string;
   isAdmin?: boolean;
-  profileUniqueId: string;
   isActivated?: boolean;
   playedMedias: PlayedMedia[];
 }

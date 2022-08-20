@@ -2754,21 +2754,21 @@ func main() {
 
 ```json
 {
-  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
-  "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
+  "color": "#ff0000",
+  "playedMedias": [
+    "string"
+  ],
+  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
   "roles": [
     "user",
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true",
-  "playedMedias": [
-    "string"
-  ]
+  "isActivated": "true"
 }
 ```
 
@@ -3243,21 +3243,21 @@ func main() {
 
 ```json
 {
-  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
-  "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
+  "color": "#ff0000",
+  "playedMedias": [
+    "string"
+  ],
+  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
   "roles": [
     "user",
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true",
-  "playedMedias": [
-    "string"
-  ]
+  "isActivated": "true"
 }
 ```
 
@@ -3569,21 +3569,21 @@ func main() {
 
 ```json
 {
-  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
-  "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
+  "color": "#ff0000",
+  "playedMedias": [
+    "string"
+  ],
+  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
   "roles": [
     "user",
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true",
-  "playedMedias": [
-    "string"
-  ]
+  "isActivated": "true"
 }
 ```
 
@@ -8048,21 +8048,21 @@ This operation does not require authentication
 
 ```json
 {
-  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
   "profileUniqueId": "5e9f8f8f8f8f8f8f8f8f8f8f8",
-  "email": "exemplle.test@gmail.com",
   "firstname": "John",
   "lastname": "Doe",
-  "username": "Johnny",
+  "color": "#ff0000",
+  "playedMedias": [
+    "string"
+  ],
+  "_id": "5e9f8f8f8f8f8f8f8f8f8f8f8",
+  "email": "exemplle.test@gmail.com",
   "roles": [
     "user",
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true",
-  "playedMedias": [
-    "string"
-  ]
+  "isActivated": "true"
 }
 
 ```
@@ -8071,16 +8071,16 @@ This operation does not require authentication
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|_id|string|true|none|The user's id|
 |profileUniqueId|string|true|none|Current profile's unique id|
-|email|string|true|none|The user's email|
 |firstname|string|true|none|The user's first name|
 |lastname|string|true|none|The user's last name|
-|username|string|true|none|The user's nickname|
+|color|string|true|none|Color profile color|
+|playedMedias|[string]|true|none|Array of medias that the user has played|
+|_id|string|true|none|The user's id|
+|email|string|true|none|The user's email|
 |roles|[string]|true|none|The user's roles|
 |isAdmin|boolean|true|none|Is the user an Admin|
 |isActivated|boolean|true|none|Is the user activated|
-|playedMedias|[string]|true|none|Array of medias that the user has played|
 
 <h2 id="tocS_RegisterAuthDto">RegisterAuthDto</h2>
 <!-- backwards compatibility -->

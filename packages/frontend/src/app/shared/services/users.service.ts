@@ -22,6 +22,16 @@ export class UsersService {
     });
   }
 
+  updateProfile(profileUniqueId: string, profile: Partial<UserProfile>) {
+    return this.api.put<UserProfile>(
+      `users/profile/${profileUniqueId}`,
+      profile,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
   createProfile(data: {
     firstName: string;
     lastName: string;

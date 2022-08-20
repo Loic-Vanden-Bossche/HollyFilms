@@ -4,7 +4,7 @@ import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 @Schema()
 export class UserProfile {
   @Prop()
-  uniqueId: string;
+  profileUniqueId: string;
 
   @Prop()
   firstname: string;
@@ -14,6 +14,9 @@ export class UserProfile {
 
   @Prop()
   username: string;
+
+  @Prop()
+  color: string;
 
   @Prop()
   playedMedias?: PlayedMedia[];
