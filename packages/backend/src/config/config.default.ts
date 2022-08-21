@@ -14,6 +14,7 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_APP_URLS_WHITELIST: ['http://localhost:4200', 'http://localhost:8080'],
   HF_APP_FRONTEND_URL: 'http://localhost:4200',
   HF_APP_LOGS_PATH: './logs/hollyfilms.log',
+  HF_APP_DATASTORE_PATH: '../../data',
 
   // Database
   HF_DB_HOST: 'localhost',

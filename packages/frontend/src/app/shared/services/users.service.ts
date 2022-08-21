@@ -23,6 +23,14 @@ export class UsersService {
     });
   }
 
+  uploadProfilePicture(file: File) {
+    const formData = new FormData();
+    formData.append('profilePicture', file);
+    return this.api.post<UserProfile>(`users/profile-picture`, formData, {
+      withCredentials: true,
+    });
+  }
+
   updateProfile(profileUniqueId: string, profile: Partial<UserProfile>) {
     return this.api.put<UserProfile>(
       `users/profile/${profileUniqueId}`,

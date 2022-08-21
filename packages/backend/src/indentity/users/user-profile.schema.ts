@@ -20,6 +20,9 @@ export class UserProfile {
   @Prop()
   username: string;
 
+  @Prop({ default: null })
+  picture: string | null;
+
   @Prop()
   color: string;
 

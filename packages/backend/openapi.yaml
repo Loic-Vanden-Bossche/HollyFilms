@@ -210,6 +210,44 @@ paths:
         "200":
           description: ""
       tags: *a1
+  "/users/picture/{uniqueId}/{hash}":
+    get:
+      operationId: UsersController_profilePicture
+      summary: "[User] Get profile picture from userId"
+      parameters:
+        - name: uniqueId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: hash
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /users/profile-picture:
+    post:
+      operationId: UsersController_uploadProfilePicture
+      summary: "[User] Upload a profile picture"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profilePicture:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: ""
+      tags: *a1
   /users/admin:
     get:
       operationId: UsersAdminController_getUsers
@@ -1019,6 +1057,14 @@ components:
           type: string
           description: The user's last name
           example: Doe
+        username:
+          type: string
+          description: The user's username
+          example: johndoe
+        picture:
+          type: string
+          description: Profile picture url
+          example: profile/wxcdkjhqzu
         color:
           type: string
           description: Color profile color
@@ -1067,6 +1113,8 @@ components:
         - isDefault
         - firstname
         - lastname
+        - username
+        - picture
         - color
         - playedMedias
         - mediasInList

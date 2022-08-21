@@ -1,4 +1,3 @@
-import { Prop } from '@nestjs/mongoose';
 import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Media } from '../../medias/media.schema';
@@ -28,8 +27,17 @@ export class Profile {
   })
   lastname: string;
 
-  @Prop()
+  @ApiProperty({
+    description: "The user's username",
+    example: 'johndoe',
+  })
   username: string;
+
+  @ApiProperty({
+    description: 'Profile picture url',
+    example: 'profile/wxcdkjhqzu',
+  })
+  picture: string | null;
 
   @ApiProperty({
     description: 'Color profile color',

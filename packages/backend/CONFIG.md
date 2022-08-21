@@ -10,6 +10,7 @@
 | HF_APP_URLS_WHITELIST | http://localhost:4200, http://localhost:8080 | List of urls to proxy | isUrlArray | No |
 | HF_APP_FRONTEND_URL | http://localhost:4200 | Path of the frontend | isString | No |
 | HF_APP_LOGS_PATH | ./logs/hollyfilms.log | Path of the logs | isString | No |
+| HF_APP_DATASTORE_PATH | ../../data | Path of misc files | isString | No |
 | HF_DB_HOST | localhost | Database host | isString | Yes |
 | HF_DB_NAME |  | Database name |  | No |
 | HF_DB_USER |  | Database user |  | Yes |
@@ -40,4 +41,4 @@
 | HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
 | HF_MEDIAS_FILES_PATH | ../../medias_files | Path where the videos files are stored before upload | isString | No |
 
-Generated on 18/08/2022, 23:45:05
+Generated on 21/08/2022, 00:24:46

@@ -33,6 +33,7 @@ export default class CurrentUser extends Profile {
     this.playedMedias =
       currentProfile.playedMedias?.filter((p) => p.media) || [];
     this.isDefault = currentProfile.isDefault;
+    this.picture = currentProfile.picture;
     this.mediasInList = currentProfile.mediasInList || [];
     this.likedMedias = currentProfile.likedMedias || [];
     this.profileUniqueId = currentProfile.profileUniqueId;

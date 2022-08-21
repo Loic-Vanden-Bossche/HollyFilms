@@ -1,6 +1,16 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
-import { faUserPen, faUserXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBan,
+  faUserPen,
+  faUserXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../shared/services/users.service';
@@ -8,6 +18,8 @@ import { NotificationsService } from '../../shared/services/notifications.servic
 import { NotificationType } from '../../shared/models/notification.model';
 import { UserProfile } from '../../shared/models/user-profile.model';
 import { ModalService } from '../../shared/services/modal.service';
+import { switchMap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-modal',
@@ -90,21 +102,47 @@ export class UserModalComponent implements OnInit {
   insightsEntries: { value: string; label: string }[] = [];
 
   editProfileForm = new FormGroup({
-    firstname: new FormControl('', Validators.pattern(/\S/)),
-    lastname: new FormControl('', Validators.pattern(/\S/)),
-    username: new FormControl('', Validators.pattern(/\S/)),
+    firstname: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+    ),
+    lastname: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+    ),
+    username: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+    ),
+    profilePicture: new FormControl(null),
   });
 
   userProfiles: UserProfile[] = [];
 
   deletedUserIcon = faUserXmark;
   modifyUserIcon = faUserPen;
+  deleteProfilePictureIcon = faBan;
 
   editMode = false;
+
+  defaultProfilePictureUrl = 'assets/img/avatar-blank.png';
+  profilePictureUrl = this.defaultProfilePictureUrl;
+
+  get user() {
+    return this.authService.user;
+  }
 
   get display(): boolean {
     return this.modalService.isDisplay('userModal') || false;
   }
+
+  get isNoProfilePicture(): boolean {
+    return this.profilePictureUrl === this.defaultProfilePictureUrl;
+  }
+
+  @ViewChild('profilePicture') thumbFileInput: {
+    nativeElement: HTMLInputElement;
+  } | null = null;
 
   constructor(
     private readonly authService: AuthService,
@@ -114,6 +152,7 @@ export class UserModalComponent implements OnInit {
   ) {}
 
   updateData() {
+    this.updateProfilePicture();
     this.updateInsights();
     this.cancelEdit();
   }
@@ -121,6 +160,11 @@ export class UserModalComponent implements OnInit {
   cancelEdit() {
     this.editMode = false;
     this.editProfileForm.reset();
+  }
+
+  onDeleteProfilePicture() {
+    this.profilePictureUrl = this.defaultProfilePictureUrl;
+    this.editProfileForm.get('profilePicture')?.setValue(null);
   }
 
   onDeleteProfile() {
@@ -143,6 +187,7 @@ export class UserModalComponent implements OnInit {
             this.authService
               .switchUserProfile(defaultProfile.profileUniqueId)
               .subscribe(() => {
+                this.updateProfilePicture();
                 this.notificationsService.push({
                   type: NotificationType.Neutral,
                   message:
@@ -222,6 +267,13 @@ export class UserModalComponent implements OnInit {
           lastname: this.editProfileForm.value.lastname || this.user.lastname,
           username: this.editProfileForm.value.username || this.user.username,
         })
+        .pipe(
+          switchMap(() =>
+            this.usersService.uploadProfilePicture(
+              this.editProfileForm.value.profilePicture as unknown as File
+            )
+          )
+        )
         .subscribe({
           next: (profile) => {
             this.authService.updateUserProfile(profile);
@@ -244,11 +296,23 @@ export class UserModalComponent implements OnInit {
         });
     }
   }
-  get user() {
-    return this.authService.user;
+
+  onFileChange(event: any) {
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      this.profilePictureUrl = URL.createObjectURL(file);
+      this.editProfileForm.get('profilePicture')?.setValue(file);
+    }
+  }
+
+  updateProfilePicture() {
+    this.profilePictureUrl = this.user?.picture
+      ? `${environment.apiUrl}/users/${this.user.picture}`
+      : this.defaultProfilePictureUrl;
   }
 
   ngOnInit(): void {
+    this.updateProfilePicture();
     this.updateInsights();
     this.usersService
       .getProfileList()

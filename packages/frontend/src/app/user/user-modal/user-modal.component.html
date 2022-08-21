@@ -21,20 +21,42 @@
               class="flex flex-row justify-center absolute -bottom-1/4 w-full"
             >
               <div
-                class="h-32 overflow-hidden border-2 border-white aspect-square rounded-full bg-center bg-cover"
-                [ngStyle]="{
-                  'background-image': 'url(assets/img/avatar-blank.png)'
-                }"
+                [ngClass]="editMode ? 'cursor-pointer' : 'cursor-default'"
+                class="relative"
               >
                 <div
-                  class="cursor-pointer flex flex-col items-center justify-center h-full w-full bg-black/40 opacity-70 hover:opacity-100 transition-all"
-                  *ngIf="editMode"
+                  (click)="onDeleteProfilePicture()"
+                  *ngIf="editMode && !isNoProfilePicture"
+                  class="transition-all cursor-pointer z-10 opacity-70 hover:opacity-100 h-8 w-8 absolute right-0 top-0 rounded-full text-error bg-base-600 flex flex-col justify-center items-center"
                 >
-                  <img
-                    class="h-10 w-10"
-                    alt=""
-                    src="assets/img/add-image.svg"
+                  <fa-icon [icon]="deleteProfilePictureIcon"></fa-icon>
+                </div>
+                <div
+                  class="h-32 overflow-hidden border-2 border-white aspect-square rounded-full bg-center bg-cover"
+                  [ngStyle]="{
+                    'background-image': 'url(' + profilePictureUrl + ')'
+                  }"
+                >
+                  <input
+                    [disabled]="!editMode"
+                    (change)="onFileChange($event)"
+                    [autofocus]="false"
+                    #profilePicture
+                    class="hidden"
+                    type="file"
+                    accept="image/png, image/jpeg"
                   />
+                  <div
+                    (click)="profilePicture.click()"
+                    class="flex flex-col items-center justify-center h-full w-full bg-black/40 opacity-70 hover:opacity-100 transition-all"
+                    *ngIf="editMode"
+                  >
+                    <img
+                      class="h-10 w-10"
+                      alt=""
+                      src="assets/img/add-image.svg"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

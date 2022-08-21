@@ -9,6 +9,7 @@ export interface BaseConfig {
   whitelistedOrigins: string[];
   frontendUrl: string;
   logsPath: string;
+  dataStorePath: string;
 }
 
 export interface APIConfig extends BaseConfig {
@@ -89,6 +90,7 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
     whitelistedOrigins: config.HF_APP_URLS_WHITELIST,
     frontendUrl: config.HF_APP_FRONTEND_URL,
     logsPath: config.HF_APP_LOGS_PATH,
+    dataStorePath: config.HF_APP_DATASTORE_PATH,
     database: {
       host: config.HF_DB_HOST,
       port: config.HF_DB_PORT,

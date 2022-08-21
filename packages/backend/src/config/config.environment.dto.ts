@@ -67,6 +67,12 @@ export class ConfigEnvironmentDto {
   @Desc('Path of the logs')
   HF_APP_LOGS_PATH: string;
 
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path of misc files')
+  HF_APP_DATASTORE_PATH: string;
+
   // Database
   @ConfigValidator(isString)
   @Expose()

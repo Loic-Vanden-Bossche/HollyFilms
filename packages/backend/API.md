@@ -1785,6 +1785,316 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## UsersController_profilePicture
+
+<a id="opIdUsersController_profilePicture"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/picture/{uniqueId}/{hash}
+
+```
+
+```http
+GET /users/picture/{uniqueId}/{hash} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/picture/{uniqueId}/{hash}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/picture/{uniqueId}/{hash}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/picture/{uniqueId}/{hash}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/picture/{uniqueId}/{hash}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/picture/{uniqueId}/{hash}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/picture/{uniqueId}/{hash}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/picture/{uniqueId}/{hash}`
+
+*[User] Get profile picture from userId*
+
+<h3 id="userscontroller_profilepicture-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|uniqueId|path|string|true|none|
+|hash|path|string|true|none|
+
+<h3 id="userscontroller_profilepicture-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## UsersController_uploadProfilePicture
+
+<a id="opIdUsersController_uploadProfilePicture"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /users/profile-picture \
+  -H 'Content-Type: multipart/form-data'
+
+```
+
+```http
+POST /users/profile-picture HTTP/1.1
+
+Content-Type: multipart/form-data
+
+```
+
+```javascript
+const inputBody = '{
+  "profilePicture": "string"
+}';
+const headers = {
+  'Content-Type':'multipart/form-data'
+};
+
+fetch('/users/profile-picture',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'multipart/form-data'
+}
+
+result = RestClient.post '/users/profile-picture',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'multipart/form-data'
+}
+
+r = requests.post('/users/profile-picture', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'multipart/form-data',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/users/profile-picture', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/profile-picture");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"multipart/form-data"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/users/profile-picture", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /users/profile-picture`
+
+*[User] Upload a profile picture*
+
+> Body parameter
+
+```yaml
+profilePicture: string
+
+```
+
+<h3 id="userscontroller_uploadprofilepicture-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» profilePicture|body|string(binary)|false|none|
+
+<h3 id="userscontroller_uploadprofilepicture-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="hollyfilms-api-users-admin">Users Admin</h1>
 
 ## UsersAdminController_getUsers
@@ -3028,6 +3338,8 @@ func main() {
   "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
+  "username": "johndoe",
+  "picture": "profile/wxcdkjhqzu",
   "color": "#ff0000",
   "playedMedias": [
     "string"
@@ -3524,6 +3836,8 @@ func main() {
   "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
+  "username": "johndoe",
+  "picture": "profile/wxcdkjhqzu",
   "color": "#ff0000",
   "playedMedias": [
     "string"
@@ -3857,6 +4171,8 @@ func main() {
   "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
+  "username": "johndoe",
+  "picture": "profile/wxcdkjhqzu",
   "color": "#ff0000",
   "playedMedias": [
     "string"
@@ -8343,6 +8659,8 @@ This operation does not require authentication
   "isDefault": false,
   "firstname": "John",
   "lastname": "Doe",
+  "username": "johndoe",
+  "picture": "profile/wxcdkjhqzu",
   "color": "#ff0000",
   "playedMedias": [
     "string"
@@ -8373,6 +8691,8 @@ This operation does not require authentication
 |isDefault|boolean|true|none|Is the profile the default one|
 |firstname|string|true|none|The user's first name|
 |lastname|string|true|none|The user's last name|
+|username|string|true|none|The user's username|
+|picture|string|true|none|Profile picture url|
 |color|string|true|none|Color profile color|
 |playedMedias|[string]|true|none|Array of medias that the user has played|
 |mediasInList|[string]|true|none|Array of medias that the user added to his list|

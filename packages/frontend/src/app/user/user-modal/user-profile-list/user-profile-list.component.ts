@@ -6,6 +6,7 @@ import { NotificationsService } from '../../../shared/services/notifications.ser
 import { NotificationType } from '../../../shared/models/notification.model';
 import { faUserCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-profile-list',
@@ -18,10 +19,21 @@ export class UserProfileListComponent {
   selectedIcon = faUserCheck;
   addUserIcon = faUserPlus;
 
+  defaultProfilePictureUrl = 'assets/img/avatar-blank.png';
+
   addProfileForm = new FormGroup({
-    firstname: new FormControl('', Validators.pattern(/\S/)),
-    lastname: new FormControl('', Validators.pattern(/\S/)),
-    username: new FormControl('', Validators.pattern(/\S/)),
+    firstname: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+    ),
+    lastname: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+    ),
+    username: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+    ),
   });
 
   get currentProfileId() {
@@ -55,6 +67,12 @@ export class UserProfileListComponent {
           },
         });
     }
+  }
+
+  getProfilePictureUrl(profile: UserProfile) {
+    return profile?.picture
+      ? `${environment.apiUrl}/users/${profile.picture}`
+      : this.defaultProfilePictureUrl;
   }
 
   switchProfile(profile: UserProfile) {

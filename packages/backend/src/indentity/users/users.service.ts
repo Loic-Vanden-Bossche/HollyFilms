@@ -19,6 +19,9 @@ import { getRandomColor, getRandomizedColors } from './colors-profiles';
 import { UserProfile } from './user-profile.schema';
 import { MediasService } from '../../medias/medias.service';
 
+import * as fsp from 'fs/promises';
+import * as fs from 'fs';
+
 @Injectable()
 export class UsersService {
   logger = new Logger('Users');
@@ -155,15 +158,76 @@ export class UsersService {
       .then((u) => u.profiles.find((p) => p.profileUniqueId === uniqueId));
   }
 
+  getProfilePicturePath(userId: string, uniqueId: string, hash: string) {
+    return `${this.configService.get<string>(
+      'dataStorePath',
+    )}/profilePictures/profilePicture.${userId}.${uniqueId}.${hash}.jpg`;
+  }
+
+  checkDataStorePath() {
+    const dataStorePath = `${this.configService.get<string>(
+      'dataStorePath',
+    )}/profilePictures`;
+    if (!fs.existsSync(dataStorePath)) {
+      return fsp.mkdir(dataStorePath, { recursive: true });
+    }
+  }
+
+  async getProfilePicture(user: CurrentUser, uniqueId: string, hash: string) {
+    return fsp.readFile(this.getProfilePicturePath(user._id, uniqueId, hash));
+  }
+
+  deleteProfilePicture(user: CurrentUser) {
+    if (user.picture) {
+      const oldPath = this.getProfilePicturePath(
+        user._id,
+        user.profileUniqueId,
+        user.picture.split('/').pop(),
+      );
+      if (fs.existsSync(oldPath)) {
+        fsp.rm(oldPath);
+      }
+    }
+  }
+
+  async uploadProfilePicture(user: CurrentUser, file?: Express.Multer.File) {
+    this.deleteProfilePicture(user);
+
+    await this.checkDataStorePath();
+    const hash = randomToken.generate(32);
+
+    if (file) {
+      await fsp.writeFile(
+        this.getProfilePicturePath(user._id, user.profileUniqueId, hash),
+        file.buffer,
+      );
+    }
+
+    return this.userModel
+      .findByIdAndUpdate(
+        getObjectId(user._id),
+        {
+          $set: {
+            'profiles.$[elem].picture': file
+              ? `picture/${user.profileUniqueId}/${hash}`
+              : null,
+          },
+        },
+        {
+          arrayFilters: [{ 'elem.profileUniqueId': user.profileUniqueId }],
+          returnOriginal: false,
+        },
+      )
+      .then((u) =>
+        u.profiles.find((p) => p.profileUniqueId === user.profileUniqueId),
+      );
+  }
+
   findByIdLimited(id: string) {
     return this.userModel
       .findById(getObjectId(id))
       .select('-token -password -roles')
       .exec();
-  }
-
-  findByEmail(email: string) {
-    return this.userModel.findOne({ email }).exec();
   }
 
   async isAlreadyExist(email: string) {
@@ -256,6 +320,8 @@ export class UsersService {
         HttpStatus.FORBIDDEN,
       );
     }
+
+    this.deleteProfilePicture(user);
 
     return this.userModel
       .findByIdAndUpdate(

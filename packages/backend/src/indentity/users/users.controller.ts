@@ -3,12 +3,23 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
   Query,
+  Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiProduces,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import UpdateMeDto from './dto/update.me.dto';
 import { Role } from '../../shared/role';
@@ -21,6 +32,11 @@ import { dtoToTrackData } from '../../medias/medias.utils';
 import GetPlayerStatusDto from './dto/get.playerStatus.dto';
 import CreateProfileDto from './dto/create.profile.dto';
 import { checkUniqueId } from '../auth/auth.utils';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express, Response } from 'express';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 
 @ApiTags('Users')
 @Controller('users')
@@ -129,5 +145,62 @@ export class UsersController {
       query.si ? parseInt(query.si) : undefined,
       query.ei ? parseInt(query.ei) : undefined,
     );
+  }
+
+  @Roles(Role.User)
+  @Get('picture/:uniqueId/:hash')
+  @ApiProduces('image/jpeg')
+  @ApiOperation({ summary: '[User] Get profile picture from userId' })
+  async profilePicture(
+    @User() user: CurrentUser,
+    @Param('uniqueId') uniqueId: string,
+    @Param('hash') hash: string,
+    @Res() res: Response,
+  ) {
+    res
+      .set({ 'Content-Type': 'image/jpeg' })
+      .send(await this.usersService.getProfilePicture(user, uniqueId, hash));
+  }
+
+  @Roles(Role.User)
+  @Post('/profile-picture')
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: '[User] Upload a profile picture' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        profilePicture: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('profilePicture'))
+  uploadProfilePicture(
+    @User() user: CurrentUser,
+    @UploadedFile() profilePicture: Express.Multer.File,
+  ) {
+    const checkMime = (file: Express.Multer.File, types: string[]) =>
+      types.includes(file.mimetype);
+
+    if (
+      profilePicture &&
+      !checkMime(profilePicture, [
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'image/gif',
+        'image/webp',
+      ])
+    ) {
+      throw new HttpException(
+        'Bad profile picture file type detected, only jpeg, png, jpg, gif and webp are allowed',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.usersService.uploadProfilePicture(user, profilePicture);
   }
 }
