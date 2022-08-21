@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { UserProfile } from '../models/user-profile.model';
 
 export interface registerDto {
@@ -16,51 +16,56 @@ export interface registerDto {
   providedIn: 'root',
 })
 export class AuthService {
-  private _user: User | null = AuthService.getUser();
+  private _user$: BehaviorSubject<User | null> =
+    new BehaviorSubject<User | null>(AuthService.getUser());
+
+  get user(): User | null {
+    return this._user$.value ? Object.assign({}, this._user$.value) : null;
+  }
+
+  get isAuthenticated(): boolean {
+    return this._user$.value != null;
+  }
+
+  get isActivated(): boolean {
+    return this._user$.value?.isActivated ?? false;
+  }
+
+  get isAdmin(): boolean {
+    return this._user$.value?.isAdmin ?? false;
+  }
 
   constructor(private readonly api: HttpClient) {}
 
   initAuth() {
     return this.api.get<User>('auth/me', { withCredentials: true }).pipe(
       catchError(() => of(null)),
-      tap((user) => (this._user = user)),
+      tap((user) => this._user$.next(user)),
       tap((user) =>
         user ? AuthService.storeUser(user) : localStorage.removeItem('user')
       )
     );
   }
 
-  get user(): User | null {
-    return this._user ? Object.assign({}, this._user) : null;
-  }
-
-  get isAuthenticated(): boolean {
-    return this._user != null;
-  }
-
-  get isActivated(): boolean {
-    return this._user?.isActivated ?? false;
-  }
-
-  get isAdmin(): boolean {
-    return this._user?.isAdmin ?? false;
+  onUserChange() {
+    return this._user$.asObservable();
   }
 
   logout() {
     return this.api.get('auth/logout', { withCredentials: true }).pipe(
       tap(() => {
-        this._user = null;
+        this._user$.next(null);
         localStorage.removeItem('user');
       })
     );
   }
 
   updateUserProfile(data: UserProfile) {
-    if (this._user) {
-      this._user = {
-        ...this._user,
+    if (this._user$.value) {
+      this._user$.next({
+        ...this._user$.value,
         ...data,
-      };
+      });
     }
   }
 
@@ -71,7 +76,7 @@ export class AuthService {
       })
       .pipe(
         tap((user) => {
-          this._user = user;
+          this._user$.next(user);
           AuthService.storeUser(user);
         })
       );
@@ -91,7 +96,7 @@ export class AuthService {
       .post<User>('auth/login', { email, password }, { withCredentials: true })
       .pipe(
         tap((user) => {
-          this._user = user;
+          this._user$.next(user);
           AuthService.storeUser(user);
         })
       );
@@ -102,7 +107,7 @@ export class AuthService {
       .post<User>('auth/register', data, { withCredentials: true })
       .pipe(
         tap((user) => {
-          this._user = user;
+          this._user$.next(user);
           AuthService.storeUser(user);
         })
       );

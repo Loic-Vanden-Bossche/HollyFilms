@@ -63,6 +63,10 @@ export class AddRequestsListComponent implements OnInit {
         tap(() => (this.loading = false))
       )
       .subscribe((value) => (this.tmdbSearchResults = value));
-    this.requestedMedias = this.authService.user?.addRequestedMedias || [];
+    this.authService
+      .onUserChange()
+      .subscribe(
+        (user) => (this.requestedMedias = user?.addRequestedMedias || [])
+      );
   }
 }
