@@ -159,6 +159,7 @@ export class UserModalComponent implements OnInit {
 
   cancelEdit() {
     this.editMode = false;
+    this.updateProfilePicture();
     this.editProfileForm.reset();
   }
 
