@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TMDBAdminSearchResult } from '../../../shared/models/admin-tmdb-search-result.model';
+import { TMDBMicroSearchResult } from '../../../shared/models/micro-tmdb-search-result.model';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -7,6 +7,6 @@ import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './tmdb-result.component.html',
 })
 export class TmdbResultComponent {
-  @Input() tmdbMedia: TMDBAdminSearchResult | null = null;
+  @Input() tmdbMedia: TMDBMicroSearchResult | null = null;
   addIcon = faSquarePlus;
 }

@@ -9,7 +9,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class TmdbController {
   constructor(private readonly tmdbService: TmdbService) {}
 
-  @Roles(Role.Admin)
+  @Roles(Role.User)
   @Get('search')
   @ApiOperation({ summary: '[Admin] Search in TMDB API for movies & tvs' })
   async searchQuerry(

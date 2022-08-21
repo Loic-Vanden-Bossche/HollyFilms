@@ -5,10 +5,10 @@ import { ConfigService } from '@nestjs/config';
 import { TMDBConfig } from '../config/config';
 import { MediaWithType } from '../medias/medias.utils';
 import {
-  TMDBAdminSearchResult,
+  TMDBMicroSearchResult,
   TMDBMedia,
   TMDBMovie,
-  TMDBSearchResult,
+  TMDBSearchResults,
   TMDBSeason,
   TMDBTVShow,
 } from './tmdb.models';
@@ -38,7 +38,7 @@ export class TmdbService {
   async searchQuery(
     query: string,
     type: SearchType,
-  ): Promise<TMDBAdminSearchResult[]> {
+  ): Promise<TMDBMicroSearchResult[]> {
     const getParamFromType = (): string => {
       switch (type) {
         case 'movie':
@@ -63,7 +63,7 @@ export class TmdbService {
     const config = this.configService.get<TMDBConfig>('tmdb');
 
     const searchResults = await firstValueFrom(
-      this.httpService.get<TMDBSearchResult>(
+      this.httpService.get<TMDBSearchResults>(
         `${config.apiUrl}/search/${getParamFromType()}?api_key=${
           config.apiKey
         }&language=fr-FR&query=${encodeURI(query)}&page=1&include_adult=false`,

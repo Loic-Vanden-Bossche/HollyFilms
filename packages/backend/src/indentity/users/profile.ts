@@ -1,6 +1,7 @@
 import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Media } from '../../medias/media.schema';
+import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
 
 export class Profile {
   @ApiProperty({
@@ -49,6 +50,11 @@ export class Profile {
     description: 'Array of medias that the user has played',
   })
   playedMedias?: PlayedMedia[];
+
+  @ApiProperty({
+    description: 'Array of medias that the user has requested to an admin',
+  })
+  addRequestedMedias?: TMDBMicroSearchResult[];
 
   @ApiProperty({
     description: 'Array of medias that the user added to his list',

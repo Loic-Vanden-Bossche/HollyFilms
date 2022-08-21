@@ -4,6 +4,8 @@ import { UpdateUserDTO, User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../models/user-profile.model';
 import { ProfileInsights } from '../models/profile-Insights.model';
+import { TMDBMicroSearchResult } from '../models/micro-tmdb-search-result.model';
+import { MediaType } from '../models/media.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +47,15 @@ export class UsersService {
     return this.api.delete<User>(`users/profile`, {
       withCredentials: true,
     });
+  }
+
+  requestMedia(tmdbId: number, mediaType: MediaType) {
+    return this.api.get<TMDBMicroSearchResult>(
+      `users/addRequest/${mediaType}/${tmdbId}`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   createProfile(data: {

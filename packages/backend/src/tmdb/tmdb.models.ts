@@ -140,11 +140,11 @@ interface TMDBTVShow {
   };
 }
 
-interface TMDBSearchResult {
+interface TMDBSearchResults {
   results: TMDBMedia[];
 }
 
-interface TMDBAdminSearchResult {
+interface TMDBMicroSearchResult {
   original_title: string;
   TMDB_id: number;
   poster_path: string;
@@ -159,7 +159,7 @@ export {
   TMDBMovie,
   TMDBTVShow,
   TMDBSeason,
-  TMDBSearchResult,
-  TMDBAdminSearchResult,
+  TMDBSearchResults,
+  TMDBMicroSearchResult,
   TMDBMedia,
 };

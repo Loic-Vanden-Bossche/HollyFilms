@@ -5,9 +5,14 @@ import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { UserProfileListComponent } from './user-modal/user-profile-list/user-profile-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AddRequestsListComponent } from './user-modal/add-requests-list/add-requests-list.component';
 
 @NgModule({
-  declarations: [UserModalComponent, UserProfileListComponent],
+  declarations: [
+    UserModalComponent,
+    UserProfileListComponent,
+    AddRequestsListComponent,
+  ],
   exports: [UserModalComponent],
   imports: [CommonModule, SharedModule, FontAwesomeModule, ReactiveFormsModule],
 })

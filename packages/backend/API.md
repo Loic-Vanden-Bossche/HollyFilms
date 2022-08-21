@@ -1194,6 +1194,145 @@ func main() {
 This operation does not require authentication
 </aside>
 
+## UsersController_createAddRequest
+
+<a id="opIdUsersController_createAddRequest"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /users/addRequest/{mediaType}/{tmdbId}
+
+```
+
+```http
+GET /users/addRequest/{mediaType}/{tmdbId} HTTP/1.1
+
+```
+
+```javascript
+
+fetch('/users/addRequest/{mediaType}/{tmdbId}',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+result = RestClient.get '/users/addRequest/{mediaType}/{tmdbId}',
+  params: {
+  }
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+
+r = requests.get('/users/addRequest/{mediaType}/{tmdbId}')
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/users/addRequest/{mediaType}/{tmdbId}', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/users/addRequest/{mediaType}/{tmdbId}");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/users/addRequest/{mediaType}/{tmdbId}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /users/addRequest/{mediaType}/{tmdbId}`
+
+*[User] Add a requested media*
+
+<h3 id="userscontroller_createaddrequest-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|mediaType|path|string|true|none|
+|tmdbId|path|number|true|none|
+
+<h3 id="userscontroller_createaddrequest-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 ## UsersController_getUserProfile
 
 <a id="opIdUsersController_getUserProfile"></a>
@@ -3344,6 +3483,9 @@ func main() {
   "playedMedias": [
     "string"
   ],
+  "addRequestedMedias": [
+    "string"
+  ],
   "mediasInList": [
     "string"
   ],
@@ -3842,6 +3984,9 @@ func main() {
   "playedMedias": [
     "string"
   ],
+  "addRequestedMedias": [
+    "string"
+  ],
   "mediasInList": [
     "string"
   ],
@@ -4175,6 +4320,9 @@ func main() {
   "picture": "profile/wxcdkjhqzu",
   "color": "#ff0000",
   "playedMedias": [
+    "string"
+  ],
+  "addRequestedMedias": [
     "string"
   ],
   "mediasInList": [
@@ -8665,6 +8813,9 @@ This operation does not require authentication
   "playedMedias": [
     "string"
   ],
+  "addRequestedMedias": [
+    "string"
+  ],
   "mediasInList": [
     "string"
   ],
@@ -8695,6 +8846,7 @@ This operation does not require authentication
 |picture|string|true|none|Profile picture url|
 |color|string|true|none|Color profile color|
 |playedMedias|[string]|true|none|Array of medias that the user has played|
+|addRequestedMedias|[string]|true|none|Array of medias that the user has requested to an admin|
 |mediasInList|[string]|true|none|Array of medias that the user added to his list|
 |likedMedias|[string]|true|none|Array of medias that the user liked|
 |_id|string|true|none|The user's id|

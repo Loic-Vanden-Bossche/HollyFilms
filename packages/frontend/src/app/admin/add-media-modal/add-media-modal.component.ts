@@ -11,9 +11,10 @@ import { AdminService } from '../../shared/services/admin.service';
 import { FormControl } from '@angular/forms';
 import { FileData } from '../../shared/models/file-data.model';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { TMDBAdminSearchResult } from '../../shared/models/admin-tmdb-search-result.model';
+import { TMDBMicroSearchResult } from '../../shared/models/micro-tmdb-search-result.model';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { NotificationType } from '../../shared/models/notification.model';
+import { TmdbService } from '../../shared/services/tmdb.service';
 
 @Component({
   selector: 'app-add-media-modal',
@@ -46,12 +47,13 @@ export class AddMediaModalComponent implements OnInit {
   searchCtrl = new FormControl('');
 
   localResults: FileData[] = [];
-  tmdbResults: TMDBAdminSearchResult[] = [];
+  tmdbResults: TMDBMicroSearchResult[] = [];
 
   constructor(
     private readonly modalService: ModalService,
     private readonly adminService: AdminService,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
+    private readonly tmdbService: TmdbService
   ) {}
 
   searchIcon = faMagnifyingGlass;
@@ -74,8 +76,8 @@ export class AddMediaModalComponent implements OnInit {
   search() {
     if (this._selectedFile || !this.addingMovie) {
       if (this.searchCtrl.value) {
-        this.adminService
-          .tmdbSearch(
+        this.tmdbService
+          .search(
             this.searchCtrl.value || '',
             this.addingMovie ? 'movie' : 'tv'
           )
@@ -94,7 +96,7 @@ export class AddMediaModalComponent implements OnInit {
     }
   }
 
-  onAddMedia(tmdbMedia: TMDBAdminSearchResult) {
+  onAddMedia(tmdbMedia: TMDBMicroSearchResult) {
     if (this.selectedFile && this.addingMovie) {
       this.adminService
         .addMovie(tmdbMedia.TMDB_id, this.selectedFile?.path)

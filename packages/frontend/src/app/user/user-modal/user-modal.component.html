@@ -1,7 +1,7 @@
 <app-modal id="userModal" (closed)="closed.emit()">
   <div
     *ngIf="user && display"
-    class="w-10/12 h-[90%] md:h-3/4 sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 absolute text-base-800"
+    class="w-10/12 h-[90%] md:h-3/4 sm:w-3/4 md:w-2/3 xl:w-3/6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 absolute text-base-100"
   >
     <div class="h-full w-full gap-5 flex flex-row">
       <div
@@ -178,8 +178,10 @@
         </div>
         <div
           [@animateBottomRight]="{ value: '', params: { delay: 400 } }"
-          class="bg-white p-5 w-full h-full rounded-lg"
-        ></div>
+          class="bg-white p-5 min-h-0 w-full h-full rounded-lg"
+        >
+          <app-add-requests-list></app-add-requests-list>
+        </div>
       </div>
     </div>
   </div>

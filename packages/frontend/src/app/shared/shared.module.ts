@@ -17,6 +17,7 @@ import { ProgressCircleComponent } from './components/progress-circle/progress-c
 import { BytesToHumanPipe } from './pipes/bytes-to-human.pipe';
 import { NoContentComponent } from './components/no-content/no-content.component';
 import { DropdownMenuComponent } from './components/dropdown-menu/dropdown-menu.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DropdownMenuComponent } from './components/dropdown-menu/dropdown-menu.
     BytesToHumanPipe,
     NoContentComponent,
     DropdownMenuComponent,
+    LoaderComponent,
   ],
   exports: [
     ModalComponent,
@@ -40,6 +42,7 @@ import { DropdownMenuComponent } from './components/dropdown-menu/dropdown-menu.
     BytesToHumanPipe,
     NoContentComponent,
     DropdownMenuComponent,
+    LoaderComponent,
   ],
   providers: [
     UsersService,

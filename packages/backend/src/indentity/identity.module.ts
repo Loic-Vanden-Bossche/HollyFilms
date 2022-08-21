@@ -18,10 +18,12 @@ import { TokensService } from './tokens/tokens.service';
 import { UsersAdminController } from './users/users.admin.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { MediasModule } from '../medias/medias.module';
+import { TmdbModule } from '../tmdb/tmdb.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    TmdbModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService<APIConfig>) => {
         const config = configService.get<JWTConfig>('jwt');

@@ -138,6 +138,25 @@ paths:
         "200":
           description: ""
       tags: *a1
+  "/users/addRequest/{mediaType}/{tmdbId}":
+    get:
+      operationId: UsersController_createAddRequest
+      summary: "[User] Add a requested media"
+      parameters:
+        - name: mediaType
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: tmdbId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a1
   "/users/profile/{uniqueId}":
     get:
       operationId: UsersController_getUserProfile
@@ -1074,6 +1093,11 @@ components:
           type: array
           items:
             type: string
+        addRequestedMedias:
+          description: Array of medias that the user has requested to an admin
+          type: array
+          items:
+            type: string
         mediasInList:
           description: Array of medias that the user added to his list
           type: array
@@ -1117,6 +1141,7 @@ components:
         - picture
         - color
         - playedMedias
+        - addRequestedMedias
         - mediasInList
         - likedMedias
         - _id

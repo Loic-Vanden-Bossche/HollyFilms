@@ -1,4 +1,4 @@
-export interface TMDBAdminSearchResult {
+export interface TMDBMicroSearchResult {
   original_title: string;
   TMDB_id: number;
   poster_path: string;

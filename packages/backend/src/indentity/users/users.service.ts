@@ -12,7 +12,7 @@ import { AdminConfig } from '../../config/config';
 import { defaultConfig } from '../../config/config.default';
 import { Role } from '../../shared/role';
 import { getObjectId } from '../../shared/mongoose';
-import { TrackData } from '../../medias/medias.utils';
+import { MediaType, TrackData } from '../../medias/medias.utils';
 import * as randomToken from 'rand-token';
 import CreateProfileDto from './dto/create.profile.dto';
 import { getRandomColor, getRandomizedColors } from './colors-profiles';
@@ -21,6 +21,8 @@ import { MediasService } from '../../medias/medias.service';
 
 import * as fsp from 'fs/promises';
 import * as fs from 'fs';
+import { TmdbService } from '../../tmdb/tmdb.service';
+import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +32,7 @@ export class UsersService {
     private readonly authService: AuthService,
     private readonly mediasService: MediasService,
     private readonly configService: ConfigService,
+    private readonly tmdbService: TmdbService,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
@@ -109,6 +112,52 @@ export class UsersService {
     }
 
     return randomizedColors[0];
+  }
+
+  getMicroMediaFromTmdb(tmdbId: number, mediaType: MediaType) {
+    switch (mediaType) {
+      case 'movie':
+        return this.tmdbService.getMovie(tmdbId);
+      case 'tv':
+        return this.tmdbService.getTv(tmdbId);
+    }
+  }
+
+  createAddRequest(user: CurrentUser, mediaType: MediaType, tmdbId: number) {
+    return this.getMicroMediaFromTmdb(tmdbId, mediaType)
+      .then((media) => ({
+        original_title: media.data.title,
+        TMDB_id: media.data.TMDB_id,
+        poster_path: media.data.poster_path,
+        backdrop_path: media.data.backdrop_path,
+        release_date: media.data.release_date,
+        mediaType: media.mediaType,
+      }))
+      .catch(() => {
+        throw new HttpException(
+          `Media ${tmdbId} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      })
+      .then((media: TMDBMicroSearchResult) =>
+        this.userModel
+          .findOneAndUpdate(
+            {
+              _id: getObjectId(user._id),
+              profiles: {
+                $elemMatch: {
+                  profileUniqueId: user.profileUniqueId,
+                },
+              },
+            },
+            {
+              $push: {
+                'profiles.$.addRequestedMedias': media,
+              },
+            },
+          )
+          .then(() => media),
+      );
   }
 
   async createProfile(user: CurrentUser, dto: CreateProfileDto) {

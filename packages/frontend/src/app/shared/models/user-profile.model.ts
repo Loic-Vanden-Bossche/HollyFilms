@@ -1,5 +1,6 @@
 import { PlayedMedia } from './played-media.model';
 import { Media } from './media.model';
+import { TMDBMicroSearchResult } from './micro-tmdb-search-result.model';
 
 export interface UserProfile {
   color: string;
@@ -10,6 +11,7 @@ export interface UserProfile {
   lastname: string;
   username: string;
   playedMedias: PlayedMedia[];
+  addRequestedMedias?: TMDBMicroSearchResult[];
   mediasInList: Media[];
   likedMedias: Media[];
 }

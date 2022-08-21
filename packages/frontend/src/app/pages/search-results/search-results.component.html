@@ -16,10 +16,8 @@
   <div
     @onLoader
     *ngIf="loading"
-    class="text-white absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 flex flex-col items-center"
+    class="text-white h-24 w-24 absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2"
   >
-    <div
-      class="h-24 w-24 border-8 border-l-base-300 border-r-base-300 border-b-base-300 border-t-base-700 animate-spin ease-linear rounded-full"
-    ></div>
+    <app-loader></app-loader>
   </div>
 </div>

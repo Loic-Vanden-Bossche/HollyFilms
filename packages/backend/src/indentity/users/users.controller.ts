@@ -28,7 +28,7 @@ import { User } from '../../shared/decorators/user.decorator';
 import { checkObjectId } from '../../shared/mongoose';
 import CurrentUser from './current';
 import UpdateTrackDto from './dto/update.track.dto';
-import { dtoToTrackData } from '../../medias/medias.utils';
+import { dtoToTrackData, MediaType } from '../../medias/medias.utils';
 import GetPlayerStatusDto from './dto/get.playerStatus.dto';
 import CreateProfileDto from './dto/create.profile.dto';
 import { checkUniqueId } from '../auth/auth.utils';
@@ -88,6 +88,20 @@ export class UsersController {
   @ApiOperation({ summary: '[User] Set media track properties' })
   async getCurrentUserProfile(@User() user: CurrentUser) {
     return this.usersService.getProfile(user, 'current');
+  }
+
+  @Roles(Role.User)
+  @Get('/addRequest/:mediaType/:tmdbId')
+  @ApiOperation({ summary: '[User] Add a requested media' })
+  async createAddRequest(
+    @User() user: CurrentUser,
+    @Param('mediaType') mediaType: MediaType,
+    @Param('tmdbId') tmdbId: number,
+  ) {
+    if (mediaType !== 'movie' && mediaType !== 'tv') {
+      throw new HttpException('Invalid media type', HttpStatus.BAD_REQUEST);
+    }
+    return this.usersService.createAddRequest(user, mediaType, tmdbId);
   }
 
   @Roles(Role.User)

@@ -2,7 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MediaWithType, MediaWithTypeAndQueue } from '../models/media.model';
 import { FileData } from '../models/file-data.model';
-import { TMDBAdminSearchResult } from '../models/admin-tmdb-search-result.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, tap } from 'rxjs';
 import { ProgressStatus } from './processing.service';
@@ -89,13 +88,6 @@ export class AdminService {
     return this.http.get<void>(`processing/onlineSearch?query=${query}`, {
       withCredentials: true,
     });
-  }
-
-  tmdbSearch(query = '', type: 'movie' | 'tv' | 'both' = 'both') {
-    return this.http.get<TMDBAdminSearchResult[]>(
-      `tmdb/search?type=${type}&query=${query}`,
-      { withCredentials: true }
-    );
   }
 
   addMovie(tmdbId: number, filePath: string) {
