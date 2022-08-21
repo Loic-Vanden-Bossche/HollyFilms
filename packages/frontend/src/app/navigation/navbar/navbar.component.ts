@@ -21,6 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { skip, tap } from 'rxjs';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { NotificationType } from '../../shared/models/notification.model';
+import { environment } from '../../../environments/environment';
 
 export class NavBarButton {
   name = '';
@@ -99,6 +100,9 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     ),
   ];
 
+  defaultProfilePictureUrl = 'assets/img/avatar-blank.png';
+  profilePictureUrl = this.defaultProfilePictureUrl;
+
   searchIcon = faMagnifyingGlass;
   userGearIcon = faUserGear;
   logoutIcon = faRightFromBracket;
@@ -112,6 +116,14 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.authService
+      .onUserChange()
+      .subscribe(
+        (user) =>
+          (this.profilePictureUrl = user?.picture
+            ? `${environment.apiUrl}/users/${user?.picture}`
+            : this.defaultProfilePictureUrl)
+      );
     let retrievedCategoryNames: string[] = [];
     if (this.router.url.startsWith('/category')) {
       retrievedCategoryNames =
