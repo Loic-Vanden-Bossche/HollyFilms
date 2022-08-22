@@ -79,7 +79,7 @@ export class UserProfileListComponent {
     if (this.currentProfileId !== profile.profileUniqueId) {
       this.auth.switchUserProfile(profile.profileUniqueId).subscribe(() => {
         this.notificationService.push({
-          type: NotificationType.Success,
+          type: NotificationType.Neutral,
           message: `Vous utilisez maintenant le profil: ${profile.username}`,
         });
         this.profileSwitched.emit();

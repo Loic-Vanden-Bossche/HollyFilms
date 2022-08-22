@@ -18,8 +18,9 @@ import { NotificationsService } from '../../shared/services/notifications.servic
 import { NotificationType } from '../../shared/models/notification.model';
 import { UserProfile } from '../../shared/models/user-profile.model';
 import { ModalService } from '../../shared/services/modal.service';
-import { switchMap } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-user-modal',
@@ -151,12 +152,6 @@ export class UserModalComponent implements OnInit {
     private readonly notificationsService: NotificationsService
   ) {}
 
-  updateData() {
-    this.updateProfilePicture();
-    this.updateInsights();
-    this.cancelEdit();
-  }
-
   cancelEdit() {
     this.editMode = false;
     this.updateProfilePicture();
@@ -188,7 +183,6 @@ export class UserModalComponent implements OnInit {
             this.authService
               .switchUserProfile(defaultProfile.profileUniqueId)
               .subscribe(() => {
-                this.updateProfilePicture();
                 this.notificationsService.push({
                   type: NotificationType.Neutral,
                   message:
@@ -230,33 +224,29 @@ export class UserModalComponent implements OnInit {
     return `${Math.floor(seconds / 3600)}h`;
   }
 
-  updateInsights() {
-    if (this.user) {
-      this.usersService
-        .getProfileInsights(this.user?.profileUniqueId)
-        .subscribe((insights) => {
-          this.insightsEntries = [
-            {
-              value: insights.watchedMedias.toString(),
-              label:
-                insights.watchedMedias === 1
-                  ? 'film regardé'
-                  : 'films regardés',
-            },
-            {
-              value: this.fromSecondsToTime(insights.totalPlayTime),
-              label: 'de visionnage',
-            },
-            {
-              value: insights.favoriteGenre,
-              label:
-                insights.favoriteGenre === 'Aucun'
-                  ? 'genre favori'
-                  : 'est votre genre favori',
-            },
-          ];
-        });
-    }
+  updateInsights(user: User) {
+    this.usersService
+      .getProfileInsights(user.profileUniqueId)
+      .subscribe((insights) => {
+        this.insightsEntries = [
+          {
+            value: insights.watchedMedias.toString(),
+            label:
+              insights.watchedMedias === 1 ? 'film regardé' : 'films regardés',
+          },
+          {
+            value: this.fromSecondsToTime(insights.totalPlayTime),
+            label: 'de visionnage',
+          },
+          {
+            value: insights.favoriteGenre,
+            label:
+              insights.favoriteGenre === 'Aucun'
+                ? 'genre favori'
+                : 'est votre genre favori',
+          },
+        ];
+      });
   }
 
   updateProfile() {
@@ -306,15 +296,25 @@ export class UserModalComponent implements OnInit {
     }
   }
 
-  updateProfilePicture() {
-    this.profilePictureUrl = this.user?.picture
-      ? `${environment.apiUrl}/users/${this.user.picture}`
+  updateProfilePicture(user: User | null = this.user) {
+    this.profilePictureUrl = user?.picture
+      ? `${environment.apiUrl}/users/${user.picture}`
       : this.defaultProfilePictureUrl;
   }
 
   ngOnInit(): void {
-    this.updateProfilePicture();
-    this.updateInsights();
+    this.authService
+      .onUserChange()
+      .pipe(
+        filter((user) => !!user),
+        map((user) => user as User)
+      )
+      .subscribe((user: User) => {
+        console.log(user);
+        this.updateProfilePicture(user);
+        this.updateInsights(user);
+        this.cancelEdit();
+      });
     this.usersService
       .getProfileList()
       .subscribe((profiles) => (this.userProfiles = profiles));
