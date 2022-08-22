@@ -55,7 +55,7 @@ export class UsersService {
 
   getProfiles(user: CurrentUser) {
     return this.userModel
-      .findOne(getObjectId(user._id))
+      .findById(getObjectId(user._id))
       .orFail(() => {
         throw new HttpException(
           `User ${user._id} not found`,
