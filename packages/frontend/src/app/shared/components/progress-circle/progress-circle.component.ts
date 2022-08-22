@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { ColorMap } from '../ratings/rating-circle/rating-circle.component';
+import { ColorMap } from '../../utils';
 
 @Component({
   selector: 'app-progress-circle',

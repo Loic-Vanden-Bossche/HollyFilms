@@ -37,10 +37,9 @@
                   </h1>
                 </div>
                 <div class="flex flex-col justify-end ml-auto">
-                  <app-rating-circle
-                    [rating]="media.data.rating"
-                    [extend]="true"
-                  ></app-rating-circle>
+                  <app-progress-circle
+                    [progress]="(media.data.rating / 10) * 100"
+                  ></app-progress-circle>
                 </div>
               </div>
               <div class="absolute flex flex-row bottom-0 h-10">

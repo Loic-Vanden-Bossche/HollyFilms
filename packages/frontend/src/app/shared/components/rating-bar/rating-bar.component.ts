@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ColorMap } from '../rating-circle/rating-circle.component';
+import { ColorMap } from '../../utils';
 
 @Component({
   selector: 'app-rating-bar',

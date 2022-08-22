@@ -8,6 +8,11 @@ const toSentenceCase = (str: string) => {
   return str.charAt(0).toUpperCase() + str.substring(1).toLowerCase();
 };
 
+interface ColorMap {
+  color: string;
+  breakpoint: number;
+}
+
 const shuffle = <T>(array: T[]): T[] => {
   let currentIndex = array.length,
     randomIndex;
@@ -25,4 +30,4 @@ const shuffle = <T>(array: T[]): T[] => {
   return array;
 };
 
-export { toTitleCase, toSentenceCase, shuffle };
+export { toTitleCase, toSentenceCase, shuffle, ColorMap };

@@ -10,8 +10,7 @@ import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SafePipe } from './pipes/safe.pipe';
-import { RatingCircleComponent } from './components/ratings/rating-circle/rating-circle.component';
-import { RatingBarComponent } from './components/ratings/rating-bar/rating-bar.component';
+import { RatingBarComponent } from './components/rating-bar/rating-bar.component';
 import { SentenceCasePipe } from './pipes/sentence-case.pipe';
 import { ProgressCircleComponent } from './components/progress-circle/progress-circle.component';
 import { BytesToHumanPipe } from './pipes/bytes-to-human.pipe';
@@ -23,7 +22,6 @@ import { LoaderComponent } from './components/loader/loader.component';
   declarations: [
     ModalComponent,
     SafePipe,
-    RatingCircleComponent,
     RatingBarComponent,
     SentenceCasePipe,
     ProgressCircleComponent,
@@ -35,7 +33,6 @@ import { LoaderComponent } from './components/loader/loader.component';
   exports: [
     ModalComponent,
     SafePipe,
-    RatingCircleComponent,
     RatingBarComponent,
     SentenceCasePipe,
     ProgressCircleComponent,
