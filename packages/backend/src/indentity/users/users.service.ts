@@ -613,7 +613,9 @@ export class UsersService {
       ])
       .exec()
       .then((user: any[]) =>
-        !user?.length ? {} : user.filter((u) => u.playedMedias?.length)[0],
+        !user?.length
+          ? {}
+          : user.filter((u) => u.playedMedias?.length)[0].playedMedias[0],
       );
   }
 
