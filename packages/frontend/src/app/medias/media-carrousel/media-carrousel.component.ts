@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MediaWithTypeAndFeatured } from '../../shared/models/media.model';
-import { MediasService } from '../../shared/services/medias.service';
-import { shuffle } from '../../shared/utils';
 
 import EffectCarousel from './carrousel-effect';
 
@@ -61,8 +59,9 @@ SwiperCore.use([
     ]),
   ],
 })
-export class MediaCarrouselComponent implements OnInit {
-  featured: MediaWithTypeAndFeatured[] = [];
+export class MediaCarrouselComponent {
+  @Input() featured: MediaWithTypeAndFeatured[] | null = [];
+
   index = 0;
 
   config: SwiperOptions = {
@@ -84,19 +83,11 @@ export class MediaCarrouselComponent implements OnInit {
     },
   };
 
-  constructor(private readonly mediasService: MediasService) {}
-
   slideChanged([swiper]: Swiper[]) {
     if (swiper.isBeginning) {
       this.index = 0;
     } else {
       this.index = swiper.realIndex;
     }
-  }
-
-  ngOnInit(): void {
-    this.mediasService.getFeaturedMedias().subscribe((medias) => {
-      this.featured = shuffle(medias);
-    });
   }
 }

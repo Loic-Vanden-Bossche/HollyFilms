@@ -3,7 +3,7 @@
   cdkVirtualScrollingElement
 >
   <div class="mb-14">
-    <app-media-carrousel></app-media-carrousel>
+    <app-media-carrousel [featured]="featured | async"></app-media-carrousel>
   </div>
   <cdk-virtual-scroll-viewport class="h-full w-full" itemSize="432">
     <ng-container *cdkVirtualFor="let list of mediaLists">
