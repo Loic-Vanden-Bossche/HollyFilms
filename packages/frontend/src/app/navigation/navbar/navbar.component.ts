@@ -117,7 +117,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.authService
-      .onUserChange()
+      .onUserUpdated()
       .subscribe(
         (user) =>
           (this.profilePictureUrl = user?.picture

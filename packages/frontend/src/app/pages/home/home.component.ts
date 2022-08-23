@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authService.onUserChange().subscribe(() => {
+    this.authService.onUserChanged().subscribe(() => {
       this.mediaLists.next([
         { type: ListType.ALL, name: 'Tous les médias', medias: [] },
         { type: ListType.MOVIE, name: 'Films', medias: [] },

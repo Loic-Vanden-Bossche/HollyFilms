@@ -19,6 +19,8 @@ export class AuthService {
   private _user$: BehaviorSubject<User | null> =
     new BehaviorSubject<User | null>(AuthService.getUser());
 
+  private _userChanged$ = new BehaviorSubject<User | null>(null);
+
   get user(): User | null {
     return this._user$.value ? Object.assign({}, this._user$.value) : null;
   }
@@ -35,7 +37,13 @@ export class AuthService {
     return this._user$.value?.isAdmin ?? false;
   }
 
-  constructor(private readonly api: HttpClient) {}
+  constructor(private readonly api: HttpClient) {
+    this._user$.subscribe((user) => {
+      if (!this._userChanged$.value && this._userChanged$.value) {
+        this._userChanged$.next(user);
+      }
+    });
+  }
 
   initAuth() {
     return this.api.get<User>('auth/me', { withCredentials: true }).pipe(
@@ -47,8 +55,12 @@ export class AuthService {
     );
   }
 
-  onUserChange() {
+  onUserUpdated() {
     return this._user$.asObservable();
+  }
+
+  onUserChanged() {
+    return this._userChanged$.asObservable();
   }
 
   logout() {
@@ -77,6 +89,7 @@ export class AuthService {
       .pipe(
         tap((user) => {
           this._user$.next(user);
+          this._userChanged$.next(user);
           AuthService.storeUser(user);
         })
       );

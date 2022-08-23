@@ -9,7 +9,7 @@ import {
   ShowcaseMedia,
 } from '../models/media.model';
 import { AuthService } from './auth.service';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Subject, tap } from 'rxjs';
 import { MediaRecord } from '../models/user-profile.model';
 import { NotificationsService } from './notifications.service';
 import { NotificationType } from '../models/notification.model';
@@ -22,11 +22,17 @@ export class MediasService {
 
   selectedMedia = new BehaviorSubject<MediaWithType | null>(null);
 
+  private _inListChanged$ = new Subject<void>();
+
   constructor(
     private readonly http: HttpClient,
     private readonly auth: AuthService,
     private readonly notificationsService: NotificationsService
   ) {}
+
+  onInListChanged() {
+    return this._inListChanged$.asObservable();
+  }
 
   clearSelectedMedia() {
     this.selectedMedia.next(null);
@@ -76,6 +82,7 @@ export class MediasService {
       .pipe(
         tap((mediasInList) => {
           this.auth.updateUserProfile({ mediasInList });
+          this._inListChanged$.next();
           this.notificationsService.push({
             type: NotificationType.Success,
             message: `${media.data.title} a été ajouté à votre liste`,
@@ -92,6 +99,7 @@ export class MediasService {
       .pipe(
         tap((mediasInList) => {
           this.auth.updateUserProfile({ mediasInList });
+          this._inListChanged$.next();
           this.notificationsService.push({
             type: NotificationType.Info,
             message: `${media.data.title} a été retiré de votre liste`,

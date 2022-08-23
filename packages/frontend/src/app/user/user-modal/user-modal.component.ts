@@ -304,7 +304,7 @@ export class UserModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService
-      .onUserChange()
+      .onUserUpdated()
       .pipe(
         filter((user) => !!user),
         map((user) => user as User)
