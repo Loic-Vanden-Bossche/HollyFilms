@@ -35,8 +35,16 @@ export default class CurrentUser extends Profile {
     this.isDefault = currentProfile.isDefault;
     this.picture = currentProfile.picture;
     this.addRequestedMedias = currentProfile.addRequestedMedias || [];
-    this.mediasInList = currentProfile.mediasInList || [];
-    this.likedMedias = currentProfile.likedMedias || [];
+    this.mediasInList =
+      currentProfile.mediasInList?.map((m) => ({
+        mediaId: m.media as unknown as string,
+        createdAt: m.createdAt,
+      })) || [];
+    this.likedMedias =
+      currentProfile.likedMedias?.map((m) => ({
+        mediaId: m.media as unknown as string,
+        createdAt: m.createdAt,
+      })) || [];
     this.profileUniqueId = currentProfile.profileUniqueId;
     this.firstname = currentProfile.firstname;
     this.lastname = currentProfile.lastname;

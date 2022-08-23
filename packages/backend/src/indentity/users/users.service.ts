@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { User, UserDocument } from './user.schema';
 import CreateUserDto from './dto/create.user.dto';
 import UpdateUserDto from './dto/update.user.dto';
-import UpdateMeDto from './dto/update.me.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import CurrentUser from './current';
@@ -160,6 +159,51 @@ export class UsersService {
       );
   }
 
+  addMediaToList(user: CurrentUser, mediaId: string) {
+    if (user.mediasInList?.map((m) => m.mediaId.toString()).includes(mediaId)) {
+      throw new HttpException(
+        `Media ${mediaId} already in list`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.mediasService
+      .isExist(mediaId)
+      .catch(() => {
+        throw new HttpException(
+          `Media ${mediaId} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      })
+      .then(() => {
+        return this.userModel
+          .findOneAndUpdate(
+            {
+              _id: getObjectId(user._id),
+              profiles: {
+                $elemMatch: {
+                  profileUniqueId: user.profileUniqueId,
+                },
+              },
+            },
+            {
+              $push: {
+                'profiles.$.mediasInList': {
+                  media: getObjectId(mediaId),
+                },
+              },
+            },
+            { new: true },
+          )
+          .then(
+            (updatedUser) =>
+              updatedUser.profiles.find(
+                (p) => p.profileUniqueId === user.profileUniqueId,
+              )?.mediasInList || [],
+          );
+      });
+  }
+
   async createProfile(user: CurrentUser, dto: CreateProfileDto) {
     const userProfiles = await this.userModel
       .findById(getObjectId(user._id))
@@ -313,32 +357,6 @@ export class UsersService {
         throw new HttpException(`User ${id} not found`, HttpStatus.NOT_FOUND);
       })
       .exec();
-  }
-
-  async updateMe(user: CurrentUser, selfUpdate: UpdateMeDto) {
-    return this.isExist(user._id)
-      .then((user) =>
-        this.authService.processPassword(
-          selfUpdate.newPassword,
-          selfUpdate.newPasswordConfirm,
-          user.password,
-        ),
-      )
-      .then((newPassword) =>
-        this.userModel
-          .findByIdAndUpdate(
-            getObjectId(user._id),
-            {
-              ...selfUpdate,
-              password: newPassword,
-            },
-            {
-              returnOriginal: false,
-            },
-          )
-          .exec(),
-      )
-      .then((u) => new CurrentUser(u));
   }
 
   async update(id: string, userUpdate: UpdateUserDto) {

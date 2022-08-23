@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Schema()
+@Schema({ _id: false })
 export class DataProfile {
   @Prop()
   name: string;
@@ -9,4 +9,4 @@ export class DataProfile {
   profile_path: string;
 }
 
-export const ProfileSchema = SchemaFactory.createForClass(DataProfile);
+export const DataProfileSchema = SchemaFactory.createForClass(DataProfile);

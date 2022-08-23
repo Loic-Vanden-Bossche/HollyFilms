@@ -21,7 +21,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import UpdateMeDto from './dto/update.me.dto';
 import { Role } from '../../shared/role';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { User } from '../../shared/decorators/user.decorator';
@@ -48,12 +47,6 @@ export class UsersController {
   @ApiOperation({ summary: '[User] get user' })
   async getUser(@Param('id') id: string) {
     return this.usersService.findByIdLimited(checkObjectId(id));
-  }
-
-  @Put('/me')
-  @ApiOperation({ summary: '[User] Update self' })
-  async updateMe(@User() user: CurrentUser, @Body() selfUpdate: UpdateMeDto) {
-    return this.usersService.updateMe(user, selfUpdate);
   }
 
   @Roles(Role.User)
@@ -102,6 +95,16 @@ export class UsersController {
       throw new HttpException('Invalid media type', HttpStatus.BAD_REQUEST);
     }
     return this.usersService.createAddRequest(user, mediaType, tmdbId);
+  }
+
+  @Roles(Role.User)
+  @Get('/addToList/:mediaId')
+  @ApiOperation({ summary: '[User] Add a media to profile list' })
+  async addMediaToList(
+    @User() user: CurrentUser,
+    @Param('mediaId') mediaId: string,
+  ) {
+    return this.usersService.addMediaToList(user, mediaId);
   }
 
   @Roles(Role.User)

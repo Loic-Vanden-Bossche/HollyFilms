@@ -3,7 +3,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { DataProfile } from './profile.schema';
 
-@Schema()
+@Schema({ _id: false })
 export class Actor extends DataProfile {
   @Prop()
   character: string;

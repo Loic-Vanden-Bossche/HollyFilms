@@ -26,21 +26,6 @@ paths:
       tags:
         &a1
         - Users
-  /users/me:
-    put:
-      operationId: UsersController_updateMe
-      summary: "[User] Update self"
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateMeDto"
-      responses:
-        "200":
-          description: ""
-      tags: *a1
   /users/track:
     get:
       operationId: UsersController_setMediaCurrentTime
@@ -153,6 +138,20 @@ paths:
           in: path
           schema:
             type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  "/users/addToList/{mediaId}":
+    get:
+      operationId: UsersController_addMediaToList
+      summary: "[User] Add a media to profile list"
+      parameters:
+        - name: mediaId
+          required: true
+          in: path
+          schema:
+            type: string
       responses:
         "200":
           description: ""
@@ -913,35 +912,6 @@ components:
       in: cookie
       name: connect.sid
   schemas:
-    UpdateMeDto:
-      type: object
-      properties:
-        firstname:
-          type: string
-          description: User first name
-          example: John
-        lastname:
-          type: string
-          description: User last name
-          example: Doe
-        username:
-          type: string
-          description: User nickname
-          example: Johnny
-        newPassword:
-          type: string
-          description: New user password
-          example: "123456"
-        newPasswordConfirm:
-          type: string
-          description: New user password confirmation
-          example: "123456"
-      required:
-        - firstname
-        - lastname
-        - username
-        - newPassword
-        - newPasswordConfirm
     CreateProfileDto:
       type: object
       properties:

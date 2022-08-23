@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Media } from '../media.schema';
 import { SchemaTypes } from 'mongoose';
+import { BaseSchema } from '../../shared/base.schema';
 
-@Schema()
-export class PlayedMedia {
+@Schema({ timestamps: true, _id: false })
+export class PlayedMedia extends BaseSchema {
   @Prop({ type: SchemaTypes.ObjectId, ref: Media.name })
   media: Media;
 

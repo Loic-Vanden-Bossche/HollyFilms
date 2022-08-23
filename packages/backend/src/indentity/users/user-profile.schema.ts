@@ -1,11 +1,20 @@
-import { Prop, Schema } from '@nestjs/mongoose';
-import { PlayedMedia } from '../../medias/schemas/played-media.schema';
-import { SchemaTypes } from 'mongoose';
-import { Media } from '../../medias/media.schema';
-import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {
+  PlayedMedia,
+  PlayedMediaSchema,
+} from '../../medias/schemas/played-media.schema';
+import { BaseSchema } from '../../shared/base.schema';
+import {
+  UserTMDBRecord,
+  UserTMDBRecordSchema,
+} from './user-tmdb-record.schema';
+import {
+  UserMediaRecord,
+  UserMediaRecordSchema,
+} from './user-media-record.schema';
 
-@Schema()
-export class UserProfile {
+@Schema({ timestamps: true, _id: false })
+export class UserProfile extends BaseSchema {
   @Prop()
   profileUniqueId: string;
 
@@ -27,21 +36,17 @@ export class UserProfile {
   @Prop()
   color: string;
 
-  @Prop({ default: undefined })
-  addRequestedMedias?: TMDBMicroSearchResult[];
+  @Prop({ type: [UserTMDBRecordSchema], default: undefined })
+  addRequestedMedias?: UserTMDBRecord[];
 
-  @Prop({ default: undefined })
+  @Prop({ type: [PlayedMediaSchema], default: undefined })
   playedMedias?: PlayedMedia[];
 
-  @Prop({
-    type: [{ type: SchemaTypes.ObjectId, ref: Media.name }],
-    default: undefined,
-  })
-  mediasInList?: Media[];
+  @Prop({ type: [UserMediaRecordSchema], default: undefined })
+  mediasInList?: UserMediaRecord[];
 
-  @Prop({
-    type: [{ type: SchemaTypes.ObjectId, ref: Media.name }],
-    default: undefined,
-  })
-  likedMedias?: Media[];
+  @Prop({ type: [UserMediaRecordSchema], default: undefined })
+  likedMedias?: UserMediaRecord[];
 }
+
+export const UserProfileSchema = SchemaFactory.createForClass(UserProfile);

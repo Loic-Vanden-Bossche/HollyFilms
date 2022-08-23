@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Season } from './tvs/schemas/season.schema';
-import { FileInfos } from './schemas/file-infos.schema';
-import { Review } from './schemas/review.schema';
-import { Actor } from './schemas/actor.schema';
-import { DataProfile } from './schemas/profile.schema';
-import { Schema as MongooseSchema } from 'mongoose';
+import { Season, SeasonSchema } from './tvs/schemas/season.schema';
+import { FileInfos, FileInfosSchema } from './schemas/file-infos.schema';
+import { Review, ReviewSchema } from './schemas/review.schema';
+import { Actor, ActorSchema } from './schemas/actor.schema';
+import { DataProfile, DataProfileSchema } from './schemas/profile.schema';
+import { BaseIdSchema } from '../shared/base.schema';
 
 export class Director {
   name: string;
@@ -13,11 +13,8 @@ export class Director {
 
 export type MediaDocument = Media & Document;
 
-@Schema()
-export class Media {
-  @Prop({ auto: true, type: MongooseSchema.Types.ObjectId })
-  _id?: string;
-
+@Schema({ timestamps: true })
+export class Media extends BaseIdSchema {
   @Prop()
   TMDB_id: number;
 
@@ -57,16 +54,16 @@ export class Media {
   @Prop()
   production_companies: Array<{ name: string; logo_path: string }>;
 
-  @Prop(DataProfile)
+  @Prop({ type: DataProfileSchema })
   director: DataProfile;
 
-  @Prop()
+  @Prop({ type: ActorSchema })
   actors: Actor[];
 
   @Prop()
   rating: number;
 
-  @Prop()
+  @Prop({ type: [ReviewSchema], default: [] })
   reviews: Review[];
 
   @Prop()
@@ -75,14 +72,11 @@ export class Media {
   @Prop({ default: false })
   available?: boolean;
 
-  @Prop({ default: undefined })
+  @Prop({ type: [SeasonSchema], default: undefined })
   tvs?: Season[];
 
-  @Prop(FileInfos)
+  @Prop({ type: FileInfosSchema, default: undefined })
   fileInfos?: FileInfos;
-
-  @Prop({ default: () => new Date() })
-  createdAt?: Date;
 }
 
 export const MediaSchema = SchemaFactory.createForClass(Media);

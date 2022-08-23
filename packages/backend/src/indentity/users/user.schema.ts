@@ -1,20 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { Token } from '../tokens/token.schema';
+import { Document } from 'mongoose';
+import { Token, TokenSchema } from '../tokens/token.schema';
 import { Role } from '../../shared/role';
-import { UserProfile } from './user-profile.schema';
+import { UserProfile, UserProfileSchema } from './user-profile.schema';
+import { BaseIdSchema } from '../../shared/base.schema';
 
 export type UserDocument = User & Document;
 
-@Schema()
-export class User {
-  @Prop({ auto: true, type: MongooseSchema.Types.ObjectId })
-  _id?: string;
-
+@Schema({ timestamps: true })
+export class User extends BaseIdSchema {
   @Prop({ required: true })
   email: string;
 
-  @Prop()
+  @Prop({ type: [UserProfileSchema], default: [] })
   profiles: UserProfile[];
 
   @Prop()
@@ -27,7 +25,7 @@ export class User {
   })
   roles: Role[];
 
-  @Prop()
+  @Prop({ type: [TokenSchema], default: [] })
   tokens: Token[];
 }
 

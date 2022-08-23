@@ -37,7 +37,7 @@ import { ConfigService } from '@nestjs/config';
 import { MediasConfig } from '../config/config';
 import { getMoviesToMigrate, getTvsToMigrate } from '../bootstrap/migrations';
 import { TmdbService } from '../tmdb/tmdb.service';
-import { getObjectId } from '../shared/mongoose';
+import { checkObjectId, getObjectId } from '../shared/mongoose';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -187,7 +187,7 @@ export class MediasService {
                 filePath: v.filePath,
                 seasonIndex: v.seasonIndex,
                 episodeIndex: v.episodeIndex,
-                dateAdded: v.dateAdded,
+                dateAdded: v.createdAt,
               })),
             })),
         ),
@@ -299,8 +299,16 @@ export class MediasService {
     return query.find({}).sort({ popularity: 'desc' });
   }
 
-  inlistQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find().sort({ title: 'asc' });
+  inlistQuery(query: Query<MediaDocument[], MediaDocument>, user: CurrentUser) {
+    return query.find({
+      _id: {
+        $in: user.mediasInList
+          .sort((a, b) => {
+            return a.createdAt.getTime() - b.createdAt.getTime();
+          })
+          .map((m) => m.mediaId),
+      },
+    });
   }
 
   likedQuery(query: Query<MediaDocument[], MediaDocument>) {
@@ -347,6 +355,14 @@ export class MediasService {
 
   animeQuery(query: Query<MediaDocument[], MediaDocument>) {
     return query.find({ genres: 'Animation' });
+  }
+
+  isExist(mediaId: string) {
+    return this.mediaModel
+      .exists({ _id: getObjectId(checkObjectId(mediaId)) })
+      .orFail(() => {
+        throw new Error('Media not found');
+      });
   }
 
   async getRecommended(
@@ -407,7 +423,7 @@ export class MediasService {
       case ListType.POPULAR:
         return this.popularQuery(query);
       case ListType.INLIST:
-        return this.inlistQuery(query);
+        return this.inlistQuery(query, user);
       case ListType.LIKED:
         return this.likedQuery(query);
       case ListType.WATCHED:

@@ -1,14 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Schema as MongooseSchema, SchemaTypes } from 'mongoose';
+import { SchemaTypes } from 'mongoose';
 import { Media } from '../medias/media.schema';
+import { BaseIdSchema } from '../shared/base.schema';
 
 export type QueuedProcessDocument = QueuedProcess & Document;
 
-@Schema()
-export class QueuedProcess {
-  @Prop({ auto: true, type: MongooseSchema.Types.ObjectId })
-  _id?: string;
-
+@Schema({ timestamps: true })
+export class QueuedProcess extends BaseIdSchema {
   @Prop()
   filePath: string;
 
@@ -23,9 +21,6 @@ export class QueuedProcess {
 
   @Prop({ required: false })
   episodeIndex?: number;
-
-  @Prop({ default: () => new Date() })
-  dateAdded: Date;
 }
 
 export const QueuedProcessSchema = SchemaFactory.createForClass(QueuedProcess);

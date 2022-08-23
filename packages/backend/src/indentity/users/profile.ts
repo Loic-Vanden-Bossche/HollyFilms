@@ -1,7 +1,11 @@
 import { PlayedMedia } from '../../medias/schemas/played-media.schema';
 import { ApiProperty } from '@nestjs/swagger';
-import { Media } from '../../medias/media.schema';
-import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
+import { UserTMDBRecord } from './user-tmdb-record.schema';
+
+export interface CurrentMediaRecord {
+  mediaId: string;
+  createdAt: Date;
+}
 
 export class Profile {
   @ApiProperty({
@@ -54,15 +58,15 @@ export class Profile {
   @ApiProperty({
     description: 'Array of medias that the user has requested to an admin',
   })
-  addRequestedMedias?: TMDBMicroSearchResult[];
+  addRequestedMedias?: UserTMDBRecord[];
 
   @ApiProperty({
     description: 'Array of medias that the user added to his list',
   })
-  mediasInList?: Media[];
+  mediasInList?: CurrentMediaRecord[];
 
   @ApiProperty({
     description: 'Array of medias that the user liked',
   })
-  likedMedias?: Media[];
+  likedMedias?: CurrentMediaRecord[];
 }
