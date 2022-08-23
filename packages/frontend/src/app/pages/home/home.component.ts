@@ -41,17 +41,33 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.authService.onUserChanged().subscribe(() => {
       this.mediaLists.next([
-        { type: ListType.ALL, name: 'Tous les médias', medias: [] },
-        { type: ListType.MOVIE, name: 'Films', medias: [] },
-        { type: ListType.SERIES, name: 'Séries', medias: [] },
-        { type: ListType.ANIME, name: 'Animes', medias: [] },
-        { type: ListType.POPULAR, name: 'Populaires', medias: [] },
+        {
+          type: ListType.RECOMMENDED,
+          name: 'Recommandés pour vous',
+          medias: [],
+        },
+        {
+          type: ListType.POPULAR,
+          name: 'Contenu populaire sur HollyFilms',
+          medias: [],
+        },
+        { type: ListType.CONTINUE, name: 'Continuer la lecture', medias: [] },
+        {
+          type: ListType.RECENT,
+          name: 'Récemment ajouté sur HollyFilms',
+          medias: [],
+        },
+        { type: ListType.LIKED, name: 'Contenu que vous aimez', medias: [] },
+        { type: ListType.SERIES, name: 'Toutes les séries', medias: [] },
+        { type: ListType.MOVIE, name: 'Tous les films', medias: [] },
+        {
+          type: ListType.WATCHED,
+          name: 'Les films que vous avez vus',
+          medias: [],
+        },
         { type: ListType.INLIST, name: 'Dans ma liste', medias: [] },
-        { type: ListType.WATCHED, name: 'Vus', medias: [] },
-        { type: ListType.LIKED, name: "J'aime", medias: [] },
-        { type: ListType.RECENT, name: 'Récents', medias: [] },
-        { type: ListType.RECOMMENDED, name: 'Recommandés', medias: [] },
-        { type: ListType.CONTINUE, name: 'En cours', medias: [] },
+        { type: ListType.ANIME, name: 'Animes', medias: [] },
+        { type: ListType.ALL, name: 'Tout le contenu', medias: [] },
       ]);
 
       this.mediasService

@@ -42,6 +42,7 @@ import { checkObjectId, getObjectId } from '../shared/mongoose';
 export interface OccurrencesSummary {
   mediaCount: number;
   averageDate: number;
+  tokens: string[];
   genres: Record<string, number>;
   actors: Record<string, number>;
 }
@@ -222,63 +223,84 @@ export class MediasService {
     }
   }
 
-  countOccurrences(
-    medias: MediaWithType[],
-    playedMedias: PlayedMedia[],
-  ): OccurrencesSummary {
+  extractFromIds(ids: string[], medias: MediaWithType[]) {
+    return ids.map((id) =>
+      medias.find((media) => media.data?._id.toString() === id),
+    );
+  }
+
+  tokenFromTitle(title: string): string[] {
+    return title.split(' ').map((word) => word.toLowerCase());
+  }
+
+  countOccurrences(medias: MediaWithType[]): OccurrencesSummary {
     const occurrences = {
       mediaCount: 0,
       averageDate: 0,
+      tokens: [],
       genres: {},
       actors: {},
     };
 
-    medias.forEach((media) =>
-      playedMedias.forEach((played) => {
-        if (played.media == media.data) {
-          media.data.genres.forEach((g) => {
-            if (!occurrences.genres[g]) {
-              occurrences.genres[g] = 1;
-            } else {
-              occurrences.genres[g]++;
-            }
-          });
-
-          media.data.actors.forEach((a) => {
-            if (!occurrences.actors[a.name]) {
-              occurrences.actors[a.name] = 1;
-            } else {
-              occurrences.actors[a.name]++;
-            }
-          });
-
-          const date = new Date(media.data.release_date);
-          const seconds = date.getTime() / 1000;
-
-          occurrences.averageDate += seconds;
-          occurrences.mediaCount++;
+    medias.forEach((media) => {
+      media.data.genres.forEach((g) => {
+        if (!occurrences.genres[g]) {
+          occurrences.genres[g] = 1;
+        } else {
+          occurrences.genres[g]++;
         }
-      }),
-    );
+      });
+
+      occurrences.tokens = [
+        ...occurrences.tokens,
+        ...this.tokenFromTitle(media.data.title),
+      ];
+
+      media.data.actors.forEach((a) => {
+        if (!occurrences.actors[a.name]) {
+          occurrences.actors[a.name] = 1;
+        } else {
+          occurrences.actors[a.name]++;
+        }
+      });
+
+      const date = new Date(media.data.release_date);
+      const seconds = date.getTime() / 1000;
+
+      occurrences.averageDate += seconds;
+      occurrences.mediaCount++;
+    });
 
     occurrences.averageDate /= occurrences.mediaCount;
-
     return occurrences;
   }
 
   calculateMediaPoints(
     media: { data: Media; mediaType: string },
     occurrences: OccurrencesSummary,
+    userMediasIds: string[],
   ): number {
+    if (userMediasIds.includes(media.data._id.toString())) {
+      return 0;
+    }
+
     let points = 0;
 
-    const keys = Object.keys(occurrences.genres);
+    const mediaTokens = this.tokenFromTitle(media.data.title);
 
-    keys.forEach((key) => {
+    mediaTokens.forEach((token) => {
+      if (occurrences.tokens.includes(token)) {
+        points += token.length;
+      }
+    });
+
+    Object.keys(occurrences.genres).forEach((key) => {
       if (media.data.genres.includes(key)) {
         points += occurrences.genres[key];
       }
+    });
 
+    Object.keys(occurrences.actors).forEach((key) => {
       if (media.data.actors.some((a) => a.name === key)) {
         points += occurrences.actors[key];
       }
@@ -292,7 +314,7 @@ export class MediasService {
   }
 
   recentQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ createdAt: 'asc' });
+    return query.find({}).sort({ createdAt: 'desc' });
   }
 
   popularQuery(query: Query<MediaDocument[], MediaDocument>) {
@@ -326,15 +348,19 @@ export class MediasService {
   }
 
   moviesQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({
-      tvs: { $exists: false },
-    });
+    return query
+      .find({
+        tvs: { $exists: false },
+      })
+      .sort({ title: 'asc' });
   }
 
   tvsQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({
-      tvs: { $exists: true },
-    });
+    return query
+      .find({
+        tvs: { $exists: true },
+      })
+      .sort({ title: 'asc' });
   }
 
   animeQuery(query: Query<MediaDocument[], MediaDocument>) {
@@ -354,7 +380,15 @@ export class MediasService {
     skip = 0,
     limit = 0,
   ): Promise<MediaWithType[]> {
-    const medias = await this.getMedias();
+    const medias = await this.getMedias(true);
+    const userMediaIds = [
+      ...user.playedMedias.map((pm) => pm.media._id),
+      ...user.mediasInList.map((m) => m.mediaId),
+      ...user.likedMedias.map((l) => l.mediaId),
+    ].map((id) => id.toString());
+    const occurrences = await this.countOccurrences(
+      this.extractFromIds(userMediaIds, medias),
+    );
 
     const calculateMediaPoints = medias.map(
       (
@@ -365,10 +399,9 @@ export class MediasService {
       } => {
         return {
           media: media,
-          points: this.calculateMediaPoints(
-            media,
-            this.countOccurrences(medias, user.playedMedias),
-          ),
+          points: this.calculateMediaPoints(media, occurrences, [
+            ...new Set(userMediaIds),
+          ]),
         };
       },
     );
