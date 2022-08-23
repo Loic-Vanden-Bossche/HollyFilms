@@ -311,8 +311,16 @@ export class MediasService {
     });
   }
 
-  likedQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ title: 'asc' });
+  likedQuery(query: Query<MediaDocument[], MediaDocument>, user: CurrentUser) {
+    return query.find({
+      _id: {
+        $in: user.likedMedias
+          .sort((a, b) => {
+            return a.createdAt.getTime() - b.createdAt.getTime();
+          })
+          .map((m) => m.mediaId),
+      },
+    });
   }
 
   watchedQuery(
@@ -425,7 +433,7 @@ export class MediasService {
       case ListType.INLIST:
         return this.inlistQuery(query, user);
       case ListType.LIKED:
-        return this.likedQuery(query);
+        return this.likedQuery(query, user);
       case ListType.WATCHED:
         return this.watchedQuery(query, user);
       case ListType.CONTINUE:

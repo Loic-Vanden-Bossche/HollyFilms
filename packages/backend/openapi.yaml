@@ -156,6 +156,20 @@ paths:
         "200":
           description: ""
       tags: *a1
+  "/users/like/{mediaId}":
+    get:
+      operationId: UsersController_likeMedia
+      summary: "[User] Like a media"
+      parameters:
+        - name: mediaId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
   "/users/profile/{uniqueId}":
     get:
       operationId: UsersController_getUserProfile

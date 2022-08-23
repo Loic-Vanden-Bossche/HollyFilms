@@ -204,6 +204,51 @@ export class UsersService {
       });
   }
 
+  likeMedia(user: CurrentUser, mediaId: string) {
+    if (user.likedMedias?.map((m) => m.mediaId.toString()).includes(mediaId)) {
+      throw new HttpException(
+        `Media ${mediaId} already liked`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.mediasService
+      .isExist(mediaId)
+      .catch(() => {
+        throw new HttpException(
+          `Media ${mediaId} not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      })
+      .then(() => {
+        return this.userModel
+          .findOneAndUpdate(
+            {
+              _id: getObjectId(user._id),
+              profiles: {
+                $elemMatch: {
+                  profileUniqueId: user.profileUniqueId,
+                },
+              },
+            },
+            {
+              $push: {
+                'profiles.$.likedMedias': {
+                  media: getObjectId(mediaId),
+                },
+              },
+            },
+            { new: true },
+          )
+          .then(
+            (updatedUser) =>
+              updatedUser.profiles.find(
+                (p) => p.profileUniqueId === user.profileUniqueId,
+              )?.likedMedias || [],
+          );
+      });
+  }
+
   async createProfile(user: CurrentUser, dto: CreateProfileDto) {
     const userProfiles = await this.userModel
       .findById(getObjectId(user._id))

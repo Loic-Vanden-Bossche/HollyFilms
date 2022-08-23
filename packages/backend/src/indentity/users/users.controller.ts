@@ -108,6 +108,16 @@ export class UsersController {
   }
 
   @Roles(Role.User)
+  @Get('/like/:mediaId')
+  @ApiOperation({ summary: '[User] Like a media' })
+  async likeMedia(
+    @User() user: CurrentUser,
+    @Param('mediaId') mediaId: string,
+  ) {
+    return this.usersService.likeMedia(user, mediaId);
+  }
+
+  @Roles(Role.User)
   @Get('/profile/:uniqueId')
   @ApiOperation({ summary: '[User] Set media track properties' })
   async getUserProfile(
