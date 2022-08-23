@@ -9,7 +9,10 @@ import {
   ShowcaseMedia,
 } from '../models/media.model';
 import { AuthService } from './auth.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
+import { MediaRecord } from '../models/user-profile.model';
+import { NotificationsService } from './notifications.service';
+import { NotificationType } from '../models/notification.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +24,8 @@ export class MediasService {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly auth: AuthService
+    private readonly auth: AuthService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   clearSelectedMedia() {
@@ -30,6 +34,70 @@ export class MediasService {
 
   selectMedia(media: MediaWithType) {
     this.selectedMedia.next(media);
+  }
+
+  likeMedia(media: MediaWithType) {
+    return this.http
+      .get<MediaRecord[]>(`users/like/${media.data._id}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((likedMedias) => {
+          this.auth.updateUserProfile({ likedMedias });
+          this.notificationsService.push({
+            type: NotificationType.Success,
+            message: `J\' aime ajouté pour ${media.data.title}`,
+          });
+        })
+      );
+  }
+
+  unlikeMedia(media: MediaWithType) {
+    return this.http
+      .get<MediaRecord[]>(`users/unlike/${media.data._id}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((likedMedias) => {
+          this.auth.updateUserProfile({ likedMedias });
+          this.notificationsService.push({
+            type: NotificationType.Info,
+            message: `Vous n\'aimez plus ${media.data.title}`,
+          });
+        })
+      );
+  }
+
+  addInList(media: MediaWithType) {
+    return this.http
+      .get<MediaRecord[]>(`users/addToList/${media.data._id}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((mediasInList) => {
+          this.auth.updateUserProfile({ mediasInList });
+          this.notificationsService.push({
+            type: NotificationType.Success,
+            message: `${media.data.title} a été ajouté à votre liste`,
+          });
+        })
+      );
+  }
+
+  removeFromList(media: MediaWithType) {
+    return this.http
+      .get<MediaRecord[]>(`users/removeFromList/${media.data._id}`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((mediasInList) => {
+          this.auth.updateUserProfile({ mediasInList });
+          this.notificationsService.push({
+            type: NotificationType.Info,
+            message: `${media.data.title} a été retiré de votre liste`,
+          });
+        })
+      );
   }
 
   getMedias(type: ListType = ListType.ALL, skip = 0) {

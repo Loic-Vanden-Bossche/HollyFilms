@@ -60,7 +60,7 @@ export class AuthService {
     );
   }
 
-  updateUserProfile(data: UserProfile) {
+  updateUserProfile(data: Partial<UserProfile>) {
     if (this._user$.value) {
       this._user$.next({
         ...this._user$.value,

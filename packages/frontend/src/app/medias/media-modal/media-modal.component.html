@@ -107,11 +107,15 @@
                   </p>
                 </div>
                 <button
+                  (click)="onAddToList()"
+                  [ngClass]="isInList ? ['bg-success'] : ['bg-base-600']"
                   class="hidden md:block transition-opacity mr-2 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-5/6 aspect-square text-white"
                 >
                   <fa-icon [icon]="addToListIcon"></fa-icon>
                 </button>
                 <button
+                  (click)="onLike()"
+                  [ngClass]="isLiked ? ['bg-success'] : ['bg-base-600']"
                   class="hidden md:block transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-5/6 aspect-square text-white"
                 >
                   <fa-icon [icon]="likeButton"></fa-icon>

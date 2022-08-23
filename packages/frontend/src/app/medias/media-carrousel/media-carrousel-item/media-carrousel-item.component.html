@@ -65,11 +65,15 @@
           </div>
           <div class="hidden md:flex h-full ml-5 mt-0 mr-5 flex-row">
             <button
-              class="transition-opacity mr-5 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-sm md:text-xl h-full aspect-square text-white"
+              (click)="onAddToList()"
+              [ngClass]="isInList ? ['bg-success'] : ['bg-base-600']"
+              class="transition-opacity mr-5 opacity-80 hover:opacity-100 rounded-md text-sm md:text-xl h-full aspect-square text-white"
             >
               <fa-icon [icon]="addToListIcon"></fa-icon>
             </button>
             <button
+              (click)="onLike()"
+              [ngClass]="isLiked ? ['bg-success'] : ['bg-base-600']"
               class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-sm md:text-xl h-full aspect-square text-white"
             >
               <fa-icon [icon]="likeButton"></fa-icon>

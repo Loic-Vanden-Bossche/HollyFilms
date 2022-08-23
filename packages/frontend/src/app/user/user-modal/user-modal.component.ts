@@ -310,7 +310,6 @@ export class UserModalComponent implements OnInit {
         map((user) => user as User)
       )
       .subscribe((user: User) => {
-        console.log(user);
         this.updateProfilePicture(user);
         this.updateInsights(user);
         this.cancelEdit();

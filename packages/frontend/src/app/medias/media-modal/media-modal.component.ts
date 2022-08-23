@@ -18,6 +18,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { TvsService } from '../../shared/services/tvs.service';
 import { PlayerService } from '../../shared/services/player.service';
 import { TitleService } from '../../shared/services/title.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-media-modal',
@@ -58,6 +59,22 @@ export class MediaModalComponent implements OnChanges, OnInit {
 
   isWatched: string | null = null;
 
+  get isLiked() {
+    return (
+      this.authService.user?.likedMedias
+        .map((media) => media.mediaId)
+        .includes(this.media?.data._id || '') || false
+    );
+  }
+
+  get isInList() {
+    return (
+      this.authService.user?.mediasInList
+        .map((media) => media.mediaId)
+        .includes(this.media?.data._id || '') || false
+    );
+  }
+
   @ViewChild('player') player: YouTubePlayer | null = null;
 
   constructor(
@@ -65,7 +82,8 @@ export class MediaModalComponent implements OnChanges, OnInit {
     private readonly mediasService: MediasService,
     private readonly tvsService: TvsService,
     private readonly playerService: PlayerService,
-    private readonly title: TitleService
+    private readonly title: TitleService,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -74,6 +92,24 @@ export class MediaModalComponent implements OnChanges, OnInit {
       tag.src = 'https://www.youtube.com/iframe_api';
       document.body.appendChild(tag);
       this.apiLoaded = true;
+    }
+  }
+
+  onLike() {
+    if (this.media) {
+      (this.isLiked
+        ? this.mediasService.unlikeMedia(this.media)
+        : this.mediasService.likeMedia(this.media)
+      ).subscribe();
+    }
+  }
+
+  onAddToList() {
+    if (this.media) {
+      (this.isInList
+        ? this.mediasService.removeFromList(this.media)
+        : this.mediasService.addInList(this.media)
+      ).subscribe();
     }
   }
 

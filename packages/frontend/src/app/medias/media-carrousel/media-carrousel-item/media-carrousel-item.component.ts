@@ -25,6 +25,7 @@ import {
 import { PlayerService } from '../../../shared/services/player.service';
 import { MediasService } from '../../../shared/services/medias.service';
 import { ModalService } from '../../../shared/services/modal.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-media-carrousel-item',
@@ -116,10 +117,27 @@ export class MediaCarrouselItemComponent implements OnInit {
     }
   }
 
+  get isLiked() {
+    return (
+      this.authService.user?.likedMedias
+        .map((media) => media.mediaId)
+        .includes(this.media?.data._id || '') || false
+    );
+  }
+
+  get isInList() {
+    return (
+      this.authService.user?.mediasInList
+        .map((media) => media.mediaId)
+        .includes(this.media?.data._id || '') || false
+    );
+  }
+
   constructor(
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,
-    private readonly modalService: ModalService
+    private readonly modalService: ModalService,
+    private readonly authService: AuthService
   ) {}
 
   openModal(media: MediaWithType) {
@@ -142,6 +160,24 @@ export class MediaCarrouselItemComponent implements OnInit {
         return ['Nouveau sur HollyFilms', faBolt];
       case FeaturedType.RECOMMENDED:
         return [' Recommandé pour vous', faUserCheck];
+    }
+  }
+
+  onLike() {
+    if (this.media) {
+      (this.isLiked
+        ? this.mediasService.unlikeMedia(this.media)
+        : this.mediasService.likeMedia(this.media)
+      ).subscribe();
+    }
+  }
+
+  onAddToList() {
+    if (this.media) {
+      (this.isInList
+        ? this.mediasService.removeFromList(this.media)
+        : this.mediasService.addInList(this.media)
+      ).subscribe();
     }
   }
 

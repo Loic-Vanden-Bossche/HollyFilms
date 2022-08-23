@@ -4,6 +4,7 @@ import { faPlusCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { PlayerService } from '../../../shared/services/player.service';
 import { MediasService } from '../../../shared/services/medias.service';
 import { ModalService } from '../../../shared/services/modal.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 export interface MediaCardTab {
   title: string;
@@ -23,14 +24,49 @@ export class MediaCardDataDetailsComponent implements OnInit {
 
   overview = '';
 
+  get isLiked() {
+    return (
+      this.authService.user?.likedMedias
+        .map((media) => media.mediaId)
+        .includes(this.media?.data._id || '') || false
+    );
+  }
+
+  get isInList() {
+    return (
+      this.authService.user?.mediasInList
+        .map((media) => media.mediaId)
+        .includes(this.media?.data._id || '') || false
+    );
+  }
+
   constructor(
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,
-    private readonly modalService: ModalService
+    private readonly modalService: ModalService,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.overview = this.truncateOverview(this.media?.data.overview || '', 300);
+  }
+
+  onLike() {
+    if (this.media) {
+      (this.isLiked
+        ? this.mediasService.unlikeMedia(this.media)
+        : this.mediasService.likeMedia(this.media)
+      ).subscribe();
+    }
+  }
+
+  onAddToList() {
+    if (this.media) {
+      (this.isInList
+        ? this.mediasService.removeFromList(this.media)
+        : this.mediasService.addInList(this.media)
+      ).subscribe();
+    }
   }
 
   onPlay(event: MouseEvent) {
