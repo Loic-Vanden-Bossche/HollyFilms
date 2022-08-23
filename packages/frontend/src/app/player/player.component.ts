@@ -264,10 +264,10 @@ export class PlayerComponent implements AfterViewInit {
     if (seasonIndex === undefined || episodeIndex === undefined) {
       return media.data.fileInfos?.location;
     } else if (media.data.tvs) {
-      const episodes = media.data.tvs[seasonIndex].episodes;
+      const episodes = media.data.tvs[seasonIndex - 1].episodes;
 
       if (episodes) {
-        return episodes[episodeIndex as number].fileInfos?.location;
+        return episodes[episodeIndex - 1].fileInfos?.location;
       }
     }
 
