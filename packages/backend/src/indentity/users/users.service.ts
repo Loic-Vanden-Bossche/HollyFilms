@@ -562,7 +562,7 @@ export class UsersService {
   }
 
   getPlayerStatus(
-    user: CurrentUser,
+    currentUser: CurrentUser,
     mediaId: string,
     seasonIndex?: number,
     episodeIndex?: number,
@@ -581,10 +581,10 @@ export class UsersService {
       .aggregate([
         {
           $match: {
-            _id: getObjectId(user._id),
+            _id: getObjectId(currentUser._id),
             profiles: {
               $elemMatch: {
-                profileUniqueId: user.profileUniqueId,
+                profileUniqueId: currentUser.profileUniqueId,
                 playedMedias: {
                   $elemMatch: {
                     media: getObjectId(mediaId),
@@ -598,7 +598,7 @@ export class UsersService {
         { $unwind: '$profiles' },
         {
           $project: {
-            'profiles.profileUniqueId': user.profileUniqueId,
+            'profiles.profileUniqueId': currentUser.profileUniqueId,
             playedMedias: {
               $filter: {
                 input: '$profiles.playedMedias',
@@ -612,7 +612,11 @@ export class UsersService {
         },
       ])
       .exec()
-      .then((user: any[]) => (!user.length ? {} : user[0].playedMedias[0]));
+      .then((result) => {
+        console.log(result);
+        return result;
+      })
+      .then((user: any[]) => (!user?.length ? {} : user[0].playedMedias[0]));
   }
 
   trackUser(user: CurrentUser, trackData: TrackData): any {
