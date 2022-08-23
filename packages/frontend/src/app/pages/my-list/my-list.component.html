@@ -1,1 +1,23 @@
-<p *ngFor="let media of medias">{{ media.data.title }}</p>
+<div class="relative h-full w-full">
+  <div class="flex-col flex p-5">
+    <div class="relative w-full" *ngIf="!loading">
+      <app-media-raw-list [medias]="medias"></app-media-raw-list>
+    </div>
+  </div>
+  <div
+    class="text-white absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2"
+  >
+    <app-no-content
+      text="Aucun contenu ajouté à votre liste"
+      *ngIf="noData"
+    ></app-no-content>
+  </div>
+
+  <div
+    @onLoader
+    *ngIf="loading"
+    class="text-white h-24 w-24 absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2"
+  >
+    <app-loader></app-loader>
+  </div>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ListType, MediaWithType } from '../../shared/models/media.model';
 import { MediasService } from '../../shared/services/medias.service';
 import { AuthService } from '../../shared/services/auth.service';
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-my-list',
@@ -10,6 +11,9 @@ import { AuthService } from '../../shared/services/auth.service';
 export class MyListComponent implements OnInit {
   medias: MediaWithType[] = [];
 
+  loading = true;
+  noData = false;
+
   constructor(
     private readonly mediasService: MediasService,
     private readonly authService: AuthService
@@ -17,8 +21,10 @@ export class MyListComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.onUserChange().subscribe(() => {
+      this.loading = true;
       this.mediasService
         .getAllMedias(ListType.INLIST)
+        .pipe(tap(() => (this.loading = false)), tap((medias) => (this.noData = medias.length === 0)))
         .subscribe((medias) => (this.medias = medias));
     });
   }
