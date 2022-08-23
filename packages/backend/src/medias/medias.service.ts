@@ -608,9 +608,6 @@ export class MediasService {
           );
           mediasToReturn = getUnique([...mediasToReturn, ...missing]);
         }
-
-        console.log(mediasToReturn.length);
-
         return mediasToReturn;
       });
   }
@@ -697,10 +694,6 @@ export class MediasService {
         ),
       )
       .exec()
-      .then((medias) => {
-        console.log(medias);
-        return medias;
-      })
       .then((medias) => medias[0])
       .then(formatOneMedia);
   }

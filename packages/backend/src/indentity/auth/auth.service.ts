@@ -69,7 +69,6 @@ export class AuthService {
   }
 
   async getTokens(user: CurrentUser) {
-    console.log({ ...user, playedMedias: undefined });
     return {
       token: this.jwtService.sign({
         profileUniqueId: user.profileUniqueId,
