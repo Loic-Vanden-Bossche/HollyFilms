@@ -152,7 +152,7 @@ export class TVShow {
 
   production_companies: Array<{ name: string; logo_path: string }>;
 
-  creator: Director;
+  creator: Director | Director[];
 
   actors: Array<{ name: string; character: string; profile_path: string }>;
 
@@ -242,7 +242,7 @@ const tvShowToMedia = (tvShow: TVShow): Media => ({
   backdrop_path: tvShow.backdrop_path,
   tagline: tvShow.taglineFr,
   production_companies: tvShow.production_companies,
-  director: tvShow.creator,
+  director: Array.isArray(tvShow.creator) ? tvShow.creator[0] : tvShow.creator,
   actors: tvShow.actors,
   tvs: tvShow.seasons.map((season) => ({
     index: season.index,
