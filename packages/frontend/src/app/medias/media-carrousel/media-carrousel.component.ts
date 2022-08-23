@@ -69,7 +69,7 @@ export class MediaCarrouselComponent {
     effect: 'carousel' as any,
     grabCursor: true,
     loop: true,
-    loopedSlides: 9,
+    loopedSlides: 10,
     slidesPerView: 'auto',
     navigation: {
       nextEl: '.swiper-button-next',

@@ -5,14 +5,8 @@ import {
   MediaWithTypeAndFeatured,
 } from '../../shared/models/media.model';
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
-import {
-  faArrowTrendUp,
-  faBolt,
-  faCirclePlay,
-  faList,
-  faUserCheck,
-} from '@fortawesome/free-solid-svg-icons';
 import { PlayerService } from '../../shared/services/player.service';
+import { MediasService } from '../../shared/services/medias.service';
 
 @Component({
   selector: 'app-play-next-media',
@@ -24,24 +18,13 @@ export class PlayNextMediaComponent implements OnInit {
   vendorTag = '';
   vendorIcon: IconDefinition | null = null;
 
-  constructor(private readonly playerService: PlayerService) {}
+  constructor(
+    private readonly playerService: PlayerService,
+    private readonly mediasService: MediasService
+  ) {}
 
   getTagAndIconFromFeatured(featured: FeaturedType): [string, IconDefinition] {
-    switch (featured) {
-      case FeaturedType.CONTINUE:
-        return [
-          'Vous avez commencé ce film, continuer la lecture ?',
-          faCirclePlay,
-        ];
-      case FeaturedType.INLIST:
-        return ['Ceci est dans votre liste', faList];
-      case FeaturedType.POPULAR:
-        return ['Très populaire sur HollyFilms', faArrowTrendUp];
-      case FeaturedType.RECENT:
-        return ['Nouveau sur HollyFilms', faBolt];
-      case FeaturedType.RECOMMENDED:
-        return [' Recommandé pour vous', faUserCheck];
-    }
+    return this.mediasService.getTagAndIconFromFeatured(featured);
   }
 
   mediaPlayLink(media: MediaWithType) {

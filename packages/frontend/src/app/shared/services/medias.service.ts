@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
+  FeaturedType,
   ListType,
   Media,
   MediaCategory,
@@ -13,6 +14,15 @@ import { BehaviorSubject, Subject, tap } from 'rxjs';
 import { MediaRecord } from '../models/user-profile.model';
 import { NotificationsService } from './notifications.service';
 import { NotificationType } from '../models/notification.model';
+import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faArrowTrendUp,
+  faBolt,
+  faCirclePlay,
+  faLightbulb,
+  faList,
+  faUserCheck,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +50,28 @@ export class MediasService {
 
   selectMedia(media: MediaWithType) {
     this.selectedMedia.next(media);
+  }
+
+  getTagAndIconFromFeatured(
+    featured: FeaturedType | undefined
+  ): [string, IconDefinition] {
+    switch (featured) {
+      case FeaturedType.CONTINUE:
+        return [
+          'Vous avez commencé ce film, continuer la lecture ?',
+          faCirclePlay,
+        ];
+      case FeaturedType.INLIST:
+        return ['Ceci est dans votre liste', faList];
+      case FeaturedType.POPULAR:
+        return ['Très populaire sur HollyFilms', faArrowTrendUp];
+      case FeaturedType.RECENT:
+        return ['Nouveau sur HollyFilms', faBolt];
+      case FeaturedType.RECOMMENDED:
+        return ['Recommandé pour vous', faUserCheck];
+      default:
+        return ['Proposition originale', faLightbulb];
+    }
   }
 
   likeMedia(media: MediaWithType) {

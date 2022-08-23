@@ -256,6 +256,24 @@ export class PlayerComponent implements AfterViewInit {
     ).pipe(map(() => this.getTextTrackIndex()));
   }
 
+  getLocation(
+    media: MediaWithType,
+    seasonIndex?: number,
+    episodeIndex?: number
+  ) {
+    if (seasonIndex === undefined || episodeIndex === undefined) {
+      return media.data.fileInfos?.location;
+    } else if (media.data.tvs) {
+      const episodes = media.data.tvs[seasonIndex].episodes;
+
+      if (episodes) {
+        return episodes[episodeIndex as number].fileInfos?.location;
+      }
+    }
+
+    return null;
+  }
+
   ngAfterViewInit() {
     const prevRoute = this.previousRouteService.previousRoute;
     if (prevRoute !== this.router.url) {
@@ -285,11 +303,15 @@ export class PlayerComponent implements AfterViewInit {
       .subscribe(({ media, episodeIndex, seasonIndex }) => {
         const tvIndexes =
           seasonIndex && seasonIndex ? `${seasonIndex}/${episodeIndex}/` : '';
+        const location =
+          this.getLocation(
+            media,
+            seasonIndex ? parseInt(seasonIndex) : undefined,
+            episodeIndex ? parseInt(episodeIndex) : undefined
+          ) || 'default';
         this.media = media;
         this.source = this.media?.data._id
-          ? `${environment.apiUrl}/medias/stream/${
-              this.media?.data.fileInfos?.location || 'default'
-            }/${this.media?.data._id}/${tvIndexes}master.m3u8`
+          ? `${environment.apiUrl}/medias/stream/${location}/${this.media?.data._id}/${tvIndexes}master.m3u8`
           : '';
 
         this.title.setTitle(this.media?.data.title || '');

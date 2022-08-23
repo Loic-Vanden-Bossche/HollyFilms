@@ -482,7 +482,7 @@ export class MediasService {
         { $match: { _id: { $in: mediaIds }, available: onlyAvailable } },
         { $addFields: { weight: stack[0] } },
         { $sort: { weight: 1 } },
-        ...(skip && limit ? [{ $skip: skip }, { $limit: limit }] : []),
+        ...(!skip && !limit ? [] : [{ $skip: skip }, { $limit: limit }]),
       ])
       .then(formatManyMedias);
   }
@@ -563,6 +563,7 @@ export class MediasService {
   }
 
   getFeatured(user: CurrentUser): Promise<MediaWithTypeAndFeatured[]> {
+    const targetNumber = 10;
     const featuredMap = [
       { listType: ListType.POPULAR, number: 3, featured: FeaturedType.POPULAR },
       {
@@ -585,7 +586,30 @@ export class MediasService {
           medias.map((media) => ({ ...media, featured })),
         ),
       ),
-    ]).then((medias) => medias.flat());
+    ])
+      .then((medias) => medias.flat())
+      .then(async (medias) => {
+        const getUnique = (mediasToProcess) => {
+          return Array.from(
+            new Set(mediasToProcess.map((m) => m.data._id)),
+          ).map((id) => mediasToProcess.find((m) => m.data._id === id));
+        };
+
+        let mediasToReturn = getUnique(medias);
+
+        while (mediasToReturn.length < targetNumber) {
+          const missing = await Promise.all(
+            [...Array(targetNumber - mediasToReturn.length).keys()].map(() =>
+              this.getRandomMedia(),
+            ),
+          );
+          mediasToReturn = getUnique([...mediasToReturn, ...missing]);
+        }
+
+        console.log(mediasToReturn.length);
+
+        return mediasToReturn;
+      });
   }
 
   migrateFromDatabase() {
@@ -658,6 +682,24 @@ export class MediasService {
         createdAt: media.data.createdAt,
       },
     });
+  }
+
+  async getRandomMedia(): Promise<MediaWithType> {
+    return this.mediaModel
+      .find({ available: true })
+      .limit(1)
+      .skip(
+        Math.floor(
+          Math.random() * (await this.mediaModel.countDocuments().exec()),
+        ),
+      )
+      .exec()
+      .then((medias) => {
+        console.log(medias);
+        return medias;
+      })
+      .then((medias) => medias[0])
+      .then(formatOneMedia);
   }
 
   updateAllMedias() {
