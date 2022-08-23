@@ -23,6 +23,7 @@ import * as fs from 'fs';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
 import { CurrentMediaRecord } from './profile';
+import { getUsersToMigrate } from '../../bootstrap/migrations';
 
 @Injectable()
 export class UsersService {
@@ -456,6 +457,17 @@ export class UsersService {
       .then((u) =>
         u.profiles.find((p) => p.profileUniqueId === user.profileUniqueId),
       );
+  }
+
+  migrateFromDatabase() {
+    this.userModel
+      .countDocuments()
+      .exec()
+      .then((count) => {
+        if (count <= 0) {
+          getUsersToMigrate().then((users) => this.userModel.insertMany(users));
+        }
+      });
   }
 
   findByIdLimited(id: string) {

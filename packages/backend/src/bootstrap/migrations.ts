@@ -1,5 +1,11 @@
 import * as fsp from 'fs/promises';
 import { Media } from '../medias/media.schema';
+import { User } from '../indentity/users/user.schema';
+import { Role } from '../shared/role';
+import { getObjectId } from '../shared/mongoose';
+import { getRandomColor } from '../indentity/users/colors-profiles';
+
+import * as randomToken from 'rand-token';
 
 export class Director {
   name: string;
@@ -15,6 +21,32 @@ export class FileInfos {
   thumbnailsGenerated: boolean;
   extraQualities: Array<number>;
   location: string;
+}
+
+export class PlayedMovie {
+  videoId: string;
+  audioTrack: number;
+  subtitleTrack: number;
+  currentTime: number;
+}
+
+export class PlayerTvShow extends PlayedMovie {
+  si: number;
+  ei: number;
+}
+
+export class OldUser {
+  _id: {
+    $oid: string;
+  };
+  username: string;
+  email: string;
+  passwd: string;
+  role: string;
+  socialId: null;
+  socialUser: boolean;
+  playedMovies: PlayedMovie[];
+  playedTvs: PlayerTvShow[];
 }
 
 export class Movie {
@@ -181,6 +213,48 @@ const loadMovies = () =>
 const loadTvs = () =>
   loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
 
+const loadUsers = () =>
+  loadJsonFile('/apps/migrations/users.json') as Promise<OldUser[]>;
+
+const oldToNewUser = (oldUser: OldUser): User => ({
+  _id: oldUser._id.$oid,
+  email: oldUser.email,
+  password: oldUser.passwd,
+  tokens: [],
+  roles: [Role.User],
+  profiles: [
+    {
+      profileUniqueId: randomToken.generate(16),
+      isDefault: true,
+      firstname: oldUser.username,
+      picture: null,
+      lastname: oldUser.username,
+      username: oldUser.username,
+      color: getRandomColor(),
+      playedMedias: [
+        ...(oldUser.playedMovies
+          ? oldUser.playedMovies.map((movie) => ({
+              media: getObjectId(movie.videoId) as unknown as Media,
+              audioTrack: movie.audioTrack,
+              subtitleTrack: movie.subtitleTrack,
+              currentTime: movie.currentTime,
+            }))
+          : []),
+        ...(oldUser.playedTvs
+          ? oldUser.playedTvs.map((tv) => ({
+              media: getObjectId(tv.videoId) as unknown as Media,
+              si: tv.si,
+              ei: tv.ei,
+              audioTrack: tv.audioTrack,
+              subtitleTrack: tv.subtitleTrack,
+              currentTime: tv.currentTime,
+            }))
+          : []),
+      ],
+    },
+  ],
+});
+
 const movieToMedia = (movie: Movie): Media => ({
   _id: movie._id.$oid,
   TMDB_id: movie.TMDB_id,
@@ -297,6 +371,10 @@ const tvShowToMedia = (tvShow: TVShow): Media => ({
     ? new Date(parseInt(tvShow?.dateAdded?.$date.$numberLong))
     : new Date(),
 });
+
+export const getUsersToMigrate = () => {
+  return loadUsers().then((users) => users.map(oldToNewUser));
+};
 
 export const getTvsToMigrate = () => {
   return loadTvs().then((movies) => movies.map(tvShowToMedia));

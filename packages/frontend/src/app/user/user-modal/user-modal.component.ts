@@ -18,7 +18,7 @@ import { NotificationsService } from '../../shared/services/notifications.servic
 import { NotificationType } from '../../shared/models/notification.model';
 import { UserProfile } from '../../shared/models/user-profile.model';
 import { ModalService } from '../../shared/services/modal.service';
-import { filter, map, switchMap } from 'rxjs';
+import { filter, map, mergeWith, switchMap, take } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { User } from '../../shared/models/user.model';
 
@@ -304,8 +304,14 @@ export class UserModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService
-      .onUserUpdated()
+      .onUserChanged()
       .pipe(
+        mergeWith(
+          this.authService.onUserUpdated().pipe(
+            filter((user) => !!user),
+            take(1)
+          )
+        ),
         filter((user) => !!user),
         map((user) => user as User)
       )

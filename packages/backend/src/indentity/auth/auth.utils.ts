@@ -56,7 +56,9 @@ export const buildJWTStrategyOptions = (
   ]),
 });
 
-export interface JWTPayload extends CurrentUser {
+export interface JWTPayload {
+  _id: string;
+  profileUniqueId: string;
   iat: number;
   exp: number;
 }

@@ -206,11 +206,14 @@ export class MediasService {
     if (media.mediaType === 'movie') {
       return this.isTimePlayed(
         playedMedia.currentTime,
-        media.data.fileInfos.Sduration,
+        media.data.fileInfos?.Sduration || 0,
       );
     } else {
       return this.flattedEpisodes(media).some((episode) =>
-        this.isTimePlayed(playedMedia.currentTime, episode.fileInfos.Sduration),
+        this.isTimePlayed(
+          playedMedia.currentTime,
+          episode.fileInfos?.Sduration || 0,
+        ),
       );
     }
   }
