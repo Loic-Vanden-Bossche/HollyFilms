@@ -57,7 +57,7 @@ export class Media extends BaseIdSchema {
   @Prop({ type: DataProfileSchema })
   director: DataProfile;
 
-  @Prop({ type: ActorSchema })
+  @Prop({ type: [ActorSchema], default: [] })
   actors: Actor[];
 
   @Prop()
