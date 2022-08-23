@@ -316,7 +316,7 @@ export class MediasService {
       _id: {
         $in: user.likedMedias
           .sort((a, b) => {
-            return a.createdAt.getTime() - b.createdAt.getTime();
+            return b.createdAt.getTime() - a.createdAt.getTime();
           })
           .map((m) => m.mediaId),
       },
@@ -430,10 +430,6 @@ export class MediasService {
         return this.recentQuery(query);
       case ListType.POPULAR:
         return this.popularQuery(query);
-      case ListType.INLIST:
-        return this.inlistQuery(query, user);
-      case ListType.LIKED:
-        return this.likedQuery(query, user);
       case ListType.WATCHED:
         return this.watchedQuery(query, user);
       case ListType.CONTINUE:
@@ -455,6 +451,66 @@ export class MediasService {
     return limit ? query.skip(skip).limit(limit) : query;
   }
 
+  queryMedias(mediaIds: string[], onlyAvailable = false, skip = 0, limit = 0) {
+    const stack = [];
+
+    for (let i = mediaIds.length - 1; i > 0; i--) {
+      const rec = {
+        $cond: [{ $eq: ['$_id', mediaIds[i - 1]] }, i],
+      };
+
+      if (stack.length == 0) {
+        rec['$cond'].push(i + 1);
+      } else {
+        const lval = stack.pop();
+        rec['$cond'].push(lval);
+      }
+      stack.push(rec);
+    }
+
+    return this.mediaModel
+      .aggregate([
+        { $match: { _id: { $in: mediaIds }, available: onlyAvailable } },
+        { $addFields: { weight: stack[0] } },
+        { $sort: { weight: 1 } },
+        { $skip: skip },
+        { $limit: limit },
+      ])
+      .then(formatManyMedias);
+  }
+
+  getLikedMedias(
+    onlyAvailable = false,
+    user: CurrentUser,
+    skip = 0,
+    limit = 0,
+  ): Promise<MediaWithType[]> {
+    return this.queryMedias(
+      user.likedMedias
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .map((m) => m.mediaId),
+      onlyAvailable,
+      skip,
+      limit,
+    );
+  }
+
+  getInListMedias(
+    onlyAvailable = false,
+    user: CurrentUser,
+    skip = 0,
+    limit = 0,
+  ): Promise<MediaWithType[]> {
+    return this.queryMedias(
+      user.mediasInList
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .map((m) => m.mediaId),
+      onlyAvailable,
+      skip,
+      limit,
+    );
+  }
+
   async getMedias(
     onlyAvailable = false,
     user?: CurrentUser,
@@ -462,21 +518,26 @@ export class MediasService {
     skip = 0,
     limit = 0,
   ): Promise<MediaWithType[]> {
-    if (type !== ListType.RECOMMENDED) {
-      return this.applyLimiters(
-        this.mediasQueryFromType(
-          this.mediaModel.find(onlyAvailable ? { available: true } : {}),
-          type,
-          user,
-        ),
-        skip,
-        limit,
-      )
-        .exec()
-        .then(formatManyMedias);
+    switch (type) {
+      case ListType.RECOMMENDED:
+        return this.getRecommended(user, skip, limit);
+      case ListType.LIKED:
+        return this.getLikedMedias(onlyAvailable, user, skip, limit);
+      case ListType.INLIST:
+        return this.getInListMedias(onlyAvailable, user, skip, limit);
+      default:
+        return this.applyLimiters(
+          this.mediasQueryFromType(
+            this.mediaModel.find(onlyAvailable ? { available: true } : {}),
+            type,
+            user,
+          ),
+          skip,
+          limit,
+        )
+          .exec()
+          .then(formatManyMedias);
     }
-
-    return this.getRecommended(user, skip, limit);
   }
 
   getShowcaseMedias(): Promise<ShowcaseMedia[]> {

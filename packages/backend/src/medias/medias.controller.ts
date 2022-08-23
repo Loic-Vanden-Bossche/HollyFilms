@@ -38,8 +38,8 @@ export class MediasController {
       true,
       user,
       query.type,
-      query.skip,
-      query.limit,
+      parseInt(query.skip, 10),
+      parseInt(query.limit, 10),
     );
   }
 

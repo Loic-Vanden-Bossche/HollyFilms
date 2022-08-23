@@ -5203,8 +5203,8 @@ func main() {
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|skip|query|number|false|none|
-|limit|query|number|false|none|
+|skip|query|string|false|none|
+|limit|query|string|false|none|
 |type|query|string|false|none|
 
 <h3 id="mediascontroller_getmedias-responses">Responses</h3>

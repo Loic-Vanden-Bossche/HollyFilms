@@ -553,12 +553,12 @@ paths:
           required: false
           in: query
           schema:
-            type: number
+            type: string
         - name: limit
           required: false
           in: query
           schema:
-            type: number
+            type: string
         - name: type
           required: false
           in: query

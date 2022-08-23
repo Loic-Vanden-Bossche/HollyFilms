@@ -6,12 +6,12 @@ export class MediasQueryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumberString()
-  skip?: number;
+  skip?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumberString()
-  limit?: number;
+  limit?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
