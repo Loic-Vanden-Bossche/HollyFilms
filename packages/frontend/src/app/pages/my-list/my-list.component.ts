@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ListType, MediaWithType } from '../../shared/models/media.model';
 import { MediasService } from '../../shared/services/medias.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-my-list',
@@ -9,11 +10,16 @@ import { MediasService } from '../../shared/services/medias.service';
 export class MyListComponent implements OnInit {
   medias: MediaWithType[] = [];
 
-  constructor(private readonly mediasService: MediasService) {}
+  constructor(
+    private readonly mediasService: MediasService,
+    private readonly authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.mediasService
-      .getAllMedias(ListType.INLIST)
-      .subscribe((medias) => (this.medias = medias));
+    this.authService.onUserChange().subscribe(() => {
+      this.mediasService
+        .getAllMedias(ListType.INLIST)
+        .subscribe((medias) => (this.medias = medias));
+    });
   }
 }

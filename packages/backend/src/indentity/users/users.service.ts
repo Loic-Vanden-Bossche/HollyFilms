@@ -22,7 +22,7 @@ import * as fsp from 'fs/promises';
 import * as fs from 'fs';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
-import {CurrentMediaRecord} from "./profile";
+import { CurrentMediaRecord } from './profile';
 
 @Injectable()
 export class UsersService {
@@ -198,9 +198,15 @@ export class UsersService {
           )
           .then(
             (updatedUser) =>
-              updatedUser.profiles.find(
-                (p) => p.profileUniqueId === user.profileUniqueId,
-              )?.mediasInList.map((m) => ({ mediaId: m.media as unknown as string, createdAt: m.createdAt }as CurrentMediaRecord)) || [],
+              updatedUser.profiles
+                .find((p) => p.profileUniqueId === user.profileUniqueId)
+                ?.mediasInList.map(
+                  (m) =>
+                    ({
+                      mediaId: m.media as unknown as string,
+                      createdAt: m.createdAt,
+                    } as CurrentMediaRecord),
+                ) || [],
           );
       });
   }
@@ -236,9 +242,15 @@ export class UsersService {
       )
       .then(
         (updatedUser) =>
-          updatedUser.profiles.find(
-            (p) => p.profileUniqueId === user.profileUniqueId,
-          )?.mediasInList.map((m) => ({ mediaId: m.media as unknown as string, createdAt: m.createdAt }as CurrentMediaRecord)) || [],
+          updatedUser.profiles
+            .find((p) => p.profileUniqueId === user.profileUniqueId)
+            ?.mediasInList.map(
+              (m) =>
+                ({
+                  mediaId: m.media as unknown as string,
+                  createdAt: m.createdAt,
+                } as CurrentMediaRecord),
+            ) || [],
       );
   }
 
@@ -280,9 +292,15 @@ export class UsersService {
           )
           .then(
             (updatedUser) =>
-              updatedUser.profiles.find(
-                (p) => p.profileUniqueId === user.profileUniqueId,
-              )?.likedMedias.map((m) => ({ mediaId: m.media as unknown as string, createdAt: m.createdAt }as CurrentMediaRecord)) || [],
+              updatedUser.profiles
+                .find((p) => p.profileUniqueId === user.profileUniqueId)
+                ?.likedMedias.map(
+                  (m) =>
+                    ({
+                      mediaId: m.media as unknown as string,
+                      createdAt: m.createdAt,
+                    } as CurrentMediaRecord),
+                ) || [],
           );
       });
   }
@@ -316,9 +334,15 @@ export class UsersService {
       )
       .then(
         (updatedUser) =>
-          updatedUser.profiles.find(
-            (p) => p.profileUniqueId === user.profileUniqueId,
-          )?.likedMedias.map((m) => ({ mediaId: m.media as unknown as string, createdAt: m.createdAt }as CurrentMediaRecord)) || [],
+          updatedUser.profiles
+            .find((p) => p.profileUniqueId === user.profileUniqueId)
+            ?.likedMedias.map(
+              (m) =>
+                ({
+                  mediaId: m.media as unknown as string,
+                  createdAt: m.createdAt,
+                } as CurrentMediaRecord),
+            ) || [],
       );
   }
 

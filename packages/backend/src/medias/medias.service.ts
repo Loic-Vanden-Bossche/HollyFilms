@@ -449,8 +449,7 @@ export class MediasService {
         { $match: { _id: { $in: mediaIds }, available: onlyAvailable } },
         { $addFields: { weight: stack[0] } },
         { $sort: { weight: 1 } },
-        { $skip: skip },
-        { $limit: limit },
+        ...(skip && limit ? [{ $skip: skip }, { $limit: limit }] : []),
       ])
       .then(formatManyMedias);
   }
