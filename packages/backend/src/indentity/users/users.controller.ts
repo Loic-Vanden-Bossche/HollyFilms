@@ -108,6 +108,16 @@ export class UsersController {
   }
 
   @Roles(Role.User)
+  @Get('/removeFromList/:mediaId')
+  @ApiOperation({ summary: '[User] Remove media from profile list' })
+  async removeMediaFromList(
+    @User() user: CurrentUser,
+    @Param('mediaId') mediaId: string,
+  ) {
+    return this.usersService.removeMediaFromList(user, mediaId);
+  }
+
+  @Roles(Role.User)
   @Get('/like/:mediaId')
   @ApiOperation({ summary: '[User] Like a media' })
   async likeMedia(
@@ -115,6 +125,16 @@ export class UsersController {
     @Param('mediaId') mediaId: string,
   ) {
     return this.usersService.likeMedia(user, mediaId);
+  }
+
+  @Roles(Role.User)
+  @Get('/unlike/:mediaId')
+  @ApiOperation({ summary: '[User] Unlike a media' })
+  async unlikeMedia(
+    @User() user: CurrentUser,
+    @Param('mediaId') mediaId: string,
+  ) {
+    return this.usersService.unlikeMedia(user, mediaId);
   }
 
   @Roles(Role.User)

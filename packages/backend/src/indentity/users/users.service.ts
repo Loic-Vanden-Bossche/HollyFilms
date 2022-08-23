@@ -204,6 +204,43 @@ export class UsersService {
       });
   }
 
+  removeMediaFromList(user: CurrentUser, mediaId: string) {
+    if (
+      !user.mediasInList?.map((m) => m.mediaId.toString()).includes(mediaId)
+    ) {
+      throw new HttpException(
+        `Media ${mediaId} not in list`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.userModel
+      .findOneAndUpdate(
+        {
+          _id: getObjectId(user._id),
+          profiles: {
+            $elemMatch: {
+              profileUniqueId: user.profileUniqueId,
+            },
+          },
+        },
+        {
+          $pull: {
+            'profiles.$.mediasInList': {
+              media: getObjectId(mediaId),
+            },
+          },
+        },
+        { new: true },
+      )
+      .then(
+        (updatedUser) =>
+          updatedUser.profiles.find(
+            (p) => p.profileUniqueId === user.profileUniqueId,
+          )?.mediasInList || [],
+      );
+  }
+
   likeMedia(user: CurrentUser, mediaId: string) {
     if (user.likedMedias?.map((m) => m.mediaId.toString()).includes(mediaId)) {
       throw new HttpException(
@@ -247,6 +284,41 @@ export class UsersService {
               )?.likedMedias || [],
           );
       });
+  }
+
+  unlikeMedia(user: CurrentUser, mediaId: string) {
+    if (!user.likedMedias?.map((m) => m.mediaId.toString()).includes(mediaId)) {
+      throw new HttpException(
+        `Media ${mediaId} not liked`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.userModel
+      .findOneAndUpdate(
+        {
+          _id: getObjectId(user._id),
+          profiles: {
+            $elemMatch: {
+              profileUniqueId: user.profileUniqueId,
+            },
+          },
+        },
+        {
+          $pull: {
+            'profiles.$.likedMedias': {
+              media: getObjectId(mediaId),
+            },
+          },
+        },
+        { new: true },
+      )
+      .then(
+        (updatedUser) =>
+          updatedUser.profiles.find(
+            (p) => p.profileUniqueId === user.profileUniqueId,
+          )?.likedMedias || [],
+      );
   }
 
   async createProfile(user: CurrentUser, dto: CreateProfileDto) {
