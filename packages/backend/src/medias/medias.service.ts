@@ -299,30 +299,6 @@ export class MediasService {
     return query.find({}).sort({ popularity: 'desc' });
   }
 
-  inlistQuery(query: Query<MediaDocument[], MediaDocument>, user: CurrentUser) {
-    return query.find({
-      _id: {
-        $in: user.mediasInList
-          .sort((a, b) => {
-            return a.createdAt.getTime() - b.createdAt.getTime();
-          })
-          .map((m) => m.mediaId),
-      },
-    });
-  }
-
-  likedQuery(query: Query<MediaDocument[], MediaDocument>, user: CurrentUser) {
-    return query.find({
-      _id: {
-        $in: user.likedMedias
-          .sort((a, b) => {
-            return b.createdAt.getTime() - a.createdAt.getTime();
-          })
-          .map((m) => m.mediaId),
-      },
-    });
-  }
-
   watchedQuery(
     query: Query<MediaDocument[], MediaDocument>,
     user: CurrentUser,
