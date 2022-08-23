@@ -46,7 +46,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
     mute: 1,
   };
 
-  displayedTime = '';
+  displayedTime: string | null = '';
 
   seekTime = 20;
 
@@ -57,7 +57,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
 
   showEpisodes = false;
 
-  isWatched: string | null = null;
+  playLabel = 'Voir';
 
   get isLiked() {
     return (
@@ -114,36 +114,20 @@ export class MediaModalComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    this.title.setTitle(this.media?.data.title);
+    if (this.media) {
+      this.title.setTitle(this.media.data.title);
 
-    if (this.media?.mediaType === 'tv' && this.media) {
-      this.showEpisodes = true;
-      const indexes = this.tvsService.getTvClosestIndexes(this.media.data);
+      this.showEpisodes = this.media.mediaType === 'tv';
 
-      if (indexes) {
-        this.isWatched = `E${indexes.episodeIndex} S${indexes.seasonIndex}`;
-      }
+      this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
+
+      this.displayedTime = this.media.data.fileInfos?.Sduration
+        ? dayjs
+            .duration(this.media?.data.fileInfos?.Sduration || 0, 'seconds')
+            .format('H[h]mm')
+            .replace(/00$/, '')
+        : null;
     }
-
-    if (this.media?.mediaType === 'movie' && this.media) {
-      this.showEpisodes = false;
-
-      const watchedTime = this.mediasService.getMovieWatchedTime(
-        this.media.data
-      );
-
-      if (watchedTime) {
-        this.isWatched = `Continuer - ${dayjs
-          .duration(watchedTime, 'minute')
-          .format('H[h]mm')
-          .replace(/00$/, '')}`;
-      }
-    }
-
-    this.displayedTime = dayjs
-      .duration(this.media?.data.fileInfos?.Sduration || 0, 'seconds')
-      .format('H[h]mm')
-      .replace(/00$/, '');
   }
 
   onVideoReady() {

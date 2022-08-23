@@ -25,6 +25,9 @@ import {
   faLeftLong,
 } from '@fortawesome/free-solid-svg-icons';
 import { TitleService } from '../shared/services/title.service';
+import { UsersService } from '../shared/services/users.service';
+import { AuthService } from '../shared/services/auth.service';
+import { PlayedMedia } from '../shared/models/played-media.model';
 
 @Component({
   selector: 'app-player',
@@ -106,6 +109,8 @@ export class PlayerComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,
+    private readonly usersService: UsersService,
+    private readonly auth: AuthService,
     private readonly previousRouteService: PreviousRouteService,
     private readonly router: Router,
     private readonly title: TitleService
@@ -274,6 +279,18 @@ export class PlayerComponent implements AfterViewInit {
     return null;
   }
 
+  onPlayedMediaUpdated(playedMedia: PlayedMedia) {
+    if (this.media) {
+      this.auth.updateUserProfile({
+        playedMedias: this.usersService.getPlayedMediasFromPlayedMedia(
+          this.auth.user?.playedMedias || [],
+          playedMedia
+        ),
+      });
+      console.log(this.auth.user?.playedMedias);
+    }
+  }
+
   ngAfterViewInit() {
     const prevRoute = this.previousRouteService.previousRoute;
     if (prevRoute !== this.router.url) {
@@ -428,17 +445,15 @@ export class PlayerComponent implements AfterViewInit {
               )
             )
             .subscribe();
-          this.onTimeUpdate()
-            .pipe(
-              switchMap((time) =>
-                this.playerService.track({
-                  mediaId: this.media?.data._id || '',
-                  ...indexesParams,
-                  time,
-                })
-              )
+          this.onTimeUpdate().pipe(
+            switchMap((time) =>
+              this.playerService.track({
+                mediaId: this.media?.data._id || '',
+                ...indexesParams,
+                time,
+              })
             )
-            .subscribe();
+          );
         });
 
         this.player.on('ended', () => (this.displayFeatured = true));

@@ -35,7 +35,7 @@
         class="absolute transition-all px-0 group-hover:px-3 bottom-0 group-hover:bottom-1 w-full"
       >
         <app-watch-progress
-          [totalTime]="200"
+          [totalTime]="episode?.fileInfos?.Sduration || 0"
           [currentTime]="episode.watchedTime || 0"
         ></app-watch-progress>
       </div>

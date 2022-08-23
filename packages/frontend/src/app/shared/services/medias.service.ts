@@ -23,6 +23,8 @@ import {
   faList,
   faUserCheck,
 } from '@fortawesome/free-solid-svg-icons';
+import { TvsService } from './tvs.service';
+import { fromSecondsToTime } from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -37,8 +39,29 @@ export class MediasService {
   constructor(
     private readonly http: HttpClient,
     private readonly auth: AuthService,
+    private readonly tvsService: TvsService,
     private readonly notificationsService: NotificationsService
   ) {}
+
+  getPlayLabelForMedia(media: MediaWithType) {
+    if (media?.mediaType === 'tv') {
+      const indexes = this.tvsService.getTvClosestIndexes(media.data);
+
+      if (indexes) {
+        return `E${indexes.episodeIndex} S${indexes.seasonIndex}`;
+      }
+
+      return 'Commencer';
+    }
+
+    const watchedTime = this.getMovieWatchedTime(media.data);
+
+    if (watchedTime) {
+      return `Continuer - ${fromSecondsToTime(watchedTime)}`;
+    }
+
+    return 'Voir le film';
+  }
 
   onInListChanged() {
     return this._inListChanged$.asObservable();

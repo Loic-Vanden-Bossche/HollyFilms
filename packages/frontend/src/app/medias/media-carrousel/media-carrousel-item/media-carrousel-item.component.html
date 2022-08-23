@@ -35,13 +35,13 @@
         </div>
         <p class="text-xs md:text-sm">{{ media.data.tagline }}</p>
         <div class="h-7 md:h-10 text-sm md:text-lg mt-5 flex flex-row">
-          <div class="flex flex-row" *ngIf="media.mediaType === 'movie'">
+          <div class="flex flex-row">
             <a
               ><button
                 (click)="onPlay($event)"
                 class="mr-5 whitespace-nowrap bg-gradient-to-r text-white gradient-colors h-full rounded-md font-bold px-4 py-1 hover:border-2 transition-all border-white"
               >
-                Voir le film
+                {{ playLabel }}
               </button></a
             >
             <a
@@ -49,17 +49,9 @@
                 (click)="openModal(media)"
                 class="text-black whitespace-nowrap h-full bg-white rounded-md font-bold px-4 py-1"
               >
-                Voir plus
-              </button></a
-            >
-          </div>
-          <div *ngIf="media.mediaType === 'tv'">
-            <a
-              ><button
-                (click)="openModal(media)"
-                class="text-black whitespace-nowrap h-full bg-white rounded-md font-bold px-4 py-1"
-              >
-                Voir les épisodes
+                {{
+                  media.mediaType === "tv" ? "Voir les épisodes" : "Voir plus"
+                }}
               </button></a
             >
           </div>

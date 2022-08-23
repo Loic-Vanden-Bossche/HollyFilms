@@ -10,9 +10,9 @@ export class TvsService {
 
   constructor(private readonly auth: AuthService) {}
 
-  isTvWatched(media: Media) {
+  isTvWatched(mediaId: string) {
     return this.auth.user?.playedMedias
-      .filter((pm) => pm.media === media)
+      .filter((pm) => pm.media._id === mediaId)
       .some((pm) => pm.currentTime > this.watchedThreshold);
   }
 
@@ -34,7 +34,7 @@ export class TvsService {
   getTvClosestIndexes(
     media: Media
   ): { episodeIndex: number; seasonIndex: number } | null {
-    if (!this.isTvWatched(media)) {
+    if (!this.isTvWatched(media._id)) {
       return null;
     }
 

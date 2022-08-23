@@ -21,6 +21,7 @@ import { ModalService } from '../../shared/services/modal.service';
 import { filter, map, mergeWith, switchMap, take } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { User } from '../../shared/models/user.model';
+import { fromSecondsToTime } from '../../shared/utils';
 
 @Component({
   selector: 'app-user-modal',
@@ -213,17 +214,6 @@ export class UserModalComponent implements OnInit {
     }
   }
 
-  fromSecondsToTime(seconds: number) {
-    if (seconds < 60) {
-      return `${seconds}s`;
-    }
-    if (seconds < 3600) {
-      return `${Math.floor(seconds / 60)}m`;
-    }
-
-    return `${Math.floor(seconds / 3600)}h`;
-  }
-
   updateInsights(user: User) {
     this.usersService
       .getProfileInsights(user.profileUniqueId)
@@ -235,7 +225,7 @@ export class UserModalComponent implements OnInit {
               insights.watchedMedias === 1 ? 'film regardé' : 'films regardés',
           },
           {
-            value: this.fromSecondsToTime(insights.totalPlayTime),
+            value: fromSecondsToTime(insights.totalPlayTime),
             label: 'de visionnage',
           },
           {

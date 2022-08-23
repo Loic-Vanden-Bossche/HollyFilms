@@ -99,6 +99,8 @@ export class MediaCarrouselItemComponent implements OnInit {
   addToListIcon = faPlusCircle;
   likeButton = faThumbsUp;
 
+  playLabel = 'Voir';
+
   ratingProgress = 0;
 
   get circleRadius() {
@@ -173,6 +175,7 @@ export class MediaCarrouselItemComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.media) {
+      this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
       [this.vendorTag, this.vendorIcon] = this.getTagAndIconFromFeatured(
         this.media.featured
       );

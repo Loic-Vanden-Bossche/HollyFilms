@@ -22,6 +22,8 @@ export class MediaCardDataDetailsComponent implements OnInit {
   addToListIcon = faPlusCircle;
   likeButton = faThumbsUp;
 
+  playLabel = 'Voir';
+
   overview = '';
 
   get isLiked() {
@@ -48,7 +50,13 @@ export class MediaCardDataDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.overview = this.truncateOverview(this.media?.data.overview || '', 300);
+    if (this.media) {
+      this.overview = this.truncateOverview(
+        this.media.data.overview || '',
+        300
+      );
+      this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
+    }
   }
 
   onLike() {
