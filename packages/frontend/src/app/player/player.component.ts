@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import {
@@ -82,7 +83,7 @@ import { PlayedMedia } from '../shared/models/played-media.model';
     ]),
   ],
 })
-export class PlayerComponent implements AfterViewInit {
+export class PlayerComponent implements AfterViewInit, OnDestroy {
   media: MediaWithType | null = null;
 
   private player: VideoJsPlayer | null = null;
@@ -291,6 +292,10 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
+  ngOnDestroy() {
+    this.player?.dispose();
+  }
+
   ngAfterViewInit() {
     const prevRoute = this.previousRouteService.previousRoute;
     if (prevRoute !== this.router.url) {
@@ -445,15 +450,17 @@ export class PlayerComponent implements AfterViewInit {
               )
             )
             .subscribe();
-          this.onTimeUpdate().pipe(
-            switchMap((time) =>
-              this.playerService.track({
-                mediaId: this.media?.data._id || '',
-                ...indexesParams,
-                time,
-              })
+          this.onTimeUpdate()
+            .pipe(
+              switchMap((time) =>
+                this.playerService.track({
+                  mediaId: this.media?.data._id || '',
+                  ...indexesParams,
+                  time,
+                })
+              )
             )
-          );
+            .subscribe();
         });
 
         this.player.on('ended', () => (this.displayFeatured = true));

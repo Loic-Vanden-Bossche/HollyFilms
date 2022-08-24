@@ -147,11 +147,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
 
   onPlay($event: MouseEvent) {
     if (this.media) {
-      this.playerService.play({
-        mediaId: this.media.data._id,
-        x: $event.clientX,
-        y: $event.clientY,
-      });
+      this.playerService.autoPlay(this.media, $event.clientX, $event.clientY);
     }
   }
 
