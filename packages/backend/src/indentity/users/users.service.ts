@@ -477,6 +477,10 @@ export class UsersService {
       .exec();
   }
 
+  findByEmail(email: string) {
+    return this.userModel.findOne({ email }).exec();
+  }
+
   async isAlreadyExist(email: string) {
     const existsUser = await this.userModel.findOne({ email }).exec();
     if (existsUser)

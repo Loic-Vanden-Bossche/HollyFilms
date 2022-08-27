@@ -74,10 +74,6 @@ export class ProcessingService {
     );
   }
 
-  onDownloadStatusUpdated() {
-    return this.socket.fromEvent<any>('processing-videoDownload');
-  }
-
   onSystemInfosUpdated() {
     return this.socket.fromEvent<SystemMetrics>('si-data');
   }

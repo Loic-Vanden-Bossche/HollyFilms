@@ -19,7 +19,6 @@ import { NotificationType } from '../../shared/models/notification.model';
 import { UserProfile } from '../../shared/models/user-profile.model';
 import { ModalService } from '../../shared/services/modal.service';
 import { filter, map, mergeWith, switchMap, take } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { User } from '../../shared/models/user.model';
 import { fromSecondsToTime } from '../../shared/utils';
 
@@ -288,7 +287,7 @@ export class UserModalComponent implements OnInit {
 
   updateProfilePicture(user: User | null = this.user) {
     this.profilePictureUrl = user?.picture
-      ? `${environment.apiUrl}/users/${user.picture}`
+      ? this.usersService.getProfilePictureUrl(user.picture)
       : this.defaultProfilePictureUrl;
   }
 
@@ -300,18 +299,21 @@ export class UserModalComponent implements OnInit {
           this.authService.onUserUpdated().pipe(
             filter((user) => !!user),
             take(1)
-          )
+          ),
+          this.authService.onUserAuthenticate()
         ),
         filter((user) => !!user),
-        map((user) => user as User)
+        map(() => this.authService.user as User)
       )
       .subscribe((user: User) => {
         this.updateProfilePicture(user);
         this.updateInsights(user);
         this.cancelEdit();
       });
-    this.usersService
-      .getProfileList()
+
+    this.authService
+      .onUserAuthenticate()
+      .pipe(switchMap(() => this.usersService.getProfileList()))
       .subscribe((profiles) => (this.userProfiles = profiles));
   }
 }

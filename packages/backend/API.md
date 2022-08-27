@@ -1003,7 +1003,7 @@ func main() {
 
 `GET /users/profile/current`
 
-*[User] Set media track properties*
+*[User] Get current profile*
 
 <h3 id="userscontroller_getcurrentuserprofile-responses">Responses</h3>
 
@@ -3872,7 +3872,8 @@ func main() {
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true"
+  "isActivated": "true",
+  "isRegisteredWithGoogle": true
 }
 ```
 
@@ -4373,7 +4374,8 @@ func main() {
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true"
+  "isActivated": "true",
+  "isRegisteredWithGoogle": true
 }
 ```
 
@@ -4711,7 +4713,8 @@ func main() {
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true"
+  "isActivated": "true",
+  "isRegisteredWithGoogle": true
 }
 ```
 
@@ -5066,6 +5069,173 @@ func main() {
 |body|body|[ChangePasswordAuthDto](#schemachangepasswordauthdto)|true|none|
 
 <h3 id="authcontroller_changepassword-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|none|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="hollyfilms-api-google-auth">Google-Auth</h1>
+
+## GoogleAuthController_authenticate
+
+<a id="opIdGoogleAuthController_authenticate"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /google-auth \
+  -H 'Content-Type: application/json'
+
+```
+
+```http
+POST /google-auth HTTP/1.1
+
+Content-Type: application/json
+
+```
+
+```javascript
+const inputBody = '{}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/google-auth',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Content-Type' => 'application/json'
+}
+
+result = RestClient.post '/google-auth',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json'
+}
+
+r = requests.post('/google-auth', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Content-Type' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/google-auth', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/google-auth");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/google-auth", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /google-auth`
+
+> Body parameter
+
+```json
+{}
+```
+
+<h3 id="googleauthcontroller_authenticate-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[GoogleTokenDto](#schemagoogletokendto)|true|none|
+
+<h3 id="googleauthcontroller_authenticate-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -9174,7 +9344,8 @@ This operation does not require authentication
     "admin"
   ],
   "isAdmin": "true",
-  "isActivated": "true"
+  "isActivated": "true",
+  "isRegisteredWithGoogle": true
 }
 
 ```
@@ -9199,6 +9370,7 @@ This operation does not require authentication
 |roles|[string]|true|none|The user's roles|
 |isAdmin|boolean|true|none|Is the user an Admin|
 |isActivated|boolean|true|none|Is the user activated|
+|isRegisteredWithGoogle|boolean|true|none|Is user registered with Google|
 
 <h2 id="tocS_RegisterAuthDto">RegisterAuthDto</h2>
 <!-- backwards compatibility -->
@@ -9275,6 +9447,22 @@ This operation does not require authentication
 |token|string|true|none|Change password token|
 |newPassword|string|true|none|New user password|
 |newPasswordConfirm|string|true|none|New user password confirmation|
+
+<h2 id="tocS_GoogleTokenDto">GoogleTokenDto</h2>
+<!-- backwards compatibility -->
+<a id="schemagoogletokendto"></a>
+<a id="schema_GoogleTokenDto"></a>
+<a id="tocSgoogletokendto"></a>
+<a id="tocsgoogletokendto"></a>
+
+```json
+{}
+
+```
+
+### Properties
+
+*None*
 
 <h2 id="tocS_AddTvDto">AddTvDto</h2>
 <!-- backwards compatibility -->

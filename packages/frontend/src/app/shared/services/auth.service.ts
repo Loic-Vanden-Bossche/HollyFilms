@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { BehaviorSubject, catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, of, tap } from 'rxjs';
 import { UserProfile } from '../models/user-profile.model';
 
 export interface registerDto {
@@ -20,6 +20,7 @@ export class AuthService {
     new BehaviorSubject<User | null>(AuthService.getUser());
 
   private _userChanged$ = new BehaviorSubject<User | null>(null);
+  private _userAuthenticated$ = new BehaviorSubject<boolean>(false);
 
   get user(): User | null {
     return this._user$.value ? Object.assign({}, this._user$.value) : null;
@@ -39,8 +40,9 @@ export class AuthService {
 
   constructor(private readonly api: HttpClient) {
     this._user$.subscribe((user) => {
-      if (!this._userChanged$.value && this._userChanged$.value) {
+      if (!this._userChanged$.value && user) {
         this._userChanged$.next(user);
+        this._userAuthenticated$.next(true);
       }
     });
   }
@@ -55,6 +57,18 @@ export class AuthService {
     );
   }
 
+  googleAuthenticate(token: string) {
+    return this.api
+      .post<User>('google-auth', { token }, { withCredentials: true })
+      .pipe(
+        tap((user) => {
+          this._user$.next(user);
+          this._userAuthenticated$.next(true);
+          AuthService.storeUser(user);
+        })
+      );
+  }
+
   onUserUpdated() {
     return this._user$.asObservable();
   }
@@ -63,10 +77,23 @@ export class AuthService {
     return this._userChanged$.asObservable();
   }
 
+  onUserAuthenticate() {
+    return this._userAuthenticated$
+      .asObservable()
+      .pipe(filter((isAuthenticated) => isAuthenticated));
+  }
+
+  onUserDisconnected() {
+    return this._userAuthenticated$
+      .asObservable()
+      .pipe(filter((isAuthenticated) => !isAuthenticated));
+  }
+
   logout() {
     return this.api.get('auth/logout', { withCredentials: true }).pipe(
       tap(() => {
         this._user$.next(null);
+        this._userAuthenticated$.next(false);
         localStorage.removeItem('user');
       })
     );
@@ -110,6 +137,7 @@ export class AuthService {
       .pipe(
         tap((user) => {
           this._user$.next(user);
+          this._userAuthenticated$.next(true);
           AuthService.storeUser(user);
         })
       );
@@ -121,6 +149,7 @@ export class AuthService {
       .pipe(
         tap((user) => {
           this._user$.next(user);
+          this._userAuthenticated$.next(true);
           AuthService.storeUser(user);
         })
       );

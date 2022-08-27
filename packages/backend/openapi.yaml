@@ -117,7 +117,7 @@ paths:
   /users/profile/current:
     get:
       operationId: UsersController_getCurrentUserProfile
-      summary: "[User] Set media track properties"
+      summary: "[User] Get current profile"
       parameters: []
       responses:
         "200":
@@ -544,6 +544,21 @@ paths:
         "201":
           description: ""
       tags: *a3
+  /google-auth:
+    post:
+      operationId: GoogleAuthController_authenticate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleTokenDto"
+      responses:
+        "201":
+          description: ""
+      tags:
+        - Google-Auth
   /medias:
     get:
       operationId: MediasController_getMedias
@@ -1144,6 +1159,10 @@ components:
           type: boolean
           description: Is the user activated
           example: "true"
+        isRegisteredWithGoogle:
+          type: boolean
+          description: Is user registered with Google
+          example: true
       required:
         - profileUniqueId
         - isDefault
@@ -1161,6 +1180,7 @@ components:
         - roles
         - isAdmin
         - isActivated
+        - isRegisteredWithGoogle
     RegisterAuthDto:
       type: object
       properties:
@@ -1228,6 +1248,9 @@ components:
         - token
         - newPassword
         - newPasswordConfirm
+    GoogleTokenDto:
+      type: object
+      properties: {}
     AddTvDto:
       type: object
       properties:

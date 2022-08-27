@@ -7,6 +7,7 @@ import { ProfileInsights } from '../models/profile-Insights.model';
 import { TMDBMicroSearchResult } from '../models/micro-tmdb-search-result.model';
 import { MediaType } from '../models/media.model';
 import { PlayedMedia } from '../models/played-media.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +43,12 @@ export class UsersService {
         withCredentials: true,
       }
     );
+  }
+
+  getProfilePictureUrl(picture: string) {
+    return picture.includes('http')
+      ? picture
+      : `${environment.apiUrl}/users/${picture}`;
   }
 
   deleteProfile() {

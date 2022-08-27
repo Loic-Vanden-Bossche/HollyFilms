@@ -61,19 +61,31 @@ export class SignInComponent implements OnInit {
             }
           },
           error: (err) => {
-            if (err.status === 401) {
-              this.notifications.push({
-                type: NotificationType.Error,
-                message: 'Email ou mot de passe incorrect',
-                lifetime: 3000,
-              });
-            } else {
-              this.notifications.push({
-                type: NotificationType.Error,
-                message:
-                  'Une erreur inconnue est survenue, réessayez plus tard',
-                lifetime: 3000,
-              });
+            switch (err.status) {
+              case 401:
+                this.notifications.push({
+                  type: NotificationType.Error,
+                  message: 'Email ou mot de passe incorrect',
+                  lifetime: 3000,
+                });
+                break;
+
+              case 400:
+                this.notifications.push({
+                  type: NotificationType.Warning,
+                  message: "Connectez vous à l'aide de Google",
+                  lifetime: 3000,
+                });
+                break;
+
+              default:
+                this.notifications.push({
+                  type: NotificationType.Error,
+                  message:
+                    'Une erreur inconnue est survenue, réessayez plus tard',
+                  lifetime: 3000,
+                });
+                break;
             }
           },
         });

@@ -288,7 +288,6 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
           playedMedia
         ),
       });
-      console.log(this.auth.user?.playedMedias);
     }
   }
 

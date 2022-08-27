@@ -59,7 +59,6 @@ export class UsersController {
     return this.usersService.trackUser(user, dtoToTrackData(trackData));
   }
 
-  @Roles(Role.User)
   @Get('insights/:uniqueId')
   @ApiOperation({ summary: '[User] Get profile insights' })
   async getProfileInsights(
@@ -69,16 +68,14 @@ export class UsersController {
     return this.usersService.getProfileInsights(user, uniqueId);
   }
 
-  @Roles(Role.User)
   @Delete('profile')
   @ApiOperation({ summary: '[User] Delete profile' })
   async deleteProfile(@User() user: CurrentUser) {
     return this.usersService.deleteProfile(user);
   }
 
-  @Roles(Role.User)
   @Get('/profile/current')
-  @ApiOperation({ summary: '[User] Set media track properties' })
+  @ApiOperation({ summary: '[User] Get current profile' })
   async getCurrentUserProfile(@User() user: CurrentUser) {
     return this.usersService.getProfile(user, 'current');
   }
@@ -147,14 +144,12 @@ export class UsersController {
     return this.usersService.getProfile(user, checkUniqueId(uniqueId));
   }
 
-  @Roles(Role.User)
   @Get('/profiles')
   @ApiOperation({ summary: '[User] Get all profiles of the user' })
   async getUserProfiles(@User() user: CurrentUser) {
     return this.usersService.getProfiles(user);
   }
 
-  @Roles(Role.User)
   @Post('/profile')
   @ApiOperation({ summary: '[User] Create a new user profile' })
   async createUserProfile(
@@ -164,7 +159,6 @@ export class UsersController {
     return this.usersService.createProfile(user, profileDto);
   }
 
-  @Roles(Role.User)
   @Put('/profile/:uniqueId')
   @ApiOperation({ summary: '[User] Update a specific user profile' })
   async updateUserProfile(
@@ -194,7 +188,6 @@ export class UsersController {
     );
   }
 
-  @Roles(Role.User)
   @Get('picture/:uniqueId/:hash')
   @ApiProduces('image/jpeg')
   @ApiOperation({ summary: '[User] Get profile picture from userId' })
@@ -209,7 +202,6 @@ export class UsersController {
       .send(await this.usersService.getProfilePicture(user, uniqueId, hash));
   }
 
-  @Roles(Role.User)
   @Post('/profile-picture')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: '[User] Upload a profile picture' })

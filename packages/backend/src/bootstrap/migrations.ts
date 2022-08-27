@@ -221,6 +221,7 @@ const oldToNewUser = (oldUser: OldUser): User => ({
   email: oldUser.email,
   password: oldUser.passwd,
   tokens: [],
+  isRegisteredWithGoogle: false,
   roles: [Role.User],
   profiles: [
     {

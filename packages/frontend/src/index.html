@@ -33,8 +33,22 @@
 
     <link href="//vjs.zencdn.net/7.0/video-js.min.css" rel="stylesheet" />
     <script src="//vjs.zencdn.net/7.0/video.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
   <body class="m-0 h-full w-full bg-base-500">
+    <div
+      id="google_initialization_script"
+      style="
+        position: fixed;
+        z-index: 9999;
+        height: 204px;
+        border: none;
+        right: 20px;
+        top: 82px;
+        width: 391px;
+      "
+      class="[&>*]:pointer-events-auto pointer-events-none"
+    ></div>
     <app-root></app-root>
     <noscript
       >Please enable JavaScript to continue using this application.</noscript

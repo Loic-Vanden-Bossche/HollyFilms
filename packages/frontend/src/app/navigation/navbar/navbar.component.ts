@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { skip, tap } from 'rxjs';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { NotificationType } from '../../shared/models/notification.model';
-import { environment } from '../../../environments/environment';
+import { UsersService } from '../../shared/services/users.service';
 
 export class NavBarButton {
   name = '';
@@ -80,6 +80,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private readonly authService: AuthService,
     private readonly searchService: SearchService,
     private readonly mediasService: MediasService,
+    private readonly usersService: UsersService,
     private readonly route: ActivatedRoute,
     private readonly notificationsService: NotificationsService,
     private readonly router: Router
@@ -121,7 +122,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
       .subscribe(
         (user) =>
           (this.profilePictureUrl = user?.picture
-            ? `${environment.apiUrl}/users/${user?.picture}`
+            ? this.usersService.getProfilePictureUrl(user.picture)
             : this.defaultProfilePictureUrl)
       );
     let retrievedCategoryNames: string[] = [];

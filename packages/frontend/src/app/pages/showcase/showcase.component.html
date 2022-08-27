@@ -30,6 +30,11 @@
           </button></a
         >
       </div>
+      <div
+        class="mt-5"
+        [ngClass]="isAuthenticated ? ['hidden'] : ['block']"
+        #googleSignIn
+      ></div>
       <div *ngIf="!isUserActivated && isAuthenticated">
         <span
           class="rounded text-sm font-bold py-1 px-2 bg-warning mt-4 inline-block"

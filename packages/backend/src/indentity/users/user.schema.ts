@@ -27,6 +27,9 @@ export class User extends BaseIdSchema {
 
   @Prop({ type: [TokenSchema], default: [] })
   tokens: Token[];
+
+  @Prop({ default: false })
+  isRegisteredWithGoogle: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

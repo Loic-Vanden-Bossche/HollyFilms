@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { GoogleAuthService } from '../../shared/services/google-auth.service';
 
 @Component({
   selector: 'app-showcase',
@@ -53,8 +60,14 @@ import { animate, style, transition, trigger } from '@angular/animations';
     ]),
   ],
 })
-export class ShowcaseComponent {
-  constructor(private readonly auth: AuthService) {}
+export class ShowcaseComponent implements OnInit, AfterViewInit {
+  @ViewChild('googleSignIn') googleSignIn: ElementRef<HTMLDivElement> | null =
+    null;
+
+  constructor(
+    private readonly auth: AuthService,
+    private readonly googleAuth: GoogleAuthService
+  ) {}
 
   get isAuthenticated() {
     return this.auth.isAuthenticated;
@@ -66,5 +79,30 @@ export class ShowcaseComponent {
 
   get isUserActivated() {
     return this.auth.isActivated;
+  }
+
+  renderGoogleSignInButton() {
+    if (this.googleSignIn) {
+      window.google.accounts.id.renderButton(this.googleSignIn.nativeElement, {
+        theme: 'outline',
+        size: 'large',
+        logo_alignment: 'left',
+        shape: 'rectangular',
+      });
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.googleAuth.googleAccountsInitialized) {
+      this.renderGoogleSignInButton();
+    } else {
+      this.googleAuth
+        .onGoogleAccountsInitialized()
+        .subscribe(() => this.renderGoogleSignInButton());
+    }
+  }
+
+  ngOnInit() {
+    this.googleAuth.fireOneTapPrompt();
   }
 }

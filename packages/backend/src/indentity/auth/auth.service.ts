@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { getExpirationDate } from './auth.utils';
 import LoginAuthDto from './dto/login.auth.dto';
-import RegisterAuthDto from './dto/register.auth.dto';
 import { TokensService } from '../tokens/tokens.service';
 import ChangePasswordAuthDto from './dto/change-password.auth.dto';
 import { User, UserDocument } from '../users/user.schema';
@@ -32,31 +31,44 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async register(userInfos: RegisterAuthDto): Promise<User> {
-    this.logger.log(`Registering user ${userInfos.email}`);
-    const user = await this.userModel
-      .findOne({ email: userInfos.email })
-      .exec();
+  async register(data: {
+    email: string;
+    firstname: string;
+    lastname: string;
+    username?: string;
+    password?: string;
+    isRegisteredWithGoogle?: boolean;
+    defaultPicture?: string;
+  }): Promise<User> {
+    this.logger.log(`Registering user ${data.email}`);
+    const user = await this.userModel.findOne({ email: data.email }).exec();
     if (user) {
-      this.logger.warn(`User ${userInfos.email} already exists`);
+      this.logger.warn(`User ${data.email} already exists`);
       throw new HttpException('Email Already Exists', HttpStatus.FORBIDDEN);
     }
 
+    if (!data.password && !data.isRegisteredWithGoogle) {
+      this.logger.warn(`User ${data.email} password is required`);
+      throw new HttpException('Password is required', HttpStatus.FORBIDDEN);
+    }
+
     return this.userModel.create({
-      email: userInfos.email,
+      email: data.email,
       profiles: [
         {
           color: getRandomColor(),
           isDefault: true,
           profileUniqueId: randomToken.generate(16),
-          firstname: userInfos.firstname,
-          lastname: userInfos.lastname,
-          username:
-            userInfos.username ||
-            `${userInfos.firstname} ${userInfos.lastname}`,
+          firstname: data.firstname,
+          lastname: data.lastname,
+          picture: data.defaultPicture || null,
+          username: data.username || `${data.firstname} ${data.lastname}`,
         },
       ],
-      password: await this.hashPassword(userInfos.password),
+      isRegisteredWithGoogle: data.isRegisteredWithGoogle,
+      password: data.password
+        ? await this.hashPassword(data.password)
+        : undefined,
     });
   }
 
@@ -146,6 +158,13 @@ export class AuthService {
         throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
       })
       .exec();
+
+    if (user.isRegisteredWithGoogle) {
+      throw new HttpException(
+        'This is a Google account',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const valid = await this.comparePasswords(
       credentials.password,

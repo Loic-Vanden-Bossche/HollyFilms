@@ -19,6 +19,8 @@ import { UsersAdminController } from './users/users.admin.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { MediasModule } from '../medias/medias.module';
 import { TmdbModule } from '../tmdb/tmdb.module';
+import { GoogleAuthService } from './auth/oauth/google/google-auth.service';
+import { GoogleAuthController } from './auth/oauth/google/google-auth.controller';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { TmdbModule } from '../tmdb/tmdb.module';
     forwardRef(() => MediasModule),
   ],
   providers: [
+    GoogleAuthService,
     UsersService,
     TokensService,
     AuthService,
@@ -54,7 +57,12 @@ import { TmdbModule } from '../tmdb/tmdb.module';
       useClass: RolesGuard,
     },
   ],
-  controllers: [UsersController, UsersAdminController, AuthController],
+  controllers: [
+    UsersController,
+    UsersAdminController,
+    AuthController,
+    GoogleAuthController,
+  ],
   exports: [UsersService, MongooseModule],
 })
 export class IdentityModule {}

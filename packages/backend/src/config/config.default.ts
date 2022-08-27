@@ -62,4 +62,8 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_MEDIAS_PATH_DEFAULT: '../../medias_default',
   HF_MEDIAS_PATH_SECONDARY: '../../medias_secondary',
   HF_MEDIAS_FILES_PATH: '../../medias_files',
+
+  // Google OAuth
+  HF_GOOGLE_AUTH_CLIENT_ID: null,
+  HF_GOOGLE_AUTH_CLIENT_SECRET: null,
 };

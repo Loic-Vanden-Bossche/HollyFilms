@@ -4,6 +4,7 @@ import { PwaService } from './shared/services/pwa.service';
 import { ThemesService } from './shared/services/themes.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { PlayerService } from './shared/services/player.service';
+import { GoogleAuthService } from './shared/services/google-auth.service';
 
 @Component({
   selector: 'app-root',
@@ -54,7 +55,8 @@ export class AppComponent implements OnInit {
     private readonly pwaService: PwaService,
     private readonly themeService: ThemesService,
     private readonly authService: AuthService,
-    private readonly playerService: PlayerService
+    private readonly playerService: PlayerService,
+    private readonly googleAuth: GoogleAuthService
   ) {}
 
   @HostListener('window:beforeinstallprompt', ['$event'])
@@ -69,5 +71,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.themeService.initializeTheme();
     this.authService.initAuth().subscribe();
+
+    this.googleAuth.init();
   }
 }

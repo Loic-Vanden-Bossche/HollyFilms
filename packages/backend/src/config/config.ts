@@ -22,6 +22,7 @@ export interface APIConfig extends BaseConfig {
   admin: AdminConfig;
   tmdb: TMDBConfig;
   medias: MediasConfig;
+  googleOAuth: GoogleOAuthConfig;
 }
 
 export interface CookieConfig {
@@ -78,6 +79,11 @@ export interface MediasConfig {
   storePathDefault: string;
   storePathSecondary: string;
   searchFilesPath: string;
+}
+
+export interface GoogleOAuthConfig {
+  clientId: string;
+  clientSecret: string;
 }
 
 export const getConfig = (env: Record<string, unknown>): APIConfig => {
@@ -137,6 +143,10 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
       storePathDefault: config.HF_MEDIAS_PATH_DEFAULT,
       storePathSecondary: config.HF_MEDIAS_PATH_SECONDARY,
       searchFilesPath: config.HF_MEDIAS_FILES_PATH,
+    },
+    googleOAuth: {
+      clientId: config.HF_GOOGLE_AUTH_CLIENT_ID,
+      clientSecret: config.HF_GOOGLE_AUTH_CLIENT_SECRET,
     },
   };
 };

@@ -32,10 +32,7 @@
                   <fa-icon [icon]="deleteProfilePictureIcon"></fa-icon>
                 </div>
                 <div
-                  class="h-32 overflow-hidden border-2 border-white aspect-square rounded-full bg-center bg-cover"
-                  [ngStyle]="{
-                    'background-image': 'url(' + profilePictureUrl + ')'
-                  }"
+                  class="h-32 overflow-hidden border-2 border-white aspect-square rounded-full relative"
                 >
                   <input
                     [disabled]="!editMode"
@@ -48,7 +45,7 @@
                   />
                   <div
                     (click)="profilePicture.click()"
-                    class="flex flex-col items-center justify-center h-full w-full bg-black/40 opacity-70 hover:opacity-100 transition-all"
+                    class="flex flex-col items-center justify-center relative z-20 h-full w-full bg-black/40 opacity-70 hover:opacity-100 transition-all"
                     *ngIf="editMode"
                   >
                     <img
@@ -57,6 +54,12 @@
                       src="assets/img/add-image.svg"
                     />
                   </div>
+                  <img
+                    class="absolute top-0 left-0 h-full w-full z-10"
+                    [src]="profilePictureUrl"
+                    referrerpolicy="no-referrer"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>

@@ -263,4 +263,18 @@ export class ConfigEnvironmentDto {
   @UseDefault()
   @Desc('Path where the videos files are stored before upload')
   HF_MEDIAS_FILES_PATH: string;
+
+  // Google OAuth
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('OAuth client id')
+  HF_GOOGLE_AUTH_CLIENT_ID: string | null;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Secret()
+  @Desc('OAuth client secret')
+  HF_GOOGLE_AUTH_CLIENT_SECRET: string | null;
 }

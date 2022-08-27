@@ -40,5 +40,7 @@
 | HF_MEDIAS_PATH_DEFAULT | ../../medias_default | Path where the videos will be stored by default | isString | No |
 | HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
 | HF_MEDIAS_FILES_PATH | ../../medias_files | Path where the videos files are stored before upload | isString | No |
+| HF_GOOGLE_AUTH_CLIENT_ID |  | OAuth client id | isString | No |
+| HF_GOOGLE_AUTH_CLIENT_SECRET |  | OAuth client secret | isString | Yes |
 
-Generated on 21/08/2022, 00:24:46
+Generated on 27/08/2022, 22:37:30

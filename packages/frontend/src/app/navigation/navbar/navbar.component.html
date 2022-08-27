@@ -84,12 +84,14 @@
       </div>
       <app-dropdown-menu floatPosition="right">
         <div class="h-full flex items-center cursor-pointer p-1.5">
-          <div
-            class="h-10 w-10 rounded-full bg-center bg-cover"
-            [ngStyle]="{
-              'background-image': 'url(' + profilePictureUrl + ')'
-            }"
-          ></div>
+          <div class="h-10 w-10 relative rounded-full overflow-hidden">
+            <img
+              [src]="profilePictureUrl"
+              class="h-full w-full top-0 left-0 absolute"
+              referrerpolicy="no-referrer"
+              alt="profile"
+            />
+          </div>
         </div>
         <div
           class="px-4 text-white py-2 bg-base-600 shadow-2xl rounded-lg"

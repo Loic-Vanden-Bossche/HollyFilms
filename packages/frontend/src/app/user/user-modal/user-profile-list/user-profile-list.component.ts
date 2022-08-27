@@ -6,7 +6,6 @@ import { NotificationsService } from '../../../shared/services/notifications.ser
 import { NotificationType } from '../../../shared/models/notification.model';
 import { faUserCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-profile-list',
@@ -71,7 +70,7 @@ export class UserProfileListComponent {
 
   getProfilePictureUrl(profile: UserProfile) {
     return profile?.picture
-      ? `${environment.apiUrl}/users/${profile.picture}`
+      ? this.usersService.getProfilePictureUrl(profile.picture)
       : this.defaultProfilePictureUrl;
   }
 

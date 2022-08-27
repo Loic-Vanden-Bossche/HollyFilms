@@ -50,6 +50,7 @@ export default class CurrentUser extends Profile {
     this.lastname = currentProfile.lastname;
     this.username = currentProfile.username;
     this.color = currentProfile.color;
+    this.isRegisteredWithGoogle = user.isRegisteredWithGoogle;
   }
 
   @ApiProperty({
@@ -81,4 +82,10 @@ export default class CurrentUser extends Profile {
     example: 'true',
   })
   isActivated: boolean;
+
+  @ApiProperty({
+    description: 'Is user registered with Google',
+    example: true,
+  })
+  isRegisteredWithGoogle: boolean;
 }
