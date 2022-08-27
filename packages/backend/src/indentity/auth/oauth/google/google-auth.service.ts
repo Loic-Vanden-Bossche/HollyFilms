@@ -1,7 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UsersService } from '../../../users/users.service';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../../../users/user.schema';
 import { AuthService } from '../../auth.service';
 import { GoogleOAuthConfig } from '../../../../config/config';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
@@ -37,14 +36,6 @@ export class GoogleAuthService {
 
     if (!user) {
       return this.registerUser(tokenInfo, email);
-    }
-
-    return this.handleRegisteredUser(user);
-  }
-
-  async handleRegisteredUser(user: User) {
-    if (!user.isRegisteredWithGoogle) {
-      throw new HttpException('User is not registered with Google', 403);
     }
 
     return user;

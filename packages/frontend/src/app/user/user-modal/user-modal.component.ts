@@ -277,10 +277,18 @@ export class UserModalComponent implements OnInit {
     }
   }
 
-  onFileChange(event: any) {
+  async onFileChange(event: any) {
+    const toBase64 = (file: any) =>
+      new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+      });
+
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
-      this.profilePictureUrl = URL.createObjectURL(file);
+      this.profilePictureUrl = await toBase64(file);
       this.editProfileForm.get('profilePicture')?.setValue(file);
     }
   }

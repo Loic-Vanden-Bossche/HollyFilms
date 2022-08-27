@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { BehaviorSubject, catchError, filter, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, of, skip, tap } from 'rxjs';
 import { UserProfile } from '../models/user-profile.model';
 
 export interface registerDto {
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   constructor(private readonly api: HttpClient) {
-    this._user$.subscribe((user) => {
+    this._user$.pipe(skip(1)).subscribe((user) => {
       if (!this._userChanged$.value && user) {
         this._userChanged$.next(user);
         this._userAuthenticated$.next(true);
