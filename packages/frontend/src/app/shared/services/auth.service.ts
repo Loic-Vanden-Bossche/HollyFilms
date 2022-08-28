@@ -48,13 +48,15 @@ export class AuthService {
   }
 
   initAuth() {
-    return this.api.get<User>('auth/me', { withCredentials: true }).pipe(
-      catchError(() => of(null)),
-      tap((user) => this._user$.next(user)),
-      tap((user) =>
-        user ? AuthService.storeUser(user) : localStorage.removeItem('user')
-      )
-    );
+    return this.isAuthenticated
+      ? this.api.get<User>('auth/me', { withCredentials: true }).pipe(
+          catchError(() => of(null)),
+          tap((user) => this._user$.next(user)),
+          tap((user) =>
+            user ? AuthService.storeUser(user) : localStorage.removeItem('user')
+          )
+        )
+      : null;
   }
 
   googleAuthenticate(token: string) {

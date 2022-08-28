@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.themeService.initializeTheme();
-    this.authService.initAuth().subscribe();
+    this.authService.initAuth()?.subscribe();
 
     this.googleAuth.init();
   }

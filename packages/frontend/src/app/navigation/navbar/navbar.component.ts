@@ -94,11 +94,18 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   navButtons: NavBarButton[] = [
     new NavBarButton('Accueil', '/home'),
     new NavBarButton('Ma liste', '/my-list'),
-    new NavBarButton(
-      'Categories',
-      undefined,
-      () => (this.showCategories = !this.showCategories)
-    ),
+    new NavBarButton('Categories', undefined, () => {
+      this.showCategories = !this.showCategories;
+
+      if (this.showCategories && this.categories.length <= 0) {
+        this.mediasService.getCategories().subscribe((categories) => {
+          this.categories = categories.map((category) => ({
+            ...category,
+            selected: false,
+          }));
+        });
+      }
+    }),
   ];
 
   defaultProfilePictureUrl = 'assets/img/avatar-blank.png';
@@ -125,21 +132,24 @@ export class NavbarComponent implements OnInit, AfterViewInit {
             ? this.usersService.getProfilePictureUrl(user.picture)
             : this.defaultProfilePictureUrl)
       );
-    let retrievedCategoryNames: string[] = [];
-    if (this.router.url.startsWith('/category')) {
-      retrievedCategoryNames =
-        this.route.snapshot.queryParamMap.get('names')?.split(',') || [];
-    }
-    this.mediasService.getCategories().subscribe((categories) => {
-      this.categories = categories.map((category) => ({
-        ...category,
-        selected: retrievedCategoryNames.includes(category.name),
-      }));
 
-      if (retrievedCategoryNames.length > 0) {
-        this.showCategories = true;
+    if (this.isAuthenticated) {
+      let retrievedCategoryNames: string[] = [];
+      if (this.router.url.startsWith('/category')) {
+        retrievedCategoryNames =
+          this.route.snapshot.queryParamMap.get('names')?.split(',') || [];
       }
-    });
+      this.mediasService.getCategories().subscribe((categories) => {
+        this.categories = categories.map((category) => ({
+          ...category,
+          selected: retrievedCategoryNames.includes(category.name),
+        }));
+
+        if (retrievedCategoryNames.length > 0) {
+          this.showCategories = true;
+        }
+      });
+    }
 
     this.searchService
       .onClearControl()
