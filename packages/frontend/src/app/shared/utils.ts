@@ -30,12 +30,16 @@ const fromSecondsToTime = (secondsInput: number) => {
   const seconds = secondsInput - hours * 3600 - minutes * 60;
 
   if (hours > 0) {
-    return `${hours === 0 ? '' : hours + 'h'}${
-      minutes === 0 ? '' : minutes + 'm'
-    }${seconds === 0 || minutes > 0 ? '' : seconds + 's'}`;
+    return `${Math.floor(hours) === 0 ? '' : Math.floor(hours) + 'h'}${
+      Math.floor(minutes) === 0 ? '' : Math.floor(minutes) + 'm'
+    }${
+      Math.floor(seconds) === 0 || Math.floor(minutes) > 0
+        ? ''
+        : Math.floor(seconds) + 's'
+    }`;
   } else {
-    return `${minutes === 0 ? '' : minutes + 'm'}${
-      seconds === 0 ? '' : seconds + 's'
+    return `${Math.floor(minutes) === 0 ? '' : Math.floor(minutes) + 'm'}${
+      Math.floor(seconds) === 0 ? '' : Math.floor(seconds)
     }`;
   }
 };

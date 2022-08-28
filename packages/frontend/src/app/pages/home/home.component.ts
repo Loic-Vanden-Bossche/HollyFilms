@@ -39,7 +39,10 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authService.onUserChanged().subscribe(() => {
+    this.authService.onUserChanged().subscribe((user) => {
+      if (!user) {
+        return;
+      }
       this.mediaLists.next([
         {
           type: ListType.RECOMMENDED,

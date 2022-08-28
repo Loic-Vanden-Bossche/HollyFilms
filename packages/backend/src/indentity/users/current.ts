@@ -2,7 +2,7 @@ import { User } from './user.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../shared/role';
 import { UserProfile } from './user-profile.schema';
-import { Profile } from './profile';
+import { CurrentMediaRecord, CurrentPlayedMedia, Profile } from './profile';
 
 export default class CurrentUser extends Profile {
   getProfileFromUniqueId(
@@ -31,20 +31,15 @@ export default class CurrentUser extends Profile {
     const currentProfile = this.getProfileFromUniqueId(user, profileUniqueId);
 
     this.playedMedias =
-      currentProfile.playedMedias?.filter((p) => p.media) || [];
+      currentProfile.playedMedias?.map((pm) => new CurrentPlayedMedia(pm)) ||
+      [];
     this.isDefault = currentProfile.isDefault;
     this.picture = currentProfile.picture;
     this.addRequestedMedias = currentProfile.addRequestedMedias || [];
     this.mediasInList =
-      currentProfile.mediasInList?.map((m) => ({
-        mediaId: m.media as unknown as string,
-        createdAt: m.createdAt,
-      })) || [];
+      currentProfile.mediasInList?.map((m) => new CurrentMediaRecord(m)) || [];
     this.likedMedias =
-      currentProfile.likedMedias?.map((m) => ({
-        mediaId: m.media as unknown as string,
-        createdAt: m.createdAt,
-      })) || [];
+      currentProfile.likedMedias?.map((m) => new CurrentMediaRecord(m)) || [];
     this.profileUniqueId = currentProfile.profileUniqueId;
     this.firstname = currentProfile.firstname;
     this.lastname = currentProfile.lastname;

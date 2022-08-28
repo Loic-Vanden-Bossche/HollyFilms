@@ -22,7 +22,7 @@ import * as fsp from 'fs/promises';
 import * as fs from 'fs';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
-import { CurrentMediaRecord } from './profile';
+import { CurrentMediaRecord, CurrentPlayedMedia } from './profile';
 import { getUsersToMigrate } from '../../bootstrap/migrations';
 
 @Injectable()
@@ -623,7 +623,10 @@ export class UsersService {
       );
   }
 
-  trackUser(user: CurrentUser, trackData: TrackData): any {
+  trackUser(
+    user: CurrentUser,
+    trackData: TrackData,
+  ): Promise<CurrentPlayedMedia[]> {
     const indexes = { seasonIndex: trackData.si, episodeIndex: trackData.ei };
     const tvReady = indexes.seasonIndex && indexes.episodeIndex;
 
@@ -720,7 +723,10 @@ export class UsersService {
         return u?.profiles.find(
           (p) => p.profileUniqueId === user.profileUniqueId,
         ).playedMedias;
-      });
+      })
+      .then((playedMedias) =>
+        playedMedias.map((pm) => new CurrentPlayedMedia(pm)),
+      );
   }
 
   deletePlayedMediasOccurences(mediaId: string): Promise<any> {

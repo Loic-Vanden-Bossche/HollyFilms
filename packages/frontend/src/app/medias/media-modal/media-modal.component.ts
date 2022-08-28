@@ -116,9 +116,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
   ngOnChanges() {
     if (this.media) {
       this.title.setTitle(this.media.data.title);
-
       this.showEpisodes = this.media.mediaType === 'tv';
-
       this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
 
       this.displayedTime = this.media.data.fileInfos?.Sduration

@@ -26,7 +26,6 @@ import {
   MediaWithTypeAndQueue,
   ShowcaseMedia,
 } from './medias.utils';
-import { PlayedMedia } from './schemas/played-media.schema';
 import { Episode } from './tvs/schemas/episode.schema';
 import { FileInfos } from './schemas/file-infos.schema';
 import { UsersService } from '../indentity/users/users.service';
@@ -38,6 +37,7 @@ import { MediasConfig } from '../config/config';
 import { getMoviesToMigrate, getTvsToMigrate } from '../bootstrap/migrations';
 import { TmdbService } from '../tmdb/tmdb.service';
 import { checkObjectId, getObjectId } from '../shared/mongoose';
+import { CurrentPlayedMedia } from '../indentity/users/profile';
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -59,6 +59,13 @@ export interface AdminMedia {
 export interface MediaCategory {
   name: string;
   count: number;
+}
+
+interface MediaIsWatched {
+  media: MediaWithType;
+  watchedDuration: number;
+  duration: number;
+  lastWatchedTime: Date;
 }
 
 @Injectable()
@@ -198,39 +205,10 @@ export class MediasService {
     return [...queuedMedias, ...medias];
   }
 
-  isTimePlayed(watchTime: number, videoTime: number): boolean {
-    return watchTime >= 0.9 * videoTime;
-  }
-
-  isWatched(playedMedia: PlayedMedia): boolean {
-    const media = formatOneMedia(playedMedia.media);
-    if (media.mediaType === 'movie') {
-      return this.isTimePlayed(
-        playedMedia.currentTime,
-        media.data.fileInfos?.Sduration || 0,
-      );
-    } else {
-      return this.flattedEpisodes(media).some((episode) =>
-        this.isTimePlayed(
-          playedMedia.currentTime,
-          episode.fileInfos?.Sduration || 0,
-        ),
-      );
-    }
-  }
-
-  flattedEpisodes(media: MediaWithType): Episode[] {
-    if (media.mediaType === 'movie') {
-      return [];
-    } else {
-      return media.data.tvs.flatMap((tv) => tv.episodes);
-    }
-  }
-
   extractFromIds(ids: string[], medias: MediaWithType[]) {
-    return ids.map((id) =>
-      medias.find((media) => media.data?._id.toString() === id),
-    );
+    return ids
+      .map((id) => medias.find((media) => media.data?._id.toString() === id))
+      .filter((media) => !!media);
   }
 
   tokenFromTitle(title: string): string[] {
@@ -325,32 +303,6 @@ export class MediasService {
     return query.find({}).sort({ popularity: 'desc' });
   }
 
-  watchedQuery(
-    query: Query<MediaDocument[], MediaDocument>,
-    user: CurrentUser,
-  ) {
-    return query.find({
-      _id: {
-        $in: user.playedMedias
-          .filter((pm) => this.isWatched(pm))
-          .map((played) => played.media),
-      },
-    });
-  }
-
-  continueQuery(
-    query: Query<MediaDocument[], MediaDocument>,
-    user: CurrentUser,
-  ) {
-    return query.find({
-      _id: {
-        $in: user.playedMedias
-          .filter((pm) => !this.isWatched(pm))
-          .map((played) => played.media),
-      },
-    });
-  }
-
   moviesQuery(query: Query<MediaDocument[], MediaDocument>) {
     return query
       .find({
@@ -386,7 +338,7 @@ export class MediasService {
   ): Promise<MediaWithType[]> {
     const medias = await this.getMedias(true);
     const userMediaIds = [
-      ...user.playedMedias.map((pm) => pm.media._id),
+      ...user.playedMedias.map((pm) => pm.mediaId),
       ...user.mediasInList.map((m) => m.mediaId),
       ...user.likedMedias.map((l) => l.mediaId),
     ].map((id) => id.toString());
@@ -395,25 +347,20 @@ export class MediasService {
     );
 
     const calculateMediaPoints = medias.map(
-      (
-        media,
-      ): {
-        media: MediaWithType;
-        points: number;
-      } => {
-        return {
-          media: media,
-          points: this.calculateMediaPoints(media, occurrences, [
-            ...new Set(userMediaIds),
-          ]),
-        };
-      },
+      (media): { media: MediaWithType; points: number } => ({
+        media: media,
+        points: this.calculateMediaPoints(media, occurrences, [
+          ...new Set(userMediaIds),
+        ]),
+      }),
     );
 
     const recommendedMedias = calculateMediaPoints
       .filter(
         (cm) =>
-          !user.playedMedias.some((played) => played.media === cm.media.data),
+          !user.playedMedias.some(
+            (played) => played.mediaId === cm.media.data._id.toString(),
+          ),
       )
       .sort((a, b) => {
         if (a.points > b.points) {
@@ -434,7 +381,6 @@ export class MediasService {
   mediasQueryFromType(
     query: Query<MediaDocument[], MediaDocument>,
     type: ListType,
-    user: CurrentUser,
   ): Query<MediaDocument[], MediaDocument> {
     switch (type) {
       case ListType.ALL:
@@ -443,10 +389,6 @@ export class MediasService {
         return this.recentQuery(query);
       case ListType.POPULAR:
         return this.popularQuery(query);
-      case ListType.WATCHED:
-        return this.watchedQuery(query, user);
-      case ListType.CONTINUE:
-        return this.continueQuery(query, user);
       case ListType.MOVIE:
         return this.moviesQuery(query);
       case ListType.SERIES:
@@ -523,6 +465,130 @@ export class MediasService {
     );
   }
 
+  isLastEpisode(
+    media: MediaWithType,
+    seasonIndex: number,
+    episodeIndex: number,
+  ): boolean {
+    if (!media.data.tvs) {
+      return false;
+    }
+
+    if (
+      seasonIndex < media.data.tvs.filter((season) => season.available).length
+    ) {
+      return false;
+    }
+
+    const season = media.data.tvs[seasonIndex - 1];
+
+    if (!season) {
+      return false;
+    }
+
+    return season.episodes.filter((e) => e.available).length === episodeIndex;
+  }
+
+  isTimePlayed(watchTime: number, videoTime: number): boolean {
+    return watchTime >= 0.9 * videoTime;
+  }
+
+  getWatchFinishedMedias(
+    onlyAvailable = false,
+    user: CurrentUser,
+    skip = 0,
+    limit = 0,
+  ) {
+    return this.getMediasWithWatchedMetadata(user.playedMedias).then((pm) =>
+      pm
+        .sort(
+          (a, b) => b.lastWatchedTime.getTime() - a.lastWatchedTime.getTime(),
+        )
+        .filter((pm) => this.isTimePlayed(pm.watchedDuration, pm.duration))
+        .filter((pm) => (onlyAvailable ? pm.media.data.available : true))
+        .filter((m, i) => i >= skip && i < skip + limit)
+        .map((m) => m.media),
+    );
+  }
+
+  getContinueToWatchMedias(
+    onlyAvailable = false,
+    user: CurrentUser,
+    skip = 0,
+    limit = 0,
+  ) {
+    return this.getMediasWithWatchedMetadata(user.playedMedias).then((pm) =>
+      pm
+        .sort(
+          (a, b) => b.lastWatchedTime.getTime() - a.lastWatchedTime.getTime(),
+        )
+        .filter((pm) => !this.isTimePlayed(pm.watchedDuration, pm.duration))
+        .filter((pm) => (onlyAvailable ? pm.media.data.available : true))
+        .filter((m, i) => i >= skip && i < skip + limit)
+        .map((m) => m.media),
+    );
+  }
+
+  getMediasWithWatchedMetadata(playedMedias: CurrentPlayedMedia[]) {
+    return this.mediaModel
+      .find({
+        _id: {
+          $in: [...new Set(playedMedias.map((pm) => pm.mediaId))],
+        },
+      })
+      .then(formatManyMedias)
+      .then((medias) => {
+        return playedMedias.reduce((acc, pm) => {
+          const media = medias.find(
+            (m) => m.data._id.toString() === pm.mediaId,
+          );
+
+          if (!media) {
+            return acc;
+          }
+
+          if (media.mediaType === 'movie') {
+            return [
+              ...acc,
+              {
+                media,
+                watchedDuration: pm.currentTime,
+                duration: media.data.fileInfos.Sduration,
+                lastWatchedTime: pm.createdAt,
+              },
+            ];
+          } else {
+            const current = {
+              media,
+              watchedDuration: this.isLastEpisode(
+                media,
+                pm.seasonIndex,
+                pm.episodeIndex,
+              )
+                ? pm.currentTime
+                : 0,
+              duration:
+                media.data.tvs[pm.seasonIndex - 1]?.episodes[
+                  pm.episodeIndex - 1
+                ]?.fileInfos.Sduration || 0,
+              lastWatchedTime: pm.createdAt,
+            };
+            const foundIdx = acc.findIndex(
+              (m) => m.media.data._id.toString() === pm.mediaId,
+            );
+
+            if (foundIdx === -1) {
+              return [...acc, current];
+            } else if (acc[foundIdx].watchedDuration === 0) {
+              acc[foundIdx] = current;
+            }
+
+            return acc;
+          }
+        }, [] as MediaIsWatched[]);
+      });
+  }
+
   async getMedias(
     onlyAvailable = false,
     user?: CurrentUser,
@@ -537,12 +603,15 @@ export class MediasService {
         return this.getLikedMedias(onlyAvailable, user, skip, limit);
       case ListType.INLIST:
         return this.getInListMedias(onlyAvailable, user, skip, limit);
+      case ListType.CONTINUE:
+        return this.getContinueToWatchMedias(onlyAvailable, user, skip, limit);
+      case ListType.WATCHED:
+        return this.getWatchFinishedMedias(onlyAvailable, user, skip, limit);
       default:
         return this.applyLimiters(
           this.mediasQueryFromType(
             this.mediaModel.find(onlyAvailable ? { available: true } : {}),
             type,
-            user,
           ),
           skip,
           limit,

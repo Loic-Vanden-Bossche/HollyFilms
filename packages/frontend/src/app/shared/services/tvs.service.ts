@@ -6,14 +6,12 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class TvsService {
-  watchedThreshold = 120;
-
   constructor(private readonly auth: AuthService) {}
 
   isTvWatched(mediaId: string) {
     return this.auth.user?.playedMedias
-      .filter((pm) => pm.media._id === mediaId)
-      .some((pm) => pm.currentTime > this.watchedThreshold);
+      .filter((pm) => pm.mediaId === mediaId)
+      .some((pm) => pm.currentTime > 0);
   }
 
   getEpisodeWatchedTime(
@@ -24,7 +22,7 @@ export class TvsService {
     return (
       this.auth.user?.playedMedias.find(
         (pm) =>
-          pm.media?._id === mediaId &&
+          pm.mediaId === mediaId &&
           pm.seasonIndex === seasonIndex &&
           pm.episodeIndex === episodeIndex
       )?.currentTime || 0
@@ -42,7 +40,7 @@ export class TvsService {
     let episodeIndex = 0;
 
     this.auth.user?.playedMedias
-      .filter((pm) => pm.media._id === media._id)
+      .filter((pm) => pm.mediaId === media._id)
       .forEach((pm) => {
         if (pm.seasonIndex !== undefined && pm.episodeIndex !== undefined) {
           if (pm.seasonIndex > seasonIndex) {
@@ -56,6 +54,10 @@ export class TvsService {
           }
         }
       });
+
+    if (seasonIndex === 0 || episodeIndex === 0) {
+      return null;
+    }
 
     return { seasonIndex, episodeIndex };
   }

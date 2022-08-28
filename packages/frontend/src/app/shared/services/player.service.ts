@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { PlayedMedia } from '../models/played-media.model';
 import { MediaWithType } from '../models/media.model';
 import { TvsService } from './tvs.service';
+import { tap } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface PlayData {
   mediaId: string;
@@ -31,7 +33,8 @@ export class PlayerService {
   constructor(
     private readonly router: Router,
     private readonly http: HttpClient,
-    private readonly tvsService: TvsService
+    private readonly tvsService: TvsService,
+    private readonly auth: AuthService
   ) {}
 
   play(data: PlayData) {
@@ -43,12 +46,18 @@ export class PlayerService {
   }
 
   track(data: TrackData) {
-    return this.http.get(
-      `users/track?${new URLSearchParams(data as any).toString()}`,
-      {
-        withCredentials: true,
-      }
-    );
+    return this.http
+      .get<PlayedMedia[]>(
+        `users/track?${new URLSearchParams(data as any).toString()}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        tap((playedMedias) =>
+          this.auth.updateUserProfile({ playedMedias: playedMedias })
+        )
+      );
   }
 
   getPlayerStatus(mediaId: string, si?: number, ei?: number) {

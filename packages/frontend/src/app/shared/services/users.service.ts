@@ -8,12 +8,13 @@ import { TMDBMicroSearchResult } from '../models/micro-tmdb-search-result.model'
 import { MediaType } from '../models/media.model';
 import { PlayedMedia } from '../models/played-media.model';
 import { environment } from '../../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  constructor(private api: HttpClient) {}
+  constructor(private api: HttpClient, private readonly auth: AuthService) {}
 
   getCurrentUser() {
     return this.api.get<User>(`auth/me`, {
@@ -115,20 +116,20 @@ export class UsersService {
     if (playedMedia.episodeIndex && playedMedia.episodeIndex) {
       index = playedMedias.findIndex(
         (media) =>
-          media.media._id === playedMedia.media._id &&
+          media.mediaId === playedMedia.mediaId &&
           media.episodeIndex === playedMedia.episodeIndex &&
           media.seasonIndex === playedMedia.seasonIndex
       );
     } else {
       index = playedMedias.findIndex(
-        (media) => media.media._id === playedMedia.media._id
+        (media) => media.mediaId === playedMedia.mediaId
       );
     }
 
     if (index !== -1) {
       playedMedias[index] = {
         ...playedMedia,
-        media: playedMedias[index].media,
+        mediaId: playedMedias[index].mediaId,
       };
     }
 

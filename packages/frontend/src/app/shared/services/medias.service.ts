@@ -48,6 +48,7 @@ export class MediasService {
       const indexes = this.tvsService.getTvClosestIndexes(media.data);
 
       if (indexes) {
+        console.log(indexes);
         return `S${indexes.seasonIndex} E${indexes.episodeIndex}`;
       }
 
@@ -57,6 +58,10 @@ export class MediasService {
     const watchedTime = this.getMovieWatchedTime(media.data);
 
     if (watchedTime) {
+      const movieDuration = this.getMovieDuration(media.data);
+      if (watchedTime > movieDuration * 0.9) {
+        return 'Revoir';
+      }
       return `Continuer - ${fromSecondsToTime(watchedTime)}`;
     }
 
@@ -73,6 +78,10 @@ export class MediasService {
 
   selectMedia(media: MediaWithType) {
     this.selectedMedia.next(media);
+  }
+
+  getMovieDuration(media: Media) {
+    return media.fileInfos?.Sduration || 0;
   }
 
   getTagAndIconFromFeatured(
@@ -213,7 +222,7 @@ export class MediasService {
 
   getMovieWatchedTime(media: Media) {
     return (
-      this.auth.user?.playedMedias.find((pm) => pm.media?._id === media._id)
+      this.auth.user?.playedMedias.find((pm) => pm.mediaId === media._id)
         ?.currentTime || 0
     );
   }
