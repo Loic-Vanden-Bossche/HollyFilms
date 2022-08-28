@@ -39,7 +39,7 @@ const fromSecondsToTime = (secondsInput: number) => {
     }`;
   } else {
     return `${Math.floor(minutes) === 0 ? '' : Math.floor(minutes) + 'm'}${
-      Math.floor(seconds) === 0 ? '' : Math.floor(seconds)
+      Math.floor(seconds) === 0 ? '' : Math.floor(seconds) + 's'
     }`;
   }
 };
