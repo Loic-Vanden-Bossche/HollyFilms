@@ -116,6 +116,7 @@ export class MediasService {
       .aggregate([
         { $unwind: '$genres' },
         { $group: { _id: '$genres', count: { $sum: 1 } } },
+        { $sort: { _id: 1, count: -1 } },
       ])
       .exec()
       .then((categories: { _id: string; count: number }[]) =>
