@@ -15,13 +15,12 @@ import { FormControl } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { SearchService } from '../../shared/services/search.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { MediasService } from '../../shared/services/medias.service';
-import { MediaCategoryAndSelected } from './category-list/category-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { skip, tap } from 'rxjs';
+import { skip } from 'rxjs';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { NotificationType } from '../../shared/models/notification.model';
 import { UsersService } from '../../shared/services/users.service';
+import { CategoriesService } from '../../shared/services/categories.service';
 
 export class NavBarButton {
   name = '';
@@ -79,31 +78,24 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly authService: AuthService,
     private readonly searchService: SearchService,
-    private readonly mediasService: MediasService,
     private readonly usersService: UsersService,
     private readonly route: ActivatedRoute,
     private readonly notificationsService: NotificationsService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly categoriesService: CategoriesService
   ) {}
 
   searchCtrl = new FormControl('');
   showSearchBar = false;
-  showCategories = false;
-  categories: MediaCategoryAndSelected[] = [];
 
   navButtons: NavBarButton[] = [
     new NavBarButton('Accueil', '/home'),
     new NavBarButton('Ma liste', '/my-list'),
     new NavBarButton('Categories', undefined, () => {
-      this.showCategories = !this.showCategories;
-
-      if (this.showCategories && this.categories.length <= 0) {
-        this.mediasService.getCategories().subscribe((categories) => {
-          this.categories = categories.map((category) => ({
-            ...category,
-            selected: false,
-          }));
-        });
+      if (this.categoriesService.isShowingCategories) {
+        this.categoriesService.hideCategories();
+      } else {
+        this.categoriesService.showCategories();
       }
     }),
   ];
@@ -114,6 +106,10 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   searchIcon = faMagnifyingGlass;
   userGearIcon = faUserGear;
   logoutIcon = faRightFromBracket;
+
+  get isShowingCategories() {
+    return this.categoriesService.isShowingCategories;
+  }
 
   ngAfterViewInit() {
     this.searchInput?.changes.subscribe((list: QueryList<ElementRef>) => {
@@ -139,14 +135,12 @@ export class NavbarComponent implements OnInit, AfterViewInit {
         retrievedCategoryNames =
           this.route.snapshot.queryParamMap.get('names')?.split(',') || [];
       }
-      this.mediasService.getCategories().subscribe((categories) => {
-        this.categories = categories.map((category) => ({
-          ...category,
-          selected: retrievedCategoryNames.includes(category.name),
-        }));
 
+      this.categoriesService.selectedCategories = retrievedCategoryNames;
+      this.categoriesService.getCategories().subscribe((categories) => {
+        this.categoriesService.categories = categories;
         if (retrievedCategoryNames.length > 0) {
-          this.showCategories = true;
+          this.categoriesService.showCategories();
         }
       });
     }
@@ -157,15 +151,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
     this.searchService
       .onChange()
-      .pipe(
-        skip(1),
-        tap((query) => {
-          if (query) {
-            this.resetSelectedCategories();
-            this.showCategories = false;
-          }
-        })
-      )
+      .pipe(skip(1))
       .subscribe((query) => {
         this.searchCtrl.setValue(query, { emitEvent: false });
 
@@ -195,10 +181,6 @@ export class NavbarComponent implements OnInit, AfterViewInit {
       },
       queryParamsHandling: 'merge',
     });
-  }
-
-  resetSelectedCategories() {
-    this.categories.forEach((category) => (category.selected = false));
   }
 
   get isAuthenticated() {

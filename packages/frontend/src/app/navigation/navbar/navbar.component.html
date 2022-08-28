@@ -151,12 +151,9 @@
 
 <div
   @onDeploy
-  *ngIf="showCategories"
+  *ngIf="isShowingCategories"
   tabindex="1"
   class="relative text-white w-full p-5 bg-base-600"
 >
-  <app-category-list
-    (close)="showCategories = false"
-    [categories]="categories"
-  ></app-category-list>
+  <app-category-list></app-category-list>
 </div>

@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediasService } from '../../shared/services/medias.service';
 import { MediaWithType } from '../../shared/models/media.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { TitleService } from '../../shared/services/title.service';
+import { CategoriesService } from '../../shared/services/categories.service';
 
 @Component({
   selector: 'app-category-results',
   templateUrl: './category-results.component.html',
 })
-export class CategoryResultsComponent implements OnInit {
+export class CategoryResultsComponent implements OnInit, OnDestroy {
   medias: MediaWithType[] = [];
   loading = true;
 
@@ -17,7 +18,8 @@ export class CategoryResultsComponent implements OnInit {
     private readonly mediasService: MediasService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly title: TitleService
+    private readonly title: TitleService,
+    private readonly categoriesService: CategoriesService
   ) {}
 
   ngOnInit(): void {
@@ -39,5 +41,10 @@ export class CategoryResultsComponent implements OnInit {
         tap(() => (this.loading = false))
       )
       .subscribe((medias) => (this.medias = medias));
+  }
+
+  ngOnDestroy() {
+    this.categoriesService.resetSelectedCategories();
+    this.categoriesService.hideCategories();
   }
 }
