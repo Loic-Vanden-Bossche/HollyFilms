@@ -13,7 +13,7 @@ interface ColorMap {
   breakpoint: number;
 }
 
-const fromSecondsToTime = (seconds: number) => {
+const fromSecondsToImpreciseTime = (seconds: number) => {
   if (seconds < 60) {
     return `${seconds}s`;
   }
@@ -22,6 +22,22 @@ const fromSecondsToTime = (seconds: number) => {
   }
 
   return `${Math.floor(seconds / 3600)}h`;
+};
+
+const fromSecondsToTime = (secondsInput: number) => {
+  const hours = Math.floor(secondsInput / 3600);
+  const minutes = Math.floor((secondsInput - hours * 3600) / 60);
+  const seconds = secondsInput - hours * 3600 - minutes * 60;
+
+  if (hours > 0) {
+    return `${hours === 0 ? '' : hours + 'h'}${
+      minutes === 0 ? '' : minutes + 'm'
+    }${seconds === 0 || minutes > 0 ? '' : seconds + 's'}`;
+  } else {
+    return `${minutes === 0 ? '' : minutes + 'm'}${
+      seconds === 0 ? '' : seconds + 's'
+    }`;
+  }
 };
 
 const shuffle = <T>(array: T[]): T[] => {
@@ -41,4 +57,11 @@ const shuffle = <T>(array: T[]): T[] => {
   return array;
 };
 
-export { toTitleCase, toSentenceCase, fromSecondsToTime, shuffle, ColorMap };
+export {
+  toTitleCase,
+  toSentenceCase,
+  fromSecondsToImpreciseTime,
+  fromSecondsToTime,
+  shuffle,
+  ColorMap,
+};

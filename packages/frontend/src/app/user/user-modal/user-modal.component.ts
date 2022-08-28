@@ -20,7 +20,7 @@ import { UserProfile } from '../../shared/models/user-profile.model';
 import { ModalService } from '../../shared/services/modal.service';
 import { filter, map, mergeWith, switchMap, take } from 'rxjs';
 import { User } from '../../shared/models/user.model';
-import { fromSecondsToTime } from '../../shared/utils';
+import { fromSecondsToImpreciseTime } from '../../shared/utils';
 
 @Component({
   selector: 'app-user-modal',
@@ -224,7 +224,7 @@ export class UserModalComponent implements OnInit {
               insights.watchedMedias === 1 ? 'film regardé' : 'films regardés',
           },
           {
-            value: fromSecondsToTime(insights.totalPlayTime),
+            value: fromSecondsToImpreciseTime(insights.totalPlayTime),
             label: 'de visionnage',
           },
           {

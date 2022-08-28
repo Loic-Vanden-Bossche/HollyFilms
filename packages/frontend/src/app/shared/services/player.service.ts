@@ -77,7 +77,7 @@ export class PlayerService {
         };
       }
 
-      return { mediaId: media.data._id, seasonIndex: 0, episodeIndex: 0, x, y };
+      return { mediaId: media.data._id, seasonIndex: 1, episodeIndex: 1, x, y };
     }
 
     return { mediaId: media.data._id, x, y };
