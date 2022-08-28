@@ -18,7 +18,7 @@ import {
   Logger,
 } from '@nestjs/common';
 
-import { MediasService } from 'src/medias/medias.service';
+import { MediasService } from '../medias/medias.service';
 import { WebsocketService } from './websocket.service';
 import { ffprobe } from 'fluent-ffmpeg';
 

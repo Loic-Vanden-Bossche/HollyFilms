@@ -12,7 +12,7 @@ import { MediasService } from './medias.service';
 
 import { Response } from 'express';
 import { Roles } from '../shared/decorators/roles.decorator';
-import { User } from 'src/shared/decorators/user.decorator';
+import { User } from '../shared/decorators/user.decorator';
 import CurrentUser from '../indentity/users/current';
 import { Role } from '../shared/role';
 import { MediaWithType } from './medias.utils';

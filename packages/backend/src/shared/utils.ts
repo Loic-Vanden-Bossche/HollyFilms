@@ -1,4 +1,4 @@
-import { Environment } from 'src/config/config.default';
+import { Environment } from '../config/config.default';
 import * as path from 'path';
 
 const appendExecutionPath = (env: Environment, execPath: string) => {
