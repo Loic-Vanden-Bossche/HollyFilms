@@ -22,7 +22,7 @@ export class DisabledGuard implements CanActivate {
 
     if (isDisabled) {
       throw new HttpException(
-        value === true ? 'This route is disabled' : value,
+        value === true ? 'This route is disabled' : value.toString(),
         HttpStatus.FORBIDDEN,
       );
     }
