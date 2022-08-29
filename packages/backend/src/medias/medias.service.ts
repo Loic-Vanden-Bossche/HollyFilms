@@ -665,8 +665,10 @@ export class MediasService {
       .then(async (medias) => {
         const getUnique = (mediasToProcess) => {
           return Array.from(
-            new Set(mediasToProcess.map((m) => m.data._id)),
-          ).map((id) => mediasToProcess.find((m) => m.data._id === id));
+            new Set(mediasToProcess.map((m) => m.data._id.toString())),
+          ).map((id) =>
+            mediasToProcess.find((m) => m.data._id.toString() === id),
+          );
         };
 
         let mediasToReturn = getUnique(medias);
