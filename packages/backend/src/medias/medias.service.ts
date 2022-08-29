@@ -543,7 +543,7 @@ export class MediasService {
             (m) => m.data._id.toString() === pm.mediaId,
           );
 
-          if (!media) {
+          if (!media || !pm.currentTime) {
             return acc;
           }
 
@@ -570,7 +570,7 @@ export class MediasService {
               duration:
                 media.data.tvs[pm.seasonIndex - 1]?.episodes[
                   pm.episodeIndex - 1
-                ]?.fileInfos.Sduration || 0,
+                ]?.fileInfos.Sduration || 10,
               lastWatchedTime: pm.createdAt,
             };
             const foundIdx = acc.findIndex(

@@ -213,8 +213,33 @@ const loadMovies = () =>
 const loadTvs = () =>
   loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
 
-const loadUsers = () =>
-  loadJsonFile('/apps/migrations/users.json') as Promise<OldUser[]>;
+const loadUsers = () => loadJsonFile('users.json') as Promise<OldUser[]>;
+
+const oldPlayedMediasToNew = (
+  oldPlayedMovies?: OldUser['playedMovies'],
+  oldPlayedTvs?: OldUser['playedTvs'],
+) => {
+  return [
+    ...(oldPlayedMovies
+      ? oldPlayedMovies.map((movie) => ({
+          media: getObjectId(movie.videoId) as unknown as Media,
+          audioTrack: movie.audioTrack,
+          subtitleTrack: movie.subtitleTrack,
+          currentTime: movie.currentTime,
+        }))
+      : []),
+    ...(oldPlayedTvs
+      ? oldPlayedTvs.map((tv) => ({
+          media: getObjectId(tv.videoId) as unknown as Media,
+          seasonIndex: tv.si,
+          episodeIndex: tv.ei,
+          audioTrack: tv.audioTrack,
+          subtitleTrack: tv.subtitleTrack,
+          currentTime: tv.currentTime,
+        }))
+      : []),
+  ];
+};
 
 const oldToNewUser = (oldUser: OldUser): User => ({
   _id: oldUser._id.$oid,
@@ -232,26 +257,10 @@ const oldToNewUser = (oldUser: OldUser): User => ({
       lastname: oldUser.username,
       username: oldUser.username,
       color: getRandomColor(),
-      playedMedias: [
-        ...(oldUser.playedMovies
-          ? oldUser.playedMovies.map((movie) => ({
-              media: getObjectId(movie.videoId) as unknown as Media,
-              audioTrack: movie.audioTrack,
-              subtitleTrack: movie.subtitleTrack,
-              currentTime: movie.currentTime,
-            }))
-          : []),
-        ...(oldUser.playedTvs
-          ? oldUser.playedTvs.map((tv) => ({
-              media: getObjectId(tv.videoId) as unknown as Media,
-              si: tv.si,
-              ei: tv.ei,
-              audioTrack: tv.audioTrack,
-              subtitleTrack: tv.subtitleTrack,
-              currentTime: tv.currentTime,
-            }))
-          : []),
-      ],
+      playedMedias: oldPlayedMediasToNew(
+        oldUser.playedMovies,
+        oldUser.playedTvs,
+      ),
     },
   ],
 });
@@ -383,4 +392,13 @@ export const getTvsToMigrate = () => {
 
 export const getMoviesToMigrate = () => {
   return loadMovies().then((movies) => movies.map(movieToMedia));
+};
+
+export const getOldPlayedMediasFromUserId = (userId: string) => {
+  return loadUsers()
+    .then((users) => {
+      const user = users.find((u) => u._id.$oid === userId);
+      return oldPlayedMediasToNew(user?.playedMovies, user?.playedTvs);
+    })
+    .catch(() => []);
 };
