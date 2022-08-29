@@ -131,7 +131,7 @@ export default async () => {
   );
 
   // await app.get(MediasService).migrateFromDatabase();
-  await app.get(UsersService).migrateFromDatabase();
+  // await app.get(UsersService).migrateFromDatabase();
 
   await app.get(UsersService).createAdminAccount();
   await app.get(ProcessingService).purgeProcessing();

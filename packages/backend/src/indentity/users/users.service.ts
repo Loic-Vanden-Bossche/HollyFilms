@@ -23,10 +23,7 @@ import * as fs from 'fs';
 import { TmdbService } from '../../tmdb/tmdb.service';
 import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
 import { CurrentMediaRecord, CurrentPlayedMedia } from './profile';
-import {
-  getOldPlayedMediasFromUserId,
-  getUsersToMigrate,
-} from '../../bootstrap/migrations';
+import { getUsersToMigrate } from '../../bootstrap/migrations';
 
 @Injectable()
 export class UsersService {
@@ -464,7 +461,7 @@ export class UsersService {
 
   migrateFromDatabase() {
     // playedMedias reset deactivated
-    this.userModel.find({}).then((users) => {
+    /*this.userModel.find({}).then((users) => {
       return Promise.all(
         users.map((user) => {
           return getOldPlayedMediasFromUserId(user._id.toString()).then(
@@ -488,7 +485,7 @@ export class UsersService {
           );
         }),
       );
-    });
+    });*/
 
     this.userModel
       .countDocuments()
