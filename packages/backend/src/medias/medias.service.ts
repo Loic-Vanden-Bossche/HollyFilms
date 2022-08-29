@@ -408,10 +408,11 @@ export class MediasService {
 
   queryMedias(mediaIds: string[], onlyAvailable = false, skip = 0, limit = 0) {
     const stack = [];
+    const mediasObjects = mediaIds.map((id) => getObjectId(checkObjectId(id)));
 
-    for (let i = mediaIds.length - 1; i > 0; i--) {
+    for (let i = mediasObjects.length - 1; i > 0; i--) {
       const rec = {
-        $cond: [{ $eq: ['$_id', mediaIds[i - 1]] }, i],
+        $cond: [{ $eq: ['$_id', mediasObjects[i - 1]] }, i],
       };
 
       if (stack.length == 0) {
@@ -425,7 +426,7 @@ export class MediasService {
 
     return this.mediaModel
       .aggregate([
-        { $match: { _id: { $in: mediaIds }, available: onlyAvailable } },
+        { $match: { _id: { $in: mediasObjects }, available: onlyAvailable } },
         { $addFields: { weight: stack[0] } },
         { $sort: { weight: 1 } },
         ...(!skip && !limit ? [] : [{ $skip: skip }, { $limit: limit }]),

@@ -29,14 +29,14 @@
       <button
         (click)="onAddToList()"
         [ngClass]="isInList ? ['bg-success'] : ['bg-base-600']"
-        class="transition-opacity mr-5 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-full aspect-square text-white"
+        class="transition-opacity mr-5 opacity-80 hover:opacity-100 bg-base-600 rounded-md text-xl h-full w-10 text-white"
       >
         <fa-icon [icon]="addToListIcon"></fa-icon>
       </button>
       <button
         (click)="onLike()"
         [ngClass]="isLiked ? ['bg-success'] : ['bg-base-600']"
-        class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-full aspect-square text-white"
+        class="transition-opacity bg-base-600 opacity-80 hover:opacity-100 rounded-md text-xl h-full w-10 text-white"
       >
         <fa-icon [icon]="likeButton"></fa-icon>
       </button>
