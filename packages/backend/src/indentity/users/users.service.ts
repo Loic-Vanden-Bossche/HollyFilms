@@ -463,6 +463,7 @@ export class UsersService {
   }
 
   migrateFromDatabase() {
+    // playedMedias reset deactivated
     this.userModel.find({}).then((users) => {
       return Promise.all(
         users.map((user) => {

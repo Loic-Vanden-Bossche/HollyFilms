@@ -48,7 +48,6 @@ export class MediasService {
       const indexes = this.tvsService.getTvClosestIndexes(media.data);
 
       if (indexes) {
-        console.log(indexes);
         return `S${indexes.seasonIndex} E${indexes.episodeIndex}`;
       }
 

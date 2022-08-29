@@ -213,7 +213,8 @@ const loadMovies = () =>
 const loadTvs = () =>
   loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
 
-const loadUsers = () => loadJsonFile('users.json') as Promise<OldUser[]>;
+const loadUsers = () =>
+  loadJsonFile('/apps/migrations/users.json') as Promise<OldUser[]>;
 
 const oldPlayedMediasToNew = (
   oldPlayedMovies?: OldUser['playedMovies'],
