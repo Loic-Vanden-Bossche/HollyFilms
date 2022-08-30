@@ -387,6 +387,14 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
 
         this.player.src({
           src: this.source,
+          html5: {
+            hls: {
+              overrideNative: videojs.default.browser.IS_SAFARI,
+            },
+            nativeVideoTracks: !videojs.default.browser.IS_SAFARI,
+            nativeAudioTracks: !videojs.default.browser.IS_SAFARI,
+            nativeTextTracks: !videojs.default.browser.IS_SAFARI,
+          },
           type: 'application/x-mpegURL',
           withCredentials: true,
         } as any);
