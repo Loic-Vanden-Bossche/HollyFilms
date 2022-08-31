@@ -75,6 +75,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   addMediaIcon = faSquarePlus;
   updateMediasIcon = faArrowsRotate;
 
+  get isProcessing() {
+    return this.processingService.liveProgress;
+  }
+
   constructor(
     private readonly router: Router,
     private readonly modalService: ModalService,

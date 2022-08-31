@@ -31,8 +31,8 @@ export class QueueControlsComponent implements OnInit {
   constructor(private readonly adminService: AdminService) {}
 
   ngOnInit() {
-    this.adminService.medias.subscribe(
-      (medias) => (this.queueLength = this.adminService.getQueueLength(medias))
+    this.adminService.filteredMedias.subscribe(
+      () => (this.queueLength = this.adminService.getQueueLength())
     );
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../shared/services/admin.service';
 import { ProcessingService } from '../../shared/services/processing.service';
 import { SearchService } from '../../shared/services/search.service';
-import { switchMap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-medias',
@@ -10,11 +10,11 @@ import { switchMap } from 'rxjs';
 })
 export class AdminMediasComponent implements OnInit {
   get medias() {
-    return this.adminService.medias;
+    return this.adminService.filteredMedias;
   }
 
   get firstMedia() {
-    return this.adminService.firstMedia;
+    return this.adminService.firstFilteredMedia;
   }
 
   get progressStatus() {
@@ -30,14 +30,16 @@ export class AdminMediasComponent implements OnInit {
   ngOnInit(): void {
     this.searchService
       .onChange()
-      .pipe(switchMap((query) => this.adminService.getMedias(query)))
+      .pipe(tap((query) => this.adminService.filterMedias(query)))
       .subscribe();
 
     this.adminService.refreshMediaList
-      .pipe(
-        switchMap(() => this.adminService.getMedias(this.searchService.search))
-      )
+      .pipe(switchMap(() => this.adminService.getMedias()))
       .subscribe();
+
+    if (this.adminService.medias.length === 0) {
+      this.adminService.refreshMedias();
+    }
 
     this.processingService
       .onStatusUpdated()

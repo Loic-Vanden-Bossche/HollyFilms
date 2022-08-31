@@ -1,6 +1,8 @@
 <div class="absolute text-white flex flex-col gap-7 top-0 left-0 h-full w-full">
   <div class="bg-base-600 flex-shrink-0">
-    <app-server-metrics [displayChart]="queueStarted"></app-server-metrics>
+    <app-server-metrics
+      [displayChart]="!!(isProcessing | async)"
+    ></app-server-metrics>
   </div>
   <div class="w-full flex flex-row h-12 px-5 flex-shrink-0">
     <button

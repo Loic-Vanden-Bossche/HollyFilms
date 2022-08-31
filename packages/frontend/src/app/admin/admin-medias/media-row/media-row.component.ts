@@ -52,8 +52,8 @@ export class MediaRowComponent implements OnChanges {
   @ViewChild('mediaContent') mediaContent: ElementRef<HTMLDivElement> | null =
     null;
 
-  currentStatus = 'Importé';
-  statusColor = '#36D399';
+  currentStatus = '';
+  statusColor = '';
   selectedStream: StreamStatus | null = null;
 
   get fileName(): string {
@@ -97,6 +97,9 @@ export class MediaRowComponent implements OnChanges {
     } else if (this.fileName) {
       this.currentStatus = 'En attente';
       this.statusColor = '#FBBD23';
+    } else {
+      this.currentStatus = 'Importé';
+      this.statusColor = '#36D399';
     }
   }
 }

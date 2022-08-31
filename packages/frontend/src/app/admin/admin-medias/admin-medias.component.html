@@ -2,11 +2,11 @@
   <div class="h-full w-full overflow-hidden" cdkVirtualScrollingElement>
     <div class="mb-3">
       <app-media-row
-        [processData]="null"
+        [processData]="progressStatus | async"
         [media]="firstMedia | async"
       ></app-media-row>
     </div>
-    <cdk-virtual-scroll-viewport class="h-full" itemSize="96">
+    <cdk-virtual-scroll-viewport itemSize="96">
       <ng-container *cdkVirtualFor="let media of medias; let index = index">
         <div class="mb-3">
           <app-media-row [media]="media"></app-media-row>

@@ -155,6 +155,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
       .subscribe((query) => {
         this.searchCtrl.setValue(query, { emitEvent: false });
 
+        if (this.router.url.startsWith('/admin')) return;
+
         if (query) {
           this.router.navigate(['/search'], {
             queryParams: { q: query },

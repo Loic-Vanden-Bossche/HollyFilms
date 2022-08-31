@@ -627,16 +627,11 @@ paths:
         "200":
           description: ""
       tags: *a4
-  /medias/adminSearch:
+  /medias/admin:
     get:
-      operationId: MediasController_adminSearchQuery
-      summary: "[User] Search for medias in admin mode"
-      parameters:
-        - name: query
-          required: true
-          in: query
-          schema:
-            type: string
+      operationId: MediasController_getAdminMedias
+      summary: "[User] Get all medias in admin mode"
+      parameters: []
       responses:
         "200":
           description: ""

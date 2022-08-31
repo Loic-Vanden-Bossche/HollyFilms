@@ -1,6 +1,6 @@
 <div class="w-full h-full overflow-y-auto relative px-5">
   <cdk-virtual-scroll-viewport class="h-full" itemSize="80">
-    <ng-container *cdkVirtualFor="let user of users">
+    <ng-container *cdkVirtualFor="let user of filteredUsers">
       <div class="mb-3">
         <app-user-row
           (userDeleted)="onDeleted($event)"

@@ -160,8 +160,8 @@ export class MediasService {
     return this.getMedias(onlyAvailable);
   }
 
-  async adminSearchQuery(query: string): Promise<MediaWithTypeAndQueue[]> {
-    let medias = await this.searchQuery(query);
+  async getAdminMedias(): Promise<MediaWithTypeAndQueue[]> {
+    let medias = await this.getMedias();
 
     const queue = await this.processingService.getQueue().then((queue) =>
       queue.reduce((acc, cur) => {
@@ -202,7 +202,7 @@ export class MediasService {
         ),
       );
 
-    return [...queuedMedias, ...medias];
+    return [...queuedMedias.reverse(), ...medias];
   }
 
   extractFromIds(ids: string[], medias: MediaWithType[]) {

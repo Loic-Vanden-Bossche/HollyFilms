@@ -5791,26 +5791,26 @@ func main() {
 This operation does not require authentication
 </aside>
 
-## MediasController_adminSearchQuery
+## MediasController_getAdminMedias
 
-<a id="opIdMediasController_adminSearchQuery"></a>
+<a id="opIdMediasController_getAdminMedias"></a>
 
 > Code samples
 
 ```shell
 # You can also use wget
-curl -X GET /medias/adminSearch?query=string
+curl -X GET /medias/admin
 
 ```
 
 ```http
-GET /medias/adminSearch?query=string HTTP/1.1
+GET /medias/admin HTTP/1.1
 
 ```
 
 ```javascript
 
-fetch('/medias/adminSearch?query=string',
+fetch('/medias/admin',
 {
   method: 'GET'
 
@@ -5827,10 +5827,9 @@ fetch('/medias/adminSearch?query=string',
 require 'rest-client'
 require 'json'
 
-result = RestClient.get '/medias/adminSearch',
+result = RestClient.get '/medias/admin',
   params: {
-  'query' => 'string'
-}
+  }
 
 p JSON.parse(result)
 
@@ -5839,9 +5838,7 @@ p JSON.parse(result)
 ```python
 import requests
 
-r = requests.get('/medias/adminSearch', params={
-  'query': 'string'
-})
+r = requests.get('/medias/admin')
 
 print(r.json())
 
@@ -5858,7 +5855,7 @@ $client = new \GuzzleHttp\Client();
 $request_body = array();
 
 try {
-    $response = $client->request('GET','/medias/adminSearch', array(
+    $response = $client->request('GET','/medias/admin', array(
         'headers' => $headers,
         'json' => $request_body,
        )
@@ -5875,7 +5872,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/medias/adminSearch?query=string");
+URL obj = new URL("/medias/admin");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("GET");
 int responseCode = con.getResponseCode();
@@ -5902,7 +5899,7 @@ import (
 func main() {
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/medias/adminSearch", data)
+    req, err := http.NewRequest("GET", "/medias/admin", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5912,17 +5909,11 @@ func main() {
 
 ```
 
-`GET /medias/adminSearch`
+`GET /medias/admin`
 
-*[User] Search for medias in admin mode*
+*[User] Get all medias in admin mode*
 
-<h3 id="mediascontroller_adminsearchquery-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|query|query|string|true|none|
-
-<h3 id="mediascontroller_adminsearchquery-responses">Responses</h3>
+<h3 id="mediascontroller_getadminmedias-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|

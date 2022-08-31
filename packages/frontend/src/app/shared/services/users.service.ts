@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UpdateUserDTO, User } from '../models/user.model';
+import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../models/user-profile.model';
 import { ProfileInsights } from '../models/profile-Insights.model';
@@ -85,12 +85,6 @@ export class UsersService {
 
   getProfileInsights(profileUniqueId: string) {
     return this.api.get<ProfileInsights>(`users/insights/${profileUniqueId}`, {
-      withCredentials: true,
-    });
-  }
-
-  saveUser(user: UpdateUserDTO) {
-    return this.api.put<User>('users/me', user, {
       withCredentials: true,
     });
   }
