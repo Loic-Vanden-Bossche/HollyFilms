@@ -1,10 +1,14 @@
-<div class="w-full relative">
-  <div *ngFor="let user of users | async" class="mb-2">
-    <app-user-row
-      (userDeleted)="onDeleted($event)"
-      (userRefused)="onRejected($event)"
-      (userValidated)="onActivated($event)"
-      [user]="user"
-    ></app-user-row>
-  </div>
+<div class="w-full h-full overflow-y-auto relative px-5">
+  <cdk-virtual-scroll-viewport class="h-full" itemSize="80">
+    <ng-container *cdkVirtualFor="let user of users">
+      <div class="mb-3">
+        <app-user-row
+          (userDeleted)="onDeleted($event)"
+          (userRefused)="onRejected($event)"
+          (userValidated)="onActivated($event)"
+          [user]="user"
+        ></app-user-row>
+      </div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
 </div>
