@@ -13,6 +13,10 @@ export class AdminMediasComponent implements OnInit {
     return this.adminService.medias;
   }
 
+  get firstMedia() {
+    return this.adminService.firstMedia;
+  }
+
   get progressStatus() {
     return this.processingService.liveProgress;
   }

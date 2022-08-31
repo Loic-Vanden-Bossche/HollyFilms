@@ -11,6 +11,8 @@ import { ProgressStatus } from './processing.service';
 })
 export class AdminService {
   users = new BehaviorSubject<User[]>([]);
+
+  firstMedia = new BehaviorSubject<MediaWithTypeAndQueue | null>(null);
   medias = new BehaviorSubject<MediaWithTypeAndQueue[]>([]);
 
   refreshMediaList = new EventEmitter<void>();
@@ -26,7 +28,10 @@ export class AdminService {
       .get<MediaWithTypeAndQueue[]>(`medias/adminSearch?query=${query}`, {
         withCredentials: true,
       })
-      .pipe(tap((medias) => this.medias.next(medias)));
+      .pipe(
+        tap((medias) => this.medias.next(medias.slice(1))),
+        tap((medias) => this.firstMedia.next(medias[0] || null))
+      );
   }
 
   getUsers() {

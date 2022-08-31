@@ -1,12 +1,17 @@
 <div class="w-full h-full overflow-y-auto relative px-5">
-  <cdk-virtual-scroll-viewport class="h-full" itemSize="96">
-    <ng-container *cdkVirtualFor="let media of medias; let index = index">
-      <div class="mb-3">
-        <app-media-row
-          [processData]="index === 0 ? (progressStatus | async) : null"
-          [media]="media"
-        ></app-media-row>
-      </div>
-    </ng-container>
-  </cdk-virtual-scroll-viewport>
+  <div class="h-full w-full overflow-hidden" cdkVirtualScrollingElement>
+    <div class="mb-3">
+      <app-media-row
+        [processData]="null"
+        [media]="firstMedia | async"
+      ></app-media-row>
+    </div>
+    <cdk-virtual-scroll-viewport class="h-full" itemSize="96">
+      <ng-container *cdkVirtualFor="let media of medias; let index = index">
+        <div class="mb-3">
+          <app-media-row [media]="media"></app-media-row>
+        </div>
+      </ng-container>
+    </cdk-virtual-scroll-viewport>
+  </div>
 </div>
