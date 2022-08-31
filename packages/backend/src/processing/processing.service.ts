@@ -30,6 +30,7 @@ import { QueuedProcess, QueuedProcessDocument } from './queued-process.schema';
 import { FileInfos } from '../medias/schemas/file-infos.schema';
 import { MoviesService } from '../medias/movies/movies.service';
 import { filter, interval } from 'rxjs';
+import { Environment } from '../config/config.default';
 
 export interface FileData {
   path: string;
@@ -89,7 +90,10 @@ export class ProcessingService {
     private readonly websocketService: WebsocketService,
     private readonly configService: ConfigService,
   ) {
-    interval(1000)
+    interval(
+      (configService.get<string>('currentEnv') === Environment.DEV ? 20 : 1) *
+        1000,
+    )
       .pipe(filter(() => !!this.websocketService.clientsConnected))
       .subscribe(() => {
         this.getSiInfos().then((data) =>

@@ -1,8 +1,8 @@
-<div class="bg-base-600">
-  <app-server-metrics [displayChart]="queueStarted"></app-server-metrics>
-</div>
-<div class="w-full p-5 text-white">
-  <div class="w-full flex flex-row h-12">
+<div class="absolute text-white flex flex-col gap-7 top-0 left-0 h-full w-full">
+  <div class="bg-base-600 flex-shrink-0">
+    <app-server-metrics [displayChart]="queueStarted"></app-server-metrics>
+  </div>
+  <div class="w-full flex flex-row h-12 px-5 flex-shrink-0">
     <button
       [ngClass]="
         selectedTab === button.path ? 'border-white' : 'border-transparent'
@@ -45,8 +45,11 @@
       </button>
     </div>
   </div>
-  <div [@onTabChange]="prepareRoute(outlet)" class="w-full mt-7">
+  <div
+    [@onTabChange]="prepareRoute(outlet)"
+    class="w-full overflow-hidden flex-grow"
+  >
     <router-outlet #outlet="outlet"></router-outlet>
   </div>
+  <app-add-media-modal [addingMovie]="addingMovie"></app-add-media-modal>
 </div>
-<app-add-media-modal [addingMovie]="addingMovie"></app-add-media-modal>

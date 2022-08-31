@@ -18,6 +18,7 @@ import { MediaStreamComponent } from './admin-medias/media-row/media-stream/medi
 import { QueueControlsComponent } from './admin-dashboard/queue-controls/queue-controls.component';
 import { ServerMetricsComponent } from './server-metrics/server-metrics.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { NgChartsModule } from 'ng2-charts';
       options: { path: environment.websocketNamespace, withCredentials: true },
     }),
     NgChartsModule,
+    ScrollingModule,
   ],
 })
 export class AdminModule {}
