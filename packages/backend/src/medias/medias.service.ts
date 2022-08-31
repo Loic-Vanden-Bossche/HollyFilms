@@ -763,7 +763,7 @@ export class MediasService {
       .limit(1)
       .skip(
         Math.floor(
-          Math.random() * (await this.mediaModel.countDocuments().exec()),
+          Math.random() * ((await this.mediaModel.countDocuments().exec()) - 1),
         ),
       )
       .exec()
