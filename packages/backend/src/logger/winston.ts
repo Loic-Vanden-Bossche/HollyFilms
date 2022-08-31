@@ -4,6 +4,7 @@ import { getLogLevels, LogLevels } from './log-levels';
 import { WinstonModule } from 'nest-winston';
 import { LoggerService } from '@nestjs/common';
 import { Environment } from '../config/config.default';
+import { Loggly } from 'winston-loggly-bulk';
 
 const getMaxLevel = (levels: { [p: string]: number }): string => {
   return Object.keys(levels).reduce((acc, key) => {
@@ -39,6 +40,7 @@ export const getWinstonLogger = (
   env: Environment,
   logsPath: string,
   verbose = false,
+  logglyToken: string | null = null,
 ): LoggerService => {
   const levels = logValues();
 
@@ -95,14 +97,16 @@ export const getWinstonLogger = (
           ),
         ),
       }),
-      new winston.transports.File({
-        filename: logsPath,
-        format: winston.format.combine(
-          winston.format.timestamp(),
-          winston.format.splat(),
-          winston.format.json(),
-        ),
-      }),
+      ...(logglyToken
+        ? [
+            new Loggly({
+              token: logglyToken,
+              subdomain: 'hollyfilms',
+              tags: [env.toUpperCase()],
+              json: true,
+            }),
+          ]
+        : []),
     ],
   });
 };

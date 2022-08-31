@@ -33,6 +33,7 @@ importers:
       '@types/request': ^2.48.8
       '@types/rimraf': ^3.0.2
       '@types/supertest': ^2.0.11
+      '@types/winston-loggly-bulk': ^3.0.3
       '@typescript-eslint/eslint-plugin': ^5.0.0
       '@typescript-eslint/parser': ^5.0.0
       bcrypt: ^5.0.1
@@ -78,6 +79,7 @@ importers:
       uptobox: ^1.0.5
       widdershins: ^4.0.1
       winston: ^3.8.1
+      winston-loggly-bulk: ^3.2.1
       yaml: ^2.1.1
     dependencies:
       '@nestjs-modules/mailer': 1.8.1_hu373yjjn2mosfiajauwg4urjm
@@ -92,6 +94,7 @@ importers:
       '@nestjs/platform-socket.io': 9.0.11_arvkpsejr32vji2s3rye3fygfa
       '@nestjs/swagger': 6.0.5_ivnm4e5qsl7bn6kf5k4o57kelu
       '@nestjs/websockets': 9.0.11_lta74l7a56f7avmhvq6ggypouy
+      '@types/winston-loggly-bulk': 3.0.3
       bcrypt: 5.0.1
       chalk: 4.1.2
       class-transformer: 0.5.1
@@ -122,6 +125,7 @@ importers:
       systeminformation: 5.12.5
       uptobox: 1.0.5
       winston: 3.8.1
+      winston-loggly-bulk: 3.2.1
       yaml: 2.1.1
     devDependencies:
       '@nestjs/cli': 9.0.0
@@ -2312,7 +2316,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       chalk: 4.1.2
       jest-message-util: 28.1.3
       jest-util: 28.1.3
@@ -2368,7 +2372,7 @@ packages:
     dependencies:
       '@jest/fake-timers': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       jest-mock: 28.1.3
     dev: true
 
@@ -2395,7 +2399,7 @@ packages:
     dependencies:
       '@jest/types': 28.1.3
       '@sinonjs/fake-timers': 9.1.2
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       jest-message-util: 28.1.3
       jest-mock: 28.1.3
       jest-util: 28.1.3
@@ -2427,7 +2431,7 @@ packages:
       '@jest/transform': 28.1.3
       '@jest/types': 28.1.3
       '@jridgewell/trace-mapping': 0.3.15
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       chalk: 4.1.2
       collect-v8-coverage: 1.0.1
       exit: 0.1.2
@@ -3147,7 +3151,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
     dev: true
 
   /@types/cookie/0.4.1:
@@ -3220,7 +3224,7 @@ packages:
   /@types/graceful-fs/4.1.5:
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
     dependencies:
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
     dev: true
 
   /@types/http-proxy/1.17.9:
@@ -3292,7 +3296,6 @@ packages:
 
   /@types/node/18.7.6:
     resolution: {integrity: sha512-EdxgKRXgYsNITy5mjjXjVE/CS8YENSdhiagGrLqjG0pvA2owgJ6i4l7wy/PFZGC0B1/H20lWKN7ONVDNYDZm7A==}
-    dev: true
 
   /@types/os-utils/0.0.1:
     resolution: {integrity: sha512-r5a1I4xr8e25GFiLdpHV+jHUawtbmtuCQHR1P3SH/Y1gmRy0KLjBVGe5uUkODU/6GntoGPhOu05jv+sBdAVpog==}
@@ -3423,8 +3426,15 @@ packages:
   /@types/whatwg-url/8.2.2:
     resolution: {integrity: sha512-FtQu10RWgn3D9U4aazdwIE2yzphmTJREDqNdODHrbrZmmMqI0vMheC/6NE/J1Yveaj8H+ela+YwWTjq5PGmuhA==}
     dependencies:
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       '@types/webidl-conversions': 6.1.1
+    dev: false
+
+  /@types/winston-loggly-bulk/3.0.3:
+    resolution: {integrity: sha512-jTYTJvgjdFZD0RKMR9vOM9dLMfE8QMLK0TqUXEyi758KdKUKWVID5Ktx2IDHe7Pxh0WtEcIrFxE+BjhFVorlXg==}
+    dependencies:
+      '@types/node': 18.7.6
+      winston: 3.8.1
     dev: false
 
   /@types/ws/8.5.3:
@@ -3447,7 +3457,7 @@ packages:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
     dev: false
     optional: true
 
@@ -6155,7 +6165,7 @@ packages:
     dependencies:
       '@types/cookie': 0.4.1
       '@types/cors': 2.8.12
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.4.2
@@ -8215,7 +8225,7 @@ packages:
       '@jest/expect': 28.1.3
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       chalk: 4.1.2
       co: 4.6.0
       dedent: 0.7.0
@@ -8337,7 +8347,7 @@ packages:
       '@jest/environment': 28.1.3
       '@jest/fake-timers': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       jest-mock: 28.1.3
       jest-util: 28.1.3
     dev: true
@@ -8353,7 +8363,7 @@ packages:
     dependencies:
       '@jest/types': 28.1.3
       '@types/graceful-fs': 4.1.5
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       anymatch: 3.1.2
       fb-watchman: 2.0.1
       graceful-fs: 4.2.10
@@ -8404,7 +8414,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
     dev: true
 
   /jest-pnp-resolver/1.2.2_jest-resolve@28.1.3:
@@ -8458,7 +8468,7 @@ packages:
       '@jest/test-result': 28.1.3
       '@jest/transform': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       chalk: 4.1.2
       emittery: 0.10.2
       graceful-fs: 4.2.10
@@ -8569,7 +8579,7 @@ packages:
     dependencies:
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.10.2
@@ -8581,7 +8591,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -8590,7 +8600,7 @@ packages:
     resolution: {integrity: sha512-CqRA220YV/6jCo8VWvAt1KKx6eek1VIHMPeLEbpcfSfkEeWyBNppynM/o6q+Wmw+sOhos2ml34wZbSX3G13//g==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
-      '@types/node': 16.11.49
+      '@types/node': 18.7.6
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -9128,6 +9138,10 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
+  /lodash.clonedeep/4.5.0:
+    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
     dev: false
 
   /lodash.debounce/4.0.8:
@@ -9953,6 +9967,10 @@ packages:
     resolution: {integrity: sha512-9ARkWHBs+6YJIvrIp0Ik5tyTTtP9PoV0Ssu2Ocq5y9v8+NOOpWiRshAp8c4rZVWTOe+157on/5G+zj5pwIQFEQ==}
     dev: false
 
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
+
   /mongodb-connection-string-url/2.5.3:
     resolution: {integrity: sha512-f+/WsED+xF4B74l3k9V/XkTVj5/fxFH2o5ToKXd8Iyi5UhM+sO9u0Ape17Mvl/GkZaFtM0HQnzAG5OTmhKw+tQ==}
     dependencies:
@@ -10277,6 +10295,15 @@ packages:
   /node-int64/0.4.0:
     resolution: {integrity: sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==}
     dev: true
+
+  /node-loggly-bulk/3.0.1:
+    resolution: {integrity: sha512-KrqNHqseUnGNGz4q1ZsnfD10W/KQkwFLpZjTHp98TPUXEqZ8zytEAugfFeiPMz/YMzgY4hqGI+6hsMIPhzaE4A==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      json-stringify-safe: 5.0.1
+      moment: 2.29.4
+      request: 2.88.2
+    dev: false
 
   /node-readfiles/0.2.0:
     resolution: {integrity: sha512-SU00ZarexNlE4Rjdm83vglt5Y9yiQ+XI1XpflWlb7q7UTN1JUItm69xMeiQCTxtTfnzt+83T8Cx+vI2ED++VDA==}
@@ -14133,6 +14160,16 @@ packages:
     dependencies:
       execa: 4.1.0
     dev: true
+
+  /winston-loggly-bulk/3.2.1:
+    resolution: {integrity: sha512-Ws4csTUuU3O8sepxzIj6VwacTlgyUWroVoNkIU0qcsEweW8lbheNUodKFi20lSiKzXKL9uF2J1hoVFyurD/M3w==}
+    engines: {node: '>= 6.4.0'}
+    dependencies:
+      lodash.clonedeep: 4.5.0
+      node-loggly-bulk: 3.0.1
+      winston: 3.8.1
+      winston-transport: 4.5.0
+    dev: false
 
   /winston-transport/4.5.0:
     resolution: {integrity: sha512-YpZzcUzBedhlTAfJg6vJDlyEai/IFMIVcaEZZyl3UXIl4gmqRpU7AE89AHLkbzLUsv0NVmw7ts+iztqKxxPW1Q==}

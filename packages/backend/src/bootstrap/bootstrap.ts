@@ -37,6 +37,7 @@ export default async () => {
           config.currentEnv,
           config.logsPath,
           config.verbose,
+          config.logglyToken,
         ),
       }),
     )

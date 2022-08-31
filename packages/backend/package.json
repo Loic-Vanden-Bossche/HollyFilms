@@ -71,6 +71,7 @@
     "systeminformation": "^5.12.1",
     "uptobox": "^1.0.5",
     "winston": "^3.8.1",
+    "winston-loggly-bulk": "^3.2.1",
     "yaml": "^2.1.1"
   },
   "devDependencies": {
@@ -102,7 +103,8 @@
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.0.0",
     "typescript": "~4.7.2",
-    "widdershins": "^4.0.1"
+    "widdershins": "^4.0.1",
+    "@types/winston-loggly-bulk": "^3.0.3"
   },
   "jest": {
     "moduleFileExtensions": [

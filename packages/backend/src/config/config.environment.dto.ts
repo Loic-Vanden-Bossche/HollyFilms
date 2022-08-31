@@ -73,6 +73,12 @@ export class ConfigEnvironmentDto {
   @Desc('Path of misc files')
   HF_APP_DATASTORE_PATH: string;
 
+  @Expose()
+  @UseDefault()
+  @Secret()
+  @Desc('Token used to connect with loggly')
+  HF_APP_LOGGLY_TOKEN: string | null;
+
   // Database
   @ConfigValidator(isString)
   @Expose()
