@@ -336,6 +336,7 @@ export class MediasService {
     skip = 0,
     limit = 0,
   ): Promise<MediaWithType[]> {
+    this.logger.verbose('Processing recommendations algorithm...');
     const medias = await this.getMedias(true);
     const userMediaIds = [
       ...user.playedMedias.map((pm) => pm.mediaId),
@@ -344,6 +345,14 @@ export class MediasService {
     ].map((id) => id.toString());
     const occurrences = await this.countOccurrences(
       this.extractFromIds(userMediaIds, medias),
+    );
+
+    this.logger.debug(
+      `Resolved medias=${occurrences.mediaCount} tokens=${
+        occurrences.tokens.length
+      } genres=${Object.keys(occurrences.genres).length} actors=${
+        Object.keys(occurrences.actors).length
+      }`,
     );
 
     const calculateMediaPoints = medias.map(
@@ -597,6 +606,14 @@ export class MediasService {
     skip = 0,
     limit = 0,
   ): Promise<MediaWithType[]> {
+    this.logger.verbose(
+      `Retrieving medias with the following parameters: ${JSON.stringify({
+        onlyAvailable,
+        type,
+        skip,
+        limit,
+      })}`,
+    );
     switch (type) {
       case ListType.RECOMMENDED:
         return this.getRecommended(user, skip, limit);
@@ -637,6 +654,7 @@ export class MediasService {
   }
 
   getFeatured(user: CurrentUser): Promise<MediaWithTypeAndFeatured[]> {
+    this.logger.verbose('Creating featured media map');
     const targetNumber = 10;
     const featuredMap = [
       { listType: ListType.POPULAR, number: 3, featured: FeaturedType.POPULAR },
@@ -686,6 +704,7 @@ export class MediasService {
   }
 
   migrateFromDatabase() {
+    this.logger.debug('Migrating medias from old database');
     this.mediaModel
       .countDocuments()
       .exec()
@@ -725,8 +744,8 @@ export class MediasService {
     }
   }
 
-  async updateOne(media: MediaWithType) {
-    this.logger.log(`updating ${media.data.title}`);
+  async updateOneFromTMDB(media: MediaWithType) {
+    this.logger.log(`Updating ${media.data.title}`);
     const newMedia = await (media.mediaType === 'tv'
       ? this.tmdbService.getTv(media.data.TMDB_id)
       : this.tmdbService.getMovie(media.data.TMDB_id));
@@ -758,23 +777,24 @@ export class MediasService {
   }
 
   async getRandomMedia(): Promise<MediaWithType> {
+    const index = Math.floor(
+      Math.random() * ((await this.mediaModel.countDocuments().exec()) - 1),
+    );
+    this.logger.verbose(`Getting random media at index [${index}]`);
     return this.mediaModel
       .find({ available: true })
       .limit(1)
-      .skip(
-        Math.floor(
-          Math.random() * ((await this.mediaModel.countDocuments().exec()) - 1),
-        ),
-      )
+      .skip(index)
       .exec()
       .then((medias) => medias[0])
       .then(formatOneMedia);
   }
 
   updateAllMedias() {
+    this.logger.log('Updating all medias');
     this.getMedias()
       .then((medias) =>
-        Promise.all(medias.map((media) => this.updateOne(media))),
+        Promise.all(medias.map((media) => this.updateOneFromTMDB(media))),
       )
       .catch((err) => {
         this.logger.error(`An error occurred while updating medias: ${err}`);
