@@ -21,7 +21,6 @@ import {
 import { DiskMetrics } from '../../shared/models/system-metrics.model';
 import * as dayjs from 'dayjs';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-server-metrics',
@@ -219,9 +218,9 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.processingService.registerSocket();
     this.processingService
       .onSystemInfosUpdated()
-      .pipe(takeWhile(() => this.displayChart))
       .subscribe(({ cpu, disks, mem, uptime }) => {
         this.cpuUsage = cpu.usage;
         this.memoryUsage = (mem.used / mem.total) * 100;
@@ -229,21 +228,23 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
         this.disks = disks;
         this.upTime = dayjs.duration(uptime, 'seconds').format('DD:HH:mm:ss');
 
-        if (this.lineChartData.datasets[0].data.length > 10 * 60) {
-          this.shiftChartData();
+        if (this.displayChart) {
+          if (this.lineChartData.datasets[0].data.length > 10 * 60) {
+            this.shiftChartData();
+          }
+
+          this.lineChartData.datasets[0].data.push(cpu.temp);
+          this.lineChartData.datasets[1].data.push(cpu.usage);
+          this.lineChartData.datasets[2].data.push(mem.used);
+          if (this.lineChartOptions?.scales) {
+            (this.lineChartOptions.scales as any)['y-axis-1'].suggestedMax =
+              mem.total;
+          }
+
+          this.lineChartData?.labels?.push(new Date());
+
+          this.chart?.update();
         }
-
-        this.lineChartData.datasets[0].data.push(cpu.temp);
-        this.lineChartData.datasets[1].data.push(cpu.usage);
-        this.lineChartData.datasets[2].data.push(mem.used);
-        if (this.lineChartOptions?.scales) {
-          (this.lineChartOptions.scales as any)['y-axis-1'].suggestedMax =
-            mem.total;
-        }
-
-        this.lineChartData?.labels?.push(new Date());
-
-        this.chart?.update();
       });
   }
 

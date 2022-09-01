@@ -58,6 +58,10 @@ export class ProcessingService {
     this.socket = socket;
   }
 
+  registerSocket() {
+    this.socket.connect();
+  }
+
   unregisterSocket() {
     this.socket.disconnect();
   }
