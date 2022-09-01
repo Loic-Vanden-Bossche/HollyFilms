@@ -232,7 +232,7 @@ export class ProcessingService {
   getQueue() {
     return this.queuedProcessModel
       .find()
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .populate('media')
       .exec();
   }
@@ -255,7 +255,7 @@ export class ProcessingService {
   getCurrent() {
     return this.queuedProcessModel
       .find()
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .limit(1)
       .populate('media')
       .exec()

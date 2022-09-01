@@ -200,9 +200,14 @@ export class MediasService {
               })),
             })),
         ),
+      ).then((medias) =>
+        medias.sort(
+          (a, b) =>
+            a.queue[0].dateAdded.getTime() - b.queue[0].dateAdded.getTime(),
+        ),
       );
 
-    return [...queuedMedias.reverse(), ...medias];
+    return [...queuedMedias, ...medias];
   }
 
   extractFromIds(ids: string[], medias: MediaWithType[]) {
