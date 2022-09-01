@@ -276,8 +276,18 @@ export class ProcessingService {
     this.queueStarted = false;
   }
 
+  handleRemoveFromQueue(mediaId: string) {
+    return this.mediasService.getMedia(mediaId).then((media) => {
+      if (media.mediaType === 'movie' && !media.data.available) {
+        return this.mediasService.deleteMedia(mediaId);
+      }
+    });
+  }
+
   removeFromQueue(id: string) {
-    return this.queuedProcessModel.findByIdAndDelete(id).exec();
+    return this.queuedProcessModel
+      .findByIdAndDelete(id)
+      .then((video) => this.handleRemoveFromQueue(video.media._id.toString()));
   }
 
   shiftQueue() {
@@ -321,13 +331,21 @@ export class ProcessingService {
 
     if (this.queueStarted) {
       return this.queuedProcessModel
-        .remove({ _id: { $ne: current._id } })
-        .exec()
+        .find({ _id: { $ne: current._id } })
+        .then((queue) =>
+          Promise.all(
+            queue.map((video) => this.removeFromQueue(video._id.toString())),
+          ),
+        )
         .then(() => true);
     } else {
       return this.queuedProcessModel
-        .remove()
-        .exec()
+        .find()
+        .then((queue) =>
+          Promise.all(
+            queue.map((video) => this.removeFromQueue(video._id.toString())),
+          ),
+        )
         .then(() => true);
     }
   }

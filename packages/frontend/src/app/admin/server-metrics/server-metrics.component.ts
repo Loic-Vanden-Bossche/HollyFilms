@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ProcessingService } from '../../shared/services/processing.service';
@@ -14,6 +21,7 @@ import {
 import { DiskMetrics } from '../../shared/models/system-metrics.model';
 import * as dayjs from 'dayjs';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-server-metrics',
@@ -64,7 +72,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
     ]),
   ],
 })
-export class ServerMetricsComponent implements OnInit {
+export class ServerMetricsComponent implements OnInit, OnChanges {
   @Input() displayChart = false;
 
   chart?: BaseChartDirective;
@@ -193,9 +201,27 @@ export class ServerMetricsComponent implements OnInit {
     return undefined;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['displayChart'] && this.displayChart) {
+      this.resetChartData();
+      this.chart?.update();
+    }
+  }
+
+  shiftChartData() {
+    this.lineChartData.datasets.forEach((dataset) => dataset.data.shift());
+    this.lineChartData.labels?.shift();
+  }
+
+  resetChartData() {
+    this.lineChartData.datasets.forEach((dataset) => (dataset.data = []));
+    this.lineChartData.labels = [];
+  }
+
   ngOnInit(): void {
     this.processingService
       .onSystemInfosUpdated()
+      .pipe(takeWhile(() => this.displayChart))
       .subscribe(({ cpu, disks, mem, uptime }) => {
         this.cpuUsage = cpu.usage;
         this.memoryUsage = (mem.used / mem.total) * 100;
@@ -203,11 +229,8 @@ export class ServerMetricsComponent implements OnInit {
         this.disks = disks;
         this.upTime = dayjs.duration(uptime, 'seconds').format('DD:HH:mm:ss');
 
-        if (this.lineChartData.datasets[0].data.length > 1000) {
-          this.lineChartData.datasets[0].data.shift();
-          this.lineChartData.datasets[1].data.shift();
-          this.lineChartData.datasets[2].data.shift();
-          this.lineChartData.labels?.shift();
+        if (this.lineChartData.datasets[0].data.length > 200) {
+          this.shiftChartData();
         }
 
         this.lineChartData.datasets[0].data.push(cpu.temp);
