@@ -229,7 +229,7 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
         this.disks = disks;
         this.upTime = dayjs.duration(uptime, 'seconds').format('DD:HH:mm:ss');
 
-        if (this.lineChartData.datasets[0].data.length > 200) {
+        if (this.lineChartData.datasets[0].data.length > 10 * 60) {
           this.shiftChartData();
         }
 
