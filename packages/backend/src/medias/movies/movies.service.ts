@@ -1,4 +1,10 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Media, MediaDocument } from '../media.schema';
 import { Model } from 'mongoose';
@@ -10,6 +16,7 @@ import {
 } from '../medias.utils';
 import { ProcessingService } from '../../processing/processing.service';
 import { FileInfos } from '../schemas/file-infos.schema';
+import * as fs from 'fs';
 
 @Injectable()
 export class MoviesService {
@@ -36,6 +43,11 @@ export class MoviesService {
 
   add(tmdbId: number, filePath: string): Promise<MediaWithTypeAndQueue> {
     this.logger.verbose(`Adding movie ${tmdbId}`);
+
+    if (!fs.existsSync(filePath)) {
+      this.logger.error(`File ${filePath} does not exist`);
+      throw new HttpException('File not found', 404);
+    }
 
     return this.tmdbService.getMovie(tmdbId).then(async (movie) => {
       this.logger.log(`Added movie ${movie.data.title}`);

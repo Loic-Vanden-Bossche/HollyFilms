@@ -84,7 +84,7 @@ export class MediasService {
 
   async getMedia(id: string) {
     return this.mediaModel
-      .findById(id)
+      .findById(checkObjectId(id))
       .orFail(() => {
         throw new HttpException(`Media not found`, HttpStatus.NOT_FOUND);
       })

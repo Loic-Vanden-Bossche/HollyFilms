@@ -31,6 +31,7 @@ import { FileInfos } from '../medias/schemas/file-infos.schema';
 import { MoviesService } from '../medias/movies/movies.service';
 import { filter, interval } from 'rxjs';
 import { Environment } from '../config/config.default';
+import { TvsService } from '../medias/tvs/tvs.service';
 
 export interface FileData {
   path: string;
@@ -83,6 +84,8 @@ export class ProcessingService {
   constructor(
     @InjectModel(QueuedProcess.name)
     private readonly queuedProcessModel: Model<QueuedProcessDocument>,
+    @Inject(forwardRef(() => TvsService))
+    private readonly tvsService: TvsService,
     @Inject(forwardRef(() => MediasService))
     private readonly mediasService: MediasService,
     @Inject(forwardRef(() => MoviesService))
@@ -237,12 +240,20 @@ export class ProcessingService {
       .exec();
   }
 
-  addToQueue(
+  async addToQueue(
     mediaId: string,
     filePath: string,
     seasonIndex?: number,
     episodeIndex?: number,
   ) {
+    await this.mediasService.getMedia(mediaId).then((media) => {
+      if (media.mediaType === 'tv' && (!seasonIndex || !episodeIndex)) {
+        throw new BadRequestException('Missing season or episode index');
+      } else if (media.mediaType === 'movie' && (seasonIndex || episodeIndex)) {
+        throw new BadRequestException('Movie can not have season or episode');
+      }
+    });
+
     return this.queuedProcessModel.create({
       media: mediaId,
       targetPath: this.getTargetPath(mediaId, seasonIndex, episodeIndex),
@@ -427,40 +438,12 @@ export class ProcessingService {
       this.queueStarted = false;
 
       if (inputVideo.seasonIndex && inputVideo.episodeIndex) {
-        /*this.tvsService.updateOne(
-          inputVideo.id,
-          {
-            $set: {
-              'seasons.$[outer].episodes.$[inner].dateAdded': new Date(),
-              'seasons.$[outer].episodes.$[inner].avaliable': true,
-              'seasons.$[outer].episodes.$[inner].runtime': Math.round(
-                this.progressStatus.fileInfos.Sduration / 60,
-              ),
-              'seasons.$[outer].episodes.$[inner].fileInfos.isProcessing':
-                false,
-              'seasons.$[outer].episodes.$[inner].fileInfos.maxQualilty':
-                this.progressStatus.fileInfos.maxQualilty,
-              'seasons.$[outer].episodes.$[inner].fileInfos.audioLangAvaliables':
-                this.progressStatus.fileInfos.audioLangAvaliables,
-              'seasons.$[outer].episodes.$[inner].fileInfos.maxQualiltyTag':
-                this.progressStatus.fileInfos.maxQualiltyTag,
-              'seasons.$[outer].episodes.$[inner].fileInfos.Sduration':
-                this.progressStatus.fileInfos.Sduration,
-              'seasons.$[outer].episodes.$[inner].fileInfos.location':
-                this.processLocation,
-            },
-          },
-          {
-            arrayFilters: [
-              {
-                'outer.index': inputVideo.seasonIndex,
-              },
-              {
-                'inner.index': inputVideo.episodeIndex,
-              },
-            ],
-          },
-        );*/
+        this.tvsService.finalizeProcess(
+          inputVideo.media._id,
+          this.progressStatus.fileInfos,
+          inputVideo.seasonIndex,
+          inputVideo.episodeIndex,
+        );
       } else {
         this.moviesService.finalizeProcess(
           inputVideo.media._id,
