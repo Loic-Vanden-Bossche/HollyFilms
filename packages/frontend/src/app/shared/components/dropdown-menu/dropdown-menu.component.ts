@@ -54,9 +54,6 @@ export class DropdownMenuComponent implements AfterViewInit {
     setTimeout(() => {
       const elemWidth =
         this.button?.nativeElement.getBoundingClientRect().width || 0;
-
-      console.log(this.button);
-      console.log(this.button?.nativeElement.getBoundingClientRect());
       switch (this.floatPosition) {
         case 'left':
           this.translateValue = 0;
