@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MediaWithTypeAndFeatured } from '../../shared/models/media.model';
 
 import EffectCarousel from './carrousel-effect';
@@ -11,8 +11,17 @@ import SwiperCore, {
   SwiperOptions,
   Virtual,
 } from 'swiper';
-import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  animateChild,
+  query,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Swiper } from 'swiper';
+import { SwiperComponent } from 'swiper/angular';
 
 SwiperCore.use([
   Navigation,
@@ -27,6 +36,19 @@ SwiperCore.use([
   selector: 'app-media-carrousel',
   templateUrl: './media-carrousel.component.html',
   animations: [
+    trigger('onLoader', [
+      transition(':leave', [
+        style({
+          opacity: 1,
+        }),
+        animate(
+          '0.5s ease',
+          style({
+            opacity: 0,
+          })
+        ),
+      ]),
+    ]),
     trigger('onCarousel', [
       transition(
         ':enter',
@@ -45,22 +67,24 @@ SwiperCore.use([
       ),
     ]),
     trigger('onCarouselGlobal', [
-      transition(':enter', [
-        style({
-          transform: 'perspective(500px) scaleZ(2) rotateY(10deg)',
-        }),
-        animate(
-          '3s ease',
-          style({
-            transform: 'perspective(1) scaleZ(1) rotateY(0deg)',
-          })
-        ),
-      ]),
+      state(
+        'true',
+        style({ transform: 'perspective(500px) scaleZ(2) rotateY(10deg)' })
+      ),
+      state(
+        'false',
+        style({ transform: 'perspective(1) scaleZ(1) rotateY(0deg)' })
+      ),
+      transition('false <=> true', animate('2s ease')),
+      transition('false => true', query('@*', [animateChild()])),
     ]),
   ],
 })
-export class MediaCarrouselComponent {
+export class MediaCarrouselComponent implements OnChanges {
   @Input() featured: MediaWithTypeAndFeatured[] | null = [];
+  @ViewChild('swiper') swiper: SwiperComponent | null = null;
+
+  loading = true;
 
   index = 0;
 
@@ -82,6 +106,19 @@ export class MediaCarrouselComponent {
       delay: 6000,
     },
   };
+
+  ngOnChanges() {
+    if (this.featured?.length) {
+      setTimeout(() => {
+        this.loading = false;
+
+        if (this.swiper) {
+          this.swiper.swiperRef.update();
+          this.index = this.swiper.swiperRef.activeIndex;
+        }
+      });
+    }
+  }
 
   slideChanged([swiper]: Swiper[]) {
     if (swiper.isBeginning) {

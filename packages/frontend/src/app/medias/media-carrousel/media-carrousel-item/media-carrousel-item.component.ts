@@ -18,6 +18,8 @@ import { PlayerService } from '../../../shared/services/player.service';
 import { MediasService } from '../../../shared/services/medias.service';
 import { ModalService } from '../../../shared/services/modal.service';
 import { AuthService } from '../../../shared/services/auth.service';
+import { User } from '../../../shared/models/user.model';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-media-carrousel-item',
@@ -103,6 +105,9 @@ export class MediaCarrouselItemComponent implements OnInit {
 
   ratingProgress = 0;
 
+  liked = false;
+  inList = false;
+
   get circleRadius() {
     if (window.innerWidth <= 768) {
       return { radius: 35, textSize: 13, innerStrokeSize: 3, strokeSize: 7 };
@@ -111,17 +116,17 @@ export class MediaCarrouselItemComponent implements OnInit {
     }
   }
 
-  get isLiked() {
+  isLiked(user: User) {
     return (
-      this.authService.user?.likedMedias
+      user.likedMedias
         .map((media) => media.mediaId)
         .includes(this.media?.data._id || '') || false
     );
   }
 
-  get isInList() {
+  isInList(user: User) {
     return (
-      this.authService.user?.mediasInList
+      user?.mediasInList
         .map((media) => media.mediaId)
         .includes(this.media?.data._id || '') || false
     );
@@ -147,19 +152,21 @@ export class MediaCarrouselItemComponent implements OnInit {
 
   onLike() {
     if (this.media) {
-      (this.isLiked
+      (this.liked
         ? this.mediasService.unlikeMedia(this.media)
         : this.mediasService.likeMedia(this.media)
       ).subscribe();
+      this.liked = !this.liked;
     }
   }
 
   onAddToList() {
     if (this.media) {
-      (this.isInList
+      (this.inList
         ? this.mediasService.removeFromList(this.media)
         : this.mediasService.addInList(this.media)
       ).subscribe();
+      this.inList = !this.inList;
     }
   }
 
@@ -170,6 +177,14 @@ export class MediaCarrouselItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService
+      .onUserUpdated()
+      .pipe(filter((user) => !!user))
+      .subscribe((user) => {
+        this.liked = this.isLiked(user as User);
+        this.inList = this.isInList(user as User);
+      });
+
     if (this.media) {
       this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
       [this.vendorTag, this.vendorIcon] = this.getTagAndIconFromFeatured(

@@ -1,9 +1,31 @@
-<div @onCarouselGlobal class="w-full relative">
+<div [@onCarouselGlobal]="loading" class="w-full relative">
+  <div
+    @onLoader
+    *ngIf="loading"
+    class="absolute flex flex-col justify-center items-center h-full w-full top-0 left-0"
+  >
+    <div class="h-20 w-20">
+      <app-loader></app-loader>
+    </div>
+  </div>
   <swiper
+    #swiper
     (slideChange)="slideChanged($event)"
+    [ngClass]="loading ? 'opacity-0' : 'opacity-100'"
     class="w-full h-full pb-14 pt-10"
     [config]="config"
   >
+    <ng-template
+      *ngIf="loading"
+      class="w-11/12 sm:w-9/12 md:w-8/12 xl:w-5/12 aspect-video h-full"
+      swiperSlide
+    >
+      <div
+        class="h-full w-full transition-all rounded-xl overflow-hidden bg-base-600"
+      >
+        <div class="h-full"></div>
+      </div>
+    </ng-template>
     <ng-template
       class="w-11/12 sm:w-9/12 md:w-8/12 xl:w-5/12 aspect-video h-full"
       *ngFor="let media of featured; let i = index"
@@ -12,6 +34,7 @@
       <div
         [@onCarousel]="{ value: '', params: { delay: i * 50 } }"
         [ngClass]="index === i ? ['hover:scale-105'] : []"
+        *ngIf="!loading"
         class="h-full w-full transition-all rounded-xl overflow-hidden bg-base-600"
       >
         <div id="swiper-carousel-animate-opacity" class="h-full">
@@ -23,7 +46,16 @@
       </div>
     </ng-template>
   </swiper>
-  <div class="swiper-button-prev ml-2 md:ml-10 hidden sm:block"></div>
-  <div class="swiper-button-next mr-2 md:mr-10 hidden sm:block"></div>
-  <div class="swiper-pagination"></div>
+  <div
+    [ngClass]="loading ? 'opacity-0' : 'opacity-100'"
+    class="swiper-button-prev ml-2 md:ml-10 hidden sm:block transition-all delay-300"
+  ></div>
+  <div
+    [ngClass]="loading ? 'opacity-0' : 'opacity-100'"
+    class="swiper-button-next mr-2 md:mr-10 hidden sm:block transition-all delay-300"
+  ></div>
+  <div
+    [ngClass]="loading ? 'opacity-0' : 'opacity-100'"
+    class="swiper-pagination transition-all delay-300"
+  ></div>
 </div>
