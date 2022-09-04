@@ -46,7 +46,8 @@ export class DropdownMenuComponent implements AfterViewInit {
   translatePercent = 0;
 
   @Input() floatPosition: 'left' | 'center' | 'right' = 'center';
-  @ViewChild('content') mainButton: ElementRef<HTMLDivElement> | null = null;
+  @ViewChild('dropDownButton') mainButton: ElementRef<HTMLDivElement> | null =
+    null;
 
   menuOpen = false;
 
