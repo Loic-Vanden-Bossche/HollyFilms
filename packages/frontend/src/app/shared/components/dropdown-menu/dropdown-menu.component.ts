@@ -46,28 +46,32 @@ export class DropdownMenuComponent implements AfterViewInit {
   translatePercent = 0;
 
   @Input() floatPosition: 'left' | 'center' | 'right' = 'center';
-  @ViewChild('dropDownButton') mainButton: ElementRef<HTMLDivElement> | null =
-    null;
+  @ViewChild('dropDownButton') button: ElementRef<HTMLDivElement> | null = null;
 
   menuOpen = false;
 
   ngAfterViewInit() {
-    const elemWidth =
-      this.mainButton?.nativeElement.getBoundingClientRect().width || 0;
-    switch (this.floatPosition) {
-      case 'left':
-        this.translateValue = 0;
-        this.translatePercent = 0;
-        break;
-      case 'center':
-        this.translateValue = elemWidth / 2;
-        this.translatePercent = -50;
-        break;
-      case 'right':
-        this.translateValue = elemWidth;
-        this.translatePercent = -100;
-        break;
-    }
+    setTimeout(() => {
+      const elemWidth =
+        this.button?.nativeElement.getBoundingClientRect().width || 0;
+
+      console.log(this.button);
+      console.log(this.button?.nativeElement.getBoundingClientRect());
+      switch (this.floatPosition) {
+        case 'left':
+          this.translateValue = 0;
+          this.translatePercent = 0;
+          break;
+        case 'center':
+          this.translateValue = elemWidth / 2;
+          this.translatePercent = -50;
+          break;
+        case 'right':
+          this.translateValue = elemWidth;
+          this.translatePercent = -100;
+          break;
+      }
+    }, 100);
   }
 
   onMouseUp() {
