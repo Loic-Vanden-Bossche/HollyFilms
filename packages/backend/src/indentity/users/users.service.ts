@@ -397,13 +397,13 @@ export class UsersService {
   getProfilePicturePath(userId: string, uniqueId: string, hash: string) {
     return `${this.configService.get<string>(
       'dataStorePath',
-    )}/profilePictures/profilePicture.${userId}.${uniqueId}.${hash}.jpg`;
+    )}/profile_pictures/profilePicture.${userId}.${uniqueId}.${hash}.jpg`;
   }
 
   checkDataStorePath() {
     const dataStorePath = `${this.configService.get<string>(
       'dataStorePath',
-    )}/profilePictures`;
+    )}/profile_pictures`;
     if (!fs.existsSync(dataStorePath)) {
       return fsp.mkdir(dataStorePath, { recursive: true });
     }

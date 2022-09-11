@@ -15,7 +15,6 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_APP_FRONTEND_URL: 'http://localhost:4200',
   HF_APP_LOGS_PATH: './logs/hollyfilms.log',
   HF_APP_DATASTORE_PATH: '../../data',
-  HF_APP_LOGGLY_TOKEN: null,
 
   // Database
   HF_DB_HOST: 'localhost',
@@ -62,7 +61,7 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_MEDIAS_FFPROBE_PATH: 'C:/ffmpeg/bin/ffprobe.exe',
   HF_MEDIAS_PATH_DEFAULT: '../../medias_default',
   HF_MEDIAS_PATH_SECONDARY: '../../medias_secondary',
-  HF_MEDIAS_FILES_PATH: '../../medias_files',
+  HF_MEDIAS_FILES_PATH: '../../data/medias_files',
 
   // Google OAuth
   HF_GOOGLE_AUTH_CLIENT_ID: null,

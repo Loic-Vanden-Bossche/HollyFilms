@@ -4,7 +4,7 @@ import { getLogLevels, LogLevels } from './log-levels';
 import { WinstonModule } from 'nest-winston';
 import { LoggerService } from '@nestjs/common';
 import { Environment } from '../config/config.default';
-import { Loggly } from 'winston-loggly-bulk';
+import * as WinstonGraylog from 'winston-graylog2';
 
 const getMaxLevel = (levels: { [p: string]: number }): string => {
   return Object.keys(levels).reduce((acc, key) => {
@@ -40,7 +40,6 @@ export const getWinstonLogger = (
   env: Environment,
   logsPath: string,
   verbose = false,
-  logglyToken: string | null = null,
 ): LoggerService => {
   const levels = logValues();
 
@@ -97,16 +96,20 @@ export const getWinstonLogger = (
           ),
         ),
       }),
-      ...(logglyToken
-        ? [
-            new Loggly({
-              token: logglyToken,
-              subdomain: 'hollyfilms',
-              tags: [env.toUpperCase()],
-              json: true,
-            }),
-          ]
-        : []),
+      new WinstonGraylog({
+        name: 'Graylog',
+        silent: false,
+        handleExceptions: false,
+        graylog: {
+          servers: [
+            {
+              host: '127.0.0.1',
+              port: 12201,
+            },
+          ],
+          bufferSize: 1400,
+        },
+      }),
     ],
   });
 };

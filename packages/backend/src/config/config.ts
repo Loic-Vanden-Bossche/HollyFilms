@@ -10,7 +10,6 @@ export interface BaseConfig {
   frontendUrl: string;
   logsPath: string;
   dataStorePath: string;
-  logglyToken: string | null;
 }
 
 export interface APIConfig extends BaseConfig {
@@ -98,7 +97,6 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
     frontendUrl: config.HF_APP_FRONTEND_URL,
     logsPath: config.HF_APP_LOGS_PATH,
     dataStorePath: config.HF_APP_DATASTORE_PATH,
-    logglyToken: config.HF_APP_LOGGLY_TOKEN,
     database: {
       host: config.HF_DB_HOST,
       port: config.HF_DB_PORT,
