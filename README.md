@@ -1,7 +1,7 @@
 # HollyFilms project
 ### Description
 
-HollyFilms is a project that I have created to provide a simple way to manage the movies that I have seen and share them with my relatives.
+HollyFilms is a project that I have created to provide a simple way to manage the movies and process large video files.
 
 ## Getting Started
 
