@@ -165,39 +165,36 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
 
   getLangFromCode(trigram: string) {
     const code = trigram.toLowerCase();
-    if ('fre'.includes(code)) {
+    if (['fre', 'vff'].includes(code)) {
       return 'Français';
-    } else if ('eng'.includes(code)) {
+    } else if (['eng'].includes(code)) {
       return 'Anglais';
-    } else if ('spa'.includes(code)) {
+    }  else if (['jpn'].includes(code)) {
+      return 'Japonais';
+    } else if (['vfq'].includes(code)) {
+      return 'Québécois';
+    } else if (['spa'].includes(code)) {
       return 'Espagnol';
-    } else if ('por'.includes(code)) {
+    } else if (['por'].includes(code)) {
       return 'Portugais';
-    } else if ('ita'.includes(code)) {
+    } else if (['ita'].includes(code)) {
       return 'Italien';
-    } else if ('ger'.includes(code)) {
+    } else if (['ger'].includes(code)) {
       return 'Allemand';
-    } else if ('rus'.includes(code)) {
+    } else if (['rus'].includes(code)) {
       return 'Russe';
-    } else if ('chi'.includes(code)) {
+    } else if (['chi'].includes(code)) {
       return 'Chinois';
     }
 
-    return 'Langue inconnue';
+    return code;
   }
 
   setLanguageAsName() {
     if (this.player) {
       const audioTrackList = this.player.audioTracks();
       for (let i = 0; i < audioTrackList.length; i++) {
-        const track = audioTrackList[0];
-        this.player.audioTracks().removeTrack(track);
-        const newTrack = new videojs.default.AudioTrack({
-          ...track,
-          label: this.getLangFromCode(track.language),
-          kind: 'main',
-        });
-        this.player.audioTracks().addTrack(newTrack as any);
+        (audioTrackList[i] as any).label = this.getLangFromCode(audioTrackList[i].language);
       }
     }
   }
