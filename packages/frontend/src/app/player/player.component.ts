@@ -169,7 +169,7 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
       return 'Français';
     } else if (['eng'].includes(code)) {
       return 'Anglais';
-    }  else if (['jpn'].includes(code)) {
+    } else if (['jpn'].includes(code)) {
       return 'Japonais';
     } else if (['vfq'].includes(code)) {
       return 'Québécois';
@@ -194,7 +194,9 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
     if (this.player) {
       const audioTrackList = this.player.audioTracks();
       for (let i = 0; i < audioTrackList.length; i++) {
-        (audioTrackList[i] as any).label = this.getLangFromCode(audioTrackList[i].language);
+        (audioTrackList[i] as any).label = this.getLangFromCode(
+          audioTrackList[i].language
+        );
       }
     }
   }
