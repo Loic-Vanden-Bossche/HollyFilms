@@ -21,6 +21,7 @@ import { MediasQueryDto } from './dto/medias.query.dto';
 import { SearchQueryDto } from './dto/search.query.dto';
 import { checkObjectId } from '../shared/mongoose';
 import { Public } from '../shared/decorators/public.decorator';
+import { Location } from './medias.service';
 
 @ApiTags('Medias')
 @Controller('medias')
@@ -119,7 +120,7 @@ export class MediasController {
   @Get('stream/:location/*')
   @ApiOperation({ summary: '[User] Stream media file' })
   async getStream(
-    @Param('location') location: string,
+    @Param('location') location: Location,
     @Param() path: string[],
     @Res() res: Response,
     @Headers('accept-encoding') encodingHeader: string,

@@ -249,14 +249,26 @@ export class ConfigEnvironmentDto {
   @ConfigValidators(isString)
   @Expose()
   @UseDefault()
-  @Desc('Path where the videos will be stored by default')
-  HF_MEDIAS_PATH_DEFAULT: string;
+  @Desc('Path where the videos will be stored as primary')
+  HF_MEDIAS_PATH_PRIMARY: string;
 
   @ConfigValidators(isString)
   @Expose()
   @UseDefault()
-  @Desc('Path where the videos will be stored in secondary')
+  @Desc('Path where the videos will be stored as secondary')
   HF_MEDIAS_PATH_SECONDARY: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path where the videos will be stored as tertiary')
+  HF_MEDIAS_PATH_TERTIARY: string;
+
+  @ConfigValidators(isString)
+  @Expose()
+  @UseDefault()
+  @Desc('Path where the videos will be stored as quaternary')
+  HF_MEDIAS_PATH_QUATERNARY: string;
 
   @ConfigValidators(isString)
   @Expose()

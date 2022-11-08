@@ -76,8 +76,10 @@ export interface TMDBConfig {
 export interface MediasConfig {
   ffmpegPath: string;
   ffprobePath: string;
-  storePathDefault: string;
+  storePathPrimary: string;
   storePathSecondary: string;
+  storePathTertiary: string;
+  storePathQuaternary: string;
   searchFilesPath: string;
 }
 
@@ -140,8 +142,10 @@ export const getConfig = (env: Record<string, unknown>): APIConfig => {
     medias: {
       ffmpegPath: config.HF_MEDIAS_FFMPEG_PATH,
       ffprobePath: config.HF_MEDIAS_FFPROBE_PATH,
-      storePathDefault: config.HF_MEDIAS_PATH_DEFAULT,
+      storePathPrimary: config.HF_MEDIAS_PATH_PRIMARY,
       storePathSecondary: config.HF_MEDIAS_PATH_SECONDARY,
+      storePathTertiary: config.HF_MEDIAS_PATH_TERTIARY,
+      storePathQuaternary: config.HF_MEDIAS_PATH_QUATERNARY,
       searchFilesPath: config.HF_MEDIAS_FILES_PATH,
     },
     googleOAuth: {

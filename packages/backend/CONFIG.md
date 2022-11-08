@@ -37,10 +37,12 @@
 | HF_TMDB_API_URL | https://api.themoviedb.org/3 | TMBD api url | isString | No |
 | HF_MEDIAS_FFMPEG_PATH | C:/ffmpeg/bin/ffmpeg.exe | Path of the ffmpeg executable | isString | No |
 | HF_MEDIAS_FFPROBE_PATH | C:/ffmpeg/bin/ffprobe.exe | Path of the ffprobe executable | isString | No |
-| HF_MEDIAS_PATH_DEFAULT | ../../medias_default | Path where the videos will be stored by default | isString | No |
-| HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored in secondary | isString | No |
+| HF_MEDIAS_PATH_PRIMARY | ../../medias_primary | Path where the videos will be stored as primary | isString | No |
+| HF_MEDIAS_PATH_SECONDARY | ../../medias_secondary | Path where the videos will be stored as secondary | isString | No |
+| HF_MEDIAS_PATH_TERTIARY | ../../medias_tertiary | Path where the videos will be stored as tertiary | isString | No |
+| HF_MEDIAS_PATH_QUATERNARY | ../../medias_quaternary | Path where the videos will be stored as quaternary | isString | No |
 | HF_MEDIAS_FILES_PATH | ../../data/medias_files | Path where the videos files are stored before upload | isString | No |
 | HF_GOOGLE_AUTH_CLIENT_ID |  | OAuth client id | isString | No |
 | HF_GOOGLE_AUTH_CLIENT_SECRET |  | OAuth client secret | isString | Yes |
 
-Generated on 11/09/2022, 18:48:25
+Generated on 08/11/2022 20:14:37

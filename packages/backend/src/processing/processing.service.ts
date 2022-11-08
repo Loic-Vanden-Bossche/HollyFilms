@@ -33,6 +33,8 @@ import { filter, interval } from 'rxjs';
 import { Environment } from '../config/config.default';
 import { TvsService } from '../medias/tvs/tvs.service';
 
+import { Location } from '../medias/medias.service';
+
 export interface FileData {
   path: string;
   name: string;
@@ -415,16 +417,10 @@ export class ProcessingService {
     return totalSizeBytes;
   }
 
-  processLocation = 'secondary';
+  processLocation = Location.TERTIARY;
 
   getInitialLocation(): string {
-    const { storePathDefault, storePathSecondary } =
-      this.configService.get<MediasConfig>('medias');
-    return this.processLocation == 'default'
-      ? storePathDefault
-      : this.processLocation == 'secondary'
-      ? storePathSecondary
-      : null;
+    return this.mediasService.fromLocationToPath(this.processLocation);
   }
 
   async processMedia(inputVideo: QueuedProcess) {

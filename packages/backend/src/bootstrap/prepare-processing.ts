@@ -14,8 +14,10 @@ const checkFfmpegAndFffprobe = () =>
 
 const checkMediaFiles = (config: MediasConfig) => {
   return Promise.all([
-    fs.access(config.storePathDefault).catch((err) => err),
+    fs.access(config.storePathPrimary).catch((err) => err),
     fs.access(config.storePathSecondary).catch((err) => err),
+    fs.access(config.storePathTertiary).catch((err) => err),
+    fs.access(config.storePathQuaternary).catch((err) => err),
   ]);
 };
 

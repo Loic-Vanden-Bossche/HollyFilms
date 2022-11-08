@@ -68,6 +68,14 @@ interface MediaIsWatched {
   lastWatchedTime: Date;
 }
 
+export enum Location {
+  DEFAULT = 'default',
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
+  QUATERNARY = 'quaternary',
+}
+
 @Injectable()
 export class MediasService {
   logger = new Logger('Medias');
@@ -81,6 +89,21 @@ export class MediasService {
     private readonly configService: ConfigService,
     private readonly tmdbService: TmdbService,
   ) {}
+
+  fromLocationToPath(location: Location): string {
+    const config = this.configService.get<MediasConfig>('medias');
+    switch (location) {
+      case Location.DEFAULT:
+      case Location.PRIMARY:
+        return config.storePathPrimary;
+      case Location.SECONDARY:
+        return config.storePathSecondary;
+      case Location.TERTIARY:
+        return config.storePathTertiary;
+      case Location.QUATERNARY:
+        return config.storePathQuaternary;
+    }
+  }
 
   async getMedia(id: string) {
     return this.mediaModel
@@ -348,7 +371,7 @@ export class MediasService {
       ...user.mediasInList.map((m) => m.mediaId),
       ...user.likedMedias.map((l) => l.mediaId),
     ].map((id) => id.toString());
-    const occurrences = await this.countOccurrences(
+    const occurrences = this.countOccurrences(
       this.extractFromIds(userMediaIds, medias),
     );
 
@@ -812,19 +835,13 @@ export class MediasService {
 
   async getStream(
     res: Response,
-    location: string,
+    location: Location,
     mediaPath: string,
     encodingHeader: string,
   ): Promise<void> {
-    const config = this.configService.get<MediasConfig>('medias');
-    location =
-      location == 'default'
-        ? config.storePathDefault
-        : location == 'secondary'
-        ? config.storePathSecondary
-        : null;
+    const locationPath = this.fromLocationToPath(location);
 
-    if (!location) {
+    if (!locationPath) {
       res.writeHead(404, {
         'Content-Type': 'text/plain',
       });
@@ -833,7 +850,7 @@ export class MediasService {
       return;
     }
 
-    const filename = path.join(location, mediaPath);
+    const filename = path.join(locationPath, mediaPath);
 
     if (!fs.existsSync(filename)) {
       this.logger.error('file not found: ' + filename);

@@ -59,8 +59,10 @@ export const defaultConfig: ConfigEnvironmentDto = {
   // Medias
   HF_MEDIAS_FFMPEG_PATH: 'C:/ffmpeg/bin/ffmpeg.exe',
   HF_MEDIAS_FFPROBE_PATH: 'C:/ffmpeg/bin/ffprobe.exe',
-  HF_MEDIAS_PATH_DEFAULT: '../../medias_default',
+  HF_MEDIAS_PATH_PRIMARY: '../../medias_primary',
   HF_MEDIAS_PATH_SECONDARY: '../../medias_secondary',
+  HF_MEDIAS_PATH_TERTIARY: '../../medias_tertiary',
+  HF_MEDIAS_PATH_QUATERNARY: '../../medias_quaternary',
   HF_MEDIAS_FILES_PATH: '../../data/medias_files',
 
   // Google OAuth
