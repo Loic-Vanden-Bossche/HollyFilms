@@ -1,9 +1,9 @@
 <div class="flex flex-col h-full">
-  <div class="flex flex-row items-center text-white w-full p-2">
+  <div class="flex flex-row items-center overflow-auto text-white w-full p-2">
     <div
       @onMetric
       *ngIf="upTime !== null"
-      class="flex flex-row items-center mr-4 bg-base-500 rounded p-2"
+      class="flex flex-row items-center mr-4 bg-base-500 h-full rounded p-2"
     >
       <div class="flex flex-col items-center mr-4">
         <fa-icon class="text-xl" [icon]="serverIcon"></fa-icon>
@@ -16,47 +16,55 @@
     <div
       @onMetric
       *ngIf="cpuUsage !== null"
-      class="flex flex-row items-center mr-4 bg-base-500 rounded p-2"
+      class="flex flex-row items-center mr-4 bg-base-500 h-full rounded p-2"
     >
       <div class="flex flex-col items-center mr-4">
         <fa-icon class="text-xl" [icon]="cpuIcon"></fa-icon>
         <p class="font-bold text-white/70 text-sm">CPU</p>
       </div>
-      <app-progress-circle [progress]="cpuUsage"></app-progress-circle>
+      <app-progress-circle
+        [colorMap]="cpuColorMap"
+        [progress]="cpuUsage"
+      ></app-progress-circle>
     </div>
     <div
       @onMetric
-      *ngIf="temperatureUsage !== null"
-      class="flex flex-row items-center mr-4 bg-base-500 rounded p-2"
+      *ngIf="temperature !== null"
+      class="flex flex-row items-center mr-4 bg-base-500 h-full rounded p-2"
     >
       <div class="flex flex-col items-center mr-4">
         <fa-icon class="text-xl" [icon]="temperatureIcon"></fa-icon>
         <p class="font-bold text-white/70 text-sm">TEMP</p>
       </div>
-      <app-progress-circle
-        [progress]="temperatureUsage || 0"
-      ></app-progress-circle>
+      <p class="px-2 py-1 bg-base-700 rounded font-bold text-white/70 text-sm">
+        {{ temperature }}°
+      </p>
     </div>
     <div
       @onMetric
       *ngIf="memoryUsage !== null"
-      class="flex flex-row items-center mr-4 bg-base-500 rounded p-2"
+      class="flex flex-row items-center mr-4 bg-base-500 h-full rounded p-2"
     >
       <div class="flex flex-col items-center mr-4">
         <fa-icon class="text-xl" [icon]="memoryIcon"></fa-icon>
         <p class="font-bold text-white/70 text-sm">RAM</p>
       </div>
-      <app-progress-circle [progress]="memoryUsage"></app-progress-circle>
+      <app-progress-circle
+        [colorMap]="ramColorMap"
+        [progress]="memoryUsage"
+      ></app-progress-circle>
     </div>
     <div
       @onMetric
       *ngFor="let disk of disks; let index = index; trackBy: trackUndefined"
       class="flex flex-col items-center mr-4 bg-base-500 rounded p-2"
     >
-      <div class="flex flex-row items-center mb-1">
-        <fa-icon class="text-xl mr-4" [icon]="hardDriveIcon"></fa-icon>
-        <h1 class="font-bold">Disque {{ index + 1 }}</h1>
-        <p class="text-xs ml-2 text-white/50">
+      <div class="flex 2xl:flex-row flex-col items-center mb-1">
+        <div class="w-full flex flex-row items-center">
+          <fa-icon class="text-xl mr-4" [icon]="hardDriveIcon"></fa-icon>
+          <h1 class="font-bold whitespace-nowrap">Disque {{ index + 1 }}</h1>
+        </div>
+        <p class="text-xs 2xl:ml-2 text-white/50 whitespace-nowrap">
           {{ disk.used | bytesToHuman }} / {{ disk.size | bytesToHuman }} ->
           <span class="text-white/80 font-bold">{{
             disk.available | bytesToHuman
@@ -66,6 +74,7 @@
       <div class="flex w-full flex-row">
         <div class="flex-grow">
           <app-rating-bar
+            [colorMap]="disksColorMap"
             [rating]="disk.used"
             [max]="disk.size"
           ></app-rating-bar>

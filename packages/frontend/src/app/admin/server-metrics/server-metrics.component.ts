@@ -84,9 +84,30 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
     }
   }
 
+  disksColorMap = [
+    { color: '#36D399', breakpoint: 70 },
+    { color: '#FFFF77', breakpoint: 80 },
+    { color: '#FBBD23', breakpoint: 90 },
+    { color: '#F87272', breakpoint: 100 },
+  ];
+
+  cpuColorMap = [
+    { color: '#36D399', breakpoint: 30 },
+    { color: '#FFFF77', breakpoint: 50 },
+    { color: '#FBBD23', breakpoint: 70 },
+    { color: '#F87272', breakpoint: 100 },
+  ];
+
+  ramColorMap = [
+    { color: '#36D399', breakpoint: 50 },
+    { color: '#FFFF77', breakpoint: 65 },
+    { color: '#FBBD23', breakpoint: 80 },
+    { color: '#F87272', breakpoint: 100 },
+  ];
+
   cpuUsage: number | null = null;
   memoryUsage: number | null = null;
-  temperatureUsage: number | null = null;
+  temperature: number | null = null;
   disks: DiskMetrics[] = [];
   upTime: string | null = null;
 
@@ -224,8 +245,8 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
       .subscribe(({ cpu, disks, mem, uptime }) => {
         this.cpuUsage = cpu.usage;
         this.memoryUsage = (mem.used / mem.total) * 100;
-        this.temperatureUsage = (cpu.temp / cpu.maxTemp) * 100;
-        this.disks = disks;
+        this.temperature = cpu.temp;
+        this.disks = disks.sort((a, b) => b.used - a.used);
         this.upTime = dayjs.duration(uptime, 'seconds').format('DD:HH:mm:ss');
 
         if (this.displayChart) {
