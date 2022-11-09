@@ -20,6 +20,7 @@ export interface CpuMetrics {
 export interface DiskMetrics {
   used: number;
   use: number;
+  name: string;
   available: number;
   size: number;
 }

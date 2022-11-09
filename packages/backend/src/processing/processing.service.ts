@@ -64,6 +64,7 @@ export interface SystemInfos {
   disks: Array<{
     used: number;
     use: number;
+    name: string;
     available: number;
     size: number;
   }>;
@@ -375,6 +376,7 @@ export class ProcessingService {
           .map((el) => ({
             used: el.used,
             use: el.use,
+            name: el.mount,
             available: el.available,
             size: el.size,
           })),
@@ -406,8 +408,8 @@ export class ProcessingService {
     const files = fs.readdirSync(folderPath);
     let totalSizeBytes = 0;
 
-    for (let i = 0; i < files.length; i++) {
-      const stats = fs.statSync(folderPath + files[i]);
+    for (const element of files) {
+      const stats = fs.statSync(folderPath + element);
 
       if (stats.isFile()) {
         totalSizeBytes += stats.size;

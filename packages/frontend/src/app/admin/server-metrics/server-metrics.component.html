@@ -56,13 +56,13 @@
     </div>
     <div
       @onMetric
-      *ngFor="let disk of disks; let index = index; trackBy: trackUndefined"
+      *ngFor="let disk of disks; trackBy: trackUndefined"
       class="flex flex-col items-center mr-4 bg-base-500 rounded p-2"
     >
       <div class="flex 2xl:flex-row flex-col items-center mb-1">
         <div class="w-full flex flex-row items-center">
           <fa-icon class="text-xl mr-4" [icon]="hardDriveIcon"></fa-icon>
-          <h1 class="font-bold whitespace-nowrap">Disque {{ index + 1 }}</h1>
+          <h1 class="font-bold whitespace-nowrap">{{ disk.name }}</h1>
         </div>
         <p class="text-xs 2xl:ml-2 text-white/50 whitespace-nowrap">
           {{ disk.used | bytesToHuman }} / {{ disk.size | bytesToHuman }} ->
