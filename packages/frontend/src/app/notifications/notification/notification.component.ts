@@ -14,7 +14,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
         style({ transform: 'translateY(100%)', 'max-height': '0px' }),
         animate(
           '0.3s ease-out',
-          style({ transform: 'translateY(0)', 'max-height': '100%' })
+          style({ transform: 'translateY(0)', 'max-height': '100%' }),
         ),
       ]),
       transition(':leave', [
@@ -37,7 +37,7 @@ export class NotificationComponent implements OnInit {
   ngOnInit() {
     this.resetTimer();
     this.typeClasses = this.classesFromTypes(
-      this.notification?.type || NotificationType.Neutral
+      this.notification?.type || NotificationType.Neutral,
     );
   }
 

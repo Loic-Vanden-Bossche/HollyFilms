@@ -23,7 +23,7 @@ export default ({ swiper, on }: { swiper: any; on: any }) => {
         modify = (absProgress - 1) * 0.3 + 1;
       }
       const opacityEls = slideEl.querySelectorAll(
-        '#swiper-carousel-animate-opacity'
+        '#swiper-carousel-animate-opacity',
       );
       const translate = `${slideProgress * modify * 50}%`;
       const scale = 1 - absProgress * scaleStep;
@@ -47,13 +47,13 @@ export default ({ swiper, on }: { swiper: any; on: any }) => {
     for (let i = 0; i < swiper.slides.length; i += 1) {
       const slideEl = swiper.slides[i];
       const opacityEls = slideEl.querySelectorAll(
-        '.swiper-carousel-animate-opacity'
+        '.swiper-carousel-animate-opacity',
       );
       slideEl.style.transitionDuration = `${duration}ms`;
       opacityEls.forEach(
         (opacityEl: { style: { transitionDuration: string } }) => {
           opacityEl.style.transitionDuration = `${duration}ms`;
-        }
+        },
       );
     }
   });

@@ -16,7 +16,7 @@ export class MyListComponent implements OnInit {
 
   constructor(
     private readonly mediasService: MediasService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class MyListComponent implements OnInit {
           .getAllMedias(ListType.INLIST)
           .pipe(
             tap(() => (this.loading = false)),
-            tap((medias) => (this.noData = medias.length === 0))
+            tap((medias) => (this.noData = medias.length === 0)),
           )
           .subscribe((medias) => (this.medias = medias));
       });

@@ -15,7 +15,7 @@ export class CategoryListComponent {
 
   constructor(
     private readonly router: Router,
-    private readonly categoriesService: CategoriesService
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   get categories() {

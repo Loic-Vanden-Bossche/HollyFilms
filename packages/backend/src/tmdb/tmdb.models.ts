@@ -1,5 +1,5 @@
 interface TMDBMovie {
-  media_type: 'movie';
+  media_type: "movie";
   title: string;
   id: number;
   backdrop_path: string;
@@ -78,7 +78,7 @@ interface TMDBSeason {
 }
 
 interface TMDBTVShow {
-  media_type: 'tv';
+  media_type: "tv";
   name: string;
   id: number;
   backdrop_path: string;
@@ -150,7 +150,7 @@ interface TMDBMicroSearchResult {
   poster_path: string;
   backdrop_path: string;
   release_date: string;
-  mediaType: 'tv' | 'movie';
+  mediaType: "tv" | "movie";
 }
 
 type TMDBMedia = TMDBMovie | TMDBTVShow;

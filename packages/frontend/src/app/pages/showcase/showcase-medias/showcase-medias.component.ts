@@ -29,10 +29,10 @@ import {
             style({
               transform: 'translateX(0) translateY(0) scale(1)',
               opacity: 1,
-            })
+            }),
           ),
         ],
-        { params: { delay: 100 } }
+        { params: { delay: 100 } },
       ),
     ]),
   ],
@@ -76,7 +76,7 @@ export class ShowcaseMediasComponent implements OnInit {
 
   resetSelectedMedias() {
     this.mediaCols.forEach((col) =>
-      col.medias.forEach((media) => (media.selected = false))
+      col.medias.forEach((media) => (media.selected = false)),
     );
   }
 
@@ -107,7 +107,7 @@ export class ShowcaseMediasComponent implements OnInit {
           Math.random() *
             (this.mediaCols.length -
               1 -
-              (this.mediaCols.length - (columnsToDisplay + 1)))
+              (this.mediaCols.length - (columnsToDisplay + 1))),
         ) +
         (this.mediaCols.length - (columnsToDisplay + 1))
       : Math.floor(Math.random() * (this.mediaCols.length - 1 - 2)) + 2;
@@ -115,7 +115,7 @@ export class ShowcaseMediasComponent implements OnInit {
     const isEven = this.isEven(randomCol);
 
     const mediaIndex = Math.floor(
-      Math.random() * this.mediaCols[randomCol].medias.length
+      Math.random() * this.mediaCols[randomCol].medias.length,
     );
     const elemRect = document
       .getElementById(`media-${randomCol}-${mediaIndex}`)
@@ -156,7 +156,7 @@ export class ShowcaseMediasComponent implements OnInit {
       setTimeout(() => {
         if (this.mediaCols[i]) {
           this.mediaCols[i].medias = this.randomizeColumn(
-            this.mediaCols[i].medias
+            this.mediaCols[i].medias,
           );
           this.mediaCols[i].display = true;
 
@@ -183,10 +183,10 @@ export class ShowcaseMediasComponent implements OnInit {
             debounceTime(50),
             map(() => this.calculateColsCount()),
             tap(() => (this._mediasSelectable = this.checkIfSelectable())),
-            filter((count) => count !== this.colCount)
-          )
+            filter((count) => count !== this.colCount),
+          ),
         ),
-        tap(() => (this.colCount = this.calculateColsCount()))
+        tap(() => (this.colCount = this.calculateColsCount())),
       )
       .subscribe(() => this.buildCols());
   }

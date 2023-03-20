@@ -45,7 +45,7 @@ SwiperCore.use([
           '0.5s ease',
           style({
             opacity: 0,
-          })
+          }),
         ),
       ]),
     ]),
@@ -60,20 +60,20 @@ SwiperCore.use([
             '1s {{delay}}ms ease',
             style({
               transform: 'TranslateX(0px) TranslateY(0px)',
-            })
+            }),
           ),
         ],
-        { params: { delay: 0 } }
+        { params: { delay: 0 } },
       ),
     ]),
     trigger('onCarouselGlobal', [
       state(
         'true',
-        style({ transform: 'perspective(500px) scaleZ(2) rotateY(10deg)' })
+        style({ transform: 'perspective(500px) scaleZ(2) rotateY(10deg)' }),
       ),
       state(
         'false',
-        style({ transform: 'perspective(1) scaleZ(1) rotateY(0deg)' })
+        style({ transform: 'perspective(1) scaleZ(1) rotateY(0deg)' }),
       ),
       transition('false <=> true', animate('2s ease')),
       transition('false => true', query('@*', [animateChild()])),

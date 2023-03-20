@@ -32,7 +32,7 @@ export class QueueControlsComponent implements OnInit {
 
   ngOnInit() {
     this.adminService.filteredMedias.subscribe(
-      () => (this.queueLength = this.adminService.getQueueLength())
+      () => (this.queueLength = this.adminService.getQueueLength()),
     );
   }
 

@@ -11,7 +11,7 @@ export class TmdbService {
   search(query = '', type: 'movie' | 'tv' | 'both' = 'both') {
     return this.http.get<TMDBMicroSearchResult[]>(
       `tmdb/search?type=${type}&query=${query}`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 }

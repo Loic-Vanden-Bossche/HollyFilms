@@ -27,13 +27,13 @@ import {
                 style({
                   opacity: 1,
                   transform: 'TranslateX(0px) TranslateY(0px)',
-                })
+                }),
               ),
             ],
-            { optional: true }
+            { optional: true },
           ),
         ],
-        { params: { delay: 0 } }
+        { params: { delay: 0 } },
       ),
     ]),
     trigger('onTextDisplay', [
@@ -49,10 +49,10 @@ import {
             style({
               opacity: 1,
               transform: 'TranslateY(0) TranslateX(0)',
-            })
+            }),
           ),
         ],
-        { params: { delay: 0 } }
+        { params: { delay: 0 } },
       ),
     ]),
   ],

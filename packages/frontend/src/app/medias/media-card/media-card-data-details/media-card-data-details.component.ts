@@ -46,14 +46,14 @@ export class MediaCardDataDetailsComponent implements OnInit {
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,
     private readonly modalService: ModalService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     if (this.media) {
       this.overview = this.truncateOverview(
         this.media.data.overview || '',
-        300
+        300,
       );
       this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
     }

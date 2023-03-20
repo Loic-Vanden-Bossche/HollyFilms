@@ -18,7 +18,7 @@ export class PagesComponent implements AfterViewInit {
     private readonly mediasService: MediasService,
     private readonly modalService: ModalService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) {}
 
   clearSelectedMedia() {

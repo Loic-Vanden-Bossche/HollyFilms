@@ -23,7 +23,7 @@ export class EpisodeComponent implements OnInit {
   ngOnInit(): void {
     const duration = dayjs.duration(
       this.episode?.fileInfos?.Sduration || 0,
-      'seconds'
+      'seconds',
     );
     this.duration =
       (duration.asHours() >= 1 ? duration.hours() + 'h' : '') +

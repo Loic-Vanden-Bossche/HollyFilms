@@ -6,17 +6,17 @@ import {
   IsString,
   Length,
   MaxLength,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../../../shared/role';
+} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Role } from "../../../shared/role";
 
 export default class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
   @ApiProperty({
-    description: 'User email',
-    example: 'exemple.test@gmail.com',
+    description: "User email",
+    example: "exemple.test@gmail.com",
   })
   email: string;
 
@@ -24,8 +24,8 @@ export default class CreateUserDto {
   @IsOptional()
   @MaxLength(32)
   @ApiProperty({
-    description: 'User first name',
-    example: 'John',
+    description: "User first name",
+    example: "John",
   })
   firstname?: string;
 
@@ -33,8 +33,8 @@ export default class CreateUserDto {
   @IsOptional()
   @MaxLength(32)
   @ApiProperty({
-    description: 'User last name',
-    example: 'Doe',
+    description: "User last name",
+    example: "Doe",
   })
   lastname?: string;
 
@@ -42,8 +42,8 @@ export default class CreateUserDto {
   @IsOptional()
   @MaxLength(32)
   @ApiProperty({
-    description: 'User nickname',
-    example: 'Johnny',
+    description: "User nickname",
+    example: "Johnny",
   })
   username?: string;
 
@@ -51,15 +51,15 @@ export default class CreateUserDto {
   @IsOptional()
   @Length(6, 20)
   @ApiProperty({
-    description: 'User password',
-    example: '123456',
+    description: "User password",
+    example: "123456",
   })
   password?: string;
 
   @IsArray()
   @IsOptional()
   @ApiProperty({
-    description: 'User roles',
+    description: "User roles",
     enum: Role,
     isArray: true,
     example: [Role.User, Role.Admin],

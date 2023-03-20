@@ -22,7 +22,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 1,
             transform: 'translateY(0)',
-          })
+          }),
         ),
       ]),
       transition(':leave', [
@@ -35,7 +35,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 0,
             transform: 'translateY(-10px)',
-          })
+          }),
         ),
       ]),
     ]),

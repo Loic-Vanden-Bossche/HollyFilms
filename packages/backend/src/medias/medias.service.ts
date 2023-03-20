@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as zlib from 'zlib';
+import * as fs from "fs";
+import * as path from "path";
+import * as zlib from "zlib";
 
 import {
   forwardRef,
@@ -9,12 +9,12 @@ import {
   Inject,
   Injectable,
   Logger,
-} from '@nestjs/common';
-import { Response } from 'express';
-import { Media, MediaDocument } from './media.schema';
-import CurrentUser from '../indentity/users/current';
-import { Model, Query } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+} from "@nestjs/common";
+import { Response } from "express";
+import { Media, MediaDocument } from "./media.schema";
+import CurrentUser from "../indentity/users/current";
+import { Model, Query } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
 import {
   FeaturedType,
   formatManyMedias,
@@ -25,19 +25,19 @@ import {
   MediaWithTypeAndFeatured,
   MediaWithTypeAndQueue,
   ShowcaseMedia,
-} from './medias.utils';
-import { Episode } from './tvs/schemas/episode.schema';
-import { FileInfos } from './schemas/file-infos.schema';
-import { UsersService } from '../indentity/users/users.service';
-import { ProcessingService } from '../processing/processing.service';
-import { QueuedProcess } from '../processing/queued-process.schema';
-import * as rimraf from 'rimraf';
-import { ConfigService } from '@nestjs/config';
-import { MediasConfig } from '../config/config';
-import { getMoviesToMigrate, getTvsToMigrate } from '../bootstrap/migrations';
-import { TmdbService } from '../tmdb/tmdb.service';
-import { checkObjectId, getObjectId } from '../shared/mongoose';
-import { CurrentPlayedMedia } from '../indentity/users/profile';
+} from "./medias.utils";
+import { Episode } from "./tvs/schemas/episode.schema";
+import { FileInfos } from "./schemas/file-infos.schema";
+import { UsersService } from "../indentity/users/users.service";
+import { ProcessingService } from "../processing/processing.service";
+import { QueuedProcess } from "../processing/queued-process.schema";
+import * as rimraf from "rimraf";
+import { ConfigService } from "@nestjs/config";
+import { MediasConfig } from "../config/config";
+import { getMoviesToMigrate, getTvsToMigrate } from "../bootstrap/migrations";
+import { TmdbService } from "../tmdb/tmdb.service";
+import { checkObjectId, getObjectId } from "../shared/mongoose";
+import { CurrentPlayedMedia } from "../indentity/users/profile";
 
 export interface OccurrencesSummary {
   mediaCount: number;
@@ -69,16 +69,16 @@ interface MediaIsWatched {
 }
 
 export enum Location {
-  DEFAULT = 'default',
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-  TERTIARY = 'tertiary',
-  QUATERNARY = 'quaternary',
+  DEFAULT = "default",
+  PRIMARY = "primary",
+  SECONDARY = "secondary",
+  TERTIARY = "tertiary",
+  QUATERNARY = "quaternary",
 }
 
 @Injectable()
 export class MediasService {
-  logger = new Logger('Medias');
+  logger = new Logger("Medias");
 
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
@@ -87,11 +87,11 @@ export class MediasService {
     @Inject(forwardRef(() => ProcessingService))
     private readonly processingService: ProcessingService,
     private readonly configService: ConfigService,
-    private readonly tmdbService: TmdbService,
+    private readonly tmdbService: TmdbService
   ) {}
 
   fromLocationToPath(location: Location): string {
-    const config = this.configService.get<MediasConfig>('medias');
+    const config = this.configService.get<MediasConfig>("medias");
     switch (location) {
       case Location.DEFAULT:
       case Location.PRIMARY:
@@ -132,8 +132,8 @@ export class MediasService {
     return this.mediaModel
       .aggregate([
         { $match: { _id: { $in: mediaIds.map((id) => getObjectId(id)) } } },
-        { $unwind: '$genres' },
-        { $group: { _id: '$genres', count: { $sum: 1 } } },
+        { $unwind: "$genres" },
+        { $group: { _id: "$genres", count: { $sum: 1 } } },
         { $sort: { _id: 1, count: -1 } },
         { $limit: 1 },
       ])
@@ -144,8 +144,8 @@ export class MediasService {
   getCategories(): Promise<MediaCategory[]> {
     return this.mediaModel
       .aggregate([
-        { $unwind: '$genres' },
-        { $group: { _id: '$genres', count: { $sum: 1 } } },
+        { $unwind: "$genres" },
+        { $group: { _id: "$genres", count: { $sum: 1 } } },
         { $sort: { _id: 1, count: -1 } },
       ])
       .exec()
@@ -153,29 +153,29 @@ export class MediasService {
         categories.map((category) => ({
           name: category._id,
           count: category.count,
-        })),
+        }))
       );
   }
 
   getMediasByCategories(categories: string[]) {
     return this.mediaModel
       .find({ genres: { $all: categories } })
-      .sort({ title: 'asc' })
+      .sort({ title: "asc" })
       .exec()
       .then(formatManyMedias);
   }
 
   async searchQuery(
-    query = '',
-    onlyAvailable = false,
+    query = "",
+    onlyAvailable = false
   ): Promise<MediaWithType[]> {
-    if (query && query !== 'blank') {
+    if (query && query !== "blank") {
       return this.mediaModel
         .find({
           ...(onlyAvailable ? { available: true } : {}),
-          $or: [{ title: new RegExp(query, 'i') }],
+          $or: [{ title: new RegExp(query, "i") }],
         })
-        .sort({ title: 'asc' })
+        .sort({ title: "asc" })
         .exec()
         .then(formatManyMedias);
     }
@@ -193,12 +193,12 @@ export class MediasService {
           cur,
         ];
         return acc;
-      }, {} as Record<string, QueuedProcess[]>),
+      }, {} as Record<string, QueuedProcess[]>)
     );
 
     for (const mediaId of Object.keys(queue)) {
       const index = medias.findIndex(
-        (media) => media.data._id.toString() === mediaId,
+        (media) => media.data._id.toString() === mediaId
       );
       if (index !== -1) {
         medias = [...medias.slice(0, index), ...medias.slice(index + 1)];
@@ -221,13 +221,13 @@ export class MediasService {
                 episodeIndex: v.episodeIndex,
                 dateAdded: v.createdAt,
               })),
-            })),
-        ),
+            }))
+        )
       ).then((medias) =>
         medias.sort(
           (a, b) =>
-            a.queue[0].dateAdded.getTime() - b.queue[0].dateAdded.getTime(),
-        ),
+            a.queue[0].dateAdded.getTime() - b.queue[0].dateAdded.getTime()
+        )
       );
 
     return [...queuedMedias, ...medias];
@@ -240,7 +240,7 @@ export class MediasService {
   }
 
   tokenFromTitle(title: string): string[] {
-    return title.split(' ').map((word) => word.toLowerCase());
+    return title.split(" ").map((word) => word.toLowerCase());
   }
 
   countOccurrences(medias: MediaWithType[]): OccurrencesSummary {
@@ -288,7 +288,7 @@ export class MediasService {
   calculateMediaPoints(
     media: { data: Media; mediaType: string },
     occurrences: OccurrencesSummary,
-    userMediasIds: string[],
+    userMediasIds: string[]
   ): number {
     if (userMediasIds.includes(media.data._id.toString())) {
       return 0;
@@ -320,15 +320,15 @@ export class MediasService {
   }
 
   allQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ title: 'asc' });
+    return query.find({}).sort({ title: "asc" });
   }
 
   recentQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ createdAt: 'desc' });
+    return query.find({}).sort({ createdAt: "desc" });
   }
 
   popularQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({}).sort({ popularity: 'desc' });
+    return query.find({}).sort({ popularity: "desc" });
   }
 
   moviesQuery(query: Query<MediaDocument[], MediaDocument>) {
@@ -336,7 +336,7 @@ export class MediasService {
       .find({
         tvs: { $exists: false },
       })
-      .sort({ title: 'asc' });
+      .sort({ title: "asc" });
   }
 
   tvsQuery(query: Query<MediaDocument[], MediaDocument>) {
@@ -344,27 +344,27 @@ export class MediasService {
       .find({
         tvs: { $exists: true },
       })
-      .sort({ title: 'asc' });
+      .sort({ title: "asc" });
   }
 
   animeQuery(query: Query<MediaDocument[], MediaDocument>) {
-    return query.find({ genres: 'Animation' });
+    return query.find({ genres: "Animation" });
   }
 
   isExist(mediaId: string) {
     return this.mediaModel
       .exists({ _id: getObjectId(checkObjectId(mediaId)) })
       .orFail(() => {
-        throw new Error('Media not found');
+        throw new Error("Media not found");
       });
   }
 
   async getRecommended(
     user: CurrentUser,
     skip = 0,
-    limit = 0,
+    limit = 0
   ): Promise<MediaWithType[]> {
-    this.logger.verbose('Processing recommendations algorithm...');
+    this.logger.verbose("Processing recommendations algorithm...");
     const medias = await this.getMedias(true);
     const userMediaIds = [
       ...user.playedMedias.map((pm) => pm.mediaId),
@@ -372,7 +372,7 @@ export class MediasService {
       ...user.likedMedias.map((l) => l.mediaId),
     ].map((id) => id.toString());
     const occurrences = this.countOccurrences(
-      this.extractFromIds(userMediaIds, medias),
+      this.extractFromIds(userMediaIds, medias)
     );
 
     this.logger.debug(
@@ -380,7 +380,7 @@ export class MediasService {
         occurrences.tokens.length
       } genres=${Object.keys(occurrences.genres).length} actors=${
         Object.keys(occurrences.actors).length
-      }`,
+      }`
     );
 
     const calculateMediaPoints = medias.map(
@@ -389,15 +389,15 @@ export class MediasService {
         points: this.calculateMediaPoints(media, occurrences, [
           ...new Set(userMediaIds),
         ]),
-      }),
+      })
     );
 
     const recommendedMedias = calculateMediaPoints
       .filter(
         (cm) =>
           !user.playedMedias.some(
-            (played) => played.mediaId === cm.media.data._id.toString(),
-          ),
+            (played) => played.mediaId === cm.media.data._id.toString()
+          )
       )
       .sort((a, b) => {
         if (a.points > b.points) {
@@ -417,7 +417,7 @@ export class MediasService {
 
   mediasQueryFromType(
     query: Query<MediaDocument[], MediaDocument>,
-    type: ListType,
+    type: ListType
   ): Query<MediaDocument[], MediaDocument> {
     switch (type) {
       case ListType.ALL:
@@ -438,7 +438,7 @@ export class MediasService {
   applyLimiters(
     query: Query<MediaDocument[], MediaDocument>,
     skip: number,
-    limit: number,
+    limit: number
   ): Query<MediaDocument[], MediaDocument> {
     return limit ? query.skip(skip).limit(limit) : query;
   }
@@ -449,14 +449,14 @@ export class MediasService {
 
     for (let i = mediasObjects.length - 1; i > 0; i--) {
       const rec = {
-        $cond: [{ $eq: ['$_id', mediasObjects[i - 1]] }, i],
+        $cond: [{ $eq: ["$_id", mediasObjects[i - 1]] }, i],
       };
 
       if (stack.length == 0) {
-        rec['$cond'].push(i + 1);
+        rec["$cond"].push(i + 1);
       } else {
         const lval = stack.pop();
-        rec['$cond'].push(lval);
+        rec["$cond"].push(lval);
       }
       stack.push(rec);
     }
@@ -475,7 +475,7 @@ export class MediasService {
     onlyAvailable = false,
     user: CurrentUser,
     skip = 0,
-    limit = 0,
+    limit = 0
   ): Promise<MediaWithType[]> {
     return this.queryMedias(
       user.likedMedias
@@ -483,7 +483,7 @@ export class MediasService {
         .map((m) => m.mediaId),
       onlyAvailable,
       skip,
-      limit,
+      limit
     );
   }
 
@@ -491,7 +491,7 @@ export class MediasService {
     onlyAvailable = false,
     user: CurrentUser,
     skip = 0,
-    limit = 0,
+    limit = 0
   ): Promise<MediaWithType[]> {
     return this.queryMedias(
       user.mediasInList
@@ -499,14 +499,14 @@ export class MediasService {
         .map((m) => m.mediaId),
       onlyAvailable,
       skip,
-      limit,
+      limit
     );
   }
 
   isLastEpisode(
     media: MediaWithType,
     seasonIndex: number,
-    episodeIndex: number,
+    episodeIndex: number
   ): boolean {
     if (!media.data.tvs) {
       return false;
@@ -535,17 +535,17 @@ export class MediasService {
     onlyAvailable = false,
     user: CurrentUser,
     skip = 0,
-    limit = 0,
+    limit = 0
   ) {
     return this.getMediasWithWatchedMetadata(user.playedMedias).then((pm) =>
       pm
         .sort(
-          (a, b) => b.lastWatchedTime.getTime() - a.lastWatchedTime.getTime(),
+          (a, b) => b.lastWatchedTime.getTime() - a.lastWatchedTime.getTime()
         )
         .filter((pm) => this.isTimePlayed(pm.watchedDuration, pm.duration))
         .filter((pm) => (onlyAvailable ? pm.media.data.available : true))
         .filter((m, i) => i >= skip && i < skip + limit)
-        .map((m) => m.media),
+        .map((m) => m.media)
     );
   }
 
@@ -553,17 +553,17 @@ export class MediasService {
     onlyAvailable = false,
     user: CurrentUser,
     skip = 0,
-    limit = 0,
+    limit = 0
   ) {
     return this.getMediasWithWatchedMetadata(user.playedMedias).then((pm) =>
       pm
         .sort(
-          (a, b) => b.lastWatchedTime.getTime() - a.lastWatchedTime.getTime(),
+          (a, b) => b.lastWatchedTime.getTime() - a.lastWatchedTime.getTime()
         )
         .filter((pm) => !this.isTimePlayed(pm.watchedDuration, pm.duration))
         .filter((pm) => (onlyAvailable ? pm.media.data.available : true))
         .filter((m, i) => i >= skip && i < skip + limit)
-        .map((m) => m.media),
+        .map((m) => m.media)
     );
   }
 
@@ -578,14 +578,14 @@ export class MediasService {
       .then((medias) => {
         return playedMedias.reduce((acc, pm) => {
           const media = medias.find(
-            (m) => m.data._id.toString() === pm.mediaId,
+            (m) => m.data._id.toString() === pm.mediaId
           );
 
           if (!media || !pm.currentTime) {
             return acc;
           }
 
-          if (media.mediaType === 'movie') {
+          if (media.mediaType === "movie") {
             return [
               ...acc,
               {
@@ -601,7 +601,7 @@ export class MediasService {
               watchedDuration: this.isLastEpisode(
                 media,
                 pm.seasonIndex,
-                pm.episodeIndex,
+                pm.episodeIndex
               )
                 ? pm.currentTime
                 : 0,
@@ -612,7 +612,7 @@ export class MediasService {
               lastWatchedTime: pm.createdAt,
             };
             const foundIdx = acc.findIndex(
-              (m) => m.media.data._id.toString() === pm.mediaId,
+              (m) => m.media.data._id.toString() === pm.mediaId
             );
 
             if (foundIdx === -1) {
@@ -632,7 +632,7 @@ export class MediasService {
     user?: CurrentUser,
     type: ListType = ListType.ALL,
     skip = 0,
-    limit = 0,
+    limit = 0
   ): Promise<MediaWithType[]> {
     this.logger.verbose(
       `Retrieving medias with the following parameters: ${JSON.stringify({
@@ -640,7 +640,7 @@ export class MediasService {
         type,
         skip,
         limit,
-      })}`,
+      })}`
     );
     switch (type) {
       case ListType.RECOMMENDED:
@@ -657,10 +657,10 @@ export class MediasService {
         return this.applyLimiters(
           this.mediasQueryFromType(
             this.mediaModel.find(onlyAvailable ? { available: true } : {}),
-            type,
+            type
           ),
           skip,
-          limit,
+          limit
         )
           .exec()
           .then(formatManyMedias);
@@ -677,12 +677,12 @@ export class MediasService {
         selected: false,
         mediaType: media.mediaType,
         audioLangAvailable: media.data.fileInfos?.audioLangAvailable || [],
-      })),
+      }))
     );
   }
 
   getFeatured(user: CurrentUser): Promise<MediaWithTypeAndFeatured[]> {
-    this.logger.verbose('Creating featured media map');
+    this.logger.verbose("Creating featured media map");
     const targetNumber = 10;
     const featuredMap = [
       { listType: ListType.POPULAR, number: 3, featured: FeaturedType.POPULAR },
@@ -703,17 +703,17 @@ export class MediasService {
     return Promise.all([
       ...featuredMap.map(({ listType, number, featured }) =>
         this.getMedias(true, user, listType, 0, number).then((medias) =>
-          medias.map((media) => ({ ...media, featured })),
-        ),
+          medias.map((media) => ({ ...media, featured }))
+        )
       ),
     ])
       .then((medias) => medias.flat())
       .then(async (medias) => {
         const getUnique = (mediasToProcess) => {
           return Array.from(
-            new Set(mediasToProcess.map((m) => m.data._id.toString())),
+            new Set(mediasToProcess.map((m) => m.data._id.toString()))
           ).map((id) =>
-            mediasToProcess.find((m) => m.data._id.toString() === id),
+            mediasToProcess.find((m) => m.data._id.toString() === id)
           );
         };
 
@@ -722,8 +722,8 @@ export class MediasService {
         while (mediasToReturn.length < targetNumber) {
           const missing = await Promise.all(
             [...Array(targetNumber - mediasToReturn.length).keys()].map(() =>
-              this.getRandomMedia(),
-            ),
+              this.getRandomMedia()
+            )
           );
           mediasToReturn = getUnique([...mediasToReturn, ...missing]);
         }
@@ -732,14 +732,14 @@ export class MediasService {
   }
 
   migrateFromDatabase() {
-    this.logger.debug('Migrating medias from old database');
+    this.logger.debug("Migrating medias from old database");
     this.mediaModel
       .countDocuments()
       .exec()
       .then((count) => {
         if (count <= 0) {
           getMoviesToMigrate().then((movies) =>
-            this.mediaModel.insertMany(movies),
+            this.mediaModel.insertMany(movies)
           );
 
           getTvsToMigrate().then((tvs) => this.mediaModel.insertMany(tvs));
@@ -750,7 +750,7 @@ export class MediasService {
   async updateEpisodes(
     originalEpisodes: Episode[] | undefined,
     TMDB_id: number,
-    seasonIndex,
+    seasonIndex
   ): Promise<Episode[]> {
     const isAvailable = (ei: number) => {
       if (!originalEpisodes || !originalEpisodes[ei]) return false;
@@ -767,14 +767,14 @@ export class MediasService {
             ...(originalEpisodes[i] || {}),
             ...episode,
             available: isAvailable(i),
-          })),
+          }))
         );
     }
   }
 
   async updateOneFromTMDB(media: MediaWithType) {
     this.logger.log(`Updating ${media.data.title}`);
-    const newMedia = await (media.mediaType === 'tv'
+    const newMedia = await (media.mediaType === "tv"
       ? this.tmdbService.getTv(media.data.TMDB_id)
       : this.tmdbService.getMovie(media.data.TMDB_id));
 
@@ -787,14 +787,14 @@ export class MediasService {
                 return this.updateEpisodes(
                   media.data.tvs[i]?.episodes || [],
                   media.data.TMDB_id,
-                  i + 1,
+                  i + 1
                 ).then((episodes) => ({
                   ...(season || {}),
                   available: media.data.tvs[i].available,
                   dateAdded: media.data.tvs[i].dateAdded,
                   episodes,
                 }));
-              }),
+              })
             )
           : undefined,
         available: media.data.available,
@@ -806,7 +806,7 @@ export class MediasService {
 
   async getRandomMedia(): Promise<MediaWithType> {
     const index = Math.floor(
-      Math.random() * ((await this.mediaModel.countDocuments().exec()) - 1),
+      Math.random() * ((await this.mediaModel.countDocuments().exec()) - 1)
     );
     this.logger.verbose(`Getting random media at index [${index}]`);
     return this.mediaModel
@@ -819,17 +819,17 @@ export class MediasService {
   }
 
   updateAllMedias() {
-    this.logger.log('Updating all medias');
+    this.logger.log("Updating all medias");
     this.getMedias().then((medias) =>
       Promise.all(
         medias.map((media) =>
           this.updateOneFromTMDB(media).catch((err) => {
             this.logger.error(
-              `An error occurred while updating media ${media.data.title}: ${err}`,
+              `An error occurred while updating media ${media.data.title}: ${err}`
             );
-          }),
-        ),
-      ),
+          })
+        )
+      )
     );
   }
 
@@ -837,15 +837,15 @@ export class MediasService {
     res: Response,
     location: Location,
     mediaPath: string,
-    encodingHeader: string,
+    encodingHeader: string
   ): Promise<void> {
     const locationPath = this.fromLocationToPath(location);
 
     if (!locationPath) {
       res.writeHead(404, {
-        'Content-Type': 'text/plain',
+        "Content-Type": "text/plain",
       });
-      res.write('Bad location.\n');
+      res.write("Bad location.\n");
       res.end();
       return;
     }
@@ -853,17 +853,17 @@ export class MediasService {
     const filename = path.join(locationPath, mediaPath);
 
     if (!fs.existsSync(filename)) {
-      this.logger.error('file not found: ' + filename);
+      this.logger.error("file not found: " + filename);
       res.writeHead(404, {
-        'Content-Type': 'text/plain',
+        "Content-Type": "text/plain",
       });
-      res.write('file not found: ' + filename);
+      res.write("file not found: " + filename);
       res.end();
     } else {
       let stream = null;
 
       switch (path.extname(mediaPath)) {
-        case '.m3u8':
+        case ".m3u8":
           fs.readFile(filename, function (err, contents) {
             if (err) {
               res.writeHead(500);
@@ -874,12 +874,12 @@ export class MediasService {
                   if (err) throw err;
 
                   res.writeHead(200, {
-                    'content-encoding': 'gzip',
+                    "content-encoding": "gzip",
                   });
                   res.end(zip);
                 });
               } else {
-                res.end(contents, 'utf-8');
+                res.end(contents, "utf-8");
               }
             } else {
               res.writeHead(500);
@@ -887,27 +887,27 @@ export class MediasService {
             }
           });
           break;
-        case '.ts':
+        case ".ts":
           res.writeHead(200, {
-            'Content-Type': 'video/MP2T',
+            "Content-Type": "video/MP2T",
           });
           stream = fs.createReadStream(filename, {
             highWaterMark: 64 * 1024,
           });
           stream.pipe(res);
           break;
-        case '.aac':
+        case ".aac":
           res.writeHead(200, {
-            'Content-Type': 'audio/aac',
+            "Content-Type": "audio/aac",
           });
           stream = fs.createReadStream(filename, {
             highWaterMark: 64 * 1024,
           });
           stream.pipe(res);
           break;
-        case '.vtt':
+        case ".vtt":
           res.writeHead(200, {
-            'Content-Type': 'text/vtt',
+            "Content-Type": "text/vtt",
           });
 
           stream = fs.createReadStream(filename, {
@@ -916,9 +916,9 @@ export class MediasService {
           stream.pipe(res);
           break;
 
-        case '.jpg':
+        case ".jpg":
           res.writeHead(200, {
-            'Content-Type': 'image/jpeg',
+            "Content-Type": "image/jpeg",
           });
           stream = fs.createReadStream(filename, {
             highWaterMark: 64 * 1024,
@@ -926,7 +926,7 @@ export class MediasService {
           stream.pipe(res);
           break;
         default:
-          this.logger.verbose('unknown file type: ' + path.extname(mediaPath));
+          this.logger.verbose("unknown file type: " + path.extname(mediaPath));
           res.writeHead(500);
           res.end();
       }

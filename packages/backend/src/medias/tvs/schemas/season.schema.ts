@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Episode } from './episode.schema';
-import { BaseSchema } from '../../../shared/base.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Episode } from "./episode.schema";
+import { BaseSchema } from "../../../shared/base.schema";
 
 @Schema({ timestamps: true, _id: false })
 export class Season extends BaseSchema {

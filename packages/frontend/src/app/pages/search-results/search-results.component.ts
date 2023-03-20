@@ -20,7 +20,7 @@ import { SearchService } from '../../shared/services/search.service';
           '0.5s ease',
           style({
             opacity: 0,
-          })
+          }),
         ),
       ]),
     ]),
@@ -40,14 +40,14 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly mediasService: MediasService,
-    private readonly searchService: SearchService
+    private readonly searchService: SearchService,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams
       .pipe(
         take(1),
-        filter((q) => !!q)
+        filter((q) => !!q),
       )
       .subscribe(({ q }) => (this.searchService.search = q));
     this.route.queryParams
@@ -58,7 +58,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         tap(({ q }) => (this.search = q)),
         switchMap(({ q }) => this.mediasService.searchQuery(q, true)),
         tap((medias) => (this.noData = !medias.length)),
-        tap(() => (this.loading = false))
+        tap(() => (this.loading = false)),
       )
       .subscribe((medias) => (this.medias = medias));
   }

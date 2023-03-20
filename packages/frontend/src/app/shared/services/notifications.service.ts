@@ -22,7 +22,7 @@ export class NotificationsService {
   close(id: string) {
     setTimeout(() => {
       this._notifications = this._notifications.filter(
-        (notification) => notification.id !== id
+        (notification) => notification.id !== id,
       );
     }, 200);
   }

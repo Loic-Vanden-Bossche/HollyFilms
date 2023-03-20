@@ -34,7 +34,7 @@ export class PlayerService {
     private readonly router: Router,
     private readonly http: HttpClient,
     private readonly tvsService: TvsService,
-    private readonly auth: AuthService
+    private readonly auth: AuthService,
   ) {}
 
   play(data: PlayData) {
@@ -51,12 +51,12 @@ export class PlayerService {
         `users/track?${new URLSearchParams(data as any).toString()}`,
         {
           withCredentials: true,
-        }
+        },
       )
       .pipe(
         tap((playedMedias) =>
-          this.auth.updateUserProfile({ playedMedias: playedMedias })
-        )
+          this.auth.updateUserProfile({ playedMedias: playedMedias }),
+        ),
       );
   }
 
@@ -68,7 +68,7 @@ export class PlayerService {
       } as any).toString()}`,
       {
         withCredentials: true,
-      }
+      },
     );
   }
 

@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema } from '../../shared/base.schema';
-import { SchemaTypes } from 'mongoose';
-import { Media } from '../../medias/media.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { BaseSchema } from "../../shared/base.schema";
+import { SchemaTypes } from "mongoose";
+import { Media } from "../../medias/media.schema";
 
 @Schema({ timestamps: true, _id: false })
 export class UserMediaRecord extends BaseSchema {

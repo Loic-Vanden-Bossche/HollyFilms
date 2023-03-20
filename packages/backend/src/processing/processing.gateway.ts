@@ -2,26 +2,26 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   WebSocketGateway,
-} from '@nestjs/websockets';
+} from "@nestjs/websockets";
 
-import { ProcessingService } from './processing.service';
-import { Socket } from 'net';
-import { WebsocketService } from './websocket.service';
+import { ProcessingService } from "./processing.service";
+import { Socket } from "net";
+import { WebsocketService } from "./websocket.service";
 
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:4200', 'https://hollyfilms.fr'],
+    origin: ["http://localhost:4200", "https://hollyfilms.fr"],
     credentials: true,
   },
-  namespace: '/api/processing-socket',
-  path: '/api/processing-socket',
+  namespace: "/api/processing-socket",
+  path: "/api/processing-socket",
 })
 export class ProcessingGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
     private readonly websocketService: WebsocketService,
-    private readonly processingService: ProcessingService,
+    private readonly processingService: ProcessingService
   ) {}
 
   handleConnection(client: Socket) {

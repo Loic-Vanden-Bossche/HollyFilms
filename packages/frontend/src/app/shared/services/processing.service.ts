@@ -51,7 +51,7 @@ export class ProcessingService {
 
   constructor(
     private readonly socket: Socket,
-    private readonly adminService: AdminService
+    private readonly adminService: AdminService,
   ) {
     this.socket = socket;
   }
@@ -72,7 +72,7 @@ export class ProcessingService {
           return null;
         }
         return status;
-      })
+      }),
     );
   }
 

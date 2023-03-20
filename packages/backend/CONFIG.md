@@ -45,4 +45,4 @@
 | HF_GOOGLE_AUTH_CLIENT_ID |  | OAuth client id | isString | No |
 | HF_GOOGLE_AUTH_CLIENT_SECRET |  | OAuth client secret | isString | Yes |
 
-Generated on 20/03/2023 01:23:43
+Generated on 20/03/2023 02:51:33

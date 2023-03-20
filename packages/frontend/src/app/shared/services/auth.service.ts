@@ -53,8 +53,10 @@ export class AuthService {
           catchError(() => of(null)),
           tap((user) => this._user$.next(user)),
           tap((user) =>
-            user ? AuthService.storeUser(user) : localStorage.removeItem('user')
-          )
+            user
+              ? AuthService.storeUser(user)
+              : localStorage.removeItem('user'),
+          ),
         )
       : null;
   }
@@ -67,7 +69,7 @@ export class AuthService {
           this._user$.next(user);
           this._userAuthenticated$.next(true);
           AuthService.storeUser(user);
-        })
+        }),
       );
   }
 
@@ -97,7 +99,7 @@ export class AuthService {
         this._user$.next(null);
         this._userAuthenticated$.next(false);
         localStorage.removeItem('user');
-      })
+      }),
     );
   }
 
@@ -120,7 +122,7 @@ export class AuthService {
           this._user$.next(user);
           this._userChanged$.next(user);
           AuthService.storeUser(user);
-        })
+        }),
       );
   }
 
@@ -141,7 +143,7 @@ export class AuthService {
           this._user$.next(user);
           this._userAuthenticated$.next(true);
           AuthService.storeUser(user);
-        })
+        }),
       );
   }
 
@@ -153,7 +155,7 @@ export class AuthService {
           this._user$.next(user);
           this._userAuthenticated$.next(true);
           AuthService.storeUser(user);
-        })
+        }),
       );
   }
 }

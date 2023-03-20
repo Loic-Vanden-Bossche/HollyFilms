@@ -19,10 +19,10 @@ import { animate, style, transition, trigger } from '@angular/animations';
             style({
               opacity: 1,
               transform: 'TranslateX(0px) TranslateY(0px)',
-            })
+            }),
           ),
         ],
-        { params: { delay: 0 } }
+        { params: { delay: 0 } },
       ),
     ]),
   ],

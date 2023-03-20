@@ -1,8 +1,8 @@
-import { exec } from 'child_process';
+import { exec } from "child_process";
 
 const generateAPIDocs = (
-  mdOutfile = 'API.md',
-  yamlOutfile = 'openapi.yaml',
+  mdOutfile = "API.md",
+  yamlOutfile = "openapi.yaml"
 ) => {
   return new Promise((resolve, reject) => {
     exec(
@@ -15,7 +15,7 @@ const generateAPIDocs = (
           reject(stderr);
         }
         resolve(stdout);
-      },
+      }
     );
   });
 };

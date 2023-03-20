@@ -1,34 +1,34 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { Response } from 'express';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
-import { getExpirationDate } from './auth.utils';
-import LoginAuthDto from './dto/login.auth.dto';
-import { TokensService } from '../tokens/tokens.service';
-import ChangePasswordAuthDto from './dto/change-password.auth.dto';
-import { User, UserDocument } from '../users/user.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Token, TokenContext } from '../tokens/token.schema';
-import CurrentUser from '../users/current';
-import { APIConfig, CookieConfig, RTokenConfig } from '../../config/config';
-import { Environment } from '../../config/config.default';
-import { getSameSiteStrategy } from '../../config/config.utils';
-import ResetPasswordDto from './dto/reset-password.auth.dto';
-import { getObjectId } from '../../shared/mongoose';
-import { JwtService } from '@nestjs/jwt';
-import * as randomToken from 'rand-token';
-import { getRandomColor } from '../users/colors-profiles';
+import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import { Response } from "express";
+import { ConfigService } from "@nestjs/config";
+import * as bcrypt from "bcrypt";
+import { getExpirationDate } from "./auth.utils";
+import LoginAuthDto from "./dto/login.auth.dto";
+import { TokensService } from "../tokens/tokens.service";
+import ChangePasswordAuthDto from "./dto/change-password.auth.dto";
+import { User, UserDocument } from "../users/user.schema";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { Token, TokenContext } from "../tokens/token.schema";
+import CurrentUser from "../users/current";
+import { APIConfig, CookieConfig, RTokenConfig } from "../../config/config";
+import { Environment } from "../../config/config.default";
+import { getSameSiteStrategy } from "../../config/config.utils";
+import ResetPasswordDto from "./dto/reset-password.auth.dto";
+import { getObjectId } from "../../shared/mongoose";
+import { JwtService } from "@nestjs/jwt";
+import * as randomToken from "rand-token";
+import { getRandomColor } from "../users/colors-profiles";
 
 @Injectable()
 export class AuthService {
-  private logger = new Logger('Auth');
+  private logger = new Logger("Auth");
 
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService<APIConfig>,
     private readonly tokensService: TokensService,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>
   ) {}
 
   async register(data: {
@@ -44,12 +44,12 @@ export class AuthService {
     const user = await this.userModel.findOne({ email: data.email }).exec();
     if (user) {
       this.logger.warn(`User ${data.email} already exists`);
-      throw new HttpException('Email Already Exists', HttpStatus.FORBIDDEN);
+      throw new HttpException("Email Already Exists", HttpStatus.FORBIDDEN);
     }
 
     if (!data.password && !data.isRegisteredWithGoogle) {
       this.logger.warn(`User ${data.email} password is required`);
-      throw new HttpException('Password is required', HttpStatus.FORBIDDEN);
+      throw new HttpException("Password is required", HttpStatus.FORBIDDEN);
     }
 
     return this.userModel.create({
@@ -87,7 +87,7 @@ export class AuthService {
         _id: user._id,
       }),
       refreshToken: await this.generateRefreshToken(user._id).then(
-        (token) => token.value,
+        (token) => token.value
       ),
     };
   }
@@ -98,7 +98,7 @@ export class AuthService {
       .orFail(() => {
         throw new HttpException(
           `User ${user._id} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .then((u) => {
@@ -106,14 +106,14 @@ export class AuthService {
         if (!profile)
           throw new HttpException(
             `Profile ${uniqueId} not found for user ${user._id}`,
-            HttpStatus.NOT_FOUND,
+            HttpStatus.NOT_FOUND
           );
         return u;
       });
   }
 
   generateRefreshToken(userId: string): Promise<Token> {
-    const config = this.configService.get<RTokenConfig>('rToken');
+    const config = this.configService.get<RTokenConfig>("rToken");
     return this.tokensService.generateToken({
       userId,
       context: TokenContext.REFRESH_STRATEGY,
@@ -127,13 +127,13 @@ export class AuthService {
       userId,
       context: TokenContext.CHANGE_PASSWORD,
       length: 64,
-      expiresAt: getExpirationDate('1-hour'),
+      expiresAt: getExpirationDate("1-hour"),
     });
   }
 
   attachCookie(res: Response, token) {
-    const env = this.configService.get<Environment>('currentEnv');
-    const config = this.configService.get<CookieConfig>('cookie');
+    const env = this.configService.get<Environment>("currentEnv");
+    const config = this.configService.get<CookieConfig>("cookie");
 
     res.cookie(config.name, token, {
       expires: getExpirationDate(config.expiresIn),
@@ -144,35 +144,35 @@ export class AuthService {
   }
 
   clearCookie(res: Response) {
-    const config = this.configService.get<CookieConfig>('cookie');
+    const config = this.configService.get<CookieConfig>("cookie");
     res.clearCookie(config.name);
   }
 
   async validateUserCredentials(
-    credentials: LoginAuthDto,
+    credentials: LoginAuthDto
   ): Promise<CurrentUser> {
     this.logger.log(`Validating user ${credentials.email} credentials`);
     const user = await this.userModel
       .findOne({ email: credentials.email })
       .orFail(() => {
-        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
       })
       .exec();
 
     if (user.isRegisteredWithGoogle) {
       throw new HttpException(
-        'This is a Google account',
-        HttpStatus.BAD_REQUEST,
+        "This is a Google account",
+        HttpStatus.BAD_REQUEST
       );
     }
 
     const valid = await this.comparePasswords(
       credentials.password,
-      user.password,
+      user.password
     );
     if (!valid) {
       this.logger.warn(`Invalid credentials for user ${credentials.email}`);
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
     }
 
     return new CurrentUser(user);
@@ -180,12 +180,12 @@ export class AuthService {
 
   async validateRefreshToken(
     userId: string,
-    refreshToken: string,
+    refreshToken: string
   ): Promise<Token> {
     return this.tokensService.validateToken(
       getObjectId(userId),
       refreshToken,
-      TokenContext.REFRESH_STRATEGY,
+      TokenContext.REFRESH_STRATEGY
     );
   }
 
@@ -194,21 +194,21 @@ export class AuthService {
     return this.userModel
       .findOne({ email: resetPassword.email })
       .orFail(() => {
-        throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+        throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
       })
       .exec()
-      .then(() => ({ message: 'Password reset email sent' }));
+      .then(() => ({ message: "Password reset email sent" }));
   }
 
   async processPassword(
     password: string | undefined,
     passwordConfirm: string | undefined,
-    old?: string,
+    old?: string
   ): Promise<string | undefined> {
     if (passwordConfirm && !password) {
       throw new HttpException(
-        'You must provide a password for password confirmation',
-        HttpStatus.BAD_REQUEST,
+        "You must provide a password for password confirmation",
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -216,14 +216,14 @@ export class AuthService {
       if (old && (await this.comparePasswords(password, old))) {
         throw new HttpException(
           `New password and old password are the same`,
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
 
       if (passwordConfirm && password !== passwordConfirm) {
         throw new HttpException(
           `New password and new password confirmation not match`,
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
 
@@ -238,7 +238,7 @@ export class AuthService {
       .orFail(() => {
         throw new HttpException(
           `User ${changePassword.email} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .exec();
@@ -246,7 +246,7 @@ export class AuthService {
     const token = await this.tokensService.validateToken(
       user._id,
       changePassword.token,
-      TokenContext.CHANGE_PASSWORD,
+      TokenContext.CHANGE_PASSWORD
     );
 
     return this.userModel
@@ -254,11 +254,11 @@ export class AuthService {
         password: await this.processPassword(
           changePassword.newPassword,
           changePassword.newPasswordConfirm,
-          user.password,
+          user.password
         ),
       })
       .exec()
       .then(() => this.tokensService.consumeToken(user._id, token))
-      .then(() => ({ message: 'Password changed' }));
+      .then(() => ({ message: "Password changed" }));
   }
 }

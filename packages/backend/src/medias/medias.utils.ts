@@ -1,8 +1,8 @@
-import { Media } from './media.schema';
-import { AdminMedia } from './medias.service';
-import UpdateTrackDto from '../indentity/users/dto/update.track.dto';
+import { Media } from "./media.schema";
+import { AdminMedia } from "./medias.service";
+import UpdateTrackDto from "../indentity/users/dto/update.track.dto";
 
-type MediaType = 'movie' | 'tv';
+type MediaType = "movie" | "tv";
 type QueueData = {
   _id?: string;
   filePath?: string;
@@ -34,25 +34,25 @@ interface ShowcaseMedia {
 }
 
 enum ListType {
-  ALL = '',
-  RECOMMENDED = 'recommended',
-  POPULAR = 'popular',
-  RECENT = 'recent',
-  INLIST = 'inlist',
-  LIKED = 'liked',
-  WATCHED = 'watched',
-  CONTINUE = 'continue',
-  MOVIE = 'movie',
-  SERIES = 'series',
-  ANIME = 'anime',
+  ALL = "",
+  RECOMMENDED = "recommended",
+  POPULAR = "popular",
+  RECENT = "recent",
+  INLIST = "inlist",
+  LIKED = "liked",
+  WATCHED = "watched",
+  CONTINUE = "continue",
+  MOVIE = "movie",
+  SERIES = "series",
+  ANIME = "anime",
 }
 
 enum FeaturedType {
-  RECOMMENDED = 'recommended',
-  POPULAR = 'popular',
-  RECENT = 'recent',
-  CONTINUE = 'continue',
-  INLIST = 'inlist',
+  RECOMMENDED = "recommended",
+  POPULAR = "popular",
+  RECENT = "recent",
+  CONTINUE = "continue",
+  INLIST = "inlist",
 }
 
 const dtoToTrackData = (dto: UpdateTrackDto): TrackData => {
@@ -67,7 +67,7 @@ const dtoToTrackData = (dto: UpdateTrackDto): TrackData => {
 };
 
 const getMediaType = (media: Media): MediaType => {
-  return media.tvs ? 'tv' : 'movie';
+  return media.tvs ? "tv" : "movie";
 };
 
 const formatOneMedia = (media: Media): MediaWithType => {
@@ -79,7 +79,7 @@ const formatOneMedia = (media: Media): MediaWithType => {
 
 const formatAdminMedia = (media: MediaWithType): AdminMedia => {
   return {
-    _id: 'media.data._id',
+    _id: "media.data._id",
     title: media.data.title,
     backdrop_path: media.data.backdrop_path,
     release_date: media.data.release_date,

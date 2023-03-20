@@ -1,10 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema } from '../../shared/base.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { BaseSchema } from "../../shared/base.schema";
 
 export enum TokenContext {
-  REGISTER_USER = 'register_user',
-  CHANGE_PASSWORD = 'change_password',
-  REFRESH_STRATEGY = 'refresh_strategy',
+  REGISTER_USER = "register_user",
+  CHANGE_PASSWORD = "change_password",
+  REFRESH_STRATEGY = "refresh_strategy",
 }
 
 @Schema({ timestamps: true })

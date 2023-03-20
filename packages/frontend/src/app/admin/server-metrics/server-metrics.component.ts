@@ -37,7 +37,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 1,
             transform: 'translateY(0px) translateX(0px) Rotate(0deg)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -52,7 +52,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 1,
             height: '9rem',
-          })
+          }),
         ),
       ]),
       transition(':leave', [
@@ -65,7 +65,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 0,
             height: '0rem',
-          })
+          }),
         ),
       ]),
     ]),
@@ -77,7 +77,7 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
   chart?: BaseChartDirective;
 
   @ViewChild(BaseChartDirective) set chartElem(
-    chart: BaseChartDirective | undefined
+    chart: BaseChartDirective | undefined,
   ) {
     if (chart) {
       this.chart = chart;
@@ -275,10 +275,10 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
         arg0: number,
         arg1: any,
         arg2: number,
-        arg3: any
+        arg3: any,
       ) => any;
     },
-    chartArea: { right: number; left: number; bottom: number; top: number }
+    chartArea: { right: number; left: number; bottom: number; top: number },
   ) {
     let width, height, gradient;
 
@@ -289,7 +289,7 @@ export class ServerMetricsComponent implements OnInit, OnChanges {
         0,
         chartArea.bottom,
         0,
-        chartArea.top
+        chartArea.top,
       );
       gradient.addColorStop(0, 'blue');
       gradient.addColorStop(0.5, 'red');

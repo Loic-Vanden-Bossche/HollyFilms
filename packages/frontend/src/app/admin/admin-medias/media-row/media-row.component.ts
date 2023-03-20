@@ -29,7 +29,7 @@ import { forkJoin } from 'rxjs';
           params: {
             delay: 0,
           },
-        }
+        },
       ),
     ]),
     trigger('onSelectionChange', [
@@ -37,7 +37,7 @@ import { forkJoin } from 'rxjs';
         style({ opacity: 0, transform: 'translateX(-100%)' }),
         animate(
           '0.5s ease',
-          style({ opacity: 1, transform: 'translateX(0%)' })
+          style({ opacity: 1, transform: 'translateX(0%)' }),
         ),
       ]),
     ]),
@@ -76,8 +76,8 @@ export class MediaRowComponent implements OnChanges {
   removeFromQueue() {
     forkJoin(
       (this.media?.queue || []).map((file) =>
-        this.adminService.removeFromQueue(file._id)
-      )
+        this.adminService.removeFromQueue(file._id),
+      ),
     ).subscribe(() => {
       this.adminService.refreshMedias();
     });

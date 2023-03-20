@@ -1,19 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { ConfigService } from '@nestjs/config';
-import { APIConfig } from '../config/config';
-import CurrentUser from '../indentity/users/current';
-import { Token } from '../indentity/tokens/token.schema';
-import { Environment } from '../config/config.default';
-import { appendExecutionPath } from '../shared/utils';
+import { Injectable, Logger } from "@nestjs/common";
+import { ISendMailOptions, MailerService } from "@nestjs-modules/mailer";
+import { ConfigService } from "@nestjs/config";
+import { APIConfig } from "../config/config";
+import CurrentUser from "../indentity/users/current";
+import { Token } from "../indentity/tokens/token.schema";
+import { Environment } from "../config/config.default";
+import { appendExecutionPath } from "../shared/utils";
 
 @Injectable()
 export class MailsService {
-  private readonly logger = new Logger('Mails');
+  private readonly logger = new Logger("Mails");
 
   constructor(
     private readonly mailer: MailerService,
-    private readonly configService: ConfigService<APIConfig>,
+    private readonly configService: ConfigService<APIConfig>
   ) {}
 
   sendEmail(config: ISendMailOptions) {
@@ -24,8 +24,8 @@ export class MailsService {
         config.attachments?.map((attachment) => ({
           ...attachment,
           path: appendExecutionPath(
-            this.configService.get<Environment>('currentEnv'),
-            `assets/${attachment.path}`,
+            this.configService.get<Environment>("currentEnv"),
+            `assets/${attachment.path}`
           ),
         })) || [],
     });
@@ -34,19 +34,19 @@ export class MailsService {
   async sendResetPasswordEmail(to: CurrentUser, token: Token) {
     return this.sendEmail({
       to: to.email,
-      subject: 'Changement de mot de passe',
-      template: 'change-password',
+      subject: "Changement de mot de passe",
+      template: "change-password",
       context: {
         link: `${this.configService.get(
-          'frontendUrl',
+          "frontendUrl"
         )}/auth/change-password?token=${token.value}`,
         email: to.email,
       },
       attachments: [
         {
-          filename: 'logo.png',
-          path: 'logo.png',
-          cid: 'logo@png.xx',
+          filename: "logo.png",
+          path: "logo.png",
+          cid: "logo@png.xx",
         },
       ],
     });
@@ -56,16 +56,16 @@ export class MailsService {
     return this.sendEmail({
       to: to.email,
       subject: title,
-      template: 'info',
+      template: "info",
       context: {
         title,
         message,
       },
       attachments: [
         {
-          filename: 'logo.png',
-          path: 'logo.png',
-          cid: 'logo@png.xx',
+          filename: "logo.png",
+          path: "logo.png",
+          cid: "logo@png.xx",
         },
       ],
     });

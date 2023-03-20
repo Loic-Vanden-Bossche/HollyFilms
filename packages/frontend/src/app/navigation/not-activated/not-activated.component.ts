@@ -16,7 +16,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 1,
             transform: 'TranslateY(0) Scale(1)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -31,7 +31,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 1,
             transform: 'Scale(1)',
-          })
+          }),
         ),
       ]),
     ]),

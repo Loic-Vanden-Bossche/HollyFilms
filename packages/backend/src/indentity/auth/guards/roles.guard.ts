@@ -4,11 +4,11 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import CurrentUser from '../../users/current';
-import { Role } from '../../../shared/role';
-import { ROLES_KEY } from '../../../shared/decorators/roles.decorator';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import CurrentUser from "../../users/current";
+import { Role } from "../../../shared/role";
+import { ROLES_KEY } from "../../../shared/decorators/roles.decorator";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -31,8 +31,8 @@ export class RolesGuard implements CanActivate {
     if (requiredRoles.some((role) => user.roles?.includes(role))) return true;
 
     throw new HttpException(
-      'You dont have suffisent privileges',
-      HttpStatus.FORBIDDEN,
+      "You dont have suffisent privileges",
+      HttpStatus.FORBIDDEN
     );
   }
 }

@@ -1,6 +1,6 @@
-import { ConfigEnvironmentDto } from './config.environment.dto';
-import { defaultConfig, Environment } from './config.default';
-import { validateConfig } from 'nestjs-env-config';
+import { ConfigEnvironmentDto } from "./config.environment.dto";
+import { defaultConfig, Environment } from "./config.default";
+import { validateConfig } from "nestjs-env-config";
 
 export interface BaseConfig {
   port: number;

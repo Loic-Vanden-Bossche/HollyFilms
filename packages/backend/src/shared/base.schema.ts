@@ -1,5 +1,5 @@
-import { Prop, Schema } from '@nestjs/mongoose';
-import { Schema as MongooseSchema } from 'mongoose';
+import { Prop, Schema } from "@nestjs/mongoose";
+import { Schema as MongooseSchema } from "mongoose";
 
 @Schema()
 export class BaseSchema {

@@ -1,11 +1,11 @@
-import * as fsp from 'fs/promises';
-import { Media } from '../medias/media.schema';
-import { User } from '../indentity/users/user.schema';
-import { Role } from '../shared/role';
-import { getObjectId } from '../shared/mongoose';
-import { getRandomColor } from '../indentity/users/colors-profiles';
+import * as fsp from "fs/promises";
+import { Media } from "../medias/media.schema";
+import { User } from "../indentity/users/user.schema";
+import { Role } from "../shared/role";
+import { getObjectId } from "../shared/mongoose";
+import { getRandomColor } from "../indentity/users/colors-profiles";
 
-import * as randomToken from 'rand-token';
+import * as randomToken from "rand-token";
 
 export class Director {
   name: string;
@@ -208,17 +208,17 @@ const loadJsonFile = (path: string) =>
   fsp.readFile(path).then((data) => JSON.parse(data.toString()));
 
 const loadMovies = () =>
-  loadJsonFile('/apps/migrations/movies.json') as Promise<Movie[]>;
+  loadJsonFile("/apps/migrations/movies.json") as Promise<Movie[]>;
 
 const loadTvs = () =>
-  loadJsonFile('/apps/migrations/tvs.json') as Promise<TVShow[]>;
+  loadJsonFile("/apps/migrations/tvs.json") as Promise<TVShow[]>;
 
 const loadUsers = () =>
-  loadJsonFile('/apps/migrations/users.json') as Promise<OldUser[]>;
+  loadJsonFile("/apps/migrations/users.json") as Promise<OldUser[]>;
 
 const oldPlayedMediasToNew = (
-  oldPlayedMovies?: OldUser['playedMovies'],
-  oldPlayedTvs?: OldUser['playedTvs'],
+  oldPlayedMovies?: OldUser["playedMovies"],
+  oldPlayedTvs?: OldUser["playedTvs"]
 ) => {
   return [
     ...(oldPlayedMovies
@@ -260,7 +260,7 @@ const oldToNewUser = (oldUser: OldUser): User => ({
       color: getRandomColor(),
       playedMedias: oldPlayedMediasToNew(
         oldUser.playedMovies,
-        oldUser.playedTvs,
+        oldUser.playedTvs
       ),
     },
   ],
@@ -272,7 +272,7 @@ const movieToMedia = (movie: Movie): Media => ({
   title: movie.titleFr,
   runtime: movie.runtime,
   budget:
-    typeof movie.budget === 'number'
+    typeof movie.budget === "number"
       ? movie.budget
       : parseInt(movie.budget?.$numberLong),
   genres: movie.genres,
@@ -280,7 +280,7 @@ const movieToMedia = (movie: Movie): Media => ({
   popularity: movie.popularity,
   release_date: movie.release_date,
   revenue:
-    typeof movie.revenue === 'number'
+    typeof movie.revenue === "number"
       ? movie.revenue
       : parseInt(movie.revenue?.$numberLong),
   poster_path: movie.poster_path,

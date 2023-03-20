@@ -1,9 +1,9 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { UsersService } from '../../../users/users.service';
-import { ConfigService } from '@nestjs/config';
-import { AuthService } from '../../auth.service';
-import { GoogleOAuthConfig } from '../../../../config/config';
-import { OAuth2Client, TokenPayload } from 'google-auth-library';
+import { HttpException, Injectable } from "@nestjs/common";
+import { UsersService } from "../../../users/users.service";
+import { ConfigService } from "@nestjs/config";
+import { AuthService } from "../../auth.service";
+import { GoogleOAuthConfig } from "../../../../config/config";
+import { OAuth2Client, TokenPayload } from "google-auth-library";
 
 @Injectable()
 export class GoogleAuthService {
@@ -11,14 +11,14 @@ export class GoogleAuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly configService: ConfigService,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {
     const OAuthConfig =
-      this.configService.get<GoogleOAuthConfig>('googleOAuth');
+      this.configService.get<GoogleOAuthConfig>("googleOAuth");
 
     this.oauthClient = new OAuth2Client(
       OAuthConfig.clientId,
-      OAuthConfig.clientSecret,
+      OAuthConfig.clientSecret
     );
   }
 
@@ -26,7 +26,7 @@ export class GoogleAuthService {
     const tokenInfo = await this.oauthClient
       .verifyIdToken({ idToken: token })
       .catch(() => {
-        throw new HttpException('Invalid token', 403);
+        throw new HttpException("Invalid token", 403);
       })
       .then((ticket) => ticket.getPayload());
 

@@ -37,7 +37,7 @@ export class AdminService {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
   ) {}
 
   refreshMedias() {
@@ -51,22 +51,22 @@ export class AdminService {
       })
       .pipe(
         tap((medias) => (this.medias = medias)),
-        tap(() => this.filterMedias())
+        tap(() => this.filterMedias()),
       );
   }
 
   filterMedias(query = '') {
     this._filteredMedias$.next(
       this.medias.filter(
-        (m) => m.data.title.toLowerCase().includes(query) || m.queue?.length
-      )
+        (m) => m.data.title.toLowerCase().includes(query) || m.queue?.length,
+      ),
     );
   }
 
   getUsers() {
     return this.http.get<User[]>('users/admin', { withCredentials: true }).pipe(
       tap((users) => (this.users = users)),
-      tap(() => this.filterUsers())
+      tap(() => this.filterUsers()),
     );
   }
 
@@ -78,9 +78,9 @@ export class AdminService {
             u.username.toLowerCase().includes(query) ||
             u.email.toLowerCase().includes(query) ||
             u.firstname.toLowerCase().includes(query) ||
-            u.lastname.toLowerCase().includes(query)
-        )
-      )
+            u.lastname.toLowerCase().includes(query),
+        ),
+      ),
     );
   }
 
@@ -109,7 +109,7 @@ export class AdminService {
   deleteUser(userId: string) {
     return this.usersService.deleteUser(userId).pipe(
       tap(() => (this.users = this.users.filter((u) => u._id !== userId))),
-      tap(() => this.filterUsers())
+      tap(() => this.filterUsers()),
     );
   }
 
@@ -118,17 +118,17 @@ export class AdminService {
       tap(
         () =>
           (this.users = this.users.map((u) =>
-            u._id === userId ? { ...u, isActivated: true } : u
-          ))
+            u._id === userId ? { ...u, isActivated: true } : u,
+          )),
       ),
-      tap(() => this.filterUsers())
+      tap(() => this.filterUsers()),
     );
   }
 
   onDeleted(userId: string): void {
     this.usersService.deleteUser(userId).pipe(
       tap(() => (this.users = this.users.filter((u) => u._id !== userId))),
-      tap(() => this.filterUsers())
+      tap(() => this.filterUsers()),
     );
   }
 
@@ -189,7 +189,7 @@ export class AdminService {
           tmdbId,
           filePath,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       )
       .pipe(tap(() => this.refreshMedias()));
   }

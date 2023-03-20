@@ -39,14 +39,14 @@ import { fromSecondsToImpreciseTime } from '../../shared/utils';
             style({
               opacity: 1,
               transform: 'translateX(0%)',
-            })
+            }),
           ),
         ],
         {
           params: {
             delay: 0,
           },
-        }
+        },
       ),
     ]),
     trigger('animateTopRight', [
@@ -62,14 +62,14 @@ import { fromSecondsToImpreciseTime } from '../../shared/utils';
             style({
               opacity: 1,
               transform: 'translateX(0%) translateY(0%) rotate(0deg)',
-            })
+            }),
           ),
         ],
         {
           params: {
             delay: 0,
           },
-        }
+        },
       ),
     ]),
     trigger('animateBottomRight', [
@@ -85,14 +85,14 @@ import { fromSecondsToImpreciseTime } from '../../shared/utils';
             style({
               opacity: 1,
               transform: 'translateX(0%) translateY(0%) rotate(0)',
-            })
+            }),
           ),
         ],
         {
           params: {
             delay: 0,
           },
-        }
+        },
       ),
     ]),
   ],
@@ -105,15 +105,15 @@ export class UserModalComponent implements OnInit {
   editProfileForm = new FormGroup({
     firstname: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+      Validators.compose([Validators.required, Validators.pattern(/\S/)]),
     ),
     lastname: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+      Validators.compose([Validators.required, Validators.pattern(/\S/)]),
     ),
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+      Validators.compose([Validators.required, Validators.pattern(/\S/)]),
     ),
     profilePicture: new FormControl(null),
   });
@@ -149,7 +149,7 @@ export class UserModalComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
     private readonly modalService: ModalService,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   cancelEdit() {
@@ -168,7 +168,7 @@ export class UserModalComponent implements OnInit {
       this.usersService.deleteProfile().subscribe({
         next: () => {
           this.userProfiles = this.userProfiles.filter(
-            (profile) => profile.profileUniqueId !== this.user?.profileUniqueId
+            (profile) => profile.profileUniqueId !== this.user?.profileUniqueId,
           );
 
           this.notificationsService.push({
@@ -176,7 +176,7 @@ export class UserModalComponent implements OnInit {
             message: 'Votre profil a bien été supprimé',
           });
           const defaultProfile = this.userProfiles.find(
-            (profile) => profile.isDefault
+            (profile) => profile.isDefault,
           );
 
           if (defaultProfile) {
@@ -250,15 +250,15 @@ export class UserModalComponent implements OnInit {
         .pipe(
           switchMap(() =>
             this.usersService.uploadProfilePicture(
-              this.editProfileForm.value.profilePicture as unknown as File
-            )
-          )
+              this.editProfileForm.value.profilePicture as unknown as File,
+            ),
+          ),
         )
         .subscribe({
           next: (profile) => {
             this.authService.updateUserProfile(profile);
             this.userProfiles = this.userProfiles.map((p) =>
-              p.profileUniqueId === profile.profileUniqueId ? profile : p
+              p.profileUniqueId === profile.profileUniqueId ? profile : p,
             );
             this.notificationsService.push({
               type: NotificationType.Success,
@@ -306,12 +306,12 @@ export class UserModalComponent implements OnInit {
         mergeWith(
           this.authService.onUserUpdated().pipe(
             filter((user) => !!user),
-            take(1)
+            take(1),
           ),
-          this.authService.onUserAuthenticate()
+          this.authService.onUserAuthenticate(),
         ),
         filter((user) => !!user),
-        map(() => this.authService.user as User)
+        map(() => this.authService.user as User),
       )
       .subscribe((user: User) => {
         this.updateProfilePicture(user);

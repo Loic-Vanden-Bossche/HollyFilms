@@ -1,5 +1,5 @@
-import { Types } from 'mongoose';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { Types } from "mongoose";
+import { HttpException, HttpStatus } from "@nestjs/common";
 
 const isObjectId = (id: string) => {
   if (!id) return false;
@@ -8,7 +8,7 @@ const isObjectId = (id: string) => {
 
 const checkObjectId = (str: string): string => {
   if (!isObjectId(str))
-    throw new HttpException('Invalid Object Id', HttpStatus.BAD_REQUEST);
+    throw new HttpException("Invalid Object Id", HttpStatus.BAD_REQUEST);
   return str;
 };
 

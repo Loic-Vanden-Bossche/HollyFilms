@@ -19,7 +19,7 @@ export class CategoryResultsComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly title: TitleService,
-    private readonly categoriesService: CategoriesService
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   ngOnInit(): void {
@@ -29,16 +29,16 @@ export class CategoryResultsComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         map((names) => names.split(',').filter((name) => name)),
         tap((names) =>
-          !names.length ? this.router.navigate(['/home']) : void 0
+          !names.length ? this.router.navigate(['/home']) : void 0,
         ),
         tap((names) =>
-          setTimeout(() => this.title.setTitle(`${names.join(', ')}`), 500)
+          setTimeout(() => this.title.setTitle(`${names.join(', ')}`), 500),
         ),
         filter((names) => names.length > 0),
         switchMap((categories) =>
-          this.mediasService.getMediasByCategory(categories)
+          this.mediasService.getMediasByCategory(categories),
         ),
-        tap(() => (this.loading = false))
+        tap(() => (this.loading = false)),
       )
       .subscribe((medias) => (this.medias = medias));
   }

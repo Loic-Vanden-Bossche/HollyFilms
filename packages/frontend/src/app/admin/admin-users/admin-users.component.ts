@@ -17,7 +17,7 @@ export class AdminUsersComponent implements OnInit {
   constructor(
     private readonly adminService: AdminService,
     private readonly notificationsService: NotificationsService,
-    private readonly searchService: SearchService
+    private readonly searchService: SearchService,
   ) {}
 
   ngOnInit(): void {

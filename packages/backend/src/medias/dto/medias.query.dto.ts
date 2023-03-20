@@ -1,6 +1,6 @@
-import { IsEnum, IsNumberString, IsOptional } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ListType } from '../medias.utils';
+import { IsEnum, IsNumberString, IsOptional } from "class-validator";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { ListType } from "../medias.utils";
 
 export class MediasQueryDto {
   @ApiPropertyOptional()

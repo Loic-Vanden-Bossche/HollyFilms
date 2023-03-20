@@ -1,10 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Season, SeasonSchema } from './tvs/schemas/season.schema';
-import { FileInfos, FileInfosSchema } from './schemas/file-infos.schema';
-import { Review, ReviewSchema } from './schemas/review.schema';
-import { Actor, ActorSchema } from './schemas/actor.schema';
-import { DataProfile, DataProfileSchema } from './schemas/profile.schema';
-import { BaseIdSchema } from '../shared/base.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Season, SeasonSchema } from "./tvs/schemas/season.schema";
+import { FileInfos, FileInfosSchema } from "./schemas/file-infos.schema";
+import { Review, ReviewSchema } from "./schemas/review.schema";
+import { Actor, ActorSchema } from "./schemas/actor.schema";
+import { DataProfile, DataProfileSchema } from "./schemas/profile.schema";
+import { BaseIdSchema } from "../shared/base.schema";
 
 export class Director {
   name: string;

@@ -17,20 +17,20 @@ export class TvsService {
   getEpisodeWatchedTime(
     mediaId: string,
     episodeIndex: number,
-    seasonIndex: number
+    seasonIndex: number,
   ): number {
     return (
       this.auth.user?.playedMedias.find(
         (pm) =>
           pm.mediaId === mediaId &&
           pm.seasonIndex === seasonIndex &&
-          pm.episodeIndex === episodeIndex
+          pm.episodeIndex === episodeIndex,
       )?.currentTime || 0
     );
   }
 
   getTvClosestIndexes(
-    media: Media
+    media: Media,
   ): { episodeIndex: number; seasonIndex: number } | null {
     if (!this.isTvWatched(media._id)) {
       return null;

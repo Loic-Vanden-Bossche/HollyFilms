@@ -38,10 +38,10 @@ import { filter } from 'rxjs';
                 '1s ease',
                 style({
                   transform: 'Rotate(0deg) Scale(1)',
-                })
+                }),
               ),
             ],
-            { optional: true }
+            { optional: true },
           ),
           query(
             '@onStatusFeatured',
@@ -53,10 +53,10 @@ import { filter } from 'rxjs';
                 '1s ease',
                 style({
                   transform: 'TranslateY(0) TranslateX(0)',
-                })
+                }),
               ),
             ],
-            { optional: true }
+            { optional: true },
           ),
           query(':self', [
             style({
@@ -68,7 +68,7 @@ import { filter } from 'rxjs';
               style({
                 opacity: 1,
                 transform: 'TranslateX(0px) Scale(1)',
-              })
+              }),
             ),
           ]),
         ]),
@@ -83,7 +83,7 @@ import { filter } from 'rxjs';
           style({
             opacity: 0,
             transform: 'TranslateX(-20px) Scale(0.9)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -136,7 +136,7 @@ export class MediaCarrouselItemComponent implements OnInit {
     private readonly playerService: PlayerService,
     private readonly mediasService: MediasService,
     private readonly modalService: ModalService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   openModal(media: MediaWithType) {
@@ -145,7 +145,7 @@ export class MediaCarrouselItemComponent implements OnInit {
   }
 
   getTagAndIconFromFeatured(
-    featured: FeaturedType
+    featured: FeaturedType,
   ): [string, IconDefinition | null] {
     return this.mediasService.getTagAndIconFromFeatured(featured);
   }
@@ -188,7 +188,7 @@ export class MediaCarrouselItemComponent implements OnInit {
     if (this.media) {
       this.playLabel = this.mediasService.getPlayLabelForMedia(this.media);
       [this.vendorTag, this.vendorIcon] = this.getTagAndIconFromFeatured(
-        this.media.featured
+        this.media.featured,
       );
       this.ratingProgress = (this.media.data.rating * 100) / 10;
     }

@@ -19,7 +19,7 @@ export class SignInComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private themes: ThemesService,
-    private notifications: NotificationsService
+    private notifications: NotificationsService,
   ) {}
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class SignInComponent implements OnInit {
       this.auth
         .authenticate(
           this.loginForm.controls['email'].value,
-          this.loginForm.controls['password'].value
+          this.loginForm.controls['password'].value,
         )
         .subscribe({
           next: () => {
@@ -52,7 +52,7 @@ export class SignInComponent implements OnInit {
               const url = this.router.parseUrl(returnUrl);
               this.router.navigate(
                 ['/' + url.root.children['primary'].segments.join('/') + '/'],
-                { queryParams: url.queryParams }
+                { queryParams: url.queryParams },
               );
             } else if (this.auth.isActivated) {
               this.router.navigate(['home']);

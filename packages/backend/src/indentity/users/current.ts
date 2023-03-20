@@ -1,13 +1,13 @@
-import { User } from './user.schema';
-import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../../shared/role';
-import { UserProfile } from './user-profile.schema';
-import { CurrentMediaRecord, CurrentPlayedMedia, Profile } from './profile';
+import { User } from "./user.schema";
+import { ApiProperty } from "@nestjs/swagger";
+import { Role } from "../../shared/role";
+import { UserProfile } from "./user-profile.schema";
+import { CurrentMediaRecord, CurrentPlayedMedia, Profile } from "./profile";
 
 export default class CurrentUser extends Profile {
   getProfileFromUniqueId(
     user: Partial<User>,
-    profileUniqueId?: string,
+    profileUniqueId?: string
   ): UserProfile {
     if (!profileUniqueId) {
       return user.profiles[0];
@@ -50,13 +50,13 @@ export default class CurrentUser extends Profile {
 
   @ApiProperty({
     description: "The user's id",
-    example: '5e9f8f8f8f8f8f8f8f8f8f8f8',
+    example: "5e9f8f8f8f8f8f8f8f8f8f8f8",
   })
   _id: string = null;
 
   @ApiProperty({
     description: "The user's email",
-    example: 'exemplle.test@gmail.com',
+    example: "exemplle.test@gmail.com",
   })
   email: string = null;
 
@@ -67,19 +67,19 @@ export default class CurrentUser extends Profile {
   roles: Role[] = null;
 
   @ApiProperty({
-    description: 'Is the user an Admin',
-    example: 'true',
+    description: "Is the user an Admin",
+    example: "true",
   })
   isAdmin?: boolean;
 
   @ApiProperty({
-    description: 'Is the user activated',
-    example: 'true',
+    description: "Is the user activated",
+    example: "true",
   })
   isActivated: boolean;
 
   @ApiProperty({
-    description: 'Is user registered with Google',
+    description: "Is user registered with Google",
     example: true,
   })
   isRegisteredWithGoogle: boolean;

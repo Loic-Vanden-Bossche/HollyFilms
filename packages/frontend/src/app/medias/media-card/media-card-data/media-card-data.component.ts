@@ -36,7 +36,7 @@ export class MediaCardDataComponent {
   constructor(
     private readonly mediasService: MediasService,
     private readonly modalService: ModalService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   onLike() {

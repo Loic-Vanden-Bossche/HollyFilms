@@ -1,13 +1,13 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { ProcessingGateway } from './processing.gateway';
-import { ProcessingService } from './processing.service';
-import { ProcessingController } from './processing.controller';
-import { WebsocketService } from './websocket.service';
-import { ScrapperService } from './scrapper.service';
-import { MediasModule } from '../medias/medias.module';
-import { HttpModule } from '@nestjs/axios';
-import { MongooseModule } from '@nestjs/mongoose';
-import { QueuedProcess, QueuedProcessSchema } from './queued-process.schema';
+import { forwardRef, Module } from "@nestjs/common";
+import { ProcessingGateway } from "./processing.gateway";
+import { ProcessingService } from "./processing.service";
+import { ProcessingController } from "./processing.controller";
+import { WebsocketService } from "./websocket.service";
+import { ScrapperService } from "./scrapper.service";
+import { MediasModule } from "../medias/medias.module";
+import { HttpModule } from "@nestjs/axios";
+import { MongooseModule } from "@nestjs/mongoose";
+import { QueuedProcess, QueuedProcessSchema } from "./queued-process.schema";
 
 @Module({
   imports: [

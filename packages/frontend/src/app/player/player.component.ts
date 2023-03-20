@@ -45,7 +45,7 @@ import { PlayedMedia } from '../shared/models/played-media.model';
           style({
             transform: 'Scale(1)',
             opacity: 1,
-          })
+          }),
         ),
       ]),
     ]),
@@ -62,10 +62,10 @@ import { PlayedMedia } from '../shared/models/played-media.model';
             style({
               transform: 'TranslateX(0%)',
               opacity: 1,
-            })
+            }),
           ),
         ],
-        { params: { delay: '500' } }
+        { params: { delay: '500' } },
       ),
       transition(':leave', [
         style({
@@ -77,7 +77,7 @@ import { PlayedMedia } from '../shared/models/played-media.model';
           style({
             transform: 'TranslateX(100%)',
             opacity: 0,
-          })
+          }),
         ),
       ]),
     ]),
@@ -114,7 +114,7 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
     private readonly auth: AuthService,
     private readonly previousRouteService: PreviousRouteService,
     private readonly router: Router,
-    private readonly title: TitleService
+    private readonly title: TitleService,
   ) {}
 
   @HostListener('window:keyup', ['$event'])
@@ -195,7 +195,7 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
       const audioTrackList = this.player.audioTracks();
       for (let i = 0; i < audioTrackList.length; i++) {
         (audioTrackList[i] as any).label = this.getLangFromCode(
-          audioTrackList[i].language
+          audioTrackList[i].language,
         );
       }
     }
@@ -229,17 +229,17 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
 
   onAudioTrackChange() {
     return new Observable((observer) =>
-      this.player?.audioTracks().on('change', () => observer.next())
+      this.player?.audioTracks().on('change', () => observer.next()),
     ).pipe(map(() => this.getAudioTrackIndex()));
   }
 
   onTimeUpdate() {
     return new Observable((observer) =>
-      this.player?.on('timeupdate', () => observer.next())
+      this.player?.on('timeupdate', () => observer.next()),
     ).pipe(
       sampleTime(2000),
       filter(() => !this.player?.paused()),
-      map(() => Math.floor(this.player?.currentTime() || 0))
+      map(() => Math.floor(this.player?.currentTime() || 0)),
     );
   }
 
@@ -257,14 +257,14 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
     return new Observable((observer) =>
       this.player
         ?.textTracks()
-        .addEventListener('change', () => observer.next())
+        .addEventListener('change', () => observer.next()),
     ).pipe(map(() => this.getTextTrackIndex()));
   }
 
   getLocation(
     media: MediaWithType,
     seasonIndex?: number,
-    episodeIndex?: number
+    episodeIndex?: number,
   ) {
     if (seasonIndex === undefined || episodeIndex === undefined) {
       return media.data.fileInfos?.location;
@@ -284,7 +284,7 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
       this.auth.updateUserProfile({
         playedMedias: this.usersService.getPlayedMediasFromPlayedMedia(
           this.auth.user?.playedMedias || [],
-          playedMedia
+          playedMedia,
         ),
       });
     }
@@ -316,9 +316,9 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
               media,
               seasonIndex: params.get('seasonIndex'),
               episodeIndex: params.get('episodeIndex'),
-            }))
-          )
-        )
+            })),
+          ),
+        ),
       )
       .subscribe(({ media, episodeIndex, seasonIndex }) => {
         const tvIndexes =
@@ -327,7 +327,7 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
           this.getLocation(
             media,
             seasonIndex ? parseInt(seasonIndex) : undefined,
-            episodeIndex ? parseInt(episodeIndex) : undefined
+            episodeIndex ? parseInt(episodeIndex) : undefined,
           ) || 'default';
         this.media = media;
         this.source = this.media?.data._id
@@ -381,7 +381,7 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
               seekToLive: false,
               pictureInPictureToggle: false,
             },
-          }
+          },
         );
 
         this.player.src({
@@ -407,8 +407,8 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
           this.playerElement?.nativeElement.parentElement?.insertBefore(
             node,
             this.playerElement?.nativeElement.parentElement?.getElementsByClassName(
-              'vjs-control-bar'
-            )[0]
+              'vjs-control-bar',
+            )[0],
           );
         });
 
@@ -441,8 +441,8 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
                   mediaId: this.media?.data._id || '',
                   ...indexesParams,
                   ai: index,
-                })
-              )
+                }),
+              ),
             )
             .subscribe();
           this.onTextTrackChange()
@@ -452,8 +452,8 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
                   mediaId: this.media?.data._id || '',
                   ...indexesParams,
                   ti: index,
-                })
-              )
+                }),
+              ),
             )
             .subscribe();
           this.onTimeUpdate()
@@ -463,8 +463,8 @@ export class PlayerComponent implements AfterViewInit, OnDestroy {
                   mediaId: this.media?.data._id || '',
                   ...indexesParams,
                   time,
-                })
-              )
+                }),
+              ),
             )
             .subscribe();
         });

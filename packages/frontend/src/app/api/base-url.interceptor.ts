@@ -17,14 +17,14 @@ export class BaseUrlInterceptor implements HttpInterceptor {
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(
       request.clone({
         url: request.url.startsWith('http')
           ? request.url
           : [this.baseUrl, request.url].join('/'),
-      })
+      }),
     );
   }
 }

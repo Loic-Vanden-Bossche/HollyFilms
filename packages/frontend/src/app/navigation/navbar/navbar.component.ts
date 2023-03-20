@@ -51,7 +51,7 @@ export class NavBarButton {
           style({
             opacity: 1,
             transform: 'translateY(0%)',
-          })
+          }),
         ),
       ]),
       transition(':leave', [
@@ -64,7 +64,7 @@ export class NavBarButton {
           style({
             opacity: 0,
             transform: 'translateY(-100%)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -82,7 +82,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly notificationsService: NotificationsService,
     private readonly router: Router,
-    private readonly categoriesService: CategoriesService
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   searchCtrl = new FormControl('');
@@ -126,7 +126,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
         (user) =>
           (this.profilePictureUrl = user?.picture
             ? this.usersService.getProfilePictureUrl(user.picture)
-            : this.defaultProfilePictureUrl)
+            : this.defaultProfilePictureUrl),
       );
 
     if (this.isAuthenticated) {
@@ -168,7 +168,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
       });
 
     this.searchCtrl.valueChanges.subscribe((query) =>
-      this.onSearch(query || '')
+      this.onSearch(query || ''),
     );
 
     if (this.authService.isAdmin) {

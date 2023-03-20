@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly mediasService: MediasService
+    private readonly mediasService: MediasService,
   ) {}
 
   ngOnInit() {
@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
 
   onNoData(type: ListType) {
     this.mediaLists.next(
-      this.mediaLists.getValue().filter((mediaList) => mediaList.type !== type)
+      this.mediaLists.getValue().filter((mediaList) => mediaList.type !== type),
     );
   }
 }

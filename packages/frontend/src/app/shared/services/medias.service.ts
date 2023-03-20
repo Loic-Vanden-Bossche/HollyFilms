@@ -40,7 +40,7 @@ export class MediasService {
     private readonly http: HttpClient,
     private readonly auth: AuthService,
     private readonly tvsService: TvsService,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   getPlayLabelForMedia(media: MediaWithType) {
@@ -84,7 +84,7 @@ export class MediasService {
   }
 
   getTagAndIconFromFeatured(
-    featured: FeaturedType | undefined
+    featured: FeaturedType | undefined,
   ): [string, IconDefinition] {
     switch (featured) {
       case FeaturedType.CONTINUE:
@@ -117,7 +117,7 @@ export class MediasService {
             type: NotificationType.Success,
             message: `J\' aime ajouté pour ${media.data.title}`,
           });
-        })
+        }),
       );
   }
 
@@ -133,7 +133,7 @@ export class MediasService {
             type: NotificationType.Info,
             message: `Vous n\'aimez plus ${media.data.title}`,
           });
-        })
+        }),
       );
   }
 
@@ -150,7 +150,7 @@ export class MediasService {
             type: NotificationType.Success,
             message: `${media.data.title} a été ajouté à votre liste`,
           });
-        })
+        }),
       );
   }
 
@@ -167,14 +167,14 @@ export class MediasService {
             type: NotificationType.Info,
             message: `${media.data.title} a été retiré de votre liste`,
           });
-        })
+        }),
       );
   }
 
   getMedias(type: ListType = ListType.ALL, skip = 0) {
     return this.http.get<MediaWithType[]>(
       `medias?type=${type}&limit=${this.limit}&skip=${skip}`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 
@@ -183,7 +183,7 @@ export class MediasService {
       `medias/category/${category.join('/')}`,
       {
         withCredentials: true,
-      }
+      },
     );
   }
 
@@ -202,14 +202,14 @@ export class MediasService {
   getAllMedias(type: ListType = ListType.ALL) {
     return this.http.get<MediaWithType[]>(
       `medias?type=${type}&limit=${0}&skip=${0}`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 
   searchQuery(query: string, all: boolean, skip = 0) {
     return this.http.get<MediaWithType[]>(
       `medias/search?query=${query}&limit=${all ? 0 : this.limit}&skip=${skip}`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 

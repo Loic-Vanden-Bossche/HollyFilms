@@ -1,9 +1,9 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { Token, TokenSchema } from '../tokens/token.schema';
-import { Role } from '../../shared/role';
-import { UserProfile, UserProfileSchema } from './user-profile.schema';
-import { BaseIdSchema } from '../../shared/base.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
+import { Token, TokenSchema } from "../tokens/token.schema";
+import { Role } from "../../shared/role";
+import { UserProfile, UserProfileSchema } from "./user-profile.schema";
+import { BaseIdSchema } from "../../shared/base.schema";
 
 export type UserDocument = User & Document;
 

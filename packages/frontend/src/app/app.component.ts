@@ -27,7 +27,7 @@ import { GoogleAuthService } from './shared/services/google-auth.service';
               width: '100vw',
               top: '0px',
               left: '0px',
-            })
+            }),
           ),
         ],
         {
@@ -35,7 +35,7 @@ import { GoogleAuthService } from './shared/services/google-auth.service';
             top: '0em',
             left: '0em',
           },
-        }
+        },
       ),
     ]),
   ],
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
     private readonly themeService: ThemesService,
     private readonly authService: AuthService,
     private readonly playerService: PlayerService,
-    private readonly googleAuth: GoogleAuthService
+    private readonly googleAuth: GoogleAuthService,
   ) {}
 
   @HostListener('window:beforeinstallprompt', ['$event'])

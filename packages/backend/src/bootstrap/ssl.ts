@@ -1,9 +1,9 @@
-import { APIConfig, getConfig, SSLConfig } from '../config/config';
-import { NestApplicationOptions } from '@nestjs/common';
-import * as fs from 'fs/promises';
+import { APIConfig, getConfig, SSLConfig } from "../config/config";
+import { NestApplicationOptions } from "@nestjs/common";
+import * as fs from "fs/promises";
 
 const getSSLOptions = async (
-  sslConfig: SSLConfig,
+  sslConfig: SSLConfig
 ): Promise<NestApplicationOptions> => {
   if (sslConfig.enabled) {
     try {
@@ -23,7 +23,7 @@ const getSSLOptions = async (
       };
     } catch (e) {
       throw new Error(
-        `SSL is enabled but the key or cert files are missing ${e}`,
+        `SSL is enabled but the key or cert files are missing ${e}`
       );
     }
   }

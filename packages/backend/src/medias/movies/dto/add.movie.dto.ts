@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class AddMovieDto {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Movie id in tmdb',
+    description: "Movie id in tmdb",
     example: 13493,
   })
   tmdbId: number;
@@ -13,8 +13,8 @@ export class AddMovieDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'filePath of the movie',
-    example: '/media/13493.mp4',
+    description: "filePath of the movie",
+    example: "/media/13493.mp4",
   })
   filePath: string;
 }

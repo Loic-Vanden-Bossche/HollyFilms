@@ -40,13 +40,13 @@ export class ShowcaseTextAnimationComponent implements AfterViewInit {
       b: parseInt(colorEnd.substring(5, 7), 16),
     };
     const r = Math.floor(start.r * (1 - percent) + end.r * percent).toString(
-      16
+      16,
     );
     const g = Math.floor(start.g * (1 - percent) + end.g * percent).toString(
-      16
+      16,
     );
     const b = Math.floor(start.b * (1 - percent) + end.b * percent).toString(
-      16
+      16,
     );
     return '#' + this.pad(r) + this.pad(g) + this.pad(b);
   }
@@ -92,7 +92,7 @@ export class ShowcaseTextAnimationComponent implements AfterViewInit {
       letter.style.color = this.colorFromGradiant(
         '#4ade80',
         '#3b82f6',
-        i / content.length
+        i / content.length,
       );
       letter.innerHTML = letterContent === ' ' ? '&nbsp;' : letterContent;
       word.appendChild(letter);

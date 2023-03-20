@@ -24,7 +24,7 @@ import { GoogleAuthService } from '../../shared/services/google-auth.service';
           style({
             opacity: 1,
             transform: 'TranslateY(0) TranslateX(0)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -39,7 +39,7 @@ import { GoogleAuthService } from '../../shared/services/google-auth.service';
           style({
             opacity: 1,
             transform: 'TranslateY(0)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -54,7 +54,7 @@ import { GoogleAuthService } from '../../shared/services/google-auth.service';
           style({
             opacity: 1,
             transform: 'TranslateY(0px) TranslateX(0px) Scale(1)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -66,7 +66,7 @@ export class ShowcaseComponent implements OnInit, AfterViewInit {
 
   constructor(
     private readonly auth: AuthService,
-    private readonly googleAuth: GoogleAuthService
+    private readonly googleAuth: GoogleAuthService,
   ) {}
 
   get isAuthenticated() {

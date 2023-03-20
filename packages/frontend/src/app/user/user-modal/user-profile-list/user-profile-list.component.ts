@@ -23,15 +23,15 @@ export class UserProfileListComponent {
   addProfileForm = new FormGroup({
     firstname: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+      Validators.compose([Validators.required, Validators.pattern(/\S/)]),
     ),
     lastname: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+      Validators.compose([Validators.required, Validators.pattern(/\S/)]),
     ),
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.pattern(/\S/)])
+      Validators.compose([Validators.required, Validators.pattern(/\S/)]),
     ),
   });
 
@@ -42,7 +42,7 @@ export class UserProfileListComponent {
   constructor(
     private readonly auth: AuthService,
     private readonly usersService: UsersService,
-    private readonly notificationService: NotificationsService
+    private readonly notificationService: NotificationsService,
   ) {}
 
   onCreateUser() {

@@ -19,11 +19,11 @@ export class PwaService {
       .pipe(
         filter(
           (evt: VersionEvent): evt is VersionReadyEvent =>
-            evt.type === 'VERSION_READY'
-        )
+            evt.type === 'VERSION_READY',
+        ),
       )
       .subscribe(() =>
-        updates.activateUpdate().then(() => document.location.reload())
+        updates.activateUpdate().then(() => document.location.reload()),
       );
     if (localStorage.getItem('promptPwa') === 'false') this._promptPwa = false;
   }

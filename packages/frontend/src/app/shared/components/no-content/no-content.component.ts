@@ -16,7 +16,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             opacity: 1,
             transform: 'TranslateY(0)',
-          })
+          }),
         ),
       ]),
     ]),

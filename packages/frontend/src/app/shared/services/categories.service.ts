@@ -54,8 +54,8 @@ export class CategoriesService {
         categories.map((category) => ({
           ...category,
           selected: this._selectedCategories.includes(category.name),
-        }))
-      )
+        })),
+      ),
     );
   }
 
@@ -66,7 +66,7 @@ export class CategoriesService {
 
   removeFromSelectedCategories(categoryName: string) {
     this._selectedCategories = this._selectedCategories.filter(
-      (name) => name !== categoryName
+      (name) => name !== categoryName,
     );
     this.setSelectedCategories();
   }

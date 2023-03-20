@@ -20,7 +20,7 @@ export class GoogleAuthService {
   constructor(
     private readonly auth: AuthService,
     private readonly router: Router,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   handleCredentialResponse(response: CredentialResponse) {

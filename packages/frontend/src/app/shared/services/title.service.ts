@@ -21,13 +21,13 @@ export class TitleService {
   constructor(
     private readonly title: Title,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) {
     this.router.events
       .pipe(
         filter(
           (event) =>
-            event instanceof ActivationEnd || event instanceof NavigationEnd
+            event instanceof ActivationEnd || event instanceof NavigationEnd,
         ),
         map(() => this.route),
         map((route) => {
@@ -35,7 +35,7 @@ export class TitleService {
           return route;
         }),
         mergeMap((route) => route.data),
-        tap((event) => (this.lastRouteTitle = event['title']))
+        tap((event) => (this.lastRouteTitle = event['title'])),
       )
       .subscribe(() => this.setTitleFromRoute());
   }

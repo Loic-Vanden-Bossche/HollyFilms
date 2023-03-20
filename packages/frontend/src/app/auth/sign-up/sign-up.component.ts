@@ -42,7 +42,7 @@ export class SignUpComponent {
     private router: Router,
     private route: ActivatedRoute,
     private themes: ThemesService,
-    private notifications: NotificationsService
+    private notifications: NotificationsService,
   ) {}
 
   get f() {
@@ -91,7 +91,7 @@ export class SignUpComponent {
       },
       {
         validator: mustMatch('password', 'confirmPassword'),
-      }
+      },
     );
   }
 

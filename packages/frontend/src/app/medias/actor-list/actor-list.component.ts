@@ -19,7 +19,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           '0.5s ease',
           style({
             transform: 'TranslateX(0%)',
-          })
+          }),
         ),
       ]),
     ]),

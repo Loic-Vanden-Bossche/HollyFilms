@@ -83,7 +83,7 @@ export class MediaModalComponent implements OnChanges, OnInit {
     private readonly tvsService: TvsService,
     private readonly playerService: PlayerService,
     private readonly title: TitleService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   ngOnInit() {

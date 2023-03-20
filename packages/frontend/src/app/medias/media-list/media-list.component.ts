@@ -39,7 +39,7 @@ import {
           '0.5s ease',
           style({
             transform: 'TranslateX(0%)',
-          })
+          }),
         ),
       ]),
     ]),
@@ -56,10 +56,10 @@ import {
             style({
               opacity: 1,
               transform: 'TranslateX(0px) TranslateY(0px)',
-            })
+            }),
           ),
         ],
-        { params: { delay: 0 } }
+        { params: { delay: 0 } },
       ),
     ]),
   ],
@@ -144,16 +144,16 @@ export class MediaListComponent implements OnChanges, OnInit {
             tap((medias) =>
               !medias.length && !this.skip.value.value
                 ? this.noData.emit()
-                : void 0
-            )
-          )
+                : void 0,
+            ),
+          ),
         ),
-        map((medias) => [...this.medias.value, ...medias])
+        map((medias) => [...this.medias.value, ...medias]),
       )
       .subscribe((medias) => this.medias.next(medias));
 
     this.medias.subscribe((medias) =>
-      this.mediasRetrieved.emit(medias.slice(0, this.mediasService.limit))
+      this.mediasRetrieved.emit(medias.slice(0, this.mediasService.limit)),
     );
   }
 

@@ -28,7 +28,7 @@ export class MediaStreamComponent implements OnInit {
         this.stream.data.height
       ) {
         this.labels.push(
-          `${this.stream.data.height}x${this.stream.data.width}`
+          `${this.stream.data.height}x${this.stream.data.width}`,
         );
       }
 

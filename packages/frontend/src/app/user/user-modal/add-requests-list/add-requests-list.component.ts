@@ -28,7 +28,7 @@ export class AddRequestsListComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly tmdbService: TmdbService,
     private readonly usersService: UsersService,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   requestMedia(media: TMDBMicroSearchResult) {
@@ -58,15 +58,15 @@ export class AddRequestsListComponent implements OnInit {
         tap(() => (this.loading = true)),
         debounceTime(500),
         switchMap((query) =>
-          !!query ? this.tmdbService.search(query?.trim() || '') : of([])
+          !!query ? this.tmdbService.search(query?.trim() || '') : of([]),
         ),
-        tap(() => (this.loading = false))
+        tap(() => (this.loading = false)),
       )
       .subscribe((value) => (this.tmdbSearchResults = value));
     this.authService
       .onUserUpdated()
       .subscribe(
-        (user) => (this.requestedMedias = user?.addRequestedMedias || [])
+        (user) => (this.requestedMedias = user?.addRequestedMedias || []),
       );
   }
 }

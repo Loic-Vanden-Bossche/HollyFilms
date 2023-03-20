@@ -20,7 +20,7 @@ export class PlayNextMediaComponent implements OnInit {
 
   constructor(
     private readonly playerService: PlayerService,
-    private readonly mediasService: MediasService
+    private readonly mediasService: MediasService,
   ) {}
 
   getTagAndIconFromFeatured(featured: FeaturedType): [string, IconDefinition] {
@@ -44,7 +44,7 @@ export class PlayNextMediaComponent implements OnInit {
   ngOnInit(): void {
     if (this.media) {
       [this.vendorTag, this.vendorIcon] = this.getTagAndIconFromFeatured(
-        this.media.featured
+        this.media.featured,
       );
     }
   }

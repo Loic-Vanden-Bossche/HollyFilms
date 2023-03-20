@@ -44,7 +44,7 @@ type Tabs = 'users' | 'medias';
             '1000ms ease',
             style({
               opacity: 1,
-            })
+            }),
           ),
         ]),
       ]),
@@ -84,7 +84,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService,
     private readonly processingService: ProcessingService,
     private readonly adminService: AdminService,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   addMovie() {
@@ -139,8 +139,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         tap(
           (data) =>
             (this.processingService.progressStatus =
-              data.progressStatus || null)
-        )
+              data.progressStatus || null),
+        ),
       )
       .subscribe((data) => {
         this.queueStarted = data.queueStarted;
@@ -149,7 +149,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(
         map((e) => (e instanceof NavigationEnd ? e.url.split('/')[2] : '')),
-        startWith(this.router.url.split('/')[2])
+        startWith(this.router.url.split('/')[2]),
       )
       .subscribe((e) => {
         if (e) this.selectedTab = e as 'users' | 'medias';

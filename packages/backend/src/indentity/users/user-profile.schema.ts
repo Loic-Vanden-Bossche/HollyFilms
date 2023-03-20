@@ -1,17 +1,17 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import {
   PlayedMedia,
   PlayedMediaSchema,
-} from '../../medias/schemas/played-media.schema';
-import { BaseSchema } from '../../shared/base.schema';
+} from "../../medias/schemas/played-media.schema";
+import { BaseSchema } from "../../shared/base.schema";
 import {
   UserTMDBRecord,
   UserTMDBRecordSchema,
-} from './user-tmdb-record.schema';
+} from "./user-tmdb-record.schema";
 import {
   UserMediaRecord,
   UserMediaRecordSchema,
-} from './user-media-record.schema';
+} from "./user-media-record.schema";
 
 @Schema({ timestamps: true, _id: false })
 export class UserProfile extends BaseSchema {

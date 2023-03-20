@@ -24,7 +24,7 @@
             />
             <label class="label">
               <span *ngIf="isError('email')" class="text-red-500 text-sm">{{
-                fieldErrors("email")
+                fieldErrors('email')
               }}</span>
             </label>
           </div>
@@ -43,7 +43,7 @@
                 <span
                   *ngIf="isError('firstname')"
                   class="text-red-500 text-sm"
-                  >{{ fieldErrors("firstname") }}</span
+                  >{{ fieldErrors('firstname') }}</span
                 >
               </label>
             </div>
@@ -61,7 +61,7 @@
                 <span
                   *ngIf="isError('lastname')"
                   class="text-red-500 text-sm"
-                  >{{ fieldErrors("lastname") }}</span
+                  >{{ fieldErrors('lastname') }}</span
                 >
               </label>
             </div>
@@ -78,7 +78,7 @@
                 <span
                   *ngIf="isError('username')"
                   class="text-red-500 text-sm"
-                  >{{ fieldErrors("username") }}</span
+                  >{{ fieldErrors('username') }}</span
                 >
               </label>
             </div>
@@ -95,7 +95,7 @@
             />
             <label class="label">
               <span *ngIf="isError('password')" class="text-red-500 text-sm">{{
-                fieldErrors("password")
+                fieldErrors('password')
               }}</span>
             </label>
           </div>
@@ -113,7 +113,7 @@
               <span
                 *ngIf="isError('confirmPassword')"
                 class="text-red-500 text-sm"
-                >{{ fieldErrors("confirmPassword") }}</span
+                >{{ fieldErrors('confirmPassword') }}</span
               >
             </label>
           </div>

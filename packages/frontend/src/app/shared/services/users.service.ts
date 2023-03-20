@@ -42,7 +42,7 @@ export class UsersService {
       profile,
       {
         withCredentials: true,
-      }
+      },
     );
   }
 
@@ -63,7 +63,7 @@ export class UsersService {
       `users/addRequest/${mediaType}/${tmdbId}`,
       {
         withCredentials: true,
-      }
+      },
     );
   }
 
@@ -103,7 +103,7 @@ export class UsersService {
 
   getPlayedMediasFromPlayedMedia(
     playedMedias: PlayedMedia[],
-    playedMedia: PlayedMedia
+    playedMedia: PlayedMedia,
   ): PlayedMedia[] {
     let index;
 
@@ -112,11 +112,11 @@ export class UsersService {
         (media) =>
           media.mediaId === playedMedia.mediaId &&
           media.episodeIndex === playedMedia.episodeIndex &&
-          media.seasonIndex === playedMedia.seasonIndex
+          media.seasonIndex === playedMedia.seasonIndex,
       );
     } else {
       index = playedMedias.findIndex(
-        (media) => media.mediaId === playedMedia.mediaId
+        (media) => media.mediaId === playedMedia.mediaId,
       );
     }
 

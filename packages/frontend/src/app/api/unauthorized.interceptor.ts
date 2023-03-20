@@ -18,7 +18,7 @@ export class AuthAuthorized implements HttpInterceptor {
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request.clone()).pipe(
       tap({
@@ -32,7 +32,7 @@ export class AuthAuthorized implements HttpInterceptor {
             }
           }
         },
-      })
+      }),
     );
   }
 }

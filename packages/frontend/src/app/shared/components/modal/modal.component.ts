@@ -52,7 +52,7 @@ export class ModalComponent implements OnInit {
         if (el.target.className === 'jw-modal') {
           this.close();
         }
-      }
+      },
     );
 
     this.modalService.add(this);

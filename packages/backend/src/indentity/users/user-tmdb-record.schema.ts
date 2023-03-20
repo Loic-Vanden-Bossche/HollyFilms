@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema } from '../../shared/base.schema';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { BaseSchema } from "../../shared/base.schema";
 
 @Schema({ timestamps: true, _id: false })
 export class UserTMDBRecord extends BaseSchema {
@@ -19,7 +19,7 @@ export class UserTMDBRecord extends BaseSchema {
   release_date: string;
 
   @Prop()
-  mediaType: 'tv' | 'movie';
+  mediaType: "tv" | "movie";
 }
 
 export const UserTMDBRecordSchema =

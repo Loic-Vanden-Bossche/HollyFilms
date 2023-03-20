@@ -1,40 +1,40 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { User, UserDocument } from './user.schema';
-import CreateUserDto from './dto/create.user.dto';
-import UpdateUserDto from './dto/update.user.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import CurrentUser from './current';
-import { AuthService } from '../auth/auth.service';
-import { ConfigService } from '@nestjs/config';
-import { AdminConfig } from '../../config/config';
-import { defaultConfig } from '../../config/config.default';
-import { Role } from '../../shared/role';
-import { getObjectId } from '../../shared/mongoose';
-import { MediaType, TrackData } from '../../medias/medias.utils';
-import * as randomToken from 'rand-token';
-import CreateProfileDto from './dto/create.profile.dto';
-import { getRandomColor, getRandomizedColors } from './colors-profiles';
-import { UserProfile } from './user-profile.schema';
-import { MediasService } from '../../medias/medias.service';
+import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import { User, UserDocument } from "./user.schema";
+import CreateUserDto from "./dto/create.user.dto";
+import UpdateUserDto from "./dto/update.user.dto";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import CurrentUser from "./current";
+import { AuthService } from "../auth/auth.service";
+import { ConfigService } from "@nestjs/config";
+import { AdminConfig } from "../../config/config";
+import { defaultConfig } from "../../config/config.default";
+import { Role } from "../../shared/role";
+import { getObjectId } from "../../shared/mongoose";
+import { MediaType, TrackData } from "../../medias/medias.utils";
+import * as randomToken from "rand-token";
+import CreateProfileDto from "./dto/create.profile.dto";
+import { getRandomColor, getRandomizedColors } from "./colors-profiles";
+import { UserProfile } from "./user-profile.schema";
+import { MediasService } from "../../medias/medias.service";
 
-import * as fsp from 'fs/promises';
-import * as fs from 'fs';
-import { TmdbService } from '../../tmdb/tmdb.service';
-import { TMDBMicroSearchResult } from '../../tmdb/tmdb.models';
-import { CurrentMediaRecord, CurrentPlayedMedia } from './profile';
-import { getUsersToMigrate } from '../../bootstrap/migrations';
+import * as fsp from "fs/promises";
+import * as fs from "fs";
+import { TmdbService } from "../../tmdb/tmdb.service";
+import { TMDBMicroSearchResult } from "../../tmdb/tmdb.models";
+import { CurrentMediaRecord, CurrentPlayedMedia } from "./profile";
+import { getUsersToMigrate } from "../../bootstrap/migrations";
 
 @Injectable()
 export class UsersService {
-  logger = new Logger('Users');
+  logger = new Logger("Users");
 
   constructor(
     private readonly authService: AuthService,
     private readonly mediasService: MediasService,
     private readonly configService: ConfigService,
     private readonly tmdbService: TmdbService,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>
   ) {}
 
   findAll() {
@@ -60,7 +60,7 @@ export class UsersService {
       .orFail(() => {
         throw new HttpException(
           `User ${user._id} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .then((u) => u.profiles);
@@ -74,31 +74,31 @@ export class UsersService {
       watchedMedias: profile.playedMedias?.length || 0,
       favoriteGenre: profile.playedMedias?.length
         ? await this.mediasService.getMostRedondantGenreFromMedias(
-            profile.playedMedias.map((pm) => pm.media._id.toString()),
+            profile.playedMedias.map((pm) => pm.media._id.toString())
           )
-        : 'Aucun',
+        : "Aucun",
     }));
   }
 
   getProfile(user: CurrentUser, uniqueId: string): Promise<UserProfile> {
     const profileUniqueId =
-      uniqueId === 'current' ? user.profileUniqueId : uniqueId;
+      uniqueId === "current" ? user.profileUniqueId : uniqueId;
     return this.userModel
       .findById(getObjectId(user._id))
       .orFail(() => {
         throw new HttpException(
           `User ${user._id} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .then((u) => {
         const profile = u.profiles.find(
-          (p) => p.profileUniqueId === profileUniqueId,
+          (p) => p.profileUniqueId === profileUniqueId
         );
         if (!profile)
           throw new HttpException(
             `Profile ${profileUniqueId} not found for user ${user._id}`,
-            HttpStatus.NOT_FOUND,
+            HttpStatus.NOT_FOUND
           );
         return profile;
       });
@@ -117,9 +117,9 @@ export class UsersService {
 
   getMicroMediaFromTmdb(tmdbId: number, mediaType: MediaType) {
     switch (mediaType) {
-      case 'movie':
+      case "movie":
         return this.tmdbService.getMovie(tmdbId);
-      case 'tv':
+      case "tv":
         return this.tmdbService.getTv(tmdbId);
     }
   }
@@ -137,7 +137,7 @@ export class UsersService {
       .catch(() => {
         throw new HttpException(
           `Media ${tmdbId} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .then((media: TMDBMicroSearchResult) =>
@@ -153,11 +153,11 @@ export class UsersService {
             },
             {
               $push: {
-                'profiles.$.addRequestedMedias': media,
+                "profiles.$.addRequestedMedias": media,
               },
-            },
+            }
           )
-          .then(() => media),
+          .then(() => media)
       );
   }
 
@@ -165,7 +165,7 @@ export class UsersService {
     if (user.mediasInList?.map((m) => m.mediaId.toString()).includes(mediaId)) {
       throw new HttpException(
         `Media ${mediaId} already in list`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -174,7 +174,7 @@ export class UsersService {
       .catch(() => {
         throw new HttpException(
           `Media ${mediaId} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .then(() => {
@@ -190,12 +190,12 @@ export class UsersService {
             },
             {
               $push: {
-                'profiles.$.mediasInList': {
+                "profiles.$.mediasInList": {
                   media: getObjectId(mediaId),
                 },
               },
             },
-            { new: true },
+            { new: true }
           )
           .then(
             (updatedUser) =>
@@ -206,8 +206,8 @@ export class UsersService {
                     ({
                       mediaId: m.media as unknown as string,
                       createdAt: m.createdAt,
-                    } as CurrentMediaRecord),
-                ) || [],
+                    } as CurrentMediaRecord)
+                ) || []
           );
       });
   }
@@ -218,7 +218,7 @@ export class UsersService {
     ) {
       throw new HttpException(
         `Media ${mediaId} not in list`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -234,12 +234,12 @@ export class UsersService {
         },
         {
           $pull: {
-            'profiles.$.mediasInList': {
+            "profiles.$.mediasInList": {
               media: getObjectId(mediaId),
             },
           },
         },
-        { new: true },
+        { new: true }
       )
       .then(
         (updatedUser) =>
@@ -250,8 +250,8 @@ export class UsersService {
                 ({
                   mediaId: m.media as unknown as string,
                   createdAt: m.createdAt,
-                } as CurrentMediaRecord),
-            ) || [],
+                } as CurrentMediaRecord)
+            ) || []
       );
   }
 
@@ -259,7 +259,7 @@ export class UsersService {
     if (user.likedMedias?.map((m) => m.mediaId.toString()).includes(mediaId)) {
       throw new HttpException(
         `Media ${mediaId} already liked`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -268,7 +268,7 @@ export class UsersService {
       .catch(() => {
         throw new HttpException(
           `Media ${mediaId} not found`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.NOT_FOUND
         );
       })
       .then(() => {
@@ -284,12 +284,12 @@ export class UsersService {
             },
             {
               $push: {
-                'profiles.$.likedMedias': {
+                "profiles.$.likedMedias": {
                   media: getObjectId(mediaId),
                 },
               },
             },
-            { new: true },
+            { new: true }
           )
           .then(
             (updatedUser) =>
@@ -300,8 +300,8 @@ export class UsersService {
                     ({
                       mediaId: m.media as unknown as string,
                       createdAt: m.createdAt,
-                    } as CurrentMediaRecord),
-                ) || [],
+                    } as CurrentMediaRecord)
+                ) || []
           );
       });
   }
@@ -310,7 +310,7 @@ export class UsersService {
     if (!user.likedMedias?.map((m) => m.mediaId.toString()).includes(mediaId)) {
       throw new HttpException(
         `Media ${mediaId} not liked`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -326,12 +326,12 @@ export class UsersService {
         },
         {
           $pull: {
-            'profiles.$.likedMedias': {
+            "profiles.$.likedMedias": {
               media: getObjectId(mediaId),
             },
           },
         },
-        { new: true },
+        { new: true }
       )
       .then(
         (updatedUser) =>
@@ -342,8 +342,8 @@ export class UsersService {
                 ({
                   mediaId: m.media as unknown as string,
                   createdAt: m.createdAt,
-                } as CurrentMediaRecord),
-            ) || [],
+                } as CurrentMediaRecord)
+            ) || []
       );
   }
 
@@ -359,7 +359,7 @@ export class UsersService {
           $push: {
             profiles: {
               color: this.getRandomProfileColor(
-                userProfiles.map((p) => p.color),
+                userProfiles.map((p) => p.color)
               ),
               profileUniqueId: randomToken.generate(16),
               username: dto.username.trim(),
@@ -370,7 +370,7 @@ export class UsersService {
         },
         {
           new: true,
-        },
+        }
       )
       .then((u) => u.profiles[u.profiles.length - 1]);
   }
@@ -381,28 +381,28 @@ export class UsersService {
         getObjectId(user._id),
         {
           $set: {
-            'profiles.$[elem].username': dto.username.trim(),
-            'profiles.$[elem].firstname': dto.firstname.trim(),
-            'profiles.$[elem].lastname': dto.lastname.trim(),
+            "profiles.$[elem].username": dto.username.trim(),
+            "profiles.$[elem].firstname": dto.firstname.trim(),
+            "profiles.$[elem].lastname": dto.lastname.trim(),
           },
         },
         {
-          arrayFilters: [{ 'elem.profileUniqueId': uniqueId }],
+          arrayFilters: [{ "elem.profileUniqueId": uniqueId }],
           returnOriginal: false,
-        },
+        }
       )
       .then((u) => u.profiles.find((p) => p.profileUniqueId === uniqueId));
   }
 
   getProfilePicturePath(userId: string, uniqueId: string, hash: string) {
     return `${this.configService.get<string>(
-      'dataStorePath',
+      "dataStorePath"
     )}/profile_pictures/profilePicture.${userId}.${uniqueId}.${hash}.jpg`;
   }
 
   checkDataStorePath() {
     const dataStorePath = `${this.configService.get<string>(
-      'dataStorePath',
+      "dataStorePath"
     )}/profile_pictures`;
     if (!fs.existsSync(dataStorePath)) {
       return fsp.mkdir(dataStorePath, { recursive: true });
@@ -418,7 +418,7 @@ export class UsersService {
       const oldPath = this.getProfilePicturePath(
         user._id,
         user.profileUniqueId,
-        user.picture.split('/').pop(),
+        user.picture.split("/").pop()
       );
       if (fs.existsSync(oldPath)) {
         fsp.rm(oldPath);
@@ -435,7 +435,7 @@ export class UsersService {
     if (file) {
       await fsp.writeFile(
         this.getProfilePicturePath(user._id, user.profileUniqueId, hash),
-        file.buffer,
+        file.buffer
       );
     }
 
@@ -444,18 +444,18 @@ export class UsersService {
         getObjectId(user._id),
         {
           $set: {
-            'profiles.$[elem].picture': file
+            "profiles.$[elem].picture": file
               ? `picture/${user.profileUniqueId}/${hash}`
               : null,
           },
         },
         {
-          arrayFilters: [{ 'elem.profileUniqueId': user.profileUniqueId }],
+          arrayFilters: [{ "elem.profileUniqueId": user.profileUniqueId }],
           returnOriginal: false,
-        },
+        }
       )
       .then((u) =>
-        u.profiles.find((p) => p.profileUniqueId === user.profileUniqueId),
+        u.profiles.find((p) => p.profileUniqueId === user.profileUniqueId)
       );
   }
 
@@ -500,7 +500,7 @@ export class UsersService {
   findByIdLimited(id: string) {
     return this.userModel
       .findById(getObjectId(id))
-      .select('-token -password -roles')
+      .select("-token -password -roles")
       .exec();
   }
 
@@ -513,7 +513,7 @@ export class UsersService {
     if (existsUser)
       throw new HttpException(
         `User ${existsUser.email} already exists`,
-        HttpStatus.FORBIDDEN,
+        HttpStatus.FORBIDDEN
       );
   }
 
@@ -555,7 +555,7 @@ export class UsersService {
         },
         {
           returnOriginal: false,
-        },
+        }
       )
       .exec();
   }
@@ -569,7 +569,7 @@ export class UsersService {
     if (user.isDefault) {
       throw new HttpException(
         `You can't delete your default profile`,
-        HttpStatus.FORBIDDEN,
+        HttpStatus.FORBIDDEN
       );
     }
 
@@ -587,7 +587,7 @@ export class UsersService {
         },
         {
           returnOriginal: false,
-        },
+        }
       )
       .exec();
   }
@@ -596,7 +596,7 @@ export class UsersService {
     currentUser: CurrentUser,
     mediaId: string,
     seasonIndex?: number,
-    episodeIndex?: number,
+    episodeIndex?: number
   ) {
     const indexes = { seasonIndex, episodeIndex };
     const tvReady = indexes.seasonIndex && indexes.episodeIndex;
@@ -626,16 +626,16 @@ export class UsersService {
             },
           },
         },
-        { $unwind: '$profiles' },
+        { $unwind: "$profiles" },
         {
           $project: {
-            'profiles.profileUniqueId': currentUser.profileUniqueId,
+            "profiles.profileUniqueId": currentUser.profileUniqueId,
             playedMedias: {
               $filter: {
-                input: '$profiles.playedMedias',
-                as: 'playedMedia',
+                input: "$profiles.playedMedias",
+                as: "playedMedia",
                 cond: {
-                  $eq: ['$$playedMedia.media', getObjectId(mediaId)],
+                  $eq: ["$$playedMedia.media", getObjectId(mediaId)],
                 },
               },
             },
@@ -646,13 +646,13 @@ export class UsersService {
       .then((user: any[]) =>
         !user?.length
           ? {}
-          : user.filter((u) => u.playedMedias?.length)[0].playedMedias[0],
+          : user.filter((u) => u.playedMedias?.length)[0].playedMedias[0]
       );
   }
 
   trackUser(
     user: CurrentUser,
-    trackData: TrackData,
+    trackData: TrackData
   ): Promise<CurrentPlayedMedia[]> {
     const indexes = { seasonIndex: trackData.si, episodeIndex: trackData.ei };
     const tvReady = indexes.seasonIndex && indexes.episodeIndex;
@@ -684,19 +684,19 @@ export class UsersService {
           $set: {
             ...(trackData.time !== undefined
               ? {
-                  'profiles.$[outer].playedMedias.$[inner].currentTime':
+                  "profiles.$[outer].playedMedias.$[inner].currentTime":
                     trackData.time,
                 }
               : {}),
             ...(trackData.ai !== undefined
               ? {
-                  'profiles.$[outer].playedMedias.$[inner].audioTrack':
+                  "profiles.$[outer].playedMedias.$[inner].audioTrack":
                     trackData.ai,
                 }
               : {}),
             ...(trackData.ti !== undefined
               ? {
-                  'profiles.$[outer].playedMedias.$[inner].subtitleTrack':
+                  "profiles.$[outer].playedMedias.$[inner].subtitleTrack":
                     trackData.ti,
                 }
               : {}),
@@ -704,15 +704,15 @@ export class UsersService {
         },
         {
           arrayFilters: [
-            { 'outer.profileUniqueId': user.profileUniqueId },
-            { 'inner.media': getObjectId(trackData.mediaId) },
+            { "outer.profileUniqueId": user.profileUniqueId },
+            { "inner.media": getObjectId(trackData.mediaId) },
           ],
-        },
+        }
       )
       .then((foundUser) => {
         if (!foundUser) {
           this.logger.verbose(
-            `User ${user._id} added playedMedias entry for media ${trackData.mediaId}`,
+            `User ${user._id} added playedMedias entry for media ${trackData.mediaId}`
           );
           return this.userModel.findOneAndUpdate(
             {
@@ -725,7 +725,7 @@ export class UsersService {
             },
             {
               $push: {
-                'profiles.$.playedMedias': {
+                "profiles.$.playedMedias": {
                   media: getObjectId(trackData.mediaId),
                   ...(trackData.time !== undefined
                     ? { currentTime: trackData.time }
@@ -739,7 +739,7 @@ export class UsersService {
                   ...(tvReady ? indexes : {}),
                 },
               },
-            },
+            }
           );
         } else {
           return foundUser;
@@ -748,11 +748,11 @@ export class UsersService {
       .then((u) => {
         this.logger.verbose(`User ${u._id} updated playedMedias`);
         return u?.profiles.find(
-          (p) => p.profileUniqueId === user.profileUniqueId,
+          (p) => p.profileUniqueId === user.profileUniqueId
         ).playedMedias;
       })
       .then((playedMedias) =>
-        playedMedias.map((pm) => new CurrentPlayedMedia(pm)),
+        playedMedias.map((pm) => new CurrentPlayedMedia(pm))
       );
   }
 
@@ -762,19 +762,19 @@ export class UsersService {
         {
           playedMedias: { $elemMatch: { _id: mediaId } },
         },
-        { $pull: { playedMedias: { media: { _id: mediaId } } } },
+        { $pull: { playedMedias: { media: { _id: mediaId } } } }
       )
       .exec();
   }
 
   async createAdminAccount() {
-    const adminConfig = this.configService.get<AdminConfig>('admin');
+    const adminConfig = this.configService.get<AdminConfig>("admin");
 
-    this.logger.verbose('Checking admin account');
+    this.logger.verbose("Checking admin account");
 
     if (adminConfig.password === defaultConfig.HF_ADMIN_PASSWORD) {
       this.logger.warn(
-        `Admin password is default password, please change it if in production`,
+        `Admin password is default password, please change it if in production`
       );
     }
 
@@ -787,7 +787,7 @@ export class UsersService {
 
       const validPassword = await this.authService.comparePasswords(
         adminConfig.password,
-        user.password,
+        user.password
       );
 
       if (validPassword) {
@@ -804,7 +804,7 @@ export class UsersService {
     }
 
     this.logger.log(
-      `Admin ${adminConfig.email} not found in database, creating`,
+      `Admin ${adminConfig.email} not found in database, creating`
     );
 
     await this.userModel.create({
@@ -814,9 +814,9 @@ export class UsersService {
           color: getRandomColor(),
           isDefault: true,
           profileUniqueId: randomToken.generate(16),
-          firstname: 'Admin',
-          lastname: 'Admin',
-          username: 'Admin',
+          firstname: "Admin",
+          lastname: "Admin",
+          username: "Admin",
         },
       ],
       password: await this.authService.hashPassword(adminConfig.password),

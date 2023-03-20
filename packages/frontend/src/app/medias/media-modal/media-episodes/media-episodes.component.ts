@@ -17,7 +17,7 @@ export class MediaEpisodesComponent implements OnInit {
 
   constructor(
     private readonly tvsService: TvsService,
-    private readonly playerService: PlayerService
+    private readonly playerService: PlayerService,
   ) {}
 
   onPlayEpisode(event: MouseEvent, seasonIndex: number, episodeIndex: number) {
@@ -47,7 +47,7 @@ export class MediaEpisodesComponent implements OnInit {
         watchedTime: this.tvsService.getEpisodeWatchedTime(
           this.mediaId,
           episode.index,
-          season.index
+          season.index,
         ),
       })),
     }));

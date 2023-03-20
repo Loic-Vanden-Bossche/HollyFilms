@@ -4,29 +4,29 @@ import {
   Inject,
   Injectable,
   Logger,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Media, MediaDocument } from '../media.schema';
-import { Model } from 'mongoose';
-import { TmdbService } from '../../tmdb/tmdb.service';
+} from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Media, MediaDocument } from "../media.schema";
+import { Model } from "mongoose";
+import { TmdbService } from "../../tmdb/tmdb.service";
 import {
   formatOneMedia,
   MediaWithType,
   MediaWithTypeAndQueue,
-} from '../medias.utils';
-import { ProcessingService } from '../../processing/processing.service';
-import { FileInfos } from '../schemas/file-infos.schema';
-import * as fs from 'fs';
+} from "../medias.utils";
+import { ProcessingService } from "../../processing/processing.service";
+import { FileInfos } from "../schemas/file-infos.schema";
+import * as fs from "fs";
 
 @Injectable()
 export class MoviesService {
-  private logger = new Logger('Movies');
+  private logger = new Logger("Movies");
 
   constructor(
     @InjectModel(Media.name) private mediaModel: Model<MediaDocument>,
     private readonly tmdbService: TmdbService,
     @Inject(forwardRef(() => ProcessingService))
-    private readonly processingService: ProcessingService,
+    private readonly processingService: ProcessingService
   ) {}
 
   async findAll(): Promise<Media[]> {
@@ -46,7 +46,7 @@ export class MoviesService {
 
     if (!fs.existsSync(filePath)) {
       this.logger.error(`File ${filePath} does not exist`);
-      throw new HttpException('File not found', 404);
+      throw new HttpException("File not found", 404);
     }
 
     return this.tmdbService.getMovie(tmdbId).then(async (movie) => {

@@ -33,7 +33,7 @@ import { TmdbService } from '../../shared/services/tmdb.service';
             'max-height': '48px',
             'padding-top': '5px',
             'padding-bottom': '5px',
-          })
+          }),
         ),
       ]),
     ]),
@@ -53,7 +53,7 @@ export class AddMediaModalComponent implements OnInit {
     private readonly modalService: ModalService,
     private readonly adminService: AdminService,
     private readonly notificationsService: NotificationsService,
-    private readonly tmdbService: TmdbService
+    private readonly tmdbService: TmdbService,
   ) {}
 
   searchIcon = faMagnifyingGlass;
@@ -66,9 +66,9 @@ export class AddMediaModalComponent implements OnInit {
         mergeWith(
           this.searchCtrl.valueChanges.pipe(
             debounceTime(500),
-            distinctUntilChanged()
-          )
-        )
+            distinctUntilChanged(),
+          ),
+        ),
       )
       .subscribe(() => this.search());
   }
@@ -79,7 +79,7 @@ export class AddMediaModalComponent implements OnInit {
         this.tmdbService
           .search(
             this.searchCtrl.value || '',
-            this.addingMovie ? 'movie' : 'tv'
+            this.addingMovie ? 'movie' : 'tv',
           )
           .subscribe((results) => (this.tmdbResults = results));
       } else {

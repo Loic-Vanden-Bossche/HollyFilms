@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
           style({
             transform: 'translateX(0) translateY(0) scale(1)',
             opacity: 1,
-          })
+          }),
         ),
       ]),
       transition(':leave', [
@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
           style({
             transform: 'translateX(50%) translateY(-10px) scale(0.9)',
             opacity: 0,
-          })
+          }),
         ),
       ]),
     ]),
