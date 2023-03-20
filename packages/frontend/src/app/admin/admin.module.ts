@@ -19,7 +19,6 @@ import { QueueControlsComponent } from './admin-dashboard/queue-controls/queue-c
 import { ServerMetricsComponent } from './server-metrics/server-metrics.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { ProcessingService } from '../shared/services/processing.service';
 
 @NgModule({
   declarations: [
@@ -48,6 +47,6 @@ import { ProcessingService } from '../shared/services/processing.service';
     NgChartsModule,
     ScrollingModule,
   ],
-  providers: [ProcessingService],
+  // providers: [ProcessingService],
 })
 export class AdminModule {}
