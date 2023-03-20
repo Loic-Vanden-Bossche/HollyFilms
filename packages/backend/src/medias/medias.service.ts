@@ -750,26 +750,20 @@ export class MediasService {
   async updateEpisodes(
     originalEpisodes: Episode[] | undefined,
     TMDB_id: number,
-    seasonIndex
+    seasonIndex: number
   ): Promise<Episode[]> {
     const isAvailable = (ei: number) => {
       if (!originalEpisodes || !originalEpisodes[ei]) return false;
       return originalEpisodes[ei].available;
     };
 
-    if (!originalEpisodes) {
-      return originalEpisodes;
-    } else {
-      return this.tmdbService
-        .getEpisodes(TMDB_id, seasonIndex)
-        .then((episodes) =>
-          episodes.map((episode, i) => ({
-            ...(originalEpisodes[i] || {}),
-            ...episode,
-            available: isAvailable(i),
-          }))
-        );
-    }
+    return this.tmdbService.getEpisodes(TMDB_id, seasonIndex).then((episodes) =>
+      episodes.map((episode, i) => ({
+        ...(originalEpisodes[i] || {}),
+        ...episode,
+        available: isAvailable(i),
+      }))
+    );
   }
 
   async updateOneFromTMDB(media: MediaWithType) {
@@ -785,7 +779,7 @@ export class MediasService {
           ? await Promise.all(
               newMedia.data?.tvs?.map((season, i) => {
                 return this.updateEpisodes(
-                  media.data.tvs[i].episodes,
+                  media.data.tvs[i]?.episodes,
                   media.data.TMDB_id,
                   season.index
                 ).then((episodes) => ({

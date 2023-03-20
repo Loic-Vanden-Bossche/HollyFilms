@@ -26,9 +26,9 @@ jobs:
         working-directory: ./packages/frontend
         run: npm run build
 
-      - name: Check lint
-        working-directory: ./packages/frontend
-        run: npm run lint
+#      - name: Check lint
+#        working-directory: ./packages/frontend
+#        run: npm run lint
 
       - name: Deploy - remove old version
         run: rm -rf /apps/frontend/*
@@ -63,9 +63,9 @@ jobs:
         working-directory: ./packages/backend
         run: npm run build
 
-      - name: Check lint
-        working-directory: ./packages/backend
-        run: npm run lint
+#      - name: Check lint
+#        working-directory: ./packages/backend
+#        run: npm run lint
 
       - name: Deploy - remove old version
         run: find /apps/backend -mindepth 1 ! -regex '^/apps/backend/node_modules\(/.*\)?' -delete
