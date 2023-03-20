@@ -785,7 +785,7 @@ export class MediasService {
           ? await Promise.all(
               newMedia.data?.tvs?.map((season, i) => {
                 return this.updateEpisodes(
-                  media.data.tvs[i].episodes,
+                  media.data.tvs[i]?.episodes || [],
                   media.data.TMDB_id,
                   i + 1,
                 ).then((episodes) => ({
@@ -820,17 +820,17 @@ export class MediasService {
 
   updateAllMedias() {
     this.logger.log('Updating all medias');
-    this.getMedias()
-      .then((medias) =>
-        Promise.all(medias.map((media) => this.updateOneFromTMDB(media))),
-      )
-      .catch((err) => {
-        this.logger.error(`An error occurred while updating medias: ${err}`);
-        throw new HttpException(
-          'Une erreur est survenue',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      });
+    this.getMedias().then((medias) =>
+      Promise.all(
+        medias.map((media) =>
+          this.updateOneFromTMDB(media).catch((err) => {
+            this.logger.error(
+              `An error occurred while updating media ${media.data.title}: ${err}`,
+            );
+          }),
+        ),
+      ),
+    );
   }
 
   async getStream(
