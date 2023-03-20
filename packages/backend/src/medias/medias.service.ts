@@ -785,9 +785,9 @@ export class MediasService {
           ? await Promise.all(
               newMedia.data?.tvs?.map((season, i) => {
                 return this.updateEpisodes(
-                  media.data.tvs[i]?.episodes || [],
+                  media.data.tvs[i].episodes,
                   media.data.TMDB_id,
-                  i + 1
+                  season.index
                 ).then((episodes) => ({
                   ...(season || {}),
                   available: media.data.tvs[i].available,
