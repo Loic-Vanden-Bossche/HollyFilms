@@ -19,6 +19,7 @@ import { MediasModule } from './medias/medias.module';
 import { TmdbModule } from './tmdb/tmdb.module';
 import { ProcessingModule } from './processing/processing.module';
 import { MailsModule } from './mails/mails.module';
+import { MongooseModuleOptions } from '@nestjs/mongoose/dist/interfaces/mongoose-options.interface';
 
 @Module({})
 export class AppModule {
@@ -32,7 +33,9 @@ export class AppModule {
       imports: [
         MongooseModule.forRootAsync({
           imports: [ConfigModule],
-          useFactory: async (config: ConfigService) => {
+          useFactory: async (
+            config: ConfigService,
+          ): Promise<MongooseModuleOptions> => {
             const logger = new Logger('Mongoose');
 
             mongoose.set('debug', (coll, method, query, doc) => {
@@ -41,9 +44,11 @@ export class AppModule {
               );
             });
 
-            return {
-              uri: getMongoString(config.get<DatabaseConfig>('database')),
-            };
+            const uri = getMongoString(config.get<DatabaseConfig>('database'));
+
+            logger.debug(`Connecting to ${uri}`);
+
+            return { uri };
           },
           inject: [ConfigService],
         }),

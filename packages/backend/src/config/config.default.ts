@@ -17,7 +17,7 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_APP_DATASTORE_PATH: '../../data',
 
   // Database
-  HF_DB_HOST: 'localhost',
+  HF_DB_HOST: '127.0.0.1',
   HF_DB_NAME: null,
   HF_DB_USER: null,
   HF_DB_PASSWORD: null,
@@ -43,9 +43,9 @@ export const defaultConfig: ConfigEnvironmentDto = {
   HF_COOKIE_SECURE: false,
 
   // Mail
-  HF_MAILS_HOST: null,
-  HF_MAILS_USER: null,
-  HF_MAILS_PASSWORD: null,
+  HF_MAILS_HOST: 'localhost',
+  HF_MAILS_USER: 'noreply@hollyfilms.fr',
+  HF_MAILS_PASSWORD: 'default',
   HF_MAILS_USER_TAG: 'HollyFilms',
 
   // Admin

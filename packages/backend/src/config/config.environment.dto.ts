@@ -84,19 +84,19 @@ export class ConfigEnvironmentDto {
   @Expose()
   @UseDefault()
   @Desc('Database name')
-  HF_DB_NAME: string | null;
+  HF_DB_NAME: string;
 
   @Expose()
   @UseDefault()
   @Desc('Database user')
   @Secret()
-  HF_DB_USER: string | null;
+  HF_DB_USER: string;
 
   @Expose()
   @UseDefault()
   @Desc('Database password')
   @Secret()
-  HF_DB_PASSWORD: string | null;
+  HF_DB_PASSWORD: string;
 
   @Expose()
   @UseDefault()
@@ -231,7 +231,7 @@ export class ConfigEnvironmentDto {
   @Expose()
   @UseDefault()
   @Desc('TMBD api url')
-  HF_TMDB_API_URL: string | null;
+  HF_TMDB_API_URL: string;
 
   // Medias
   @ConfigValidators(isString)
@@ -281,12 +281,12 @@ export class ConfigEnvironmentDto {
   @Expose()
   @UseDefault()
   @Desc('OAuth client id')
-  HF_GOOGLE_AUTH_CLIENT_ID: string | null;
+  HF_GOOGLE_AUTH_CLIENT_ID: string;
 
   @ConfigValidators(isString)
   @Expose()
   @UseDefault()
   @Secret()
   @Desc('OAuth client secret')
-  HF_GOOGLE_AUTH_CLIENT_SECRET: string | null;
+  HF_GOOGLE_AUTH_CLIENT_SECRET: string;
 }

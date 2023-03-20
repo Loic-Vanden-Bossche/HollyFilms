@@ -33,9 +33,7 @@ export interface StreamStatus {
   lang?: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ProcessingService {
   private _progressStatus = new BehaviorSubject<ProgressStatus | null>(null);
 
