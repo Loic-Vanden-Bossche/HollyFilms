@@ -138,7 +138,10 @@ export class MediasService {
         { $limit: 1 },
       ])
       .exec()
-      .then(([{ _id: genre }]) => genre);
+      .then((genres) => {
+        if (genres.length === 0) return "Aucun";
+        return genres[0]._id;
+      });
   }
 
   getCategories(): Promise<MediaCategory[]> {
@@ -759,7 +762,7 @@ export class MediasService {
 
     return this.tmdbService.getEpisodes(TMDB_id, seasonIndex).then((episodes) =>
       episodes.map((episode, i) => ({
-        ...(originalEpisodes[i] || {}),
+        ...(originalEpisodes && originalEpisodes[i] ? originalEpisodes[i] : {}),
         ...episode,
         available: isAvailable(i),
       }))
@@ -784,8 +787,8 @@ export class MediasService {
                   season.index
                 ).then((episodes) => ({
                   ...(season || {}),
-                  available: media.data.tvs[i].available,
-                  dateAdded: media.data.tvs[i].dateAdded,
+                  available: media.data.tvs[i]?.available || false,
+                  dateAdded: media.data.tvs[i]?.dateAdded || new Date(),
                   episodes,
                 }));
               })

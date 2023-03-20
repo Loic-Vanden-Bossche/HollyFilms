@@ -161,7 +161,7 @@ export class TmdbService {
           };
         }),
         tvs: tv.seasons
-          .filter((s) => s.name.toLowerCase() != "specials")
+          .filter((s) => s.name.toLowerCase() != "épisodes spéciaux")
           .map((c) => ({
             index: c.season_number,
             name: c.name,

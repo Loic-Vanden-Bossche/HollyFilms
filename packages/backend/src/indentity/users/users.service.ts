@@ -74,7 +74,9 @@ export class UsersService {
       watchedMedias: profile.playedMedias?.length || 0,
       favoriteGenre: profile.playedMedias?.length
         ? await this.mediasService.getMostRedondantGenreFromMedias(
-            profile.playedMedias.map((pm) => pm.media._id.toString())
+            profile.playedMedias
+              .filter((pm) => !!pm.media)
+              .map((pm) => pm.media._id.toString())
           )
         : "Aucun",
     }));
