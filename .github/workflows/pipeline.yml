@@ -23,12 +23,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.SCW_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.SCW_ACCESS_KEY }}
-          aws-region: fr-par
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          aws-access-key-id: ${{ secrets.SCW_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.SCW_ACCESS_KEY }}
+#          aws-region: fr-par
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -37,6 +37,9 @@ jobs:
         id: fmt
         run: terraform fmt -check
         working-directory: ${{ env.WORKING_DIRECTORY }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
 
       - name: Terraform Init
         id: init
