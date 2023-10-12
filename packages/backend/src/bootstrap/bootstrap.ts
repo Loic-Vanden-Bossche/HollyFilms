@@ -90,16 +90,14 @@ export default async () => {
     const logger = new Logger("Docs");
 
     await initializeSwagger(app)
-      .then((openapi) => {
+      .then(async (openapi) => {
         logger.log("Swagger initialized");
 
         if (env === Environment.DEV) {
-          return fs.writeFile("openapi.yaml", openapi).then(() =>
-            generateAPIDocs().then((stout) => {
-              logger.debug("API docs generated");
-              logger.debug(stout);
-            })
-          );
+          await fs.writeFile("openapi.yaml", openapi);
+          const stout = await generateAPIDocs();
+          logger.debug("API docs generated");
+          logger.debug(stout);
         }
       })
       .catch((e) => {
@@ -129,9 +127,6 @@ export default async () => {
       whitelist: true,
     })
   );
-
-  // await app.get(MediasService).migrateFromDatabase();
-  // await app.get(UsersService).migrateFromDatabase();
 
   await app.get(UsersService).createAdminAccount();
   await app.get(ProcessingService).purgeProcessing();
