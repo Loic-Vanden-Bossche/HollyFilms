@@ -4,7 +4,6 @@ terraform {
       source = "scaleway/scaleway"
     }
   }
-  required_version = ">= 0.13"
 
   backend "local" {
     path = ".terraform.tfstate"
