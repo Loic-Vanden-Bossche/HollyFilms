@@ -6,9 +6,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket                      = "tfstate"
-    key                         = "state.tfstate"
-    region                      = "fr-par"
+    bucket = "tfstate"
+    key    = "state.tfstate"
+    region = "fr-par"
     endpoints = {
       s3 = "https://s3.fr-par.scw.cloud"
     }
